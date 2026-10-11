@@ -3,6 +3,7 @@ import { brainGet, brainPost } from "../brain";
 import { camera } from "../clock";
 import { anchorsFor, frameFor, type PathNode } from "../graphpath";
 import { useTwin } from "../state";
+import { Volty } from "./Volty";
 
 interface Machine {
   id: string; name: string; type: string; status?: string; machine_state?: string; alert?: string | null;
@@ -127,12 +128,13 @@ const SUGGEST = ["Explain the production process", "Why is M05 red?", "What shou
 interface AnswerPath { nodes: PathNode[]; machine: string | null }
 
 /** Light the answer up on the plant: nodes appear one by one, the camera frames the whole chain. */
-function playPath(p: AnswerPath) {
+function playPath(p: AnswerPath, keepBot = false) {
   const st = useTwin.getState();
   if (!st.data) return;
   st.setGraphPath({ nodes: p.nodes, machine: p.machine, t0: performance.now() });
   camera.mode = "free";
   camera.goal = frameFor(anchorsFor(st.data.layout, p.nodes, p.machine));
+  if (!keepBot) st.setBot("pointing", 4500);
 }
 
 function AskView() {
@@ -148,6 +150,7 @@ function AskView() {
     text = text.trim();
     if (!text || busy) return;
     setBusy(true); setQ("");
+    useTwin.getState().setBot(/\b(part|stock|spare|find|search|where|which|sop|procedure|who)\b/i.test(text) ? "searching" : "thinking");
     setLog((l) => [...l, { q: text, a: "" }]);
     try {
       const r = await brainPost("/chat", { message: text, session_id: sid, station_id: selectedStation });
@@ -155,14 +158,21 @@ function AskView() {
       const gpath: PathNode[] = r.highlight?.graph_path?.length ? r.highlight.graph_path : first ? [{ id: first, kind: "machine" }] : [];
       const path: AnswerPath | null = gpath.length ? { nodes: gpath, machine: first ?? null } : null;
       setLog((l) => l.map((m, i) => (i === l.length - 1 ? { q: text, a: r.answer, report: r.report, path } : m)));
-      if (path) playPath(path); else useTwin.getState().setGraphPath(null);
+      const sev = r.report?.severity as string | undefined;
+      const bot = useTwin.getState().setBot;
+      if (sev === "critical") bot("danger", 20000);
+      else if (sev === "warning") bot("warning", 12000);
+      else if (sev === "ok") bot("happy", 4000);
+      else bot("answering", 3500);
+      if (path) playPath(path, sev === "critical" || sev === "warning"); else useTwin.getState().setGraphPath(null);
       const st = data?.layout.machines.find((m) => m.id === first)?.station;
       if (st) selectQuiet(st);
-    } catch { setLog((l) => l.map((m, i) => (i === l.length - 1 ? { q: text, a: "The brain is not running on :8100. Start it with brain/scripts/start_all.sh" } : m))); }
+    } catch { useTwin.getState().setBot("sleeping"); setLog((l) => l.map((m, i) => (i === l.length - 1 ? { q: text, a: "The brain is not running on :8100. Start it with brain/scripts/start_all.sh" } : m))); }
     setBusy(false);
   };
   return (
     <div className="askv">
+      <Volty height={168} />
       <div className="log">
         {log.length === 0 && (
           <div>
@@ -187,7 +197,7 @@ function AskView() {
         <div ref={end} />
       </div>
       <div className="compose">
-        <input type="text" className="inp" value={q} placeholder="Why is M05 red?" onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void ask(q)} />
+        <input type="text" className="inp" value={q} placeholder="Why is M05 red?" onChange={(e) => { setQ(e.target.value); const b = useTwin.getState().bot; if (e.target.value && (b === "idle" || b === "sleeping")) useTwin.getState().setBot("listening", 6000); }} onKeyDown={(e) => e.key === "Enter" && void ask(q)} />
         <button className="btn pri" onClick={() => void ask(q)} disabled={busy}>Ask</button>
       </div>
     </div>
@@ -200,6 +210,7 @@ export function SidePanel() {
   const setSid = useTwin((s) => s.setSelectedStation);
   const askOpen = useTwin((s) => s.askOpen);
   const setAskOpen = useTwin((s) => s.setAskOpen);
+  const bot = useTwin((s) => s.bot);
   const tab = useTwin((s) => s.sideTab);
   const setTab = useTwin((s) => s.setSideTab);
   useEffect(() => { if (askOpen) setTab("ask"); }, [askOpen, setTab]);
@@ -207,7 +218,7 @@ export function SidePanel() {
   const shown = tab === "station" && !sid ? "ask" : tab;
   const close = () => { setSid(null); setAskOpen(false); useTwin.getState().setGraphPath(null); };
   return (
-    <div className={`dock gl ${shown === "ask" ? "fill" : ""}`}>
+    <div className={`dock gl ${shown === "ask" ? "fill" : ""} b-${bot}`}>
       <div className="tabs3">
         {sid && <button className={shown === "station" ? "on" : ""} onClick={() => setTab("station")}>{sid}</button>}
         <button className={shown === "ask" ? "on" : ""} onClick={() => { setAskOpen(true); setTab("ask"); }}>Ask</button>

@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import { BotGallery } from "./ui/Volty";
 import "./styles.css";
 import "./hud.css";
 import { clock, startClock } from "./clock";
@@ -13,4 +14,4 @@ startClock();
 }
 if (new URLSearchParams(location.search).get("clean")) document.body.classList.add("clean");
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(new URLSearchParams(location.search).get("botdemo") ? <BotGallery /> : <App />);

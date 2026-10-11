@@ -1,5 +1,8 @@
 import type { GraphPath } from "./graphpath";
 import { create } from "zustand";
+
+export type BotState = "idle" | "listening" | "thinking" | "answering" | "happy" | "searching" | "pointing" | "warning" | "danger" | "sleeping";
+let botTimer: ReturnType<typeof setTimeout> | undefined;
 import type { TwinData } from "./data";
 import type { Injected } from "./plant";
 
@@ -15,6 +18,8 @@ interface TwinState {
   setView: (v: "live" | "dash") => void;
   error: string | null;
   selectedStation: string | null;
+  bot: BotState;
+  setBot: (s: BotState, holdMs?: number) => void;       // after holdMs the bot goes back to idle
   graphPath: GraphPath | null;
   setGraphPath: (p: GraphPath | null) => void;
   askOpen: boolean;
@@ -39,6 +44,8 @@ export const useTwin = create<TwinState>((set) => ({
   setView: (view) => set({ view }),
   error: null,
   selectedStation: null,
+  bot: "idle",
+  setBot: (bot, holdMs) => { clearTimeout(botTimer); set({ bot }); if (holdMs) botTimer = setTimeout(() => set({ bot: "idle" }), holdMs); },
   graphPath: null,
   setGraphPath: (graphPath) => set({ graphPath }),
   askOpen: false,
