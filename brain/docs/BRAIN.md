@@ -69,8 +69,12 @@ RAGAS needs its own venv and a judge model: see the header of `brain/eval/run_ra
 ## Failure handling
 If Ollama is down or errors, the brain answers in degraded mode straight from the graph and retrieval (flagged `degraded`). Answers are cached by question, shift and pipeline version.
 
-## What M needs for SIM_MODE=live
-Proposed endpoints (see `brain/docs/CONTRACT_PROPOSALS.md`): `GET /state`, `POST /scenario`, `POST /work_order`. Until then `SIM_MODE=mock` builds from `data/out/events.json` and `data/out/scenarios/summary.json`.
+## Connecting to M's engine (SIM_MODE=live)
+`brain/app/sim_adapter.py` `LiveSim` calls the engine in `sim/` through its `/tools` endpoints:
+`get_machine_health` + `get_anomaly_report` (sensors, alert level, contributors, RUL), `run_what_if` (baseline vs scenario KPIs), `create_work_order`.
+Start the engine (`sim/README.md`, port 8000), then `SIM_MODE=live python3 brain/app/api.py`. Machines the engine does not simulate (all except `M01..M10`) fall back to the mock storyline data.
+Status: verified against a stub that returns the shapes read from `sim/plantsim/tools.py`; **not yet run against the real engine** (its saved anomaly model needs a newer numpy than this machine has, and there was no network to install it).
+Mock mode (default) builds from `data/out/events.json` and `data/out/scenarios/summary.json`.
 
 ## Evaluation
 `brain/eval/questions.jsonl`: 40 questions with gold answers drawn from the data (who to page, fault codes, SOPs, parts, repeat failures, keep-running, live storylines, hero path). `run_eval.py` reports retrieval hit@6/MRR (free) and end-to-end pass rate. `run_ragas.py` adds RAGAS metrics (faithfulness, answer relevancy, context precision/recall) with a local Ollama judge in an isolated venv. `embed_experiment.py` compares local embedding models (dense / BM25 / hybrid). Latest numbers: `brain/eval/results_latest.json`, `brain/eval/ragas_latest.json`.

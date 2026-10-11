@@ -292,15 +292,19 @@ class Brain:
             if sc and "kpis" in sc:
                 k = sc["kpis"]
                 h = sc["query"]["hours"]
-                L.append(f"{mid}: keeping it running {h:g} more hours matches scenario '{sc['matched_scenario']}' "
-                         f"({sc.get('about')})")
+                L.append(f"{mid}: keeping it running {h:g} more hours matches scenario '{sc['matched_scenario']}'"
+                         + (f" ({sc['about']})" if sc.get("about") else ""))
                 if st and st.get("remaining_useful_life_min"):
                     L.append(f"- Remaining useful life at alert: about {st['remaining_useful_life_min']} min (bearing wear).")
                 L.append(f"- Downtime: {k['downtime_min']['scenario']} min vs {k['downtime_min']['baseline']} min if repaired now.")
                 L.append(f"- Throughput: {k['throughput_per_hr']['scenario']}/h vs {k['throughput_per_hr']['baseline']}/h; "
                          f"OEE {k['oee']['scenario']} vs {k['oee']['baseline']}.")
-                L.append(f"- Cost: ${k['cost_usd']:,.0f}; failure probability about {k['failure_probability']:.0%} (estimate).")
-                rec = ("Do not extend. Repair now." if sc["matched_scenario"] != "hero_timely_repair" and h > sc["rul_hours_at_alert"] else
+                fp = k.get("failure_probability")
+                cost = k.get("cost_usd")
+                L.append(f"- Cost: " + (f"${cost:,.0f}" if cost is not None else "n/a")
+                         + (f"; failure probability about {fp:.0%} (estimate)." if fp is not None else "."))
+                rul_h = sc.get("rul_hours_at_alert")
+                rec = ("Do not extend. Repair now." if sc["matched_scenario"] != "hero_timely_repair" and (rul_h is None or h > rul_h) else
                        "Extension is risky; finish the current batch only and repair at the next buffer-protected stop."
                        if h > 0.1 else "Repair now.")
                 L.append(f"Recommendation: {rec} Rule: criticality A with a rising warn-level trend limits extension to the "
@@ -353,13 +357,23 @@ class Brain:
             if st:
                 L.append(f"{mid} status: {st.get('status')}.")
                 for ch, v in (st.get("readings") or {}).items():
-                    if isinstance(v, dict) and "ratio" in v:
-                        L.append(f"- {ch}: {v['value']} (nominal {v['nominal']}, {v['ratio']}x; alert at {v['alert_at_ratio']}x)")
-                    elif isinstance(v, dict) and v.get("value") != v.get("nominal"):
-                        L.append(f"- {ch}: {v['value']} {v.get('unit') or ''} (nominal {v['nominal']}" + (f", warn {v['warn']}" if v.get("warn") is not None else "") + ")")
+                    if not isinstance(v, dict):
+                        continue
+                    nom, val = v.get("nominal"), v.get("value")
+                    if "ratio" in v:
+                        L.append(f"- {ch}: {val} (nominal {nom}, {v['ratio']}x; alert at {v.get('alert_at_ratio')}x)")
+                    elif nom is None or val != nom:
+                        L.append(f"- {ch}: {val}" + (f" {v['unit']}" if v.get("unit") else "")
+                                 + (f" (nominal {nom}" + (f", warn {v['warn']}" if v.get("warn") is not None else "") + ")" if nom is not None else ""))
+                if st.get("vib_multiple"):
+                    L.append(f"- Vibration is {st['vib_multiple']}x its healthy level.")
+                if st.get("remaining_useful_life_min") and not any("ratio" in (x or {}) for x in (st.get("readings") or {}).values() if isinstance(x, dict)):
+                    L.append(f"- Remaining useful life about {st['remaining_useful_life_min']} min.")
                 if st.get("alert"):
-                    c = ", ".join(f"{x['signal']} {x['shap']}" for x in st["alert"]["contributors"])
-                    L.append(f"- Alert score {st['alert']['score']}; top signals: {c}; component {st['alert']['component_id']}.")
+                    c = ", ".join(f"{x['signal']} {x['shap']}" if x.get("shap") is not None else str(x["signal"])
+                                  for x in st["alert"].get("contributors") or [])
+                    L.append(f"- Alert ({st['alert'].get('severity')}), score {st['alert'].get('score')}"
+                             + (f"; top signals: {c}" if c else "") + f"; component {st['alert'].get('component_id')}.")
                 if st.get("storyline_fault"):
                     L.append(f"- Ongoing fault: {st['storyline_fault']} (drifting channel {st['drifting_channel']}, {st['shape']}).")
             fm = first("graph_lookup", lambda a, o: "fault_modes" in o)
@@ -453,7 +467,7 @@ class Brain:
         t0 = time.time()
         sess = self.sessions.setdefault(session_id, {"history": []})
         focus = self.g.find_machines(question)
-        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v3", config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
+        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v3", config.get("SIM_MODE", "mock"), config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
                                        sess["history"][-2:] if sess["history"] else []]).encode()).hexdigest()
         hit = self.cache.get(key)
         if hit:

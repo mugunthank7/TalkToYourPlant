@@ -2,8 +2,8 @@
 
 SIM_MODE=mock (default): answers from M's committed outputs (data/out/events.json,
 data/out/scenarios/summary.json) and the Voltara contract (simulator_interface.json).
-SIM_MODE=live: HTTP calls to M's FastAPI (D-016): GET /state, GET /kpis, POST /scenario,
-POST /work_order. Endpoint shapes are proposals until M confirms (see docs/CONTRACT_PROPOSALS.md).
+SIM_MODE=live: M's engine (sim/plantsim) through its /tools endpoints: get_machine_health,
+get_anomaly_report, run_what_if, create_work_order.
 
 All methods return plain dicts. Everything the mock returns carries "source": "mock...".
 """
@@ -124,32 +124,102 @@ class MockSim:
 
 
 class LiveSim:
+    """M's SimPy engine (sim/plantsim/api.py): reads and acts through its /tools endpoints.
+
+    Response shapes are taken from sim/plantsim/tools.py and snapshot.py. Machines the engine does
+    not simulate (everything except M01..M10) fall back to the mock storyline data.
+    """
     mode = "live"
+    SIMULATED = {f"M{i:02d}" for i in range(1, 11)}
 
     def __init__(self, base=None):
         self.base = (base or config.get("SIM_URL", "http://localhost:8000")).rstrip("/")
+        self.fallback = MockSim()
 
-    def _req(self, method, path, body=None, timeout=8):
+    def _req(self, method, path, body=None, timeout=60):
         data = json.dumps(body).encode() if body is not None else None
         r = urllib.request.Request(self.base + path, data=data, method=method,
                                    headers={"Content-Type": "application/json"})
         with urllib.request.urlopen(r, timeout=timeout) as resp:
             return json.loads(resp.read().decode())
 
+    def _tool(self, name, args):
+        return self._req("POST", f"/tools/{name}", args)
+
+    @staticmethod
+    def _contrib(raw):
+        out = []
+        for c in raw or []:
+            if isinstance(c, dict):
+                sig = c.get("signal") or c.get("name") or c.get("feature")
+                val = c.get("shap", c.get("value", c.get("contribution")))
+                if sig is not None:
+                    out.append({"signal": sig, "shap": val})
+            elif isinstance(c, (list, tuple)) and len(c) >= 2:
+                out.append({"signal": c[0], "shap": c[1]})
+        return out
+
     def get_sensor_state(self, machine_id, graph=None):
-        st = self._req("GET", "/state")
-        m = (st.get("machines") or {}).get(machine_id) if isinstance(st, dict) else None
-        return {"machine_id": machine_id, "source": "live:/state", **(m or {"status": "unknown"})}
+        if machine_id not in self.SIMULATED:
+            return self.fallback.get_sensor_state(machine_id, graph)
+        h = self._tool("get_machine_health", {"machine_id": machine_id})
+        if h.get("error"):
+            return {"machine_id": machine_id, "status": "unknown", "source": "live", "error": h["error"]}
+        try:
+            an = self._tool("get_anomaly_report", {"machine_id": machine_id})
+        except Exception:  # noqa: BLE001
+            an = {}
+        level = h.get("alert")
+        status = {"critical": "critical", "watch": "warning"}.get(level, "ok" if h.get("state") in (None, "run", "idle") else h.get("state"))
+        readings = {k: {"value": v} for k, v in (h.get("sensors") or {}).items()}
+        out = {"machine_id": machine_id, "status": status, "machine_state": h.get("state"),
+               "readings": readings, "source": "live:/tools/get_machine_health",
+               "vib_multiple": h.get("vib_multiple")}
+        if h.get("rul_s") is not None:
+            out["remaining_useful_life_min"] = round(h["rul_s"] / 60.0, 1)
+        if level:
+            out["alert"] = {"type": "alert", "machine_id": machine_id,
+                            "severity": "critical" if level == "critical" else "warning",
+                            "score": (an.get("anomaly") or {}).get("score") if isinstance(an, dict) else None,
+                            "contributors": self._contrib(h.get("contributors") or an.get("contributors")),
+                            "component_id": h.get("component_id")}
+        return out
 
     def run_scenario(self, machine_id, hours, op="keep_running", baseline="live"):
-        body = {"type": "run_scenario", "id": f"SC-{next(_wo_counter)}", "base": baseline,
-                "changes": [{"op": op, "machine_id": machine_id, "hours": hours}]}
-        return {**self._req("POST", "/scenario", body, timeout=60), "source": "live:/scenario"}
+        changes = [{"op": op, "hours": hours}]
+        if op != "keep_running":
+            changes = [{"op": op, "machine": machine_id}]
+        res = self._tool("run_what_if", {"changes": changes})
+        if res.get("error"):
+            return {"error": res["error"], "source": "live:/tools/run_what_if"}
+        b, s = (res.get("baseline") or {}).get("kpis", {}), (res.get("scenario") or {}).get("kpis", {})
+        shift_h = max(((res.get("baseline") or {}).get("kpis", {}).get("t_s") or 28800) / 3600.0, 1.0)
+        rul_h = None
+        try:
+            h = self._tool("get_machine_health", {"machine_id": machine_id})
+            if h.get("rul_s") is not None:
+                rul_h = round(h["rul_s"] / 3600.0, 2)
+        except Exception:  # noqa: BLE001
+            pass
+        pick = lambda k: {"baseline": b.get(k), "scenario": s.get(k)}
+        return {
+            "type": "scenario_result", "id": f"SC-{next(_wo_counter)}", "source": "live:/tools/run_what_if",
+            "query": {"op": op, "machine_id": machine_id, "hours": hours},
+            "matched_scenario": "live simulation (branch from now to end of shift)", "rul_hours_at_alert": rul_h,
+            "kpis": {"throughput_per_hr": {"baseline": round((b.get("units") or 0) / 8.0, 1), "scenario": round((s.get("units") or 0) / 8.0, 1)},
+                     "downtime_min": pick("downtime_min"), "oee": pick("oee"), "units": pick("units"),
+                     "failure_probability": None, "cost_usd": s.get("downtime_cost_usd")},
+            "about": res.get("summary"), "delta": res.get("delta"),
+            "caveat": "throughput_per_hr = units / 8 h shift; failure probability is not modelled by the engine.",
+        }
 
     def create_work_order(self, machine_id, component_id=None, spare_part=None, fault_code=None, priority="P2", note=None):
-        body = {"type": "work_order", "machine_id": machine_id, "component_id": component_id,
-                "spare_part": spare_part, "fault_code": fault_code, "priority": priority, "note": note}
-        return {**self._req("POST", "/work_order", body), "source": "live:/work_order"}
+        reason = note or (f"{fault_code} on {component_id}" if fault_code else "requested by brain")
+        wo = self._tool("create_work_order", {"machine_id": machine_id, "reason": reason})
+        return {"type": "work_order", "id": wo.get("id") or wo.get("wo_id"), "machine_id": machine_id,
+                "component_id": component_id, "spare_part": spare_part, "fault_code": fault_code,
+                "priority": priority, "note": reason, "downtime_cost_per_min": COST_PER_MIN,
+                "source": "live:/tools/create_work_order", "engine_response": wo}
 
 
 def get_sim():
