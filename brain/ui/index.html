@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Talk to Your Plant</title>
+<style>
+:root{--bg:#0f1417;--panel:#171e23;--ink:#e6edf1;--mut:#8a99a3;--acc:#3fb68b;--warn:#e5a23a;--line:#26323a}
+@media (prefers-color-scheme:light){:root{--bg:#f4f6f7;--panel:#fff;--ink:#14202a;--mut:#5b6b75;--acc:#14805c;--warn:#a96a00;--line:#d9e0e4}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif;display:flex;flex-direction:column;height:100vh}
+header{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+header b{font-size:16px}header span{color:var(--mut);font-size:13px}
+#log{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px;max-width:900px;width:100%;margin:0 auto}
+.m{padding:10px 14px;border-radius:10px;background:var(--panel);border:1px solid var(--line);white-space:pre-wrap}
+.u{align-self:flex-end;background:var(--acc);color:#fff;border-color:transparent;max-width:80%}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chip{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mut)}
+.chip.mach{border-color:var(--acc);color:var(--acc);font-weight:600}.chip.act{border-color:var(--warn);color:var(--warn)}
+.meta{font-size:12px;color:var(--mut);margin-top:6px}
+form{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line);max-width:900px;width:100%;margin:0 auto}
+input{flex:1;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:inherit}
+button{padding:10px 16px;border:0;border-radius:8px;background:var(--acc);color:#fff;font:inherit;cursor:pointer}
+button:disabled{opacity:.5}label{font-size:13px;color:var(--mut)}
+details{margin-top:6px;font-size:12px;color:var(--mut)}
+</style></head><body>
+<header><b>Talk to Your Plant</b><span id="st">connecting...</span>
+</header>
+<div id="log"></div>
+<form id="f"><input id="q" placeholder="Ask: why is M05 red? who do I page for CAS-GP-01?" autocomplete="off" autofocus><button id="b">Send</button></form>
+<script>
+const log=document.getElementById('log'),q=document.getElementById('q'),b=document.getElementById('b');
+const sid=Math.random().toString(36).slice(2);
+fetch('/health').then(r=>r.json()).then(h=>{document.getElementById('st').textContent=
+ `graph ${h.graph} nodes · local LLM ${h.ollama_model} · embedder ${h.embedder.split('/').pop()} · sim:${h.sim_mode}`}).catch(()=>{document.getElementById('st').textContent='backend not reachable'});
+function add(cls,text){const d=document.createElement('div');d.className='m '+cls;d.textContent=text;log.appendChild(d);log.scrollTop=1e9;return d}
+function chips(el,items,cls){if(!items.length)return;const c=document.createElement('div');c.className='chips';
+ items.forEach(t=>{const s=document.createElement('span');s.className='chip '+cls;s.textContent=t;c.appendChild(s)});el.appendChild(c)}
+document.getElementById('f').onsubmit=async e=>{e.preventDefault();const t=q.value.trim();if(!t)return;q.value='';
+ add('u',t);const w=add('','thinking...');b.disabled=true;
+ try{const r=await fetch('/chat',{method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({message:t,session_id:sid})});
+  const j=await r.json();w.textContent=j.answer;
+  chips(w,j.highlight.machine_ids,'mach');
+  chips(w,(j.highlight.graph_path||[]).map(n=>n.id),'');
+  chips(w,j.citations.map(c=>c.id),'');
+  chips(w,j.actions.map(a=>a.type+((a.work_order&&a.work_order.id)?' '+a.work_order.id:'')),'act');
+  const m=document.createElement('div');m.className='meta';
+  m.textContent=`${j.meta.model||'offline'} · ${j.meta.llm_calls} LLM calls · ${j.meta.latency_s}s`+(j.meta.cached?' · cached':'')+(j.meta.degraded?' · degraded: '+j.meta.error:'');
+  w.appendChild(m)}
+ catch(err){w.textContent='Error: '+err}finally{b.disabled=false;q.focus()}};
+</script></body></html>

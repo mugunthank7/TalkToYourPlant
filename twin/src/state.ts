@@ -13,6 +13,8 @@ interface TwinState {
   view: "live" | "dash";
   setView: (v: "live" | "dash") => void;
   error: string | null;
+  selectedStation: string | null;
+  setSelectedStation: (id: string | null) => void;
   setData: (d: TwinData) => void;
   setShift: (s: "A" | "B") => void;
   setError: (e: string) => void;
@@ -28,6 +30,8 @@ export const useTwin = create<TwinState>((set) => ({
   view: "live",
   setView: (view) => set({ view }),
   error: null,
+  selectedStation: null,
+  setSelectedStation: (selectedStation) => set({ selectedStation }),
   setData: (data) => set({ data }),
   setShift: (shift) => set({ shift }),
   setError: (error) => set({ error }),

@@ -1,0 +1,280 @@
+[
+ {
+  "group": "A. The hero moment (M05 bearing wear)",
+  "q": "Why is M05 red?",
+  "why": "Status card: cause, evidence, impact, steps, who to page, part, SOP",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "M05 Weld robot 2 (station S06)  |  CRITICAL\nNeeds action now.\n\nWHAT HAPPENED\n- Joint bearing wear (bearing_wear).\n- Likely cause: lubricant breakdown or missed regrease interval.\n- Vibration is 1.08x the healthy level.\n- Flagged because of: bearing-defect band, bearing-band trend.\n\nIMPACT\n- About 157 minutes of useful life left.\n- Open work order: WO-SIM-0001.\n\nDO NOW\n1. Page L1 Yuki Alvarez (x4438) now.\n2. Bring bearing_6208 from the spares cage (S12); 2 in stock.\n3. Follow SOP-MNT-M05-01.\n\nWHO TO PAGE\n- L1 Yuki Alvarez (Robotics Technician (L1)), x4438, radio PLT-22: now\n- L2 Nicholas Mukherjee (Robotics Technician (L2)), x4434, radio PLT-CA: after 8 min if no answer\n\nPART\n- bearing_6208 (Deep groove ball bearing 6208 (A1 joint))\n\nPROCEDURE\n- SOP-MNT-M05-01\n\nSources: [WO-SIM-0001] [SOP-MNT-M05-01] [M05-A]",
+  "latency_s": 0.11,
+  "highlight": [
+   "M05"
+  ]
+ },
+ {
+  "group": "A. The hero moment (M05 bearing wear)",
+  "q": "What should I do?",
+  "why": "Follow-up: remembers M05, gives the action list",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "M05 Weld robot 2 (station S06)  |  CRITICAL\nNeeds action now.\n\nWHAT HAPPENED\n- Joint bearing wear (bearing_wear).\n- Likely cause: lubricant breakdown or missed regrease interval.\n- Vibration is 1.08x the healthy level.\n- Flagged because of: bearing-defect band, bearing-band trend.\n\nIMPACT\n- About 157 minutes of useful life left.\n- Open work order: WO-SIM-0001.\n\nDO NOW\n1. Page L1 Yuki Alvarez (x4438) now.\n2. Bring bearing_6208 from the spares cage (S12); 2 in stock.\n3. Follow SOP-SAF-03.\n\nWHO TO PAGE\n- L1 Yuki Alvarez (Robotics Technician (L1)), x4438, radio PLT-22: now\n- L2 Nicholas Mukherjee (Robotics Technician (L2)), x4434, radio PLT-CA: after 8 min if no answer\n\nPART\n- bearing_6208 (Deep groove ball bearing 6208 (A1 joint))\n\nPROCEDURE\n- SOP-SAF-03\n\nSources: [WO-SIM-0001] [SOP-SAF-03] [M05-A]",
+  "latency_s": 0.05,
+  "highlight": [
+   "M05"
+  ]
+ },
+ {
+  "group": "A. The hero moment (M05 bearing wear)",
+  "q": "Who do I page for M05?",
+  "why": "Escalation chain for the current shift with timers",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "M05 Weld robot 2 (station S06)  |  INFO\nOn shift A, page in this order.\n\nDO NOW\n1. Press andon, tell Line Lead, note fault code/time\n\nWHO TO PAGE\n- L0 Latoya Joshi (line lead), x4199, radio BIW-FA\n- L1 Yuki Alvarez (Robotics Technician (L1)), x4438, radio PLT-22: now\n- L2 Nicholas Mukherjee (Robotics Technician (L2)), x4434, radio PLT-CA: after 8 min if no answer\n- L3 George Sato (Maintenance Supervisor), x4265, 830-555-0126, radio PLT-4D: after 15 min if no answer\n- Beyond L3: KUKA hotline +1-800-555-0112\n\nSources: [M05-A]",
+  "latency_s": 0.0,
+  "highlight": [
+   "M05"
+  ]
+ },
+ {
+  "group": "A. The hero moment (M05 bearing wear)",
+  "q": "Which part do we need for M05 and is it in stock?",
+  "why": "Part number and stock from the knowledge base",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "M05 Weld robot 2 (station S06)  |  INFO\nbearing_wear: Joint bearing wear.\n\nWHAT HAPPENED\n- Likely causes: Lubricant breakdown or missed regrease interval; Contamination at the axis 1 joint; Collision or overload event\n\nIMPACT\n- Shows in vibration_rms (None)\n\nPART\n- bearing_6208 (Deep groove ball bearing 6208 (A1 joint)), 2 in stock\n\nSources: [SOP-MNT-M05-01]",
+  "latency_s": 0.0,
+  "highlight": [
+   "M05"
+  ]
+ },
+ {
+  "group": "A. The hero moment (M05 bearing wear)",
+  "q": "Can we keep running M05 2 more hours?",
+  "why": "Live what-if from the engine plus the SOP-OPS-02 rule",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "M05 Weld robot 2 (station S06)  |  WARNING\nKeep running 2 more hours? NOT RECOMMENDED. Exceeds the SOP-OPS-02 limit for a rising trend.\n\nWHAT HAPPENED\n- With the alert ignored for 2.0 h: 260 cars instead of 267 (7 fewer), downtime 69 min vs 77 min, OEE 79% vs 82%, 274,070 dollars saved in downtime cost.\n\nIMPACT\n- Downtime 69.4 min if you wait, versus 76.6 min if repaired now.\n- Downtime cost $2,636,109 versus $2,910,179.\n- OEE 0.793 versus 0.82.\n- Predicted remaining life 157 min (safe lower bound 25 min).\n\nDO NOW\n1. Anything beyond the current batch needs written Maintenance Manager approval, 15-minute re-checks and a technician on standby.\n2. Repair at the next buffer-protected stop; do not plan to run past the remaining life.\n\nSources: [SOP-OPS-02]",
+  "latency_s": 4.4,
+  "highlight": [
+   "M05"
+  ]
+ },
+ {
+  "group": "A. The hero moment (M05 bearing wear)",
+  "q": "Create a work order for the M05 bearing replacement.",
+  "why": "Opens a real work order in the engine",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "M05 Weld robot 2 (station S06)  |  INFO\nWork order WO-SIM-0002 created.\n\nWHAT HAPPENED\n- Component m05_joint1_bearing; fault bearing_wear.\n\nIMPACT\n- Downtime costs about $38,000 per minute until it is fixed.\n\nDO NOW\n1. A technician is dispatched; the engine opens the work order.\n\nPART\n- bearing_6208\n\nSources: [WO-SIM-0002]",
+  "latency_s": 0.01,
+  "highlight": [
+   "M05"
+  ]
+ },
+ {
+  "group": "B. What if something breaks",
+  "q": "What happens if the conveyor stops?",
+  "why": "Engine fault branch: cars lost and cost",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "M06 Main conveyor (station S04)  |  WARNING\nIf M06 Main conveyor stops for 30 minutes: about 26 fewer cars and $1,498,796 extra downtime cost.\n\nWHAT HAPPENED\n- With a breakdown of M06: 241 cars instead of 267 (26 fewer), downtime 116 min vs 77 min, OEE 74% vs 82%, 1,498,796 dollars extra in downtime cost.\n\nIMPACT\n- Downtime 116.0 min versus 76.6 min.\n- OEE 0.738 versus 0.82.\n\nDO NOW\n1. Keep a technician and the likely spare part ready; the line starves downstream and blocks upstream while it is down.",
+  "latency_s": 4.2,
+  "highlight": [
+   "M06"
+  ]
+ },
+ {
+  "group": "B. What if something breaks",
+  "q": "What happens if the decoiler fails?",
+  "why": "Same, upstream machine",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "M10 Decoiler (station S01)  |  WARNING\nIf M10 Decoiler stops for 30 minutes: about 0 fewer cars and $0 extra downtime cost.\n\nWHAT HAPPENED\n- With a breakdown of M10: 267 cars instead of 267 (0 more), downtime 77 min vs 77 min, OEE 82% vs 82%, 0 dollars extra in downtime cost.\n\nIMPACT\n- Downtime 76.6 min versus 76.6 min.\n- OEE 0.82 versus 0.82.\n\nDO NOW\n1. Keep a technician and the likely spare part ready; the line starves downstream and blocks upstream while it is down.",
+  "latency_s": 4.1,
+  "highlight": [
+   "M10"
+  ]
+ },
+ {
+  "group": "B. What if something breaks",
+  "q": "How many cars have we built so far?",
+  "why": "Live KPIs: output, OEE, downtime cost",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "Plant output  |  INFO\n122 cars so far this shift against a plan of 320.\n\nIMPACT\n- OEE 0.867, throughput 36.0 cars per hour.\n- Downtime 24.1 min, about $915,057.",
+  "latency_s": 0.0,
+  "highlight": []
+ },
+ {
+  "group": "C. Know the plant",
+  "q": "What does the casting press do?",
+  "why": "Station record with machines and flow",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.84,
+   "reason": "best match S02"
+  },
+  "answer": "From the station record: Station S02 (Casting and press): Large casting press forms underbody parts; a transfer robot moves parts out. Machines: M01 Casting press, M02 Press transfer robot. [S02]",
+  "latency_s": 0.07,
+  "highlight": [
+   "M01"
+  ]
+ },
+ {
+  "group": "C. Know the plant",
+  "q": "What are the safety rules in the weld cell?",
+  "why": "Procedure lookup with source",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.95,
+   "reason": "best match SOP-SAF-04"
+  },
+  "answer": "From SOP-SAF-04, Robot Cell Entry, Teaching and Safeguarding: Purpose Protect personnel who enter robot cells for maintenance, teaching or troubleshooting. Applies to all FANUC, KUKA, ABB, Duerr and cobot cells. [SOP-SAF-04]",
+  "latency_s": 0.09,
+  "highlight": []
+ },
+ {
+  "group": "C. Know the plant",
+  "q": "Which SOP covers lockout tagout?",
+  "why": "Procedure finder",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "Procedures  |  INFO\n1 relevant procedure(s).\n\nPROCEDURE\n- SOP-SAF-01: Lockout/Tagout (Control of Hazardous Energy)\n\nSources: [SOP-SAF-01]",
+  "latency_s": 0.07,
+  "highlight": []
+ },
+ {
+  "group": "C. Know the plant",
+  "q": "What does fault code SRVO-062 mean on M04?",
+  "why": "Fault-code meaning from the manual catalogue",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "M04 Weld robot 1 (station S05)  |  INFO\nSRVO-062: BZAL alarm: pulsecoder backup battery voltage zero, absolute position lost.\n\nWHAT HAPPENED\n- Likely causes: Encoder backup battery fully discharged; Battery cable disconnected or broken inside base; Controller powered off for a long period with dead battery\n\nIMPACT\n- Shows in battery_voltage_v (decay)\n\nPART\n- FAN-A02B-0200-K102 (Lithium backup battery A02B-0200-K102)\n\nSources: [MAN-WF]",
+  "latency_s": 0.05,
+  "highlight": [
+   "M04"
+  ]
+ },
+ {
+  "group": "C. Know the plant",
+  "q": "What spare part is needed to fix KSS-GEAR-LEAK on BIW-WK-03?",
+  "why": "Fault to part mapping",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "BIW-WK-03 Spot Weld Robot (KUKA) 3  |  INFO\nKSS-GEAR-LEAK: Oil leak detected at A1-A3 gearbox seal.\n\nWHAT HAPPENED\n- Likely causes: Seal wear; Over-filled gearbox; Vent plug blocked\n\nIMPACT\n- Shows in gearbox_temp_c (drift_up)\n\nPART\n- KUKA-SEAL-A2 (Axis 2 shaft seal kit)\n\nSources: [MAN-WK]",
+  "latency_s": 0.09,
+  "highlight": [
+   "BIW-WK-03"
+  ]
+ },
+ {
+  "group": "C. Know the plant",
+  "q": "How many times has CAS-GP-01 had GP-SHOT-SLOW in the last 90 days?",
+  "why": "Repeat-failure history from 20k work orders",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "CAS-GP-01 Giga Press 1  |  WARNING\nGP-SHOT-SLOW happened 2 times in the last 90 days.\n\nWHAT HAPPENED\n- 16 times in the whole history; latest 2026-10-02.\n\nIMPACT\n- Repeat faults should be treated as at least warning level (SOP-OPS-02).\n\nDO NOW\n1. Ask the engineer for a root-cause review if it keeps coming back.\n\nSources: [WO-2026-007763] [WO-2026-007566] [WO-2026-004772]",
+  "latency_s": 0.0,
+  "highlight": [
+   "CAS-GP-01"
+  ]
+ },
+ {
+  "group": "C. Know the plant",
+  "q": "Who do I page for CAS-GP-01 on shift B?",
+  "why": "Escalation for a specific machine and shift",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 0.9,
+   "reason": "matched a known question type"
+  },
+  "answer": "CAS-GP-01 Giga Press 1  |  INFO\nOn shift B, page in this order.\n\nDO NOW\n1. Press andon, tell Line Lead, note fault code/time\n\nWHO TO PAGE\n- L0 Michael Taylor (line lead), x4269, radio CAS-11\n- L1 Kwame Sato (Hydraulics / Pneumatics Technician (L1)), x4474, radio PLT-CB: now\n- L2 Deepak Hicks (Hydraulics / Pneumatics Technician (L2)), x4475, radio PLT-BA: after 8 min if no answer\n- L3 Larry Banerjee (Maintenance Supervisor), x4348, 737-555-0121, radio PLT-16: after 15 min if no answer\n- Beyond L3: IDRA hotline +1-800-555-0111\n\nSources: [CAS-GP-01-B]",
+  "latency_s": 0.0,
+  "highlight": [
+   "CAS-GP-01"
+  ]
+ },
+ {
+  "group": "C. Know the plant",
+  "q": "Explain OEE",
+  "why": "Plain-language glossary",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 1.0,
+   "reason": "glossary"
+  },
+  "answer": "OEE (overall equipment effectiveness) is availability x performance x quality: how much of the planned production time the line really produces good cars.",
+  "latency_s": 0.04,
+  "highlight": []
+ },
+ {
+  "group": "C. Know the plant",
+  "q": "What can you do?",
+  "why": "Capability answer with example questions",
+  "ok": true,
+  "confidence": {
+   "level": "high",
+   "score": 1.0,
+   "reason": "capabilities"
+  },
+  "answer": "I can tell you why a machine is alarming, what is likely wrong, who to page, which part and procedure apply, and what happens if you keep running. Click a station in the 3D view and I'll focus on it.\nTry: \"Why is M05 red?\" / \"Who do I page for M05?\" / \"Can we keep running M05 2 more hours?\"",
+  "latency_s": 0.04,
+  "highlight": []
+ }
+]

@@ -1,0 +1,20 @@
+{"q": "Who is the on-call technician for M05 during the morning shift?", "gold": ["M05-A"]}
+{"q": "page list for CAS-GP-01 night shift", "gold": ["CAS-GP-01-C"]}
+{"q": "What does the SRVO-062 alarm on the FANUC robot indicate?", "gold": ["MAN-WF", "SOP-ROB-02"]}
+{"q": "battery low pulsecoder alarm procedure", "gold": ["SOP-ROB-02"]}
+{"q": "how do we handle a torque tool reporting NOK", "gold": ["SOP-QA-01"]}
+{"q": "steps to isolate energy before maintenance", "gold": ["SOP-SAF-01"]}
+{"q": "rules for working on the high voltage traction battery", "gold": ["SOP-SAF-02"]}
+{"q": "when to escalate a fault and who to call first", "gold": ["SOP-MNT-01"]}
+{"q": "can the machine run a bit longer or must we stop now", "gold": ["SOP-OPS-02"]}
+{"q": "how to change the bearing on the weld robot axis 1", "gold": ["SOP-MNT-M05-01"]}
+{"q": "KUKA gear oil leak seal replacement", "gold": ["MAN-WK", "SOP-ROB-03", "RCA-049"]}
+{"q": "laser power below tolerance protective glass", "gold": ["SOP-BAT-02", "MAN-BL"]}
+{"q": "helium leak test failing on battery packs", "gold": ["SOP-BAT-03"]}
+{"q": "hydraulic oil spilled on the floor what to do", "gold": ["SOP-ENV-01"]}
+{"q": "compressor tripped and plant air pressure is low", "gold": ["SOP-UTL-01"]}
+{"q": "weld tip dressing and nugget quality check", "gold": ["SOP-ROB-04"]}
+{"q": "how to restart the line after an emergency stop", "gold": ["SOP-OPS-01"]}
+{"q": "double blank detected in the servo press", "gold": ["SOP-STP-01"]}
+{"q": "paint booth purge fault in the explosion zone", "gold": ["SOP-PNT-01"]}
+{"q": "what must be included in a shift handover", "gold": ["SOP-MNT-03"]}
