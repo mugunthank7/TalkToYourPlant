@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { brainGet, brainPost } from "../brain";
+import { camera } from "../clock";
+import { anchorsFor, frameFor, type PathNode } from "../graphpath";
 import { useTwin } from "../state";
 
 interface Machine {
@@ -122,11 +124,23 @@ function StationView({ sid }: { sid: string }) {
 
 const SUGGEST = ["Explain the production process", "Why is M05 red?", "What should I do?", "Can we keep running M05 2 more hours?", "What happens if the conveyor stops?", "How many cars have we built so far?"];
 
+interface AnswerPath { nodes: PathNode[]; machine: string | null }
+
+/** Light the answer up on the plant: nodes appear one by one, the camera frames the whole chain. */
+function playPath(p: AnswerPath) {
+  const st = useTwin.getState();
+  if (!st.data) return;
+  st.setGraphPath({ nodes: p.nodes, machine: p.machine, t0: performance.now() });
+  camera.mode = "free";
+  camera.goal = frameFor(anchorsFor(st.data.layout, p.nodes, p.machine));
+}
+
 function AskView() {
   const { data, selectedStation, selectQuiet } = useTwin();
   const [q, setQ] = useState("");
   const [busy, setBusy] = useState(false);
-  const [log, setLog] = useState<{ q: string; a: string; report?: Report | null }[]>([]);
+  const [log, setLog] = useState<{ q: string; a: string; report?: Report | null; path?: AnswerPath | null }[]>([]);
+  const active = useTwin((s) => s.graphPath);
   const [sid] = useState(() => Math.random().toString(36).slice(2));
   const end = useRef<HTMLDivElement>(null);
   useEffect(() => { end.current?.scrollIntoView({ block: "end" }); }, [log, busy]);
@@ -137,8 +151,11 @@ function AskView() {
     setLog((l) => [...l, { q: text, a: "" }]);
     try {
       const r = await brainPost("/chat", { message: text, session_id: sid, station_id: selectedStation });
-      setLog((l) => l.map((m, i) => (i === l.length - 1 ? { q: text, a: r.answer, report: r.report } : m)));
       const first = r.highlight?.machine_ids?.[0];
+      const gpath: PathNode[] = r.highlight?.graph_path?.length ? r.highlight.graph_path : first ? [{ id: first, kind: "machine" }] : [];
+      const path: AnswerPath | null = gpath.length ? { nodes: gpath, machine: first ?? null } : null;
+      setLog((l) => l.map((m, i) => (i === l.length - 1 ? { q: text, a: r.answer, report: r.report, path } : m)));
+      if (path) playPath(path); else useTwin.getState().setGraphPath(null);
       const st = data?.layout.machines.find((m) => m.id === first)?.station;
       if (st) selectQuiet(st);
     } catch { setLog((l) => l.map((m, i) => (i === l.length - 1 ? { q: text, a: "The brain is not running on :8100. Start it with brain/scripts/start_all.sh" } : m))); }
@@ -156,7 +173,15 @@ function AskView() {
         {log.map((m, i) => (
           <div key={i} style={{ display: "contents" }}>
             <div className="bub">{m.q}</div>
-            <div className="ans">{m.report ? <ReportView r={m.report} onAsk={(s) => void ask(s)} /> : m.a ? <pre className="txt" style={{ margin: 0 }}>{m.a}</pre> : <div className="note">Thinking…</div>}</div>
+            <div className="ans">
+              {m.report ? <ReportView r={m.report} onAsk={(s) => void ask(s)} /> : m.a ? <pre className="txt" style={{ margin: 0 }}>{m.a}</pre> : <div className="note">Thinking…</div>}
+              {m.path && (
+                <div className="row" style={{ marginTop: 8 }}>
+                  <button className="btn pri" onClick={() => playPath(m.path!)}>{m.path.nodes.length > 1 ? "Show the path on the plant" : "Show on the plant"}</button>
+                  {active && <button className="btn" onClick={() => useTwin.getState().setGraphPath(null)}>Hide</button>}
+                </div>
+              )}
+            </div>
           </div>
         ))}
         <div ref={end} />
@@ -180,7 +205,7 @@ export function SidePanel() {
   useEffect(() => { if (askOpen) setTab("ask"); }, [askOpen, setTab]);
   if (!sid && !askOpen) return null;
   const shown = tab === "station" && !sid ? "ask" : tab;
-  const close = () => { setSid(null); setAskOpen(false); };
+  const close = () => { setSid(null); setAskOpen(false); useTwin.getState().setGraphPath(null); };
   return (
     <div className={`dock gl ${shown === "ask" ? "fill" : ""}`}>
       <div className="tabs3">

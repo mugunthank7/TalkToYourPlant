@@ -23,6 +23,7 @@ import { Building } from "./scene/Building";
 import { Cells } from "./scene/Cells";
 import { Props } from "./scene/Props";
 import { StationModels } from "./scene/stations";
+import { GraphPath } from "./scene/GraphPath";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 
 /** Shift the render so the plant sits in the free area between the HUD panels. */
@@ -164,6 +165,7 @@ function Scene({ low }: { low: boolean }) {
       <Logistics />
       <Machines />
       <People />
+      <GraphPath />
       {!low && (
         <EffectComposer multisampling={0}>
           <Bloom intensity={0.9} luminanceThreshold={0.9} luminanceSmoothing={0.2} mipmapBlur />

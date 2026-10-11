@@ -1,3 +1,4 @@
+import type { GraphPath } from "./graphpath";
 import { create } from "zustand";
 import type { TwinData } from "./data";
 import type { Injected } from "./plant";
@@ -14,6 +15,8 @@ interface TwinState {
   setView: (v: "live" | "dash") => void;
   error: string | null;
   selectedStation: string | null;
+  graphPath: GraphPath | null;
+  setGraphPath: (p: GraphPath | null) => void;
   askOpen: boolean;
   setAskOpen: (v: boolean) => void;
   setSelectedStation: (id: string | null) => void;
@@ -36,6 +39,8 @@ export const useTwin = create<TwinState>((set) => ({
   setView: (view) => set({ view }),
   error: null,
   selectedStation: null,
+  graphPath: null,
+  setGraphPath: (graphPath) => set({ graphPath }),
   askOpen: false,
   setAskOpen: (askOpen) => set({ askOpen }),
   setSelectedStation: (selectedStation) => set((st) => ({ selectedStation, sideTab: selectedStation ? "station" : st.sideTab })),
