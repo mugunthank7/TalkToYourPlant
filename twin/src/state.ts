@@ -1,4 +1,3 @@
-import type { GraphPath } from "./graphpath";
 import { create } from "zustand";
 
 export type BotState = "idle" | "listening" | "thinking" | "answering" | "happy" | "searching" | "pointing" | "warning" | "danger" | "sleeping";
@@ -20,8 +19,6 @@ interface TwinState {
   selectedStation: string | null;
   bot: BotState;
   setBot: (s: BotState, holdMs?: number) => void;       // after holdMs the bot goes back to idle
-  graphPath: GraphPath | null;
-  setGraphPath: (p: GraphPath | null) => void;
   askOpen: boolean;
   setAskOpen: (v: boolean) => void;
   setSelectedStation: (id: string | null) => void;
@@ -46,8 +43,6 @@ export const useTwin = create<TwinState>((set) => ({
   selectedStation: null,
   bot: "idle",
   setBot: (bot, holdMs) => { clearTimeout(botTimer); set({ bot }); if (holdMs) botTimer = setTimeout(() => set({ bot: "idle" }), holdMs); },
-  graphPath: null,
-  setGraphPath: (graphPath) => set({ graphPath }),
   askOpen: false,
   setAskOpen: (askOpen) => set({ askOpen }),
   setSelectedStation: (selectedStation) => set((st) => ({ selectedStation, sideTab: selectedStation ? "station" : st.sideTab })),

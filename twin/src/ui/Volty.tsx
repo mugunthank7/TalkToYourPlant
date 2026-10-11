@@ -19,7 +19,7 @@ const THEME: Record<BotState, { glow: string; eye: string; body: string }> = {
   searching: { glow: "#38bdf8", eye: "#67e8f9", body: "#6f93d8" },
   pointing: { glow: "#22d3ee", eye: "#67e8f9", body: "#6f93d8" },
   warning: { glow: "#fbbf24", eye: "#ffc93c", body: "#7d92c9" },
-  danger: { glow: "#ff4d4d", eye: "#ff5a5a", body: "#c4687e" },
+  danger: { glow: "#ff4d4d", eye: "#ff5a5a", body: "#a56a9a" },
   sleeping: { glow: "#9ca3af", eye: "#9ca3af", body: "#8a909b" },
 };
 const GOLD = "#c9a45c", GREY = "#3b414d";
@@ -123,7 +123,7 @@ function poses(s: BotState, t: number): { l: P; r: P } {
 function Hand({ g, bodyMat }: { g: React.Ref<THREE.Group>; bodyMat: THREE.Material }) {
   return (
     <group ref={g}>
-      <mesh material={bodyMat} scale={[1, 1.15, 0.95]}><sphereGeometry args={[0.21, 20, 16]} /></mesh>
+      <mesh material={bodyMat} scale={[1, 1.15, 0.95]}><sphereGeometry args={[0.19, 20, 16]} /></mesh>
       <mesh position={[0, 0.17, 0]} rotation={[Math.PI / 2, 0, 0]}><torusGeometry args={[0.17, 0.035, 10, 24]} /><meshStandardMaterial color={GOLD} roughness={0.4} metalness={0.4} /></mesh>
       {[-0.1, 0, 0.1].map((x) => <mesh key={x} position={[x, -0.2, 0.04]}><sphereGeometry args={[0.055, 10, 8]} /><meshStandardMaterial color={GREY} roughness={0.7} /></mesh>)}
     </group>
@@ -281,7 +281,7 @@ export function Volty({ state, height = 150 }: { state?: BotState; height?: numb
   useEffect(() => { /* canvas sizes itself to the wrapper */ }, []);
   return (
     <div ref={wrap} className={`volty s-${s}`} style={{ height }}>
-      <Canvas dpr={1} gl={{ alpha: true, antialias: true }} camera={{ position: [0, 0.38, 5.7], fov: 37 }} style={{ background: "transparent" }}>
+      <Canvas dpr={1} gl={{ alpha: true, antialias: true }} camera={{ position: [0, 0.4, 6.1], fov: 37 }} style={{ background: "transparent" }}>
         <ambientLight intensity={1.05} />
         <directionalLight position={[3, 5, 5]} intensity={1.7} />
         <directionalLight position={[-4, 1, 3]} intensity={0.6} color="#9ec5ff" />

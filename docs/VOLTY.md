@@ -14,7 +14,7 @@ A small floating robot at the top of the chat. Built in code from primitives (`t
 | searching | magnifier, narrowed eyes | question about a part, stock, procedure, "who", "where", "which" |
 | answering | waveform mouth, talking pulse, gesturing | normal answer (3.5 s) |
 | all clear | green, happy eyes, sparkles, thumbs up | answer with severity ok (4 s) |
-| look here | points sideways | the graph path is shown on the plant (4.5 s) |
+| look here | points sideways | not triggered right now (the graph-path feature was removed, D-061) |
 | warning | amber glow, worried brows, blinking antenna | answer with severity warning (12 s) |
 | danger | red body tint, siren and "!", shaking, hands up, red pulsing chat border | answer with severity critical (20 s) |
 | offline | grey, eyes closed, "z z" | the brain is not reachable |

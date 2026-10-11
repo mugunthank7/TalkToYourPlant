@@ -291,3 +291,8 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 ## D-060, Volty, an animated 3D assistant in the chat | 2026-10-11 | accepted
 **Decision:** A character sheet generated with Gemini defines the look; the bot is built in code (react-three-fiber primitives, canvas-texture face) in its own small canvas at the top of the Ask tab, with ten states driven by the chat (typing, thinking or searching, answer severity, path shown, brain offline). The chat panel border takes the bot's mood. Docs and the review gallery (`?botdemo=1`) are in `docs/VOLTY.md`.
 **Consequences:** One extra small WebGL context. No new assets or downloads. Swapping to a modelled GLB later only means replacing `Bot` in `Volty.tsx`; the states and triggers stay.
+
+## D-061, Removed the graph path from the 3D scene | 2026-10-11 | accepted
+**Context:** D-059 drew the knowledge-graph path (symptom, failure mode, component, repair, spare part) as animated arcs and labels across the plant. On review it was unwanted: the arcs between stations were visually noisy and unclear.
+**Decision:** Supersedes D-059. The graph-path module, scene component, store state, camera framing and the "Show the path on the plant" buttons are deleted. Chat answers still select the machine's station quietly. The brain still returns `graph_path`; the twin ignores it.
+**Consequences:** Volty's "look here" state is no longer triggered. If a path view is wanted again it should be a small diagram in the chat, not lines across the plant.
