@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plant Brain Runs</title>
+<style>
+:root{--bg:#f4f6f7;--panel:#fff;--ink:#14202a;--mut:#5b6b75;--line:#d9e0e4;--ok:#14805c;--warn:#a96a00;--bad:#b3261e;--acc:#1f5fbf;--bar:#e3e9ec}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1417;--panel:#171e23;--ink:#e6edf1;--mut:#8a99a3;--line:#26323a;--ok:#3fb68b;--warn:#e5a23a;--bad:#ef6b61;--acc:#6aa3ff;--bar:#26323a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,sans-serif}
+header{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+header h1{font-size:17px;margin:0}header .mut{color:var(--mut);font-size:13px}
+main{max-width:1200px;margin:0 auto;padding:16px 20px;display:grid;gap:16px}
+.cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+.card h2{font-size:15px;margin:0 0 8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.badge{font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mut)}
+.badge.running{color:var(--acc);border-color:var(--acc)}.badge.done{color:var(--ok);border-color:var(--ok)}
+.badge.failed,.badge.stopped{color:var(--bad);border-color:var(--bad)}
+.bar{height:8px;background:var(--bar);border-radius:4px;overflow:hidden;margin:8px 0}
+.bar>i{display:block;height:100%;background:var(--acc);width:0}
+.row{display:flex;justify-content:space-between;gap:8px;font-size:13px}.mut{color:var(--mut)}
+button{padding:5px 12px;border-radius:7px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;font:inherit}
+button.go{background:var(--acc);color:#fff;border-color:transparent}button:disabled{opacity:.45;cursor:default}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mut);font-weight:600}td.n{text-align:right;font-variant-numeric:tabular-nums}
+.pass{color:var(--ok)}.fail{color:var(--bad)}
+pre{margin:8px 0 0;max-height:160px;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px;font-size:12px;white-space:pre-wrap}
+.mbar{display:inline-block;height:8px;background:var(--acc);border-radius:2px;vertical-align:middle}
+h3{font-size:14px;margin:14px 0 6px}details summary{cursor:pointer;color:var(--mut)}
+.err{color:var(--bad);font-size:12px}
+</style></head><body>
+<header><h1>Plant Brain: run status</h1><span class="mut" id="oll">checking local LLM...</span><span class="mut" id="clock"></span></header>
+<main>
+  <div class="cards" id="cards"></div>
+  <div class="card" id="emb"><h2>Embedding experiment</h2><div class="mut">no data yet</div></div>
+  <div class="card" id="ev"><h2>Eval results</h2><div class="mut">no data yet</div></div>
+  <div class="card" id="rg"><h2>RAGAS (local judge)</h2><div class="mut">no data yet</div></div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const NAMES={eval:'Eval (40 questions)',ragas:'RAGAS (local judge)',embeddings:'Embedding experiment'};
+const fmt=s=>{s=Math.round(s);const m=Math.floor(s/60);return m>=60?`${Math.floor(m/60)}h ${m%60}m`:m?`${m}m ${s%60}s`:`${s}s`};
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e}
+async function act(kind,job){try{const r=await fetch(`/api/${kind}/${job}`,{method:'POST'});if(!r.ok){alert((await r.json()).detail)}}catch(e){alert(e)}tick()}
+function card(job,d,anyRunning){
+  const c=el('div','card');const h=el('h2');h.appendChild(el('span','',NAMES[job]));
+  const st=d?d.state:'idle';h.appendChild(el('span','badge '+st,st));c.appendChild(h);
+  if(d){const p=d.progress||{done:0,total:0};const pct=p.total?Math.round(100*p.done/p.total):0;
+    const r=el('div','row');r.appendChild(el('span','',`${p.done}/${p.total}`+(d.current?` · ${d.current}`:'')));
+    r.appendChild(el('span','mut',(d.elapsed_s!=null?fmt(d.elapsed_s):'')+(d.eta_s?` · ETA ${fmt(d.eta_s)}`:'')));c.appendChild(r);
+    const b=el('div','bar');const i=el('i');i.style.width=pct+'%';b.appendChild(i);c.appendChild(b);
+    if(d.error)c.appendChild(el('div','err',d.error));
+    if(d.log&&d.log.length){const pre=el('pre','',d.log.join('\n'));c.appendChild(pre);pre.scrollTop=1e9}}
+  const bar=el('div','row');bar.style.marginTop='10px';
+  const go=el('button','go',d&&d.state==='running'?'running...':'Start');go.disabled=anyRunning;go.onclick=()=>act('start',job);
+  const stop=el('button','','Stop');stop.disabled=!(d&&d.state==='running');stop.onclick=()=>act('stop',job);
+  bar.appendChild(go);bar.appendChild(stop);c.appendChild(bar);return c}
+function table(head,rows){const t=el('table');const tr=el('tr');head.forEach(x=>tr.appendChild(el('th','',x)));t.appendChild(tr);
+  rows.forEach(r=>{const tr=el('tr');r.forEach(v=>{const td=el('td',typeof v==='number'?'n':'');
+    if(v&&v.nodeType)td.appendChild(v);else td.textContent=v===null||v===undefined?'-':v;tr.appendChild(td)});t.appendChild(tr)});return t}
+function bar(v){const s=el('span');const b=el('span','mbar');b.style.width=Math.round((v||0)*100)+'px';s.appendChild(b);s.appendChild(document.createTextNode(' '+(v==null?'-':v.toFixed(2))));return s}
+function renderEmb(d){const c=$('emb');c.replaceChildren(el('h2','','Embedding experiment (local models, hit@6 / MRR)'));
+  if(!d||!d.results||!d.results.length){c.appendChild(el('div','mut','no data yet: start the experiment'));return}
+  c.appendChild(el('div','mut',`${d.queries} queries: 23 scoped data questions ("gold") + 20 unscoped paraphrases ("para"). Hybrid = dense + BM25 (RRF).`));
+  const rows=[];d.results.forEach(r=>{if(r.error){rows.push([r.model,'',el('span','err',r.error),'','','','','']);return}
+    rows.push([r.model.split('/').pop(),r.dim,r.build_s+'s',bar(r.dense.para.hit6),bar(r.bm25.para.hit6),bar(r.hybrid.para.hit6),bar(r.hybrid.gold.hit6),r.hybrid.para.mrr])});
+  c.appendChild(table(['model','dim','build','dense para hit@6','bm25 para','hybrid para','hybrid gold hit@6','hybrid para MRR'],rows))}
+function renderEval(d,job){const c=$('ev');c.replaceChildren(el('h2','','Eval results'));
+  const j=job;const items=(j&&j.items)||[];
+  if(j&&j.retrieval){const r=j.retrieval;c.appendChild(el('div','',`Retrieval: hit@6 ${r.hit_at_6} · MRR ${r.mrr} · n=${r.n}`+(r.misses.length?` · misses ${r.misses.join(', ')}`:'')))}
+  if(j&&j.summary){c.appendChild(el('div','',`Answers: ${j.summary.pass}/${j.summary.total} pass`));
+    c.appendChild(table(['category','pass'],Object.entries(j.summary.by_category).map(([k,v])=>[k,`${v[0]}/${v[1]}`])))}
+  else if(items.length){const ok=items.filter(i=>i.pass).length;c.appendChild(el('div','',`So far: ${ok}/${items.length} pass`))}
+  if(items.length){const det=el('details');det.appendChild(el('summary','','per question'));
+    det.appendChild(table(['id','category','question','result','s'],items.map(i=>[i.id,i.category,i.question,el('span',i.pass?'pass':'fail',i.pass?'PASS':'FAIL '+(i.fails||[]).join('; ')),i.latency_s])));c.appendChild(det)}
+  if(!j&&!d)c.appendChild(el('div','mut','no data yet: start the eval'))}
+function renderRagas(d,job){const c=$('rg');c.replaceChildren(el('h2','',`RAGAS (judge ${(d&&d.judge)||(job&&job.judge)||'local'}, embeddings ${(d&&d.embed)||'nomic'})`));
+  const m=(job&&job.metrics&&Object.keys(job.metrics).length?job.metrics:(d&&d.summary))||{};
+  const names=Object.keys(m);if(!names.length){c.appendChild(el('div','mut','no data yet: run eval first, then start RAGAS'));return}
+  c.appendChild(table(['metric','mean','scored','of'],names.map(n=>[n,bar(m[n].mean),m[n].n,m[n].of])));
+  const rows=(d&&d.rows)||[];if(rows.length){const det=el('details');det.open=true;det.appendChild(el('summary','','per question'));
+    det.appendChild(table(['id','category','faithfulness','relevancy','ctx precision','ctx recall'],rows.map(r=>[r.id,r.category,r.faithfulness,r.answer_relevancy,r.context_precision,r.context_recall])));c.appendChild(det)}}
+async function tick(){
+  try{const s=await (await fetch('/api/status')).json();
+    $('oll').textContent=s.ollama.up?`Ollama up · loaded: ${s.ollama.loaded.join(', ')||'none'} · ${s.ollama.models.length} models`:'Ollama not reachable';
+    $('clock').textContent=new Date(s.now*1000).toLocaleTimeString();
+    const run=Object.values(s.jobs).some(j=>j&&j.state==='running');
+    const cards=$('cards');cards.replaceChildren(...['embeddings','eval','ragas'].map(j=>card(j,s.jobs[j],run)));
+    renderEmb(s.embedding_experiment);renderEval(s.eval_results,s.jobs.eval);renderRagas(s.ragas_results,s.jobs.ragas)
+  }catch(e){$('oll').textContent='dashboard backend not reachable'}}
+tick();setInterval(tick,2500);
+</script></body></html>

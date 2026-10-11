@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Plant Integration Monitor</title>
+<style>
+:root{--bg:#f4f6f7;--panel:#fff;--ink:#14202a;--mut:#5b6b75;--line:#d9e0e4;--ok:#14805c;--warn:#a96a00;--bad:#b3261e;--acc:#1f5fbf;--c2:#8a4fbf;--c3:#c2570c}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1417;--panel:#171e23;--ink:#e6edf1;--mut:#8a99a3;--line:#26323a;--ok:#3fb68b;--warn:#e5a23a;--bad:#ef6b61;--acc:#6aa3ff;--c2:#b58cf0;--c3:#f0905a}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,sans-serif}
+header{padding:12px 20px;border-bottom:1px solid var(--line);display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header h1{font-size:17px;margin:0}.pill{font-size:12px;padding:2px 10px;border-radius:999px;border:1px solid var(--line);color:var(--mut)}
+.pill.ok{color:var(--ok);border-color:var(--ok)}.pill.bad{color:var(--bad);border-color:var(--bad)}
+main{max-width:1280px;margin:0 auto;padding:16px 20px;display:grid;gap:14px}
+.tiles{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.tile,.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.tile .l{color:var(--mut);font-size:12px}.tile .v{font-size:24px;font-weight:650;font-variant-numeric:tabular-nums}
+.tile .d{font-size:12px}.up{color:var(--ok)}.down{color:var(--bad)}
+.grid2{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(380px,1fr))}
+.card h2{font-size:14px;margin:0 0 6px;display:flex;justify-content:space-between;gap:8px}
+.mut{color:var(--mut)}svg{width:100%;height:150px;display:block}
+.ev{display:flex;gap:8px;padding:4px 0;border-bottom:1px solid var(--line);font-size:13px}
+.ev .t{color:var(--mut);min-width:62px;font-variant-numeric:tabular-nums}
+.k{font-size:11px;padding:0 7px;border-radius:5px;border:1px solid var(--line);align-self:center}
+.k.alert,.k.inject,.k.machine{color:var(--bad);border-color:var(--bad)}.k.work_order{color:var(--warn);border-color:var(--warn)}
+.k.station{color:var(--c3);border-color:var(--c3)}.k.engine{color:var(--acc);border-color:var(--acc)}
+.ask{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:8px}
+.ask pre{white-space:pre-wrap;margin:6px 0;font:13px/1.45 system-ui,sans-serif}
+.chip{font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mut);margin-right:4px}
+.chip.m{color:var(--acc);border-color:var(--acc);font-weight:600}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button,select,input{font:inherit;padding:6px 10px;border-radius:7px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
+button{cursor:pointer}button.bad{background:var(--bad);color:#fff;border-color:transparent}button.go{background:var(--acc);color:#fff;border-color:transparent}
+input.q{flex:1;min-width:220px}table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+</style></head><body>
+<header><h1>Plant Integration Monitor</h1>
+<span class="pill" id="pe">engine ?</span><span class="pill" id="pb">brain ?</span><span class="pill" id="pm"></span>
+<span class="mut" id="clk"></span></header>
+<main>
+  <div class="card"><div class="row">
+    <b>Simulate failure</b>
+    <select id="mach"></select>
+    <label class="mut">repair min <input id="rep" type="number" value="45" style="width:70px"></label>
+    <button class="bad" id="inj">Inject fault</button>
+    <button id="clr">Clear faults</button>
+    <span class="mut" id="msg"></span>
+  </div></div>
+  <div class="tiles" id="tiles"></div>
+  <div class="grid2">
+    <div class="card"><h2><span>OEE</span><span class="mut" id="v_oee"></span></h2><svg id="c_oee"></svg></div>
+    <div class="card"><h2><span>Throughput (units/h)</span><span class="mut" id="v_thr"></span></h2><svg id="c_thr"></svg></div>
+    <div class="card"><h2><span>M05 vibration (x healthy) and RUL (min)</span><span class="mut" id="v_vib"></span></h2><svg id="c_vib"></svg></div>
+    <div class="card"><h2><span>Downtime cost (USD)</span><span class="mut" id="v_cost"></span></h2><svg id="c_cost"></svg></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h2><span>What changed (events)</span></h2><div id="events" style="max-height:340px;overflow:auto"></div></div>
+    <div class="card"><h2><span>How the brain reacted</span></h2>
+      <div class="row" style="margin-bottom:8px"><input class="q" id="q" placeholder="Ask the brain: why is M05 red?"><button class="go" id="ask">Ask</button></div>
+      <div id="asks" style="max-height:340px;overflow:auto"></div></div>
+  </div>
+  <div class="card"><h2><span>Impact since baseline</span><span class="mut">baseline = first sample, or the moment you press Inject</span></h2><div id="impact"></div></div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const fmtT=ts=>new Date(ts*1000).toLocaleTimeString();
+let baseline=null,last=null;
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e}
+function spark(svg,series,opts){ // series: [{key,color,label}], data = samples
+  const W=600,H=150,P=24;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.replaceChildren();
+  const ns='http://www.w3.org/2000/svg';const mk=(n,a)=>{const e=document.createElementNS(ns,n);for(const k in a)e.setAttribute(k,a[k]);return e};
+  const data=opts.data;if(data.length<2)return;
+  const t0=data[0].ts,t1=data[data.length-1].ts||t0+1;
+  series.forEach((s,si)=>{
+    const vals=data.map(d=>d[s.key]).filter(v=>typeof v==='number');if(!vals.length)return;
+    const lo=s.min!==undefined?s.min:Math.min(...vals),hi=s.max!==undefined?s.max:Math.max(...vals);const span=(hi-lo)||1;
+    let path='';data.forEach(d=>{const v=d[s.key];if(typeof v!=='number')return;
+      const x=P+(d.ts-t0)/(t1-t0||1)*(W-2*P),y=H-P-(v-lo)/span*(H-2*P);path+=(path?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)});
+    svg.appendChild(mk('path',{d:path,fill:'none',stroke:`var(--${s.color})`,'stroke-width':2}));
+    const l=mk('text',{x:P+4+si*150,y:12,fill:`var(--${s.color})`,'font-size':11});l.textContent=`${s.label} ${lo.toFixed(s.dp||1)}..${hi.toFixed(s.dp||1)}`;svg.appendChild(l)});
+  (opts.events||[]).forEach(e=>{if(e.ts<t0||e.ts>t1)return;const x=P+(e.ts-t0)/(t1-t0||1)*(W-2*P);
+    svg.appendChild(mk('line',{x1:x,x2:x,y1:16,y2:H-P,stroke:'var(--bad)','stroke-dasharray':'3 3','stroke-width':1,opacity:.7}))})}
+function tile(l,v,d){const t=el('div','tile');t.appendChild(el('div','l',l));t.appendChild(el('div','v',v));if(d)t.appendChild(el('div','d '+(d.cls||''),d.text));return t}
+function delta(now,base,good,dp=3,pct=false){if(typeof now!=='number'||typeof base!=='number')return null;const d=now-base;
+  return {text:(d>=0?'+':'')+d.toFixed(dp)+' vs baseline',cls:Math.abs(d)<1e-9?'':((d>0)===good?'up':'down')}}
+async function post(p,b){const r=await fetch(p,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+  if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.detail||r.status)}return r.json()}
+$('inj').onclick=async()=>{try{baseline=last;$('msg').textContent='injecting...';await post('/api/inject',{machine:$('mach').value,repair_minutes:+$('rep').value});$('msg').textContent='fault injected'}catch(e){$('msg').textContent='failed: '+e.message}};
+$('clr').onclick=async()=>{try{await post('/api/control',{action:'clear_faults'});$('msg').textContent='faults cleared'}catch(e){$('msg').textContent='failed: '+e.message}};
+$('ask').onclick=async()=>{const q=$('q').value.trim();if(!q)return;$('ask').disabled=true;try{await post('/api/ask',{question:q})}finally{$('ask').disabled=false}tick()};
+$('q').addEventListener('keydown',e=>{if(e.key==='Enter')$('ask').click()});
+const mach=$('mach');for(let i=1;i<=10;i++){const o=document.createElement('option');o.value='M'+String(i).padStart(2,'0');o.textContent=o.value;mach.appendChild(o)}mach.value='M05';
+function render(d){
+  const pe=$('pe');pe.textContent='engine '+(d.engine.up?'up':'down');pe.className='pill '+(d.engine.up?'ok':'bad');
+  const pb=$('pb');pb.textContent='brain '+(d.brain.up?'up':'down');pb.className='pill '+(d.brain.up?'ok':'bad');
+  $('pm').textContent=d.brain.up?`brain sim mode: ${d.brain.sim_mode}`:(d.engine.error||'');$('clk').textContent=fmtT(d.now);
+  const S=d.samples;if(!S.length)return;last=S[S.length-1];if(!baseline)baseline=S[0];
+  const b=baseline,n=last;
+  const tl=$('tiles');tl.replaceChildren(
+    tile('OEE',(n.oee??0).toFixed(3),delta(n.oee,b.oee,true)),
+    tile('Throughput /h',(n.throughput??0).toFixed(1),delta(n.throughput,b.throughput,true,1)),
+    tile('Downtime min',(n.downtime_min??0).toFixed(1),delta(n.downtime_min,b.downtime_min,false,1)),
+    tile('Downtime cost','$'+Math.round(n.cost||0).toLocaleString(),delta(n.cost,b.cost,false,0)),
+    tile('Machines alerting',n.n_alert,null),tile('Stopped stations',n.stopped.length?n.stopped.join(', '):'none',null),
+    tile('Open work orders',n.open_wo,null),tile('M05 RUL min',n.m05_rul_min??'-',null));
+  const evs=d.events;
+  spark($('c_oee'),[{key:'oee',color:'acc',label:'OEE',min:0,max:1,dp:2}],{data:S,events:evs});
+  spark($('c_thr'),[{key:'throughput',color:'c2',label:'units/h',min:0}],{data:S,events:evs});
+  spark($('c_vib'),[{key:'m05_vib',color:'bad',label:'vib x',dp:2},{key:'m05_rul_min',color:'c3',label:'RUL min',min:0}],{data:S,events:evs});
+  spark($('c_cost'),[{key:'cost',color:'warn',label:'USD',min:0,dp:0}],{data:S,events:evs});
+  $('v_oee').textContent=(n.oee??0).toFixed(3);$('v_thr').textContent=(n.throughput??0).toFixed(1);
+  $('v_vib').textContent=n.m05_vib?`${n.m05_vib}x · RUL ${n.m05_rul_min??'-'} min · alert ${n.m05_alert||'none'}`:'healthy';
+  $('v_cost').textContent='$'+Math.round(n.cost||0).toLocaleString();
+  const ev=$('events');ev.replaceChildren(...evs.slice().reverse().map(e=>{const r=el('div','ev');r.appendChild(el('span','t',fmtT(e.ts)));r.appendChild(el('span','k '+e.kind,e.kind));r.appendChild(el('span','',e.text));return r}));
+  if(!evs.length)ev.appendChild(el('div','mut','no changes yet: inject a fault to see the plant and the brain react'));
+  const as=$('asks');as.replaceChildren(...d.asks.slice().reverse().map(a=>{const c=el('div','ask');
+    const h=el('div','mut',`${fmtT(a.ts)} · ${a.question} · ${a.latency_s}s · ${a.model||'n/a'}${a.degraded?' · DEGRADED':''}${a.sim_mode?' · sim:'+a.sim_mode:''}`);c.appendChild(h);
+    c.appendChild(el('pre','',a.answer));const ch=el('div');(a.highlight||[]).forEach(m=>ch.appendChild(el('span','chip m',m)));
+    (a.citations||[]).forEach(m=>ch.appendChild(el('span','chip',m)));(a.actions||[]).forEach(m=>ch.appendChild(el('span','chip',m)));c.appendChild(ch);return c}));
+  if(!d.asks.length)as.appendChild(el('div','mut','no brain answers yet'));
+  const rows=[['OEE',b.oee,n.oee,3,true],['Throughput /h',b.throughput,n.throughput,1,true],['Downtime min',b.downtime_min,n.downtime_min,1,false],
+    ['Downtime cost $',b.cost,n.cost,0,false],['Units',b.units,n.units,0,true],['Availability',b.availability,n.availability,3,true],['Quality',b.quality,n.quality,3,true]];
+  const t=el('table');const h=el('tr');['metric','baseline','now','change'].forEach(x=>h.appendChild(el('th','',x)));t.appendChild(h);
+  rows.forEach(([k,bv,nv,dp,good])=>{const r=el('tr');r.appendChild(el('td','',k));r.appendChild(el('td','n',typeof bv==='number'?bv.toFixed(dp):'-'));
+    r.appendChild(el('td','n',typeof nv==='number'?nv.toFixed(dp):'-'));const dd=delta(nv,bv,good,dp);const td=el('td','n '+(dd?dd.cls:''),dd?dd.text.replace(' vs baseline',''):'-');r.appendChild(td);t.appendChild(r)});
+  $('impact').replaceChildren(t)}
+async function tick(){try{render(await (await fetch('/api/monitor')).json())}catch(e){$('pe').textContent='monitor unreachable';$('pe').className='pill bad'}}
+tick();setInterval(tick,2000);
+</script></body></html>

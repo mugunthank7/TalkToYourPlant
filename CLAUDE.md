@@ -8,7 +8,7 @@ The **simulation engine + live 3D digital twin + dashboard** for "Talk to Your P
 
 Ownership (from the team whiteboard, marked M and T):
 - **M (this repo, Mugu):** Data 1 (layout, employees, sensor time series, timing), simulation engine, what-if scenarios, KPI dashboard (throughput, forecast), live 3D window with moving people, fault glow/heatmap, graph-path animation, work-order beat.
-- **T (teammate):** Data 2 (maintenance logs, service logs, procedures/protocols), knowledge base (graph + vector RAG), LLM brain (Gemini Flash), chat interface, diagnosing bot, voice/vision input.
+- **T (teammate):** Data 2 (maintenance logs, service logs, procedures/protocols), knowledge base (graph + hybrid RAG), the brain (local-only, no hosted LLM), chat interface, click-a-station briefing; voice/vision input not built yet. See the Brain section below and `brain/docs/HANDOFF.md`.
 - **Anomaly detection is now M's too (D-031):** Isolation Forest + Shapley + RUL inside the engine, see `docs/ANOMALY.md`. M exposes live state, anomaly reports and what-if via API and renders alerts/graph paths.
 
 Hero scenario: Weld robot 2 (`M05`) develops joint bearing wear; the twin shows the fault, the LLM explains it and can run a what-if ("keep running 2 more hours?"), then the maintenance tech walks to fix it.
@@ -103,6 +103,17 @@ Twin behaviour per message: `sensor` updates HUD and gauges; `alert` turns the m
 ## Simulation engine (sim/)
 
 SimPy model + FastAPI + WebSocket + LLM tool endpoints. See `sim/README.md`. The twin connects to the engine automatically on load (retrying every 3 s; `?sim=ws://...` overrides the URL); when connected, station states, belt cars, KPIs, work orders, technician walks, fault injection, what-if and forecast all come from the engine, otherwise the client-side approximation in `twin/src/plant.ts` is used (D-029, D-030).
+
+## Brain (T side): `brain/` (added in PR #3, decisions D-033 to D-052)
+
+The knowledge base, the answer engine and the click-a-station panel. Start with `brain/docs/HANDOFF.md` (what changed, how to run, what is open), then `brain/docs/BRAIN.md` (architecture, API, answer format), `brain/docs/PAGES.md` (what each web page does) and `brain/docs/DEMO_QUESTIONS.md` (18 verified demo questions).
+
+- **What it is:** local-only (no hosted LLM, no API key). Intent router -> tools (graph, hybrid retrieval, your engine's `/state` and `/tools`) -> structured card `{severity, headline, what_happened, impact, do_now, contacts, parts, procedure, sources}` plus `confidence`. Unknown questions get a short plain answer, never a disclaimer.
+- **Ports:** engine :8000, brain :8100, run dashboard :8200, monitor :8300, twin :5180. `brain/scripts/start_all.sh` / `stop_all.sh`.
+- **Click a station** in the 3D twin: `GET /station/{id}` returns state, sensors, SHAP, affected stations, steps, who to page, failure modes. Twin files touched: `state.ts`, `scene/Plant.tsx`, `ui/Hud.tsx`, `styles.css`, new `brain.ts` and `ui/StationPanel.tsx`.
+- **Tests and checks:** `python3 brain/eval/demo_check.py --reset` (18/18 high confidence), `python3 brain/eval/run_eval.py` (40/40), `python3 brain/tests/test_graph.py`, `python3 brain/tests/test_index.py`.
+- **Rules for this folder:** keep answers grounded in tool results; cite only ids that were retrieved; do not cache answers in live mode; ids `M01..M11` / `S01..S12` are the contract (D-008).
+- **Engine dependency:** run the engine from `sim/.venv` (numpy 2, scikit-learn 1.9); install requirements package by package if the network is flaky.
 
 ## Commands (fill in as the app is scaffolded)
 

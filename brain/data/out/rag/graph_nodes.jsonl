@@ -5677,6 +5677,9 @@
 {"id": "replace_bearing", "label": "Repair", "kind": "repair", "name": "Replace axis 1 joint bearing", "mttr_min": [90, 150], "source": "synthetic"}
 {"id": "bearing_6208", "label": "Part", "kind": "spare_part", "name": "Deep groove ball bearing 6208 (A1 joint)", "on_hand": 2, "lead_time_days": 9, "location": "S12", "source": "synthetic"}
 {"id": "SOP-MNT-M05-01", "label": "Document", "name": "Weld robot axis 1 joint bearing wear", "source": "synthetic"}
+{"id": "CAUSE:bearing-wear-1", "label": "Cause", "text": "Lubricant breakdown or missed regrease interval", "source": "synthetic"}
+{"id": "CAUSE:bearing-wear-2", "label": "Cause", "text": "Contamination at the axis 1 joint", "source": "synthetic"}
+{"id": "CAUSE:bearing-wear-3", "label": "Cause", "text": "Collision or overload event", "source": "synthetic"}
 {"id": "m05_base", "label": "Component", "kind": "component", "name": "Base plinth", "machine_id": "M05"}
 {"id": "m05_joint1_bearing", "label": "Component", "kind": "component", "name": "Axis 1 joint bearing", "machine_id": "M05"}
 {"id": "m05_joint2_bearing", "label": "Component", "kind": "component", "name": "Axis 2 joint bearing", "machine_id": "M05"}
