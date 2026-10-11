@@ -1,6 +1,6 @@
-.env
-.cache/
-.venv-ragas/
 __pycache__/
+.cache/
+.env
+.venv-ragas/
 *.pyc
-brain/eval/status/
+eval/status/
