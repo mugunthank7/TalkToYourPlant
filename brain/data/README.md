@@ -6,7 +6,7 @@ T-side (knowledge base) dataset, keyed to the twin's IDs.
 - `crosswalk_*.csv`: twin IDs (`M01..M11`, `S01..S12`, `A-TECH01`...) mapped to Voltara IDs and signals. **Twin IDs win** (D-021/D-022).
 - `build_keyed.py`: runs the generator, re-keys mapped entities to twin IDs, adds gap machines (`M03`, `M10`) and the hero `M05` bearing-wear content, runs integrity checks.
 - `hero_m05_messages.json`: example `alert` and `graph_path` messages for M05, matching the interface contract in `../../CLAUDE.md`.
-- `out/`: generated, gitignored (about 46 MB). Rebuild with `python3 build_keyed.py` (about 3 s).
+- `out/`: generated and **committed** (about 46 MB, 169 files) so both sides see the same data. Rebuild with `python3 build_keyed.py` (about 3 s); the build is deterministic, so a rebuild produces no diff.
 
 ## Layout of `out/`
 ```

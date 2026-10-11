@@ -1,0 +1,1192 @@
+[
+  {
+    "machine_id": "CAS-GP-01",
+    "area": "CAS",
+    "line": "CAS-L1",
+    "x_m": 0.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "GP"
+  },
+  {
+    "machine_id": "M01",
+    "area": "CAS",
+    "line": "CAS-L1",
+    "x_m": 12.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "GP"
+  },
+  {
+    "machine_id": "CAS-DOS-01",
+    "area": "CAS",
+    "line": "CAS-L1",
+    "x_m": 24.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "DOS"
+  },
+  {
+    "machine_id": "CAS-DOS-02",
+    "area": "CAS",
+    "line": "CAS-L1",
+    "x_m": 36.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "DOS"
+  },
+  {
+    "machine_id": "CAS-DSR-01",
+    "area": "CAS",
+    "line": "CAS-L1",
+    "x_m": 48.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "DSR"
+  },
+  {
+    "machine_id": "CAS-DSR-02",
+    "area": "CAS",
+    "line": "CAS-L1",
+    "x_m": 60.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "DSR"
+  },
+  {
+    "machine_id": "CAS-TRM-01",
+    "area": "CAS",
+    "line": "CAS-L2",
+    "x_m": 0.0,
+    "y_m": 14.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "TRM"
+  },
+  {
+    "machine_id": "CAS-XRY-01",
+    "area": "CAS",
+    "line": "CAS-L2",
+    "x_m": 12.0,
+    "y_m": 14.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "XRY"
+  },
+  {
+    "machine_id": "CAS-CNC-01",
+    "area": "CAS",
+    "line": "CAS-L2",
+    "x_m": 24.0,
+    "y_m": 14.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "CNC"
+  },
+  {
+    "machine_id": "CAS-CNC-02",
+    "area": "CAS",
+    "line": "CAS-L2",
+    "x_m": 36.0,
+    "y_m": 14.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "CNC"
+  },
+  {
+    "machine_id": "CAS-CNC-03",
+    "area": "CAS",
+    "line": "CAS-L2",
+    "x_m": 48.0,
+    "y_m": 14.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "CNC"
+  },
+  {
+    "machine_id": "CAS-CNC-04",
+    "area": "CAS",
+    "line": "CAS-L2",
+    "x_m": 60.0,
+    "y_m": 14.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "CNC"
+  },
+  {
+    "machine_id": "STP-PRS-01",
+    "area": "STP",
+    "line": "STP-L1",
+    "x_m": 80.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "PRS"
+  },
+  {
+    "machine_id": "STP-PRS-02",
+    "area": "STP",
+    "line": "STP-L1",
+    "x_m": 92.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "PRS"
+  },
+  {
+    "machine_id": "STP-PRS-03",
+    "area": "STP",
+    "line": "STP-L1",
+    "x_m": 104.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "PRS"
+  },
+  {
+    "machine_id": "M02",
+    "area": "STP",
+    "line": "STP-L1",
+    "x_m": 116.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "BLK"
+  },
+  {
+    "machine_id": "STP-BLK-02",
+    "area": "STP",
+    "line": "STP-L1",
+    "x_m": 128.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "BLK"
+  },
+  {
+    "machine_id": "STP-BLK-03",
+    "area": "STP",
+    "line": "STP-L1",
+    "x_m": 140.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "BLK"
+  },
+  {
+    "machine_id": "BIW-WK-01",
+    "area": "BIW",
+    "line": "BIW-L1",
+    "x_m": 0.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "WK"
+  },
+  {
+    "machine_id": "BIW-WK-02",
+    "area": "BIW",
+    "line": "BIW-L1",
+    "x_m": 12.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WK"
+  },
+  {
+    "machine_id": "BIW-WK-03",
+    "area": "BIW",
+    "line": "BIW-L1",
+    "x_m": 24.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "WK"
+  },
+  {
+    "machine_id": "BIW-WK-04",
+    "area": "BIW",
+    "line": "BIW-L1",
+    "x_m": 36.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WK"
+  },
+  {
+    "machine_id": "M05",
+    "area": "BIW",
+    "line": "BIW-L1",
+    "x_m": 48.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "WK"
+  },
+  {
+    "machine_id": "BIW-WK-06",
+    "area": "BIW",
+    "line": "BIW-L1",
+    "x_m": 60.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WK"
+  },
+  {
+    "machine_id": "BIW-WK-07",
+    "area": "BIW",
+    "line": "BIW-L2",
+    "x_m": 0.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WK"
+  },
+  {
+    "machine_id": "BIW-WK-08",
+    "area": "BIW",
+    "line": "BIW-L2",
+    "x_m": 12.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WK"
+  },
+  {
+    "machine_id": "BIW-WA-01",
+    "area": "BIW",
+    "line": "BIW-L2",
+    "x_m": 24.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WA"
+  },
+  {
+    "machine_id": "BIW-WA-02",
+    "area": "BIW",
+    "line": "BIW-L2",
+    "x_m": 36.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "WA"
+  },
+  {
+    "machine_id": "BIW-WA-03",
+    "area": "BIW",
+    "line": "BIW-L2",
+    "x_m": 48.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WA"
+  },
+  {
+    "machine_id": "BIW-WA-04",
+    "area": "BIW",
+    "line": "BIW-L2",
+    "x_m": 60.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WA"
+  },
+  {
+    "machine_id": "M04",
+    "area": "BIW",
+    "line": "BIW-L3",
+    "x_m": 0.0,
+    "y_m": 88.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WF"
+  },
+  {
+    "machine_id": "BIW-WF-02",
+    "area": "BIW",
+    "line": "BIW-L3",
+    "x_m": 12.0,
+    "y_m": 88.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WF"
+  },
+  {
+    "machine_id": "BIW-WF-03",
+    "area": "BIW",
+    "line": "BIW-L3",
+    "x_m": 24.0,
+    "y_m": 88.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "WF"
+  },
+  {
+    "machine_id": "BIW-WF-04",
+    "area": "BIW",
+    "line": "BIW-L3",
+    "x_m": 36.0,
+    "y_m": 88.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WF"
+  },
+  {
+    "machine_id": "BIW-WF-05",
+    "area": "BIW",
+    "line": "BIW-L3",
+    "x_m": 48.0,
+    "y_m": 88.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "WF"
+  },
+  {
+    "machine_id": "BIW-WF-06",
+    "area": "BIW",
+    "line": "BIW-L3",
+    "x_m": 60.0,
+    "y_m": 88.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "WF"
+  },
+  {
+    "machine_id": "BIW-LB-01",
+    "area": "BIW",
+    "line": "BIW-L4",
+    "x_m": 0.0,
+    "y_m": 102.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "LB"
+  },
+  {
+    "machine_id": "BIW-LB-02",
+    "area": "BIW",
+    "line": "BIW-L4",
+    "x_m": 12.0,
+    "y_m": 102.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "LB"
+  },
+  {
+    "machine_id": "BIW-ADH-01",
+    "area": "BIW",
+    "line": "BIW-L4",
+    "x_m": 24.0,
+    "y_m": 102.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "ADH"
+  },
+  {
+    "machine_id": "BIW-ADH-02",
+    "area": "BIW",
+    "line": "BIW-L4",
+    "x_m": 36.0,
+    "y_m": 102.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "ADH"
+  },
+  {
+    "machine_id": "M07",
+    "area": "BIW",
+    "line": "BIW-L4",
+    "x_m": 48.0,
+    "y_m": 102.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "MET"
+  },
+  {
+    "machine_id": "BIW-MET-02",
+    "area": "BIW",
+    "line": "BIW-L4",
+    "x_m": 60.0,
+    "y_m": 102.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "MET"
+  },
+  {
+    "machine_id": "PNT-PR-01",
+    "area": "PNT",
+    "line": "PNT-L1",
+    "x_m": 110.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "PR"
+  },
+  {
+    "machine_id": "PNT-PR-02",
+    "area": "PNT",
+    "line": "PNT-L1",
+    "x_m": 122.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "PR"
+  },
+  {
+    "machine_id": "PNT-PR-03",
+    "area": "PNT",
+    "line": "PNT-L1",
+    "x_m": 134.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "PR"
+  },
+  {
+    "machine_id": "PNT-PR-04",
+    "area": "PNT",
+    "line": "PNT-L1",
+    "x_m": 146.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "PR"
+  },
+  {
+    "machine_id": "PNT-PR-05",
+    "area": "PNT",
+    "line": "PNT-L1",
+    "x_m": 158.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "PR"
+  },
+  {
+    "machine_id": "PNT-PR-06",
+    "area": "PNT",
+    "line": "PNT-L1",
+    "x_m": 170.0,
+    "y_m": 60.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "PR"
+  },
+  {
+    "machine_id": "PNT-PR-07",
+    "area": "PNT",
+    "line": "PNT-L2",
+    "x_m": 110.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "PR"
+  },
+  {
+    "machine_id": "PNT-PR-08",
+    "area": "PNT",
+    "line": "PNT-L2",
+    "x_m": 122.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "PR"
+  },
+  {
+    "machine_id": "PNT-OV-01",
+    "area": "PNT",
+    "line": "PNT-L2",
+    "x_m": 134.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "OV"
+  },
+  {
+    "machine_id": "PNT-OV-02",
+    "area": "PNT",
+    "line": "PNT-L2",
+    "x_m": 146.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "OV"
+  },
+  {
+    "machine_id": "PNT-ECT-01",
+    "area": "PNT",
+    "line": "PNT-L2",
+    "x_m": 158.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "ECT"
+  },
+  {
+    "machine_id": "PNT-ASU-01",
+    "area": "PNT",
+    "line": "PNT-L2",
+    "x_m": 170.0,
+    "y_m": 74.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "ASU"
+  },
+  {
+    "machine_id": "PNT-ASU-02",
+    "area": "PNT",
+    "line": "PNT-L3",
+    "x_m": 110.0,
+    "y_m": 88.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "ASU"
+  },
+  {
+    "machine_id": "BAT-BL-01",
+    "area": "BAT",
+    "line": "BAT-L1",
+    "x_m": 0.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "BL"
+  },
+  {
+    "machine_id": "BAT-BL-02",
+    "area": "BAT",
+    "line": "BAT-L1",
+    "x_m": 12.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "BL"
+  },
+  {
+    "machine_id": "M08",
+    "area": "BAT",
+    "line": "BAT-L1",
+    "x_m": 24.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "BS"
+  },
+  {
+    "machine_id": "BAT-BS-02",
+    "area": "BAT",
+    "line": "BAT-L1",
+    "x_m": 36.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "BS"
+  },
+  {
+    "machine_id": "BAT-BS-03",
+    "area": "BAT",
+    "line": "BAT-L1",
+    "x_m": 48.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "BS"
+  },
+  {
+    "machine_id": "BAT-BS-04",
+    "area": "BAT",
+    "line": "BAT-L1",
+    "x_m": 60.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "BS"
+  },
+  {
+    "machine_id": "M09",
+    "area": "BAT",
+    "line": "BAT-L2",
+    "x_m": 0.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "BT"
+  },
+  {
+    "machine_id": "BAT-BT-02",
+    "area": "BAT",
+    "line": "BAT-L2",
+    "x_m": 12.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "BT"
+  },
+  {
+    "machine_id": "BAT-BT-03",
+    "area": "BAT",
+    "line": "BAT-L2",
+    "x_m": 24.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "BT"
+  },
+  {
+    "machine_id": "BAT-BT-04",
+    "area": "BAT",
+    "line": "BAT-L2",
+    "x_m": 36.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "BT"
+  },
+  {
+    "machine_id": "BAT-BD-01",
+    "area": "BAT",
+    "line": "BAT-L2",
+    "x_m": 48.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "BD"
+  },
+  {
+    "machine_id": "BAT-BD-02",
+    "area": "BAT",
+    "line": "BAT-L2",
+    "x_m": 60.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "BD"
+  },
+  {
+    "machine_id": "BAT-BH-01",
+    "area": "BAT",
+    "line": "BAT-L3",
+    "x_m": 0.0,
+    "y_m": 158.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "BH"
+  },
+  {
+    "machine_id": "BAT-BH-02",
+    "area": "BAT",
+    "line": "BAT-L3",
+    "x_m": 12.0,
+    "y_m": 158.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "BH"
+  },
+  {
+    "machine_id": "BAT-BE-01",
+    "area": "BAT",
+    "line": "BAT-L3",
+    "x_m": 24.0,
+    "y_m": 158.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "BE"
+  },
+  {
+    "machine_id": "BAT-BE-02",
+    "area": "BAT",
+    "line": "BAT-L3",
+    "x_m": 36.0,
+    "y_m": 158.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "BE"
+  },
+  {
+    "machine_id": "DRV-DW-01",
+    "area": "DRV",
+    "line": "DRV-L1",
+    "x_m": 80.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "DW"
+  },
+  {
+    "machine_id": "DRV-DW-02",
+    "area": "DRV",
+    "line": "DRV-L1",
+    "x_m": 92.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "DW"
+  },
+  {
+    "machine_id": "DRV-DN-01",
+    "area": "DRV",
+    "line": "DRV-L1",
+    "x_m": 104.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "DN"
+  },
+  {
+    "machine_id": "DRV-DN-02",
+    "area": "DRV",
+    "line": "DRV-L1",
+    "x_m": 116.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "DN"
+  },
+  {
+    "machine_id": "GA-TQ-01",
+    "area": "GA",
+    "line": "GA-L1",
+    "x_m": 150.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "TQ"
+  },
+  {
+    "machine_id": "GA-TQ-02",
+    "area": "GA",
+    "line": "GA-L1",
+    "x_m": 162.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "TQ"
+  },
+  {
+    "machine_id": "GA-TQ-03",
+    "area": "GA",
+    "line": "GA-L1",
+    "x_m": 174.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "TQ"
+  },
+  {
+    "machine_id": "GA-TQ-04",
+    "area": "GA",
+    "line": "GA-L1",
+    "x_m": 186.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "TQ"
+  },
+  {
+    "machine_id": "GA-TQ-05",
+    "area": "GA",
+    "line": "GA-L1",
+    "x_m": 198.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "TQ"
+  },
+  {
+    "machine_id": "GA-TQ-06",
+    "area": "GA",
+    "line": "GA-L1",
+    "x_m": 210.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "TQ"
+  },
+  {
+    "machine_id": "GA-TQ-07",
+    "area": "GA",
+    "line": "GA-L2",
+    "x_m": 150.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "TQ"
+  },
+  {
+    "machine_id": "GA-TQ-08",
+    "area": "GA",
+    "line": "GA-L2",
+    "x_m": 162.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "TQ"
+  },
+  {
+    "machine_id": "GA-TQ-09",
+    "area": "GA",
+    "line": "GA-L2",
+    "x_m": 174.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "TQ"
+  },
+  {
+    "machine_id": "GA-TQ-10",
+    "area": "GA",
+    "line": "GA-L2",
+    "x_m": 186.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "TQ"
+  },
+  {
+    "machine_id": "M06",
+    "area": "GA",
+    "line": "GA-L2",
+    "x_m": 198.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "CV"
+  },
+  {
+    "machine_id": "GA-CV-02",
+    "area": "GA",
+    "line": "GA-L2",
+    "x_m": 210.0,
+    "y_m": 144.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "CV"
+  },
+  {
+    "machine_id": "GA-CV-03",
+    "area": "GA",
+    "line": "GA-L3",
+    "x_m": 150.0,
+    "y_m": 158.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "CV"
+  },
+  {
+    "machine_id": "GA-DK-01",
+    "area": "GA",
+    "line": "GA-L3",
+    "x_m": 162.0,
+    "y_m": 158.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "DK"
+  },
+  {
+    "machine_id": "GA-DK-02",
+    "area": "GA",
+    "line": "GA-L3",
+    "x_m": 174.0,
+    "y_m": 158.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "DK"
+  },
+  {
+    "machine_id": "GA-DK-03",
+    "area": "GA",
+    "line": "GA-L3",
+    "x_m": 186.0,
+    "y_m": 158.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "DK"
+  },
+  {
+    "machine_id": "GA-DK-04",
+    "area": "GA",
+    "line": "GA-L3",
+    "x_m": 198.0,
+    "y_m": 158.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "DK"
+  },
+  {
+    "machine_id": "GA-GR-01",
+    "area": "GA",
+    "line": "GA-L3",
+    "x_m": 210.0,
+    "y_m": 158.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "GR"
+  },
+  {
+    "machine_id": "GA-GR-02",
+    "area": "GA",
+    "line": "GA-L4",
+    "x_m": 150.0,
+    "y_m": 172.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "GR"
+  },
+  {
+    "machine_id": "GA-FL-01",
+    "area": "GA",
+    "line": "GA-L4",
+    "x_m": 162.0,
+    "y_m": 172.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "FL"
+  },
+  {
+    "machine_id": "GA-FL-02",
+    "area": "GA",
+    "line": "GA-L4",
+    "x_m": 174.0,
+    "y_m": 172.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "FL"
+  },
+  {
+    "machine_id": "EOL-DY-01",
+    "area": "EOL",
+    "line": "EOL-L1",
+    "x_m": 240.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "DY"
+  },
+  {
+    "machine_id": "EOL-DY-02",
+    "area": "EOL",
+    "line": "EOL-L1",
+    "x_m": 252.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "DY"
+  },
+  {
+    "machine_id": "EOL-DY-03",
+    "area": "EOL",
+    "line": "EOL-L1",
+    "x_m": 264.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "DY"
+  },
+  {
+    "machine_id": "EOL-AD-01",
+    "area": "EOL",
+    "line": "EOL-L1",
+    "x_m": 276.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "AD"
+  },
+  {
+    "machine_id": "EOL-AD-02",
+    "area": "EOL",
+    "line": "EOL-L1",
+    "x_m": 288.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "AD"
+  },
+  {
+    "machine_id": "EOL-WT-01",
+    "area": "EOL",
+    "line": "EOL-L1",
+    "x_m": 300.0,
+    "y_m": 130.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "WT"
+  },
+  {
+    "machine_id": "UTL-CP-01",
+    "area": "UTL",
+    "line": "UTL-L1",
+    "x_m": 230.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "CP"
+  },
+  {
+    "machine_id": "UTL-CP-02",
+    "area": "UTL",
+    "line": "UTL-L1",
+    "x_m": 242.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "CP"
+  },
+  {
+    "machine_id": "UTL-CP-03",
+    "area": "UTL",
+    "line": "UTL-L1",
+    "x_m": 254.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "CP"
+  },
+  {
+    "machine_id": "UTL-CP-04",
+    "area": "UTL",
+    "line": "UTL-L1",
+    "x_m": 266.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "CP"
+  },
+  {
+    "machine_id": "UTL-CH-01",
+    "area": "UTL",
+    "line": "UTL-L1",
+    "x_m": 278.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "CH"
+  },
+  {
+    "machine_id": "UTL-CH-02",
+    "area": "UTL",
+    "line": "UTL-L1",
+    "x_m": 290.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "CH"
+  },
+  {
+    "machine_id": "UTL-SS-01",
+    "area": "UTL",
+    "line": "UTL-L2",
+    "x_m": 230.0,
+    "y_m": 14.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "SS"
+  },
+  {
+    "machine_id": "UTL-SS-02",
+    "area": "UTL",
+    "line": "UTL-L2",
+    "x_m": 242.0,
+    "y_m": 14.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "SS"
+  },
+  {
+    "machine_id": "M11",
+    "area": "LOG",
+    "line": "LOG-L1",
+    "x_m": 150.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "AM"
+  },
+  {
+    "machine_id": "LOG-AM-02",
+    "area": "LOG",
+    "line": "LOG-L1",
+    "x_m": 162.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "AM"
+  },
+  {
+    "machine_id": "LOG-AM-03",
+    "area": "LOG",
+    "line": "LOG-L1",
+    "x_m": 174.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "AM"
+  },
+  {
+    "machine_id": "LOG-AM-04",
+    "area": "LOG",
+    "line": "LOG-L1",
+    "x_m": 186.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "AM"
+  },
+  {
+    "machine_id": "LOG-AM-05",
+    "area": "LOG",
+    "line": "LOG-L1",
+    "x_m": 198.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 90,
+    "family": "AM"
+  },
+  {
+    "machine_id": "LOG-AM-06",
+    "area": "LOG",
+    "line": "LOG-L1",
+    "x_m": 210.0,
+    "y_m": 0.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "AM"
+  },
+  {
+    "machine_id": "LOG-CR-01",
+    "area": "LOG",
+    "line": "LOG-L2",
+    "x_m": 150.0,
+    "y_m": 14.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "CR"
+  },
+  {
+    "machine_id": "LOG-CR-02",
+    "area": "LOG",
+    "line": "LOG-L2",
+    "x_m": 162.0,
+    "y_m": 14.0,
+    "z_m": 0.0,
+    "rotation_deg": 0,
+    "family": "CR"
+  },
+  {
+    "machine_id": "LOG-CR-03",
+    "area": "LOG",
+    "line": "LOG-L2",
+    "x_m": 174.0,
+    "y_m": 14.0,
+    "z_m": 0.0,
+    "rotation_deg": 180,
+    "family": "CR"
+  }
+]
