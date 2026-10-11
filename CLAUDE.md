@@ -117,7 +117,8 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 - [x] `twin/` v0 (Vite + R3F): floor, stations, walkways, conveyor + cars, placeholder machines, people (capsules) playing `schedule.json`, M05 fault glow, HUD (clock, speed, shift, jump to alert, camera views). Run: `cd twin && npm run dev` (port 5180) the schedule
 - [ ] Install Blender, confirm headless export works
 - [ ] P0 assets: weld robot (rigged), conveyor, press, BIW
-- [ ] NEXT: real models (Blender weld robot etc.) and Mixamo characters replacing the placeholders
+- [x] HUD v1 matching the ChatGPT concept mockup (top bar, live plant state, KPIs, forecast, timeline, what-if, camera shortcuts) with live numbers from `kpi.json`
+- [ ] NEXT: 3D realism pass (fences, shelving, car shape, limbed workers, lighting), then real models (Blender weld robot etc.) and Mixamo characters replacing the placeholders
 - [ ] Replay `scenarios/hero_timely_repair_sensors.parquet` as the mock stream + fault glow on M05
 - [ ] SimPy engine + what-if + FastAPI tool endpoints (D-016)
 - [ ] KPI dashboard

@@ -65,7 +65,7 @@ function Scene() {
       <Machines />
       <People />
       <CameraRig />
-      <OrbitControls makeDefault target={[0, 0, 5]} maxPolarAngle={Math.PI / 2.1} minDistance={15} maxDistance={220} />
+      <OrbitControls makeDefault target={[0, 0, 4]} maxPolarAngle={Math.PI / 2.1} minDistance={15} maxDistance={220} />
     </>
   );
 }
@@ -82,7 +82,7 @@ export default function App() {
 
   return (
     <>
-      <Canvas shadows camera={{ position: [0, 105, 130], fov: 45, near: 0.5, far: 600 }} dpr={[1, 2]}>
+      <Canvas shadows camera={{ position: [0, 62, 74], fov: 45, near: 0.5, far: 600 }} dpr={[1, 2]}>
         <Clock />
         <Scene />
       </Canvas>
