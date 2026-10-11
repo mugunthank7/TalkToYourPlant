@@ -33,9 +33,9 @@ def get_int(name, default):
 
 API_KEY = get("GEMINI_API_KEY")
 MODELS = {
-    "agent": get("MODEL_AGENT", "gemini-2.5-flash"),
-    "lite": get("MODEL_LITE", "gemini-2.5-flash-lite"),
-    "fallback": get("MODEL_FALLBACK", "gemini-2.5-flash-lite"),
+    "agent": get("MODEL_AGENT", "gemini-3.8-flash"),
+    "lite": get("MODEL_LITE", "gemini-3.5-flash-lite"),
+    "fallback": get("MODEL_FALLBACK", "gemini-3.7-flash"),
     "embed": get("MODEL_EMBED", "gemini-embedding-001"),
 }
 # conservative client-side budgets per role

@@ -128,3 +128,8 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 **Context:** Free-tier Gemini quotas are low and change; sources disagree on exact numbers (RPM, RPD per model, and embeddings unconfirmed).
 **Decision:** Brain uses `google-genai`. Key in `brain/.env` (gitignored), never committed. Model names in env vars (`MODEL_AGENT`, `MODEL_LITE`, `MODEL_FALLBACK`, `MODEL_EMBED`); verified against the key's model list by `brain/scripts/check_key.py`. `brain/app/ratelimit.py`: sliding-window RPM and persisted daily budget per role (agent/lite/embed), set below real quotas by default, plus exponential backoff with jitter on 429/5xx honouring server retry hints. Embeddings are cached to disk by chunk hash so reruns cost nothing.
 **Consequences:** Quota errors degrade to waiting or the fallback model, not crashes. Limits must be re-checked on the AI Studio rate-limit page before demo day and set in `.env`.
+
+## D-028, Gemini models: 3.8 Flash agent, 3.5 Flash-Lite cheap steps | 2026-10-11 | accepted
+**Context:** `gemini-2.5-flash` returned 404 "no longer available to new users". `brain/scripts/check_key.py` listed the models this key can use.
+**Decision:** Agent `gemini-3.8-flash`, cheap steps `gemini-3.5-flash-lite`, fallback `gemini-3.7-flash`, embeddings `gemini-embedding-001` (3072 dims). All set via env vars, so they can change without code edits. Client-side RPM/RPD defaults stay conservative because the free-tier limits for these models are not confirmed.
+**Consequences:** Preview/latest model names can be retired; re-run `check_key.py` before the demo.
