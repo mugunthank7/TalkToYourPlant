@@ -100,9 +100,14 @@ If the simulation engine ends up in the same process as the twin (see D-013), th
 
 Twin behaviour per message: `sensor` updates HUD and gauges; `alert` turns the machine/component red with a SHAP-weighted heatmap and sets the andon light; `graph_path` highlights the 3D parts and animates a line through them; `work_order` starts the technician walk S10 -> S12 -> S06.
 
+## Simulation engine (sim/)
+
+SimPy model + FastAPI + WebSocket + LLM tool endpoints. See `sim/README.md`. The twin connects with `?sim=ws://localhost:8000/ws` or the top-bar button; when connected, station states, belt cars, KPIs, work orders, technician walks, fault injection, what-if and forecast all come from the engine, otherwise the client-side approximation in `twin/src/plant.ts` is used (D-029, D-030).
+
 ## Commands (fill in as the app is scaffolded)
 
 ```bash
+cd sim && .venv/bin/uvicorn plantsim.api:app --port 8000   # SimPy engine
 cd data && pip install -r requirements.txt && python -m plantdata --seed 42 --out out --copy-to ../twin/public/data   # regenerate data
 cd twin && npm install && npm run dev      # app
 blender --background --python assets/source/blender/<asset>.py   # regenerate a model
@@ -129,6 +134,6 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 - [x] Dashboard help popovers (?) and hover readouts on every chart; throughput forecast shows 'if repaired' vs 'if ignored'
 - [ ] (old) NEXT: people spots inside the new rooms (supervisor at the S11 desk, seated breaks, technician at the S10 bench, S12 pickup, sit pose), check performance on a real GPU, replace Cells/old safety zone code, then SimPy engine detailed models in this order: S11, S12, S10, S09, S02, S03 (then S01, S08); Blender-built hero models (press, robot, conveyor) and rigged Mixamo/Quaternius characters replacing the procedural ones; match the ChatGPT mockup's density (racks, glass control room, more props) (Blender weld robot etc.) and Mixamo characters replacing the placeholders
 - [ ] Replay `scenarios/hero_timely_repair_sensors.parquet` as the mock stream + fault glow on M05
-- [ ] SimPy engine + what-if + FastAPI tool endpoints (D-016)
+- [x] SimPy engine + what-if + FastAPI tool endpoints + WebSocket stream (D-016, D-030); twin connected to it. Calibrated to the scenario data within 8 percent (tests).
 - [ ] KPI dashboard
 - [ ] Wire to real WebSocket

@@ -137,3 +137,8 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 ## D-029, Client-side plant state engine until SimPy exists | 2026-10-11 | accepted
 **Decision:** Fault behaviour (stops, starving, blocking, repair, KPI impact) lives in twin/src/plant.ts as pure functions of the sim clock plus a list of injected faults. Scripted hero repair and injected faults share one interval model. The SimPy engine (D-016) replaces this later and must emit the same per-station states (run, fault, repair, starved, blocked).
 **Consequences:** The demo can inject any fault on demand without a backend. KPI changes from injected faults are approximations (extra downtime added to the precomputed scenario series).
+
+## D-030, The SimPy engine is the source of truth | 2026-10-11 | accepted
+**Decision:** `sim/` implements D-016. Strict-pitch paced line with buffers, mid-job failures, a technician and work orders, replayable named random streams. What-if = replay to now, apply changes, run to the horizon, compare with the unchanged future (no state copying needed). `MICRO_X = 4.5` calibrates everyday OEE to the generated scenarios (tolerance 8 percent, tested). The client-side engine in plant.ts (D-029) stays as the offline fallback.
+**Consequences:** KPIs and what-if numbers in the twin come from the engine when connected. The precomputed `kpi.json` series are still used for the dashboard charts; exporting them from the engine is a follow-up. Per-second accounting was replaced by lost-pitch accounting so that downtime, cost and lost cars agree.
+**Open:** anomaly detection is still not implemented (alerts follow the scripted wear curve); the LLM side calls the tool endpoints.

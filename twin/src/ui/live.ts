@@ -1,5 +1,6 @@
 import { Hero, Kpi, Status, m05Status } from "../data";
 import { injectedStopSeconds, TAKT } from "../plant";
+import { simLink } from "../simlink";
 
 export const SHIFT_S = 8 * 3600;
 
@@ -19,6 +20,13 @@ export function seriesName(shift: string) {
 }
 
 export function liveAt(t: number, shift: string, kpi: Kpi, hero: Hero): Live {
+  if (simLink.on) {
+    const sn = simLink.snap!;
+    const k = sn.kpis;
+    const m5 = sn.machines.M05;
+    return { units: k.units, planUnits: k.plan_units, downMin: k.downtime_min, cost: k.downtime_cost_usd, oee: k.oee, ratePerHr: k.throughput_per_hour,
+      status: m05Status(t, shift, hero), rulMin: m5?.alert === "critical" && m5.rul_s !== undefined ? m5.rul_s / 60 : null };
+  }
   const s = kpi.series[seriesName(shift)];
   const i = Math.min(Math.max(Math.floor(t / 60), 0), kpi.minutes - 1);
   const j = Math.max(i - 60, 0);
@@ -50,3 +58,8 @@ export function rateSeries(kpi: Kpi, shift: string): number[] {
 }
 
 export const money = (v: number) => (v >= 1e6 ? `$${(v / 1e6).toFixed(2)}M` : `$${Math.round(v).toLocaleString()}`);
+
+/** Units-per-hour points (every 10 min) from a cumulative curve sampled every 10 minutes. */
+export function ratesFromCum(cum: number[]): number[] {
+  return cum.map((v, i) => { const a = Math.max(i - 5, 0); return ((v - (a > 0 ? cum[a - 1] : 0)) / (i - a + 1)) * 6; });
+}

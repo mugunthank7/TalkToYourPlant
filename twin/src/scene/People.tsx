@@ -5,6 +5,9 @@ import * as THREE from "three";
 import { clock } from "../clock";
 import { Person, Seg, Pt, toScene } from "../data";
 import { useTwin } from "../state";
+import { simLink } from "../simlink";
+import { responderFromWO } from "../plant";
+import { useEffect, useState } from "react";
 
 const ROLE_COLOR: Record<string, string> = {
   operator: "#f97316",
@@ -194,10 +197,29 @@ export function People() {
   const shift = useTwin((s) => s.shift);
   const people = useMemo(() => data.schedule.shifts[shift], [data, shift]);
   const faults = useTwin((s) => s.faults);
+  const simOn = useTwin((s) => s.sim) === "on";
+  const [wos, setWos] = useState<string>("");
+  useEffect(() => {
+    if (!simOn) return;
+    const id = setInterval(() => {
+      const w = simLink.snap?.work_orders ?? [];
+      setWos(JSON.stringify(w.map((x) => [x.id, x.status, Math.round(x.dispatch_at), x.arrived_at && Math.round(x.arrived_at), x.closed_at && Math.round(x.closed_at)])));
+    }, 400);
+    return () => clearInterval(id);
+  }, [simOn]);
+  const responders = useMemo(() => {
+    if (!simOn || !simLink.snap) return [];
+    const cut = simLink.snap.t - 900;
+    return simLink.snap.work_orders.filter((w) => w.status !== "closed" || (w.closed_at ?? 0) > cut).map((w) => ({ w, person: responderFromWO(data.layout, w) }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [simOn, wos, data]);
   return (
     <>
-      {people.map((p) => (
+      {people.filter((p) => !(simOn && p.role === "technician")).map((p) => (
         <Worker key={p.employee_id} person={p} />
+      ))}
+      {responders.map(({ w, person }) => (
+        <Worker key={person.employee_id} person={person} carry={[person.timeline[3].s, person.timeline[4].e]} />
       ))}
       {faults.map((f) => (
         <Worker key={f.id} person={f.person} carry={[f.pickupAt + 90, f.fixAt]} />

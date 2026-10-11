@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { camera, clock, fmt } from "../clock";
+import { camera, clock, ctl, fmt } from "../clock";
 import { forecastFor, makeInjected, stationState } from "../plant";
 import { useTwin } from "../state";
 import { ForecastChart2, Gauge, Spark } from "./charts";
 import { Help } from "./Help";
-import { liveAt, money, rateSeries, SHIFT_S } from "./live";
+import { liveAt, money, rateSeries, ratesFromCum, SHIFT_S } from "./live";
+import { simLink, simPost } from "../simlink";
 import { buildShots, goTo } from "./shots";
 
 const SPEEDS = [1, 10, 60, 300, 1200];
@@ -32,6 +33,7 @@ function useRows(): Row[] {
     const nm = hero && (L.status === "alert" || L.status === "repair" || f.level !== "ok") ? "M05  Weld robot 2" : `${s.id}  ${s.name}`;
     if (r.state === "fault") return { id: s.id, name: nm, sub: r.reason, cls: "blink", label: "Fault" };
     if (r.state === "repair") return { id: s.id, name: nm, sub: r.reason, cls: "amber", label: "Repair" };
+    if (r.state === "micro") return { id: s.id, name: nm, sub: r.reason, cls: "warn", label: "Micro-stop" };
     if (r.state === "starved" || r.state === "blocked") return { id: s.id, name: nm, sub: r.reason, cls: "warn", label: r.state === "starved" ? "Starved" : "Blocked" };
     if (hero && L.status === "alert") return { id: s.id, name: nm, sub: `Bearing wear, RUL ${Math.ceil(L.rulMin ?? 0)} min`, cls: "bad", label: "Alert" };
     if (f.level !== "ok") return { id: s.id, name: nm, sub: f.text, cls: "warn", label: f.level === "risk" ? "At risk" : "Watch" };
@@ -167,7 +169,8 @@ function FaultCard() {
   useTick(500);
   if (!data) return null;
   const choices = data.layout.machines.filter((m) => m.type !== "agv");
-  const inject = () => addFault(makeInjected(data.layout, machine, clock.t));
+  const inject = () => { if (simLink.on) void simPost("/fault", { machine }); else addFault(makeInjected(data.layout, machine, clock.t)); };
+  const clear = () => { if (simLink.on) ctl.send?.({ type: "control", action: "clear_faults" }); else clearFaults(); };
   return (
     <div className="card faultcard">
       <div className="card-h">
@@ -183,9 +186,12 @@ function FaultCard() {
         <button className="danger" onClick={inject}>Break it</button>
       </div>
       <div className="frow">
-        <button onClick={() => { clock.t = data.hero.t_alert_s - 120; }} disabled={shift !== "A"}>Replay hero alert</button>
-        <button onClick={clearFaults} disabled={!faults.length}>Clear faults</button>
+        <button onClick={() => ctl.seek(data.hero.t_alert_s - 120)} disabled={shift !== "A"}>Replay hero alert</button>
+        <button onClick={clear} disabled={!faults.length && !simLink.on}>Clear faults</button>
       </div>
+      {simLink.on && simLink.snap!.work_orders.filter((w) => w.status !== "closed").map((w) => (
+        <div key={w.id} className="fitem bad"><b>{w.machine}</b> {w.kind} work order {w.id}: {w.status === "open" ? "technician being dispatched" : w.status === "dispatched" ? "technician on the way" : "repairing"}</div>
+      ))}
       {faults.map((f) => {
         const t = clock.t;
         const stage = t < f.t0 ? "scheduled" : t < f.dispatchAt ? "dispatching technician" : t < f.pickupAt ? "technician fetching part" : t < f.arriveAt ? "technician on the way" : t < f.fixAt ? `repairing, ${Math.ceil((f.fixAt - t) / 60)} min left` : "fixed";
@@ -209,9 +215,24 @@ function AlertToast() {
 }
 
 function ForecastPanel() {
-  const { data, shift } = useTwin();
+  const { data, shift, sim } = useTwin();
   useTick(500);
+  const [eng, setEng] = useState<null | { actual: number[]; futures: { name: string; color: string; values: number[] }[] }>(null);
+  useEffect(() => {
+    if (sim !== "on") { setEng(null); return; }
+    let alive = true;
+    const pull = async () => {
+      const [act, wait] = await Promise.all([simPost("/scenario", { changes: [{ op: "dispatch_now" }] }), simPost("/scenario", { changes: [{ op: "keep_running", hours: 2 }] })]);
+      if (!alive) return;
+      const a = ratesFromCum(act.scenario.cum_units_10min), w = ratesFromCum(wait.scenario.cum_units_10min);
+      setEng({ actual: ratesFromCum(act.baseline.cum_units_10min), futures: [{ name: "if repaired on alert", color: "#38bdf8", values: a }, { name: "if ignored", color: "#ef4444", values: w }] });
+    };
+    void pull();
+    const id = setInterval(pull, 15000);
+    return () => { alive = false; clearInterval(id); };
+  }, [sim]);
   const model = useMemo(() => {
+    if (eng) return eng;
     if (!data) return null;
     const live = shift === "A" ? "hero_timely_repair" : "healthy_realistic";
     const actual = rateSeries(data.kpi, live);
@@ -220,7 +241,7 @@ function ForecastPanel() {
          { name: "if ignored", color: "#ef4444", values: rateSeries(data.kpi, "hero_ignored") }]
       : [{ name: "expected", color: "#38bdf8", values: actual }];
     return { actual, futures };
-  }, [data, shift]);
+  }, [data, shift, eng]);
   if (!data || !model) return null;
   const nowIdx = Math.min(Math.floor(clock.t / 600), model.actual.length - 1);
   return (
@@ -270,14 +291,14 @@ function TimelinePanel() {
       <div className="tbar">
         {bands.map((b, i) => <div key={i} className="band" title={b.label} style={{ left: pos(b.a), width: `calc(${pos(b.b)} - ${pos(b.a)})`, background: b.color }} />)}
         <div className="cursor" style={{ left: pos(clock.t) }} />
-        <input type="range" min={0} max={SHIFT_S} step={10} value={clock.t} onChange={(e) => { clock.t = Number(e.target.value); }} />
+        <input type="range" min={0} max={SHIFT_S} step={10} value={clock.t} onChange={(e) => { ctl.seek(Number(e.target.value)); }} />
         <div className="ticks">{[0, 2, 4, 6, 8].map((k) => <span key={k} style={{ left: `${(k / 8) * 100}%` }}>{hhmm(k * 3600, shift)}</span>)}</div>
       </div>
       <div className="transport">
-        <button className="play" onClick={() => { clock.playing = !clock.playing; setPlaying(clock.playing); }}>{playing ? "❚❚" : "▶"}</button>
-        {SPEEDS.map((v) => <button key={v} className={`spd ${v === speed ? "on" : ""}`} onClick={() => { clock.speed = v; setSpeed(v); }}>{v}x</button>)}
+        <button className="play" onClick={() => { ctl.play(!clock.playing); setPlaying(clock.playing); }}>{playing ? "❚❚" : "▶"}</button>
+        {SPEEDS.map((v) => <button key={v} className={`spd ${v === speed ? "on" : ""}`} onClick={() => { ctl.speed(v); setSpeed(v); }}>{v}x</button>)}
         <div className="jumps">
-          {jumps.map(([n, t]) => <button key={n + t} className="spd jump" onClick={() => { clock.t = Math.max(0, t); }}>{n}</button>)}
+          {jumps.map(([n, t]) => <button key={n + t} className="spd jump" onClick={() => ctl.seek(t)}>{n}</button>)}
         </div>
       </div>
     </div>
@@ -285,34 +306,42 @@ function TimelinePanel() {
 }
 
 function WhatIf() {
-  const { data } = useTwin();
-  const [state, setState] = useState<"idle" | "running" | "done">("done");
+  const { data, sim } = useTwin();
+  const [res, setRes] = useState<null | { act: any; wait: any; at: number }>(null);
+  const [busy, setBusy] = useState(false);
   if (!data) return null;
   const base = data.kpi.summary.hero_timely_repair;
   const alt = data.kpi.summary.hero_ignored;
-  const run = () => { setState("running"); setTimeout(() => setState("done"), 900); };
-  const col = (title: string, s: typeof base, hot = false) => (
+  const run = async () => {
+    if (sim !== "on") { setBusy(true); setTimeout(() => setBusy(false), 900); return; }
+    setBusy(true);
+    const [act, wait] = await Promise.all([simPost("/scenario", { changes: [{ op: "dispatch_now" }] }), simPost("/scenario", { changes: [{ op: "keep_running", hours: 2 }] })]);
+    setRes({ act, wait, at: clock.t });
+    setBusy(false);
+  };
+  const col = (title: string, k: { units_lost_vs_ideal: number; downtime_min: number; downtime_cost_usd: number }, hot = false) => (
     <div className={`wcol ${hot ? "hot" : ""}`}>
       <b>{title}</b>
-      <div><span>Units lost</span><em>{Math.round(s.units_lost_vs_ideal)}</em></div>
-      <div><span>Downtime</span><em>{Math.round(s.downtime_min)} min</em></div>
-      <div><span>Cost</span><em>{money(s.downtime_cost_usd)}</em></div>
+      <div><span>Units lost</span><em>{Math.round(k.units_lost_vs_ideal)}</em></div>
+      <div><span>Downtime</span><em>{Math.round(k.downtime_min)} min</em></div>
+      <div><span>Cost</span><em>{money(k.downtime_cost_usd)}</em></div>
     </div>
   );
+  const live = sim === "on" && res;
   return (
     <div className="card whatif">
       <div className="card-h">
-        <span>⚙ What-if</span>
-        <Help title="What-if" what="Compares two decisions for the whole shift: repair weld robot 2 when the alert fires, or keep running."
+        <span>⚙ What-if {sim === "on" && <small className="simtag">SimPy</small>}</span>
+        <Help title="What-if" what="Runs the real simulation forward from now to the end of the shift for two decisions: send the technician now, or keep running 2 more hours."
           read="Units lost, downtime and cost for each. Waiting costs far more because the robot seizes and needs a 90-minute emergency repair."
           why="This is the question a plant manager asks the copilot." />
       </div>
-      <small>What if we keep running 2 more hours?</small>
+      <small>{live ? (res!.wait.summary as string).slice(0, 110) + "…" : "What if we keep running 2 more hours?"}</small>
       <div className="wgrid">
-        {col("Repair now", base)}
-        {state === "running" ? <div className="wcol hot spin">Simulating…</div> : col("Keep running", alt, true)}
+        {col("Repair now", live ? res!.act.scenario.kpis : base)}
+        {busy ? <div className="wcol hot spin">Simulating…</div> : col("Keep running", live ? res!.wait.scenario.kpis : alt, true)}
       </div>
-      <button className="run" onClick={run}>Run scenario →</button>
+      <button className="run" onClick={run}>{sim === "on" ? "Run on SimPy →" : "Run scenario →"}</button>
     </div>
   );
 }

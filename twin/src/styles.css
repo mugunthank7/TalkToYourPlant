@@ -203,3 +203,6 @@ kbd { background: rgba(148, 163, 184, .25); border-radius: 4px; padding: 0 5px; 
 .transport { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .jumps { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; justify-content: flex-end; }
 .spd { padding: 3px 8px; font-size: 11px; }
+
+.simbtn.on { background: #15803d; border-color: #22c55e; color: #fff; } .simbtn.off { opacity: .75; } .simbtn.connecting { background: #854d0e; }
+.simtag { color: #86efac; margin-left: 4px; }

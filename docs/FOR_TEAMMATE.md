@@ -37,8 +37,8 @@ Twin consumes; details and field names in `CLAUDE.md`, section "Interface contra
 - `work_order`: id, machine_id, component_id, spare_part, downtime_cost_per_min. The technician in the twin walks to the machine.
 - `run_scenario` (you to me) and `scenario_result` (me to you): what-if requests and KPI answers.
 
-## 4. What I will expose for your LLM tools (planned, SimPy plus FastAPI)
-`GET /state` (all machines and people), `GET /station/{id}`, `GET /kpis`, `POST /scenario`. Reply with JSON; I will publish the exact schemas before you integrate.
+## 4. The engine is live (SimPy plus FastAPI, see `sim/README.md`)
+Run `cd sim && .venv/bin/uvicorn plantsim.api:app --port 8000`. `GET /tools` returns function-calling schemas for your LLM: `get_plant_state`, `get_station`, `get_machine_health`, `get_kpis`, `get_diagnosis_context` (sensor evidence, failure-mode candidates, act-now vs wait cost), `run_what_if`, `create_work_order`, `inject_fault`. Execute with `POST /tools/{name}`. A WebSocket at `/ws` streams state and events (alert, fault, work_order, dispatched, repair_*).
 
 ## 5. Facts to quote
 - Downtime cost: $38,000 per minute, large automotive plant (Siemens, True Cost of Downtime 2024). See `docs/SOURCES.md`.
