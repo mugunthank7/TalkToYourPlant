@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.DS_Store
+.env
+*.blend1
+*.blend2
+# large raw sources stay out of git; list them in docs/ASSETS.md instead
+assets/source/raw/
