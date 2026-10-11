@@ -112,7 +112,14 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 **Decision:** Author the hero content as synthetic: fault mode `bearing_wear` on family WK, component nodes `m05_*` (10, from `docs/STATIONS.md`), repair `replace_bearing`, spare part `bearing_6208` (2 on hand, bin S12, lead time 9 days), SOP `SOP-MNT-M05-01`, a past-incident chunk on M04, sensor signal crosswalk (`vibration_rms` <-> `vibration_mm_s`, `temperature_c` <-> `motor_temp_c`, `motor_current_a`). Example `alert` and `graph_path` messages in `brain/data/hero_m05_messages.json` match the interface contract. Run-extension logic reuses existing `SOP-OPS-02`.
 **Consequences:** The hero demo path works end to end in the KB. SHAP values in the example alert are illustrative until anomaly detection exists (owner open, see D-019). `BIW-WK-03` (Voltara's gearbox oil leak storyline) stays as a contrast case.
 
-## D-024, Generated brain dataset is committed | 2026-10-11 | accepted
+## D-024, Downtime cost $38,000 per minute (Siemens 2024) | 2026-10-10 | accepted
+**Decision:** Replace the brief's unsourced $20,000 per minute with $38,000 per minute, derived from Siemens' "True Cost of Downtime 2024": $2.3M per hour for a large automotive plant. The older $22,000 per minute figure is from a 2006 survey and is not used. See docs/SOURCES.md.
+**Consequences:** Pitch wording: "industry figure for a large automotive plant". Single-line numbers are likely conservative-to-high; the constant is configurable.
+
+## D-025, Estimated maintenance and downtime history | 2026-10-10 | accepted
+**Decision:** Generate a year of estimated work orders, downtime events and a failure-mode catalogue (data/plantdata/maintenance.py). Structured numbers for dashboards and forecasts are M's; free-text manuals and logs remain the teammate's Data 2. The failure-mode catalogue uses our component IDs so the teammate can reuse it for the graph.
+
+## D-026, Generated brain dataset is committed | 2026-10-11 | accepted
 **Context:** M and T both need to inspect the same generated data on GitHub. D-017 commits small outputs and regenerates large ones.
-**Decision:** `brain/data/out/` (about 46 MB, 169 files, largest 20 MB) is committed on request of T so the whole team sees both datasets: M's in `data/out/`, T's in `brain/data/out/`. Source of truth stays the generators; outputs are deterministic (seed 42).
+**Decision:** `brain/data/out/` (about 46 MB, 169 files, largest 20 MB) is committed on request of T so the whole team sees both datasets: M's in `data/out/`, T's in `brain/data/out/`. Source of truth stays the generators; outputs are deterministic (seed 42). (Renumbered from D-024 after M's D-024 and D-025.)
 **Consequences:** Repo grows by about 10 MB compressed. If the data is regenerated with a new seed or schema, the diff will be large; prefer rebuilding only on schema changes.
