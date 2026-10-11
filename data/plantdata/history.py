@@ -36,7 +36,8 @@ def build(days: int, seed: int) -> dict[str, pd.DataFrame]:
                 mid = str(rng.choice(CANDIDATES))
                 onset = float(rng.uniform(0.3, 4.0) * 3600)
                 ramp = float(rng.uniform(2.0, 3.5) * 3600)
-                f0 = sensors.make_fault(mid, f"{mid.lower()}_main_bearing", onset, ramp, None, 0.0,
+                comp = "joint1_bearing" if mid in ("M04", "M05") else "main_bearing"
+                f0 = sensors.make_fault(mid, f"{mid.lower()}_{comp}", onset, ramp, None, 0.0,
                                         vib_gain=float(rng.uniform(2.2, 3.0)))
                 alert = ev.alert_time(f0)
                 fail_t = onset + ramp

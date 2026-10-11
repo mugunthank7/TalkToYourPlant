@@ -21,6 +21,7 @@ Time is **seconds since shift start** (`t_s`). A shift is 8 h = 28,800 s. Shift 
 | `out/scenarios/<name>_output_minute.parquet` | Production output per minute per scenario | no, regenerate |
 | `out/scenarios/<name>_output_hourly.csv`, `summary.json` | Hourly output and the scenario KPI comparison | yes |
 | `out/history/history_shifts.csv`, `history_incidents.csv` | ~30 days: shift KPIs and every degradation incident | yes |
+| `out/history/maintenance_work_orders.csv`, `downtime_events.csv`, `failure_modes.csv`, `maintenance_stats.json` | A year of estimated work orders and downtime events, plus the failure-mode catalogue | yes |
 | `out/history/history_hourly.parquet`, `history_sensors_1min.parquet` | Hourly output and 1-minute sensors for forecasting | no, regenerate |
 
 ## layout.json
@@ -55,21 +56,24 @@ Columns: `t_s, machine_id, vibration_rms_mm_s, vib_bpfo_band, temperature_c, mot
 ## Scenarios (ideal, realistic, and what-if outcomes)
 One 8 h shift each, same sensors plus production output. Numbers from seed 42:
 
-| Scenario | Units | OEE | Downtime | Cost at $20k/min |
+| Scenario | Units | OEE | Downtime | Cost at $38k/min |
 |----------|------:|----:|---------:|-----------------:|
-| `ideal` (ceiling: no stops, no scrap, takt 90 s) | 320 | 1.00 | 0 min | $0 |
-| `healthy_realistic` (micro-stops, base scrap) | 287 | 0.88 | 49 min | $0.98M |
-| `hero_timely_repair` (fixed 5 min after alert) | 264 | 0.82 | 70 min | $1.40M |
-| `hero_delayed_repair` (fixed 40 min late) | 251 | 0.76 | 84 min | $1.69M |
-| `hero_ignored` (M05 seizes at 6.0 h) | 218 | 0.63 | 134 min | $2.67M |
+| `ideal` (ceiling: no stops, no scrap, takt 90 s) | 320 | 1.00 | 0 min | $0.00M |
+| `healthy_realistic` (micro-stops, base scrap) | 287 | 0.88 | 49 min | $1.86M |
+| `hero_timely_repair` (fixed 5 min after alert) | 264 | 0.82 | 70 min | $2.67M |
+| `hero_delayed_repair` (fixed 40 min late) | 251 | 0.76 | 84 min | $3.20M |
+| `hero_ignored` (M05 seizes at 6.0 h) | 218 | 0.63 | 134 min | $5.08M |
 
-At the alert there are about 53 minutes of remaining useful life before M05 would fail. That window is what the LLM's "keep running 2 more hours?" what-if should expose. The $20,000 per minute figure is an assumption from the brief; find and cite a source before pitching.
+At the alert there are about 53 minutes of remaining useful life before M05 would fail. That window is what the LLM's "keep running 2 more hours?" what-if should expose. The $38,000 per minute figure comes from the Siemens 2024 report (see SOURCES.md).
 
 ## Output model (outputs.py)
 Units flow through the line in series, so one stopped machine stops the line, except the press, transfer robot and decoiler, which sit upstream of a 15-minute buffer. A degrading weld robot slows itself (cycle up to +30 percent) and raises scrap (up to +5 points). Per-minute columns: `units_completed, good_units, scrap_units, cum_units, downtime_s, effective_cycle_s, availability, performance, quality, oee, bottleneck_machine, downtime_cost_usd`. OEE = availability x performance x quality.
 
 ## History for forecasting (history/)
 52 shifts over 30 days (Sunday off, Saturday takt 120 s, per-day operator efficiency). 6 degradation incidents on random machines (M01, M03, M04, M05, M09, M10) with outcomes `timely`, `late` or `failure`. Targets you can train on: throughput per hour or shift (from `history_hourly`, `history_shifts`), and remaining useful life (`rul_s` in `history_sensors_1min`). Six incidents is thin for a real model; raise it with `--history-days 90`.
+
+## Maintenance and downtime history (maintenance.py)
+Estimated year 2025-10-01 to 2026-09-30. `maintenance_work_orders.csv` (158 rows: monthly and quarterly PM, planned and emergency corrective repairs): `wo_id, opened_ts, closed_ts, machine_id, component_id, type, failure_mode, symptom, cause, repair_procedure, spare_part, supplier, detected_by, crew, labor_hours, parts_cost_usd, labor_cost_usd, downtime_min, line_down_min, line_downtime_cost_usd`. `downtime_events.csv`: `event_id, start_ts, end_ts, machine_id, station, category, cause, planned, duration_min, line_down_min, wo_id` with categories mechanical, electrical, material_shortage, quality_hold and changeover. `failure_modes.csv` lists 35 failure modes per machine type (symptom, cause, repair, spare part, supplier, typical repair time, part cost) and is a ready seed for the knowledge graph. `maintenance_stats.json` has observed MTBF, MTTR, a downtime Pareto and yearly cost per machine. The last 30 days reuse `history_incidents.csv`, so the two agree. Failures follow a Weibull wear-out model; 45 percent are caught early by an alarm and fixed as planned work, the rest are emergencies; some wait for a spare part.
 
 ## Limits (be honest in the pitch)
 Everything is synthetic and tuned by hand. Cycle times, noise levels and fault growth are plausible, not measured. The schedule is a scripted stand-in until the SimPy engine produces the same shapes live.

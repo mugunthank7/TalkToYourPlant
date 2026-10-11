@@ -1,0 +1,36 @@
+machine_type,failure_mode,component,symptom,cause,repair_procedure,spare_part,supplier,typical_repair_min,part_cost_usd
+weld_robot,bearing_wear,joint1_bearing,"high vibration, rising temperature",lubrication loss and fatigue,Replace joint bearing and regrease,bearing_6208,Northwind Bearings,90,180
+weld_robot,bearing_wear,joint2_bearing,"high vibration, rising temperature",lubrication loss and fatigue,Replace joint bearing and regrease,bearing_6208,Northwind Bearings,90,180
+weld_robot,servo_motor_fault,servo_motor,"high motor current, overheating",winding degradation,Replace servo motor and recalibrate,servo_motor_a,Meridian Drives,150,2400
+weld_robot,gearbox_wear,gearbox,"noise, backlash",worn gear teeth,Replace gearbox and retune,gearbox_unit,Meridian Drives,240,3800
+weld_robot,weld_tip_wear,weld_gun,"weak welds, quality alarms",electrode tip erosion,Dress or replace electrode tips,electrode_tips,Harbor Industrial Supply,20,40
+weld_robot,cable_harness_fatigue,cable_harness,intermittent faults,flex fatigue,Replace cable harness,cable_harness_kit,Kestrel Robot Parts,75,650
+weld_robot,controller_fault,controller_cabinet,controller error codes,I/O card failure,Replace I/O card and reload program,io_card,Orion Electrical,60,520
+robot,gripper_fault,gripper,part drops,pad wear and air leak,Replace gripper pads and seals,gripper_pad_set,Kestrel Robot Parts,30,220
+robot,bearing_wear,joint1_bearing,high vibration,fatigue,Replace joint bearing and regrease,bearing_6208,Northwind Bearings,90,180
+robot,servo_motor_fault,servo_motor,high motor current,winding degradation,Replace servo motor,servo_motor_a,Meridian Drives,150,2400
+robot,controller_fault,controller_cabinet,controller error codes,I/O card failure,Replace I/O card,io_card,Orion Electrical,60,520
+press,hydraulic_leak,hydraulic_unit,"pressure drop, oil on floor",worn seals,Replace seal kit and refill,seal_kit_h40,Apex Hydraulics,180,900
+press,die_wear,die_insert,"part defects, burrs",abrasive wear,Replace die insert and re-shim,die_insert_a,Harbor Industrial Supply,240,5200
+press,clutch_brake_fault,clutch_brake,long stopping time,friction pad wear,Replace brake pads and recalibrate,brake_pad_set,Harbor Industrial Supply,300,1400
+press,lubrication_failure,lube_pump,"high temperature, vibration",pump failure,Replace lube pump,lube_pump,Apex Hydraulics,90,700
+press,main_bearing_wear,main_bearing,"vibration, noise",overload and fatigue,Replace main bearing,bearing_22222,Northwind Bearings,360,2600
+conveyor,drive_chain_wear,drive_chain,"jerky motion, noise",elongation,Replace drive chain,chain_set,Harbor Industrial Supply,90,450
+conveyor,roller_seizure,roller,skid stalls,bearing seizure,Replace roller,roller_unit,Harbor Industrial Supply,45,120
+conveyor,drive_motor_fault,drive_motor,"high current, trips",winding fault,Replace drive motor,drive_motor_b,Meridian Drives,120,900
+conveyor,sensor_misalignment,position_sensor,false stops,vibration loosened mount,Realign position sensor,photo_eye,Orion Electrical,20,90
+fixture,clamp_cylinder_leak,clamp_cylinder,slow clamping,worn seal,Replace cylinder seal,cyl_seal,Apex Hydraulics,45,80
+fixture,locating_pin_wear,locating_pin,gap and fit defects,wear,Replace locating pins,pin_set,Harbor Industrial Supply,30,150
+fixture,hydraulic_valve_fault,valve,unstable pressure,contamination,Replace valve,valve_4_3,Apex Hydraulics,75,600
+vision_gate,camera_fault,camera,no image,sensor failure,Replace camera,camera_unit,Lumen Vision Systems,60,1800
+vision_gate,lens_contamination,lens,false rejects,dust and spatter,Clean lens,cleaning_kit,Lumen Vision Systems,10,5
+vision_gate,calibration_drift,camera,measurement drift,thermal drift,Recalibrate,none,Lumen Vision Systems,30,0
+gantry,belt_wear,drive_belt,positioning error,wear,Replace belt,gantry_belt,Harbor Industrial Supply,60,140
+gantry,linear_guide_wear,linear_guide,vibration,wear,Replace guide block,guide_block,Northwind Bearings,120,700
+gantry,servo_motor_fault,servo_motor,high current,winding fault,Replace servo,servo_motor_a,Meridian Drives,120,1500
+sealer,seal_head_wear,seal_head,"poor seals, leaks",wear,Replace seal head,seal_head,Harbor Industrial Supply,90,520
+sealer,heater_fault,heater,low temperature,element burnout,Replace heater,heater_element,Orion Electrical,60,260
+sealer,leak_tester_fault,leak_tester,false failures,sensor drift,Recalibrate or replace sensor,pressure_sensor,Orion Electrical,45,300
+decoiler,mandrel_bearing_wear,mandrel_bearing,vibration,fatigue,Replace mandrel bearing,bearing_22222,Northwind Bearings,180,2600
+decoiler,brake_fault,brake,uncontrolled uncoiling,pad wear,Replace brake pads,brake_pad_set,Harbor Industrial Supply,90,1400
+decoiler,motor_fault,motor,high current,winding fault,Replace motor,drive_motor_b,Meridian Drives,150,900

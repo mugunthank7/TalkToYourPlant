@@ -13,7 +13,9 @@ TAKT_S = 90.0
 BASE_SCRAP = 0.015
 BUFFER_S = 900
 UPSTREAM = {"M01", "M02", "M10"}
-DOWNTIME_COST_PER_MIN_USD = 20000   # ASSUMPTION from the brief; cite a real source before pitching
+# Siemens, The True Cost of Downtime 2024: large automotive plant, $2.3M per hour of unplanned downtime
+# (they quote 'more than $600 a second'). 2.3M / 60 = ~$38,300 per minute. See docs/SOURCES.md.
+DOWNTIME_COST_PER_MIN_USD = 38000
 
 
 def _after_buffer(outage: np.ndarray, buffer_s: int) -> np.ndarray:
