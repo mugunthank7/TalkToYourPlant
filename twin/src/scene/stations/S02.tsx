@@ -2,6 +2,8 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { clock } from "../../clock";
+import { animT } from "../../plant";
+import { useTwin } from "../../state";
 import { AtStation, B, Cyl, Hazard, Npc, Pad, RB, Screen } from "../kit";
 import { WeldRobot } from "../Machines";
 import type { Machine } from "../../data";
@@ -14,7 +16,9 @@ function Press() {
   const ram = useRef<THREE.Group>(null!);
   const bar = useRef<THREE.MeshStandardMaterial>(null!);
   useFrame(() => {
-    const cyc = (clock.t % 6) / 6; // 6 s stroke cycle, down fast, up slow
+    const st = useTwin.getState();
+    const ta = animT("S02", clock.t, st.shift, st.data!.hero);
+    const cyc = (ta % 6) / 6; // 6 s stroke cycle, down fast, up slow
     const down = cyc < 0.25 ? cyc / 0.25 : cyc < 0.35 ? 1 : 1 - (cyc - 0.35) / 0.65;
     ram.current.position.y = 4.2 - Math.max(0, down) * 2.2;
     bar.current.emissive.setHSL((clock.t * 0.05) % 1, 0.9, 0.5);
@@ -54,7 +58,8 @@ function RollerConveyor({ from, to }: { from: [number, number]; to: [number, num
   useFrame(() => {
     panels.current.forEach((g, i) => {
       if (!g) return;
-      const u = (((clock.t * 0.35 + i * (len / 4)) % len) + len) % len;
+      const st = useTwin.getState();
+      const u = (((animT("S02", clock.t, st.shift, st.data!.hero) * 0.35 + i * (len / 4)) % len) + len) % len;
       g.position.x = -len / 2 + u;
     });
   });

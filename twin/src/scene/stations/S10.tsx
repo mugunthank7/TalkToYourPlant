@@ -122,7 +122,7 @@ export function S10() {
           <Bench p={[5.6, 0, -4.7]} />
           <Hazard p={[5.6, 0, -2.4]} s={[4.2, 0.5]} />
           <B p={[5.6, 0.085, -3.0]} s={[3.6, 0.02, 1.4]} c="#1f2937" rough={0.95} metal={0} shadow={false} />
-          <Npc p={[5.0, 0, -3.1]} rotY={Math.PI} color="#ef4444" pose="work" seed={3} />
+          <Npc p={[6.7, 0, -3.1]} rotY={Math.PI} color="#ef4444" pose="work" seed={3} />
 
           {/* jib crane in the middle of the bay */}
           <group position={[1.0, 0, 0.2]}><JibCrane /></group>

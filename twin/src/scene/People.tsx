@@ -38,9 +38,16 @@ function findSeg(tl: Seg[], t: number): number {
   return lo;
 }
 
-interface Pose { x: number; z: number; heading: number; anim: Seg["anim"]; label: string }
+export interface Pose { x: number; z: number; heading: number; anim: Seg["anim"]; label: string }
 
-function poseAt(p: Person, t: number): Pose {
+/** The conveyor strip (plant coordinates). Nobody is ever drawn standing on it. */
+const BELT = { x0: 62, x1: 123.5, z0: 32.2, z1: 35.8 };
+function offBelt(x: number, z: number): [number, number] {
+  if (x > BELT.x0 && x < BELT.x1 && z > BELT.z0 && z < BELT.z1) return [x, z < 34 ? BELT.z0 - 0.1 : BELT.z1 + 0.1];
+  return [x, z];
+}
+
+export function poseAt(p: Person, t: number): Pose {
   const seg = p.timeline[findSeg(p.timeline, t)];
   if (seg.k === "walk" && seg.path) {
     const { cum, len } = pathInfo(seg);
@@ -71,7 +78,7 @@ function Limb({ r, len, color }: { r: number; len: number; color: string }) {
   );
 }
 
-function Worker({ person }: { person: Person }) {
+export function Worker({ person, carry }: { person: Person; carry?: [number, number] }) {
   const group = useRef<THREE.Group>(null!);
   const body = useRef<THREE.Group>(null!);
   const lLeg = useRef<THREE.Group>(null!);
@@ -87,7 +94,8 @@ function Worker({ person }: { person: Person }) {
 
   useFrame((_, dt) => {
     const pose = poseAt(person, clock.t);
-    const [sx, sz] = toScene(pose.x, pose.z);
+    const [ox, oz] = offBelt(pose.x, pose.z);
+    const [sx, sz] = toScene(ox, oz);
     group.current.position.set(sx, 0, sz);
     let d = pose.heading - yaw.current;
     d = Math.atan2(Math.sin(d), Math.cos(d));
@@ -108,6 +116,11 @@ function Worker({ person }: { person: Person }) {
       torso.current.rotation.x = 0.22;
       la = -1.0 + Math.sin(phase.current * 1.3) * 0.25;
       ra = -1.15 + Math.cos(phase.current * 1.1) * 0.25;
+    } else if (pose.anim === "sit") {
+      b.position.y = -0.42;
+      ll = -1.5; rl = -1.5;
+      torso.current.rotation.x = 0.06;
+      la = -0.7 + Math.sin(phase.current * 0.7) * 0.05; ra = -0.7;
     } else if (pose.anim === "crouch") {
       b.position.y = -0.34;
       ll = -1.15; rl = -1.15;
@@ -122,7 +135,8 @@ function Worker({ person }: { person: Person }) {
     text.current = `${person.employee_id}: ${pose.label}`;
     if (box.current) {
       const h = useTwin.getState().data!.hero;
-      box.current.visible = person.role === "technician" && person.shift === "A" && clock.t >= h.t_pickup_s && clock.t < h.t_repair_end_s;
+      const w = carry ?? (person.role === "technician" && person.shift === "A" ? [h.t_pickup_s, h.t_repair_end_s] : null);
+      box.current.visible = !!w && clock.t >= w[0] && clock.t < w[1];
     }
   });
 
@@ -179,10 +193,14 @@ export function People() {
   const data = useTwin((s) => s.data)!;
   const shift = useTwin((s) => s.shift);
   const people = useMemo(() => data.schedule.shifts[shift], [data, shift]);
+  const faults = useTwin((s) => s.faults);
   return (
     <>
       {people.map((p) => (
         <Worker key={p.employee_id} person={p} />
+      ))}
+      {faults.map((f) => (
+        <Worker key={f.id} person={f.person} carry={[f.pickupAt + 90, f.fixAt]} />
       ))}
     </>
   );

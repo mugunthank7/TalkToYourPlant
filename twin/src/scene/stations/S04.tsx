@@ -1,3 +1,4 @@
+import { andonFor, andonPlant } from "../../plant";
 import { AtStation, Andon, B, CellFence, Cyl, Npc, Pad, RB, Screen } from "../kit";
 import { Robot } from "./common";
 
@@ -36,9 +37,9 @@ export function S04() {
           <Portal x={1.8} />
 
           {/* tack-welding robots */}
-          <Robot p={[-3.0, 0, 3.1]} id="M03a" absX={68} />
-          <Robot p={[3.2, 0, 3.1]} id="M03b" absX={68} />
-          <Robot p={[3.4, 0, -3.1]} rotY={Math.PI} id="M03c" absX={68} />
+          <Robot p={[-3.0, 0, 3.1]} id="M03a" absX={68}  station="S04" />
+          <Robot p={[3.2, 0, 3.1]} id="M03b" absX={68}  station="S04" />
+          <Robot p={[3.4, 0, -3.1]} rotY={Math.PI} id="M03c" absX={68}  station="S04" />
 
           {/* parts presentation racks with stamped panels */}
           {[[-4.2, -3.2], [-4.2, -4.6]].map(([x, z], i) => (
@@ -63,8 +64,8 @@ export function S04() {
             <RB p={[0, 0.7, 0]} s={[1.0, 1.4, 0.6]} c="#1d5fd0" metal={0.4} />
             <B p={[0, 0.7, 0.31]} s={[0.9, 1.2, 0.02]} c="#174a9e" />
           </group>
-          <Andon p={[-4.9, 0, -4.9]} state={() => "ok"} />
-          <Andon p={[4.9, 0, -4.9]} state={() => "ok"} />
+          <Andon p={[-4.9, 0, -4.9]} state={andonFor("S04")} />
+          <Andon p={[4.9, 0, -4.9]} state={andonFor("S04")} />
         </group>
       )}
     </AtStation>

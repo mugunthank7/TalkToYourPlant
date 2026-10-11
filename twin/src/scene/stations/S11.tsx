@@ -1,3 +1,4 @@
+import { andonFor, andonPlant } from "../../plant";
 import { clock } from "../../clock";
 import { m05Status } from "../../data";
 import { useTwin } from "../../state";
@@ -143,7 +144,7 @@ export function S11() {
           <B p={[-3.3, 0.37, 3.0]} s={[0.08, 0.74, 1.0]} c="#475569" />
           <B p={[-4.2, 0.79, 3.1]} s={[0.55, 0.02, 0.38]} c="#e5e7eb" />
           <B p={[-4.2, 0.95, 2.92]} s={[0.55, 0.34, 0.02]} c="#1f2937" rot={[-0.2, 0, 0]} />
-          <B p={[-5.1, 0.45, 3.45]} s={[0.4, 0.5, 0.4]} c="#1f2937" />
+          <Chair p={[-4.5, 0, 3.95]} rotY={Math.PI} c="#334155" />
           <Plant p={[-7.3, 0, 4.2]} s={1.1} />
           <Plant p={[0.5, 0, 4.3]} />
           <Cyl p={[-0.5, 0.25, 4.3]} r={0.2} h={0.5} c="#64748b" metal={0.4} />
@@ -182,8 +183,8 @@ export function S11() {
           <Cyl p={[7.3, 0.3, 4.6]} r={0.28} h={0.6} c="#64748b" metal={0.4} rb={0.24} />
 
           {/* ---- andon towers outside the glass ---- */}
-          <Andon p={[-8.6, 0, 4.6]} state={() => (alert() ? "bad" : "ok")} />
-          <Andon p={[1.4, 0, 5.6]} state={() => (alert() ? "bad" : "ok")} />
+          <Andon p={[-8.6, 0, 4.6]} state={andonPlant} />
+          <Andon p={[1.4, 0, 5.6]} state={andonPlant} />
 
           {/* people not on the schedule: two colleagues having coffee */}
           <Npc p={[2.3, 0, -3.5] as V3} rotY={Math.PI} color="#f97316" pose="stand" seed={2} />

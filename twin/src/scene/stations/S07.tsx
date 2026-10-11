@@ -1,7 +1,10 @@
+import { andonFor, andonPlant } from "../../plant";
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { clock } from "../../clock";
+import { animT } from "../../plant";
+import { useTwin } from "../../state";
 import { AtStation, Andon, B, CellFence, Npc, Pad, RB, Screen } from "../kit";
 
 const GREY = "#7c8795";
@@ -9,7 +12,9 @@ const GREY = "#7c8795";
 export function S07() {
   const lasers = useRef<THREE.MeshBasicMaterial[]>([]);
   useFrame(() => {
-    lasers.current.forEach((m, i) => { if (m) m.opacity = 0.22 + 0.14 * Math.sin(clock.t * 4 + i * 1.7); });
+    const st = useTwin.getState();
+    const ta = animT("S07", clock.t, st.shift, st.data!.hero);
+    lasers.current.forEach((m, i) => { if (m) m.opacity = 0.22 + 0.14 * Math.sin(ta * 4 + i * 1.7); });
   });
   const heat = (ctx: CanvasRenderingContext2D, w: number, h: number) => {
     ctx.fillStyle = "#06121a"; ctx.fillRect(0, 0, w, h);
@@ -96,7 +101,7 @@ export function S07() {
             {[-1.4, 0, 1.4].map((x) => <B key={x} p={[x, 0.14, 0]} s={[0.18, 0.1, 2.0]} c="#8b95a3" metal={0.7} />)}
           </group>
 
-          <Andon p={[-4.4, 0, -4.8]} state={() => "ok"} />
+          <Andon p={[-4.4, 0, -4.8]} state={andonFor("S07")} />
         </group>
       )}
     </AtStation>

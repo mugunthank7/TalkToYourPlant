@@ -1,9 +1,14 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, PerformanceMonitor } from "@react-three/drei";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { camera as camGoal, clock } from "./clock";
+import { beltTime } from "./plant";
+import { CAR_SLOTS, carDistance } from "./flow";
+import { buildShots } from "./ui/shots";
+import { TOUR } from "./ui/shots";
+import { poseAt } from "./scene/People";
 import { loadAll, toScene } from "./data";
 import { useTwin } from "./state";
 import { Floor, SafetyZones, Stations, Walkways } from "./scene/Plant";
@@ -24,7 +29,7 @@ import { Bloom, EffectComposer } from "@react-three/postprocessing";
 function ViewFit() {
   const { camera, size } = useThree();
   useEffect(() => {
-    const L = 276, R = 352, T = 52, B = 184;
+    const L = 276, R = 352, T = 52, B = 150;
     const cx = (L + size.width - R) / 2;
     const cy = (T + size.height - B) / 2;
     const cam = camera as THREE.PerspectiveCamera;
@@ -56,19 +61,76 @@ function UrlView() {
 
 const goalPos = new THREE.Vector3();
 const goalTarget = new THREE.Vector3();
+const tmpPos = new THREE.Vector3();
+const tmpTarget = new THREE.Vector3();
 
 function CameraRig() {
   const { camera, controls } = useThree();
+  const data = useTwin((s) => s.data)!;
+  const shots = useMemo(() => buildShots(data.layout), [data]);
   useFrame(() => {
-    const g = camGoal.goal;
-    if (!g || !controls) return;
+    if (!controls) return;
     const oc = controls as unknown as OrbitControlsImpl;
+    const st = useTwin.getState();
+    const mode = camGoal.mode;
+    let desiredPos: THREE.Vector3 | null = null;
+    let desiredTarget: THREE.Vector3 | null = null;
+    let k = 0.08;
+
+    if (mode === "orbit") {
+      const ang = performance.now() / 24000;
+      desiredPos = tmpPos.set(Math.sin(ang) * 100, 58, Math.cos(ang) * 96 + 4);
+      desiredTarget = tmpTarget.set(0, 0, 4);
+      k = 0.04;
+    } else if (mode === "tour") {
+      const idx = Math.floor(performance.now() / 8000) % TOUR.length;
+      if (idx !== camGoal.tourIdx) {
+        camGoal.tourIdx = idx;
+        const shot = shots.find((s) => s.name === TOUR[idx]);
+        if (shot) camGoal.goal = { pos: [...shot.pos], target: [...shot.target] };
+      }
+      k = 0.035;
+    } else if (mode === "follow-car") {
+      const cp = data.layout.conveyor_path;
+      const [x0, z0] = toScene(cp[0][0], cp[0][1]);
+      const len = cp[1][0] - cp[0][0];
+      const bt = beltTime(clock.t, st.shift, data.hero);
+      let best = -1, bd = -1;
+      for (let s = 0; s < CAR_SLOTS; s++) {
+        const { d } = carDistance(s, bt);
+        if (d >= 0 && d <= len - 4 && d > bd) { bd = d; best = s; }
+      }
+      if (best >= 0) {
+        desiredTarget = tmpTarget.set(x0 + bd, 1.4, z0);
+        desiredPos = tmpPos.set(x0 + bd - 7, 5.5, z0 + 10);
+        k = 0.1;
+      }
+    } else if (mode === "follow-tech") {
+      const resp = st.faults.find((f) => clock.t >= f.t0 - 5 && clock.t < f.fixAt + 240);
+      const person = resp ? resp.person : st.data!.schedule.shifts[st.shift].find((p) => p.role === "technician");
+      if (person) {
+        const ps = poseAt(person, clock.t);
+        const [sx, sz] = toScene(ps.x, ps.z);
+        desiredTarget = tmpTarget.set(sx, 1.2, sz);
+        desiredPos = tmpPos.set(sx + 6, 5, sz + 9);
+        k = 0.12;
+      }
+    }
+
+    if (desiredPos && desiredTarget) {
+      camera.position.lerp(desiredPos, k);
+      oc.target.lerp(desiredTarget, k);
+      oc.update();
+      return;
+    }
+    const g = camGoal.goal;
+    if (!g) return;
     goalPos.set(...g.pos);
     goalTarget.set(...g.target);
-    camera.position.lerp(goalPos, 0.08);
-    oc.target.lerp(goalTarget, 0.08);
+    camera.position.lerp(goalPos, k);
+    oc.target.lerp(goalTarget, k);
     oc.update();
-    if (camera.position.distanceTo(goalPos) < 0.3) camGoal.goal = null;
+    if (mode !== "tour" && camera.position.distanceTo(goalPos) < 0.3) camGoal.goal = null;
   });
   return null;
 }
