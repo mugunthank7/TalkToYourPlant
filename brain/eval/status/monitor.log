@@ -1,0 +1,93 @@
+/Users/tan/Desktop/talkToYourPlant/TalkToYourPlant/brain/app/monitor.py:142: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:     Started server process [22005]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8300 (Press CTRL+C to quit)
+INFO:     127.0.0.1:63090 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63286 - "POST /api/inject HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63324 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63510 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63512 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "POST /api/inject HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "POST /api/inject HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "POST /api/inject HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63564 - "GET /api/monitor HTTP/1.1" 200 OK

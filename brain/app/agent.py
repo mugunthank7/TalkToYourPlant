@@ -300,15 +300,26 @@ class Brain:
                 L.append(f"- Throughput: {k['throughput_per_hr']['scenario']}/h vs {k['throughput_per_hr']['baseline']}/h; "
                          f"OEE {k['oee']['scenario']} vs {k['oee']['baseline']}.")
                 fp = k.get("failure_probability")
-                cost = k.get("cost_usd")
-                L.append(f"- Cost: " + (f"${cost:,.0f}" if cost is not None else "n/a")
+                cost, cost_b = k.get("cost_usd"), k.get("cost_baseline_usd")
+                L.append("- Downtime cost: " + (f"${cost:,.0f}" if cost is not None else "n/a")
+                         + (f" vs ${cost_b:,.0f} if repaired now" if cost_b is not None else "")
                          + (f"; failure probability about {fp:.0%} (estimate)." if fp is not None else "."))
-                rul_h = sc.get("rul_hours_at_alert")
-                rec = ("Do not extend. Repair now." if sc["matched_scenario"] != "hero_timely_repair" and (rul_h is None or h > rul_h) else
-                       "Extension is risky; finish the current batch only and repair at the next buffer-protected stop."
-                       if h > 0.1 else "Repair now.")
-                L.append(f"Recommendation: {rec} Rule: criticality A with a rising warn-level trend limits extension to the "
-                         f"current batch (SOP-OPS-02)" + (" [SOP-OPS-02]." if rule else "."))
+                rul_h, rul_low = sc.get("rul_hours_at_alert"), sc.get("rul_low_hours")
+                if rul_h is not None:
+                    L.append(f"- Predicted remaining useful life: {rul_h * 60:.0f} min"
+                             + (f" (80% interval lower bound {rul_low * 60:.0f} min)" if rul_low is not None else "") + ".")
+                better = cost is not None and cost_b is not None and cost < cost_b
+                inside = rul_low is not None and h <= rul_low
+                if sc["matched_scenario"] == "hero_ignored" or (rul_h is not None and h > rul_h):
+                    rec = "Do not extend. The run is longer than the remaining useful life, so failure is likely. Repair now."
+                elif h > 1.0:
+                    rec = (f"{h:g} h exceeds the SOP-OPS-02 limit for a rising warn-level trend (current batch, about 30 to 60 min). "
+                           + ("The engine projects lower downtime cost, but that is not a licence to exceed the rule: it needs written Maintenance Manager approval, 15-minute re-checks and a technician on standby. " if better else "")
+                           + ("Inside the predicted RUL interval, " if inside else "")
+                           + "plan the repair at the next buffer-protected stop.")
+                else:
+                    rec = "Allowed only for the current batch with supervisor approval and 30-minute re-checks; repair at the next buffer-protected stop."
+                L.append(f"Recommendation: {rec}" + (" [SOP-OPS-02]" if rule else ""))
             elif sc:
                 L.append(sc.get("error", "No scenario result."))
             return "\n".join(L)
@@ -390,7 +401,20 @@ class Brain:
                 w = wo["work_orders"][0]
                 L.append(f"- Latest work order [{w['wo_id']}] {w['opened_ts'][:10]}: {w.get('fault_code') or w.get('wo_type')}"
                          + (f", root cause: {w['root_cause']}" if w.get("root_cause") else "") + ".")
-            sop = next((x for x in ctx["retrieved"] if x["source_id"].startswith("SOP-")), None)
+            def _applies(sid):
+                m = re.match(r"SOP-[A-Z]+-(M\d\d)-\d+", sid)       # machine-specific SOPs only apply to their machine
+                return not m or m.group(1) == mid
+            sop = next((x for x in ctx["retrieved"] if x["source_id"].startswith("SOP-") and _applies(x["source_id"])), None)
+            if st and st.get("evidence"):
+                for e in st["evidence"][:3]:
+                    L.append(f"- {e}")
+            if st and st.get("affected_stations"):
+                L.append("- Affected stations: " + ", ".join(f"{a['station']} ({a['state']}{', ' + a['reason'] if a.get('reason') else ''})"
+                                                            for a in st["affected_stations"][:4]))
+            if st and st.get("open_work_orders"):
+                L.append("- Open work orders: " + ", ".join(f"{w['id']} ({w['status']})" for w in st["open_work_orders"][:3]))
+            if not first("graph_lookup", lambda a, o: "fault_modes" in o and o["fault_modes"]):
+                L.append(f"- No fault catalogue for {mid} in the knowledge base.")
             if sop:
                 L.append(f"- Procedure: [{sop['source_id']}].")
             if esc and "chain" in esc:
@@ -467,9 +491,10 @@ class Brain:
         t0 = time.time()
         sess = self.sessions.setdefault(session_id, {"history": []})
         focus = self.g.find_machines(question)
-        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v3", config.get("SIM_MODE", "mock"), config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
+        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v5", config.get("SIM_MODE", "mock"), config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
                                        sess["history"][-2:] if sess["history"] else []]).encode()).hexdigest()
-        hit = self.cache.get(key)
+        live = config.get("SIM_MODE", "mock").lower() == "live"     # live plant state changes: never serve cached answers
+        hit = None if live else self.cache.get(key)
         if hit:
             return {**hit, "meta": {**hit["meta"], "cached": True, "latency_s": round(time.time() - t0, 2)}}
         ctx = {"machines": [], "cite": set(), "retrieved": [], "alerts": [], "actions": [], "trace": [], "tool_outputs": [],
@@ -501,7 +526,7 @@ class Brain:
                      "shift": shift or current_shift(), "sim_mode": self.sim.mode,
                      "latency_s": round(time.time() - t0, 2), "cached": False},
         }
-        if not degraded:
+        if not degraded and not live:
             self.cache.put(key, result)
         if mids:
             sess["focus"] = mids[:2]
