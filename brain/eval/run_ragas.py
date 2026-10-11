@@ -55,8 +55,8 @@ def faithfulness(question, answer, ctxs):
              "Answer false if the context does not contain it.\nCONTEXT:\n" + ctx_block(ctxs)
              + "\nSTATEMENTS:\n" + "\n".join(f"{i+1}. {x}" for i, x in enumerate(s))
              + '\nReturn {"verdicts": [{"n": 1, "supported": true}, ...]}', 300).get("verdicts", [])
-    sup = sum(1 for x in v if isinstance(x, dict) and x.get("supported") is True)
-    return sup / len(s)
+    ok = {x.get("n") for x in v if isinstance(x, dict) and x.get("supported") is True and isinstance(x.get("n"), int)}
+    return min(1.0, len([n for n in ok if 1 <= n <= len(s)]) / len(s))
 
 
 def answer_relevancy(question, answer, emb):
@@ -95,8 +95,8 @@ def context_recall(reference, ctxs):
     v = chat("For each REFERENCE sentence decide if it can be attributed to the CONTEXT.\nCONTEXT:\n" + ctx_block(ctxs)
              + "\nREFERENCE SENTENCES:\n" + "\n".join(f"{i+1}. {x}" for i, x in enumerate(sents))
              + '\nReturn {"verdicts": [{"n": 1, "attributed": true}, ...]}', 250).get("verdicts", [])
-    ok = sum(1 for x in v if isinstance(x, dict) and x.get("attributed") is True)
-    return ok / len(sents) if sents else None
+    ok = {x.get("n") for x in v if isinstance(x, dict) and x.get("attributed") is True and isinstance(x.get("n"), int)}
+    return min(1.0, len([n for n in ok if 1 <= n <= len(sents)]) / len(sents)) if sents else None
 
 
 def main():
@@ -105,6 +105,7 @@ def main():
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--ctx-chars", type=int, default=1400)
     ap.add_argument("--max-ctx", type=int, default=6)
+    ap.add_argument("--ids", default="", help="comma list of question ids to (re)score and merge into ragas_latest.json")
     ap.add_argument("--metrics", default="faithfulness,answer_relevancy,context_precision,context_recall")
     a = ap.parse_args()
     want = a.metrics.split(",")
@@ -112,6 +113,14 @@ def main():
     qs = {q["id"]: q for q in (json.loads(l) for l in open(HERE / "questions.jsonl"))}
     res = json.load(open(HERE / "results_latest.json"))["answers"]
     rows = [r for i, r in enumerate(res) if i % a.every == 0 and r.get("contexts_text")]
+    prev = {}
+    if a.ids:
+        want_ids = set(a.ids.split(","))
+        rows = [r for r in res if r["id"] in want_ids and r.get("contexts_text")]
+        try:
+            prev = {x["id"]: x for x in json.load(open(HERE / "ragas_latest.json"))["rows"]}
+        except Exception:
+            prev = {}
     if a.limit:
         rows = rows[:a.limit]
     if not rows:
@@ -147,14 +156,16 @@ def main():
             st.log(f"{r['id']} {name} = {out[name]} ({time.time()-t:.0f}s)")
         scored.append(out)
         st.item(**out)
+        allrows = list({**prev, **{x["id"]: x for x in scored}}.values()) if a.ids else scored
+        allrows.sort(key=lambda x: x["id"])
         means = {}
         for n in want:
-            vals = [x[n] for x in scored if isinstance(x.get(n), float)]
-            means[n] = {"mean": round(statistics.mean(vals), 3) if vals else None, "n": len(vals), "of": len(scored)}
+            vals = [x[n] for x in allrows if isinstance(x.get(n), float)]
+            means[n] = {"mean": round(statistics.mean(vals), 3) if vals else None, "n": len(vals), "of": len(allrows)}
         st.update(metrics=means)
         (HERE / "ragas_latest.json").write_text(json.dumps(
             {"judge": JUDGE, "embed": config.LOCAL_EMBED_MODEL, "impl": "ragas definitions, local judge",
-             "summary": means, "rows": scored, "partial": len(scored) < len(rows)}, indent=1))
+             "summary": means, "rows": allrows, "partial": (not a.ids) and len(scored) < len(rows)}, indent=1))
     st.finish("done")
 
 
