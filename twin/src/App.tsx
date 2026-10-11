@@ -97,8 +97,6 @@ function Scene({ low }: { low: boolean }) {
         <Building />
       </Suspense>
       <Walkways />
-      <SafetyZones />
-      <Cells />
       <Stations />
       <Conveyor />
       <Logistics />

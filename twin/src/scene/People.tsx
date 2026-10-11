@@ -80,6 +80,7 @@ function Worker({ person }: { person: Person }) {
   const rArm = useRef<THREE.Group>(null!);
   const torso = useRef<THREE.Group>(null!);
   const text = useRef("");
+  const box = useRef<THREE.Mesh>(null!);
   const color = ROLE_COLOR[person.role] ?? "#ccc";
   const yaw = useRef(0);
   const phase = useRef(Math.random() * 6);
@@ -119,6 +120,10 @@ function Worker({ person }: { person: Person }) {
     lLeg.current.rotation.x = ll; rLeg.current.rotation.x = rl;
     lArm.current.rotation.set(la, 0, lz); rArm.current.rotation.set(ra, 0, rz);
     text.current = `${person.employee_id}: ${pose.label}`;
+    if (box.current) {
+      const h = useTwin.getState().data!.hero;
+      box.current.visible = person.role === "technician" && person.shift === "A" && clock.t >= h.t_pickup_s && clock.t < h.t_repair_end_s;
+    }
   });
 
   return (
@@ -158,6 +163,10 @@ function Worker({ person }: { person: Person }) {
           </group>
           <group ref={rArm} position={[0.29, 0.56, 0]}>
             <Limb r={0.07} len={0.62} color={color} />
+            <mesh ref={box} position={[0, -0.62, 0.1]} castShadow>
+              <boxGeometry args={[0.28, 0.2, 0.22]} />
+              <meshStandardMaterial color="#f8fafc" roughness={0.6} />
+            </mesh>
           </group>
         </group>
       </group>

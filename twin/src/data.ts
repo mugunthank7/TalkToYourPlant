@@ -37,6 +37,7 @@ export interface Layout {
   walk_graph: { nodes: { id: string; x: number; z: number }[]; edges: [string, string][] };
 }
 export interface Hero {
+  fault?: { onset_s: number; ramp_s: number; tau_s: number; vib_gain: number };
   t_onset_s: number;
   t_alert_s: number;
   t_dispatch_s: number;
@@ -90,4 +91,13 @@ export function m05Status(t: number, shift: string, h: Hero): Status {
   if (t < h.t_repair_start_s) return "alert";
   if (t < h.t_repair_end_s) return "repair";
   return "repaired";
+}
+
+/** Vibration as a multiple of baseline for the hero bearing (mirrors the generator's degradation model). */
+export function vibMultiple(t: number, h: Hero): number {
+  const f = h.fault;
+  if (!f) return 1;
+  const x = Math.min(1, Math.max(0, (t - f.onset_s) / f.ramp_s));
+  const k = f.ramp_s / f.tau_s;
+  return 1 + f.vib_gain * ((Math.exp(x * k) - 1) / (Math.exp(k) - 1));
 }

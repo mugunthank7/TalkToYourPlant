@@ -287,3 +287,42 @@ export function WireMesh({ p, s, axis = "x", frame = "#1d4ed8" }: { p: V3; s: [n
     </group>
   );
 }
+
+/** Yellow safety fence with clear panels around a station. The conveyor runs west-east through the middle:
+ * `belt` is the opening width on the west/east sides, `gate` the person gate on the south side (centre x, width). */
+export function CellFence({ w, d, belt = 3.4, gate, tall = 2.0 }: { w: number; d: number; belt?: number; gate?: [number, number]; tall?: number }) {
+  const hw = w / 2 - 0.25;
+  const hd = d / 2 - 0.25;
+  const panel = (len: number, key: string, p: V3, rotY = 0) => (
+    <group key={key} position={p} rotation={[0, rotY, 0]}>
+      <mesh position={[0, tall / 2, 0]}>
+        <boxGeometry args={[len, tall - 0.4, 0.03]} />
+        <meshPhysicalMaterial color="#9ad0ff" transparent opacity={0.13} roughness={0.05} side={THREE.DoubleSide} depthWrite={false} />
+      </mesh>
+      <B p={[0, tall - 0.04, 0]} s={[len, 0.07, 0.09]} c="#facc15" />
+      <B p={[0, 0.3, 0]} s={[len, 0.07, 0.09]} c="#facc15" />
+      <B p={[0, tall / 2, 0]} s={[len, 0.05, 0.07]} c="#facc15" />
+    </group>
+  );
+  const post = (x: number, z: number, key: string) => <B key={key} p={[x, tall / 2, z]} s={[0.1, tall, 0.1]} c="#facc15" />;
+  const out: ReactNode[] = [];
+  // north (full), south (with a gate)
+  out.push(panel(2 * hw, "n", [0, 0, -hd]));
+  const gx = gate ? gate[0] : 0, gw = gate ? gate[1] : 0;
+  if (gate) {
+    out.push(panel(gx - gw / 2 + hw, "sa", [(-hw + gx - gw / 2) / 2, 0, hd]));
+    out.push(panel(hw - (gx + gw / 2), "sb", [(gx + gw / 2 + hw) / 2, 0, hd]));
+    out.push(post(gx - gw / 2, hd, "g1"), post(gx + gw / 2, hd, "g2"));
+  } else out.push(panel(2 * hw, "s", [0, 0, hd]));
+  // west / east: full panels except the belt opening
+  [-hw, hw].forEach((x) => {
+    const seg = hd - belt / 2;
+    out.push(panel(seg, `w${x}a`, [x, 0, -(belt / 2 + seg / 2)], Math.PI / 2));
+    out.push(panel(seg, `w${x}b`, [x, 0, belt / 2 + seg / 2], Math.PI / 2));
+    out.push(post(x, -belt / 2, `p${x}a`), post(x, belt / 2, `p${x}b`));
+    // light curtain across the belt opening
+    [0.35, 0.9, 1.45].forEach((y) => out.push(<B key={`lc${x}${y}`} p={[x, y, 0]} s={[0.02, 0.02, belt]} c="#ef4444" emissive="#ef4444" ei={1.6} shadow={false} />));
+  });
+  [[-hw, -hd], [hw, -hd], [-hw, hd], [hw, hd]].forEach(([x, z], i) => out.push(post(x, z, `c${i}`)));
+  return <group>{out}</group>;
+}
