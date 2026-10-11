@@ -306,6 +306,30 @@ class Brain:
             w = "Second weld robot (M05) welds the body; this is where the demo's bearing wear develops"
         return w + "."
 
+    _GENERIC_SOPS = {"SOP-SAF-01"}          # lockout/tagout applies to any stopped machine
+
+    def _sop_applies(self, sid, mid, machine):
+        """Only cite an SOP for a machine if it is written for that machine, for its area, or is generic (lockout/tagout).
+        Retrieval alone is not enough: it once returned the battery-fire SOP for a weld robot fault."""
+        if not hasattr(self, "_sop_meta"):
+            import json as _json
+            self._sop_meta = {}
+            for line in open(config.BRAIN_DIR / "data" / "out" / "rag" / "rag_chunks.jsonl"):
+                r = _json.loads(line)
+                if r["source_id"].startswith("SOP-") and r["source_id"] not in self._sop_meta:
+                    self._sop_meta[r["source_id"]] = (r.get("machine_id"), r.get("area"), re.sub(r"^\s*SOP-[A-Z0-9-]+:\s*", "", (r.get("title") or "")).strip())
+        mach, area, _ = self._sop_meta.get(sid, (None, None, ""))
+        if sid in self._GENERIC_SOPS:
+            return True
+        if mach:
+            return mach == mid
+        return bool(area) and area != "ALL" and area == (machine or {}).get("area")
+
+    def _sop_label(self, sid):
+        """'SOP-xxx: title' so a card says what the procedure is, not just its id."""
+        title = (getattr(self, "_sop_meta", {}).get(sid) or (None, None, ""))[2]
+        return f"{sid}: {title}" if title else sid
+
     def _process_steps(self):
         """Stations in material-flow order (from the station book's upstream/downstream links), then the support areas."""
         import json as _json
@@ -519,10 +543,14 @@ class Brain:
             part = (f["parts"][0] if f and f["parts"] else None)
             if part and sev != "ok":
                 do.append(f"Bring {part['part_no']} from the spares cage (S12)" + (f"; {part['on_hand']} in stock." if part.get("on_hand") is not None else "."))
-            sop = next((x for x in ctx["retrieved"] if x["source_id"].startswith("SOP-") and
-                        not (re.match(r"SOP-[A-Z]+-(M\d\d)-\d+", x["source_id"]) and re.match(r"SOP-[A-Z]+-(M\d\d)-\d+", x["source_id"]).group(1) != mid)), None)
+            sop = next((x for x in ctx["retrieved"] if x["source_id"].startswith("SOP-") and self._sop_applies(x["source_id"], mid, m)), None)
+            if not sop and sev != "ok" and m:
+                self._sop_applies("SOP-SAF-01", mid, m)               # loads the SOP index
+                area_id = f"SOP-AREA-{m.get('area')}"
+                if area_id in self._sop_meta:
+                    sop = {"source_id": area_id}                       # the area's own SOP when nothing machine-specific was retrieved
             if sop and sev != "ok":
-                do.append(f"Follow {sop['source_id']}.")
+                do.append(f"Follow {self._sop_label(sop['source_id'])}.")
                 src.append(sop["source_id"])
             if sev == "ok":
                 do = ["Nothing to do. Keep watching vibration and temperature."]
@@ -531,7 +559,7 @@ class Brain:
             headline = {"critical": "Needs action now." , "warning": "Needs attention soon.", "ok": "Running normally."}[sev]
             return {"title": title, "severity": sev, "headline": headline, "what_happened": what, "impact": impact, "do_now": do,
                     "contacts": contacts(esc, 2) if sev != "ok" else [], "parts": [f"{part['part_no']} ({part['description']})"] if part and sev != "ok" else [],
-                    "procedure": [sop["source_id"]] if sop and sev != "ok" else [], "sources": list(dict.fromkeys(src)), "intent": intent}
+                    "procedure": [self._sop_label(sop["source_id"])] if sop and sev != "ok" else [], "sources": list(dict.fromkeys(src)), "intent": intent}
         return None
 
 

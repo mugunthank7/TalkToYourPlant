@@ -277,3 +277,8 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 **Context:** Asking "explain the production process" in the twin's chat returned "No specific record found": the deterministic router had no overview intent, and the chat view dropped the fallback's suggestions.
 **Decision:** New `process` intent in `brain/app/agent.py` (router, report card and plain render) that walks the stations in line order (S01 to S09, from `stations.json`) with the takt and the three support areas. Chat reports now show their suggestion chips and a numbered flow. Added to the demo set (19 questions).
 **Consequences:** Small edit in the teammate's agent file; they should keep the branch when they extend `_route`. Any other open-ended "explain X" question still falls back until it gets its own intent.
+
+## D-058, Only cite an SOP that applies to the machine | 2026-10-11 | accepted
+**Context:** The status card for a stopped weld robot (M04) told the operator to "Follow SOP-SAF-03", which is the battery thermal event and fire response SOP. The card took the first SOP the search returned.
+**Decision:** An SOP is cited for a machine only if it is written for that machine, for that machine's area, or is lockout/tagout (SOP-SAF-01). If none was retrieved, fall back to the area SOP (for example SOP-AREA-BIW). Cards show the SOP title next to its id.
+**Consequences:** A wrong-but-plausible citation is worse than none, so a machine without a matching SOP gets no procedure line. Retrieval ranks by text similarity only, so any new place that picks a document from search results should apply the same applicability check.
