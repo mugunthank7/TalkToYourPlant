@@ -136,5 +136,5 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 - [ ] Replay `scenarios/hero_timely_repair_sensors.parquet` as the mock stream + fault glow on M05
 - [x] SimPy engine + what-if + FastAPI tool endpoints + WebSocket stream (D-016, D-030); twin connected to it. Calibrated to the scenario data within 8 percent (tests).
 - [x] Real anomaly detector (Isolation Forest + exact Shapley + conformal RUL) in the engine; 40/40 faults caught, 0 false alerts on held-out data (docs/ANOMALY.md, D-031). Retrain: `cd sim && .venv/bin/python -m plantsim.anomaly.train`
-- [ ] KPI dashboard
+- [x] Dashboard tab driven by the engine when connected (KPI tiles, anomaly scores per machine, score history, Shapley 'why flagged', station load, work orders; `twin/src/ui/EngineCards.tsx`); precomputed series still feed the historical charts offline
 - [ ] Wire to real WebSocket
