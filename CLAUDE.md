@@ -118,7 +118,8 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 - [ ] Install Blender, confirm headless export works
 - [ ] P0 assets: weld robot (rigged), conveyor, press, BIW
 - [x] HUD v1 matching the ChatGPT concept mockup (top bar, live plant state, KPIs, forecast, timeline, what-if, camera shortcuts) with live numbers from `kpi.json`
-- [ ] NEXT: 3D realism pass (fences, shelving, car shape, limbed workers, lighting), then real models (Blender weld robot etc.) and Mixamo characters replacing the placeholders
+- [x] 3D realism pass v1: CC0 HDRI + concrete floor + Poly Haven props (licence log in docs/ASSETS.md), limbed workers with walk/work/crouch, fenced weld cells + andon lights, car bodies, articulated robots with sparks and the glowing `m05_joint1_bearing` ring, bloom, adaptive quality (`?q=low` forces low)
+- [ ] NEXT: Blender-built hero models (press, robot, conveyor) and rigged Mixamo/Quaternius characters replacing the procedural ones; match the ChatGPT mockup's density (racks, glass control room, more props) (Blender weld robot etc.) and Mixamo characters replacing the placeholders
 - [ ] Replay `scenarios/hero_timely_repair_sensors.parquet` as the mock stream + fault glow on M05
 - [ ] SimPy engine + what-if + FastAPI tool endpoints (D-016)
 - [ ] KPI dashboard

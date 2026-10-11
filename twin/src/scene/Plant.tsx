@@ -5,6 +5,7 @@ import { Label } from "./Label";
 import * as THREE from "three";
 import { clock } from "../clock";
 import { toScene } from "../data";
+import { ConcreteFloor } from "./Env";
 import { useTwin } from "../state";
 
 const PAD: Record<string, string> = {
@@ -16,10 +17,7 @@ export function Floor() {
   const { plant } = useTwin((s) => s.data)!.layout;
   return (
     <>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[plant.width_m, plant.depth_m]} />
-        <meshStandardMaterial color="#9ca3af" roughness={0.95} />
-      </mesh>
+      <ConcreteFloor />
       {/* perimeter wall */}
       {[
         { p: [0, 2, -plant.depth_m / 2], s: [plant.width_m, 4, 0.4] },
@@ -100,6 +98,36 @@ export function SafetyZones() {
   );
 }
 
+const carShape = (() => {
+  const sh = new THREE.Shape();
+  sh.moveTo(-2.3, 0.3); sh.lineTo(2.3, 0.3); sh.lineTo(2.3, 0.78); sh.lineTo(1.55, 0.9); sh.lineTo(0.75, 1.42);
+  sh.lineTo(-0.85, 1.45); sh.lineTo(-1.7, 0.98); sh.lineTo(-2.3, 0.9); sh.closePath();
+  return sh;
+})();
+const carGeo = new THREE.ExtrudeGeometry(carShape, { depth: 1.7, bevelEnabled: true, bevelSize: 0.08, bevelThickness: 0.08, bevelSegments: 2 });
+carGeo.translate(0, 0, -0.85);
+const CAR_COLORS = ["#f8fafc", "#cbd5e1", "#1d4ed8", "#e2e8f0", "#b91c1c"];
+
+function Car({ color }: { color: string }) {
+  return (
+    <group>
+      <mesh geometry={carGeo} castShadow>
+        <meshPhysicalMaterial color={color} metalness={0.6} roughness={0.25} clearcoat={1} clearcoatRoughness={0.1} />
+      </mesh>
+      <mesh position={[0.1, 1.14, 0]} castShadow>
+        <boxGeometry args={[1.9, 0.42, 1.74]} />
+        <meshStandardMaterial color="#0b1220" metalness={0.9} roughness={0.1} />
+      </mesh>
+      {[[-1.4, 0.88], [1.4, 0.88], [-1.4, -0.88], [1.4, -0.88]].map(([x, z], i) => (
+        <mesh key={i} position={[x, 0.36, z]} rotation={[Math.PI / 2, 0, 0]} castShadow>
+          <cylinderGeometry args={[0.36, 0.36, 0.28, 18]} />
+          <meshStandardMaterial color="#111827" roughness={0.8} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 export function Conveyor() {
   const { conveyor_path, } = useTwin((s) => s.data)!.layout;
   const [x0, z0] = toScene(conveyor_path[0][0], conveyor_path[0][1]);
@@ -131,14 +159,9 @@ export function Conveyor() {
       </mesh>
       {Array.from({ length: N }).map((_, i) => (
         <group key={i} ref={(g) => { if (g) cars.current[i] = g; }}>
-          <mesh position={[0, 1.15, 0]} castShadow>
-            <boxGeometry args={[4.6, 1.1, 1.9]} />
-            <meshStandardMaterial color="#9ca3af" metalness={0.5} roughness={0.45} />
-          </mesh>
-          <mesh position={[-0.2, 1.9, 0]} castShadow>
-            <boxGeometry args={[2.4, 0.6, 1.7]} />
-            <meshStandardMaterial color="#94a3b8" metalness={0.5} roughness={0.45} />
-          </mesh>
+          <group position={[0, 0.55, 0]}>
+            <Car color={CAR_COLORS[i % CAR_COLORS.length]} />
+          </group>
         </group>
       ))}
     </group>
