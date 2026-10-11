@@ -1,0 +1,6 @@
+01:05:49 RAGAS-definitions, local judge phi3:3.8b, 40 questions, metrics ['faithfulness', 'answer_relevancy', 'context_precision', 'context_recall']
+01:06:10 Q01 faithfulness = 1.0 (21s)
+01:06:24 Q01 answer_relevancy = 0.752 (14s)
+01:06:28 Q01 context_precision = 1.0 (4s)
+01:06:32 Q01 context_recall = 1.0 (4s)
+01:06:50 Q02 faithfulness = 0.9 (18s)

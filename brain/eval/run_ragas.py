@@ -1,137 +1,161 @@
 #!/usr/bin/env python3
-"""RAGAS analysis of the brain's answers (LLM-judged), run in the isolated venv:
+"""RAGAS metrics with a LOCAL judge (Ollama) and LOCAL embeddings. No API, no key, stdlib + numpy.
 
-  python3 -m venv brain/.venv-ragas
-  brain/.venv-ragas/bin/pip install ragas==0.4.3 google-genai
-  brain/.venv-ragas/bin/pip install "langchain-community==0.3.31" "langchain-core<1.0" "langchain<1.0" "langchain-openai<1.0"
-  python3 brain/eval/run_eval.py                       # produces results_latest.json (with contexts)
-  brain/.venv-ragas/bin/python brain/eval/run_ragas.py --every 2
+Re-implements the four RAGAS metrics with the same definitions (the ragas library hung on this
+8 GB machine with a local judge, see run_ragas_lib.py):
+  faithfulness       = supported statements / statements in the answer         (2 judge calls)
+  answer_relevancy   = mean cosine(question, 3 questions generated from answer) (1 call + embeddings)
+  context_precision  = average precision of useful contexts vs the reference    (1 call)
+  context_recall     = reference sentences attributable to the contexts         (1 call)
 
-Judge = MODEL_LITE through Gemini's OpenAI-compatible endpoint, throttled by the same rate
-limiter as the agent (RPM/RPD/TPM). Contexts = the tool outputs the agent actually saw.
-Metrics: faithfulness, answer_relevancy, context_precision, context_recall.
+  python3 brain/eval/run_eval.py          # writes results_latest.json with contexts
+  python3 brain/eval/run_ragas.py            # all 40 questions, about 1 min each with phi3:3.8b
 """
-import argparse, asyncio, json, statistics, sys, time
+import argparse, json, re, statistics, sys, time, urllib.request
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
-from app import config, ratelimit  # noqa: E402
+sys.path.insert(0, str(HERE))
+from app import config  # noqa: E402
+from status import Status  # noqa: E402
+
+JUDGE = config.get("JUDGE_MODEL", "phi3:3.8b")
+
+
+def chat(prompt, num_predict=420, system="You are a strict evaluation judge. Output valid JSON only."):
+    body = {"model": JUDGE, "stream": False, "format": "json", "keep_alive": "30m",
+            "options": {"temperature": 0, "num_ctx": 4096, "num_predict": num_predict},
+            "messages": [{"role": "system", "content": system}, {"role": "user", "content": prompt}]}
+    for attempt in range(2):
+        r = urllib.request.Request(config.OLLAMA_URL.rstrip("/") + "/api/chat", data=json.dumps(body).encode(),
+                                   headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(r, timeout=420) as resp:
+            txt = json.loads(resp.read().decode())["message"]["content"]
+        try:
+            return json.loads(txt)
+        except Exception:
+            body["messages"][-1]["content"] = prompt + "\nReturn ONLY a JSON object, nothing else."
+    raise ValueError("judge returned invalid JSON")
+
+
+def ctx_block(ctxs):
+    return "\n".join(f"[{i+1}] {c}" for i, c in enumerate(ctxs))
+
+
+def faithfulness(question, answer, ctxs):
+    clean = re.sub(r"\[[A-Za-z0-9_.:\-]+\]", "", answer)
+    s = chat(f"Break the ANSWER into short, self-contained factual statements (max 10). Skip greetings and advice words.\n"
+             f"QUESTION: {question}\nANSWER: {clean}\n"
+             'Return {"statements": ["...", "..."]}', 350).get("statements", [])
+    s = [x for x in s if isinstance(x, str) and x.strip()][:10]
+    if not s:
+        return None
+    v = chat("Decide for each statement whether it can be directly inferred from the CONTEXT. "
+             "Answer false if the context does not contain it.\nCONTEXT:\n" + ctx_block(ctxs)
+             + "\nSTATEMENTS:\n" + "\n".join(f"{i+1}. {x}" for i, x in enumerate(s))
+             + '\nReturn {"verdicts": [{"n": 1, "supported": true}, ...]}', 300).get("verdicts", [])
+    sup = sum(1 for x in v if isinstance(x, dict) and x.get("supported") is True)
+    return sup / len(s)
+
+
+def answer_relevancy(question, answer, emb):
+    clean = re.sub(r"\[[A-Za-z0-9_.:\-]+\]", "", answer)
+    qs = chat(f"Write 3 different questions to which the following ANSWER is a good response.\nANSWER: {clean[:900]}\n"
+              'Return {"questions": ["...", "...", "..."]}', 200).get("questions", [])
+    qs = [q for q in qs if isinstance(q, str) and q.strip()][:3]
+    if not qs:
+        return None
+    import numpy as np
+    v = emb.embed([question] + qs, kind="query")
+    return float(np.mean(v[1:] @ v[0]))
+
+
+def context_precision(question, reference, ctxs):
+    v = chat(f"QUESTION: {question}\nREFERENCE ANSWER: {reference}\nFor each numbered context decide if it is useful to "
+             "arrive at the reference answer.\nCONTEXTS:\n" + ctx_block(ctxs)
+             + '\nReturn {"verdicts": [{"n": 1, "useful": true}, ...]}', 250).get("verdicts", [])
+    use = {}
+    for x in v:
+        if isinstance(x, dict) and isinstance(x.get("n"), int):
+            use[x["n"]] = x.get("useful") is True
+    flags = [use.get(i + 1, False) for i in range(len(ctxs))]
+    if not any(flags):
+        return 0.0
+    hits, tot = 0, 0.0
+    for k, f in enumerate(flags, 1):
+        if f:
+            hits += 1
+            tot += hits / k
+    return tot / hits
+
+
+def context_recall(reference, ctxs):
+    sents = [x.strip() for x in re.split(r"(?<=[.!?;])\s+", reference) if x.strip()]
+    v = chat("For each REFERENCE sentence decide if it can be attributed to the CONTEXT.\nCONTEXT:\n" + ctx_block(ctxs)
+             + "\nREFERENCE SENTENCES:\n" + "\n".join(f"{i+1}. {x}" for i, x in enumerate(sents))
+             + '\nReturn {"verdicts": [{"n": 1, "attributed": true}, ...]}', 250).get("verdicts", [])
+    ok = sum(1 for x in v if isinstance(x, dict) and x.get("attributed") is True)
+    return ok / len(sents) if sents else None
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--every", type=int, default=2, help="evaluate every Nth question (budget control)")
+    ap.add_argument("--every", type=int, default=1)
     ap.add_argument("--limit", type=int, default=0)
+    ap.add_argument("--ctx-chars", type=int, default=1400)
+    ap.add_argument("--max-ctx", type=int, default=6)
     ap.add_argument("--metrics", default="faithfulness,answer_relevancy,context_precision,context_recall")
     a = ap.parse_args()
-    want = set(a.metrics.split(","))
-
-    from openai import AsyncOpenAI
-    from google import genai
-    from ragas.llms import llm_factory
-    from ragas.embeddings import GoogleEmbeddings
-    from ragas.metrics.collections import Faithfulness, AnswerRelevancy, ContextPrecision, ContextRecall
-
-    async def throttled(role, fn, est, *a, **kw):
-        """Async wrapper: shared rate limiter + backoff on 429/5xx/402."""
-        import random
-        for attempt in range(5):
-            await asyncio.to_thread(ratelimit.limiter(role).acquire, est)
-            try:
-                return await fn(*a, **kw)
-            except ratelimit.DailyBudgetExceeded:
-                raise
-            except Exception as e:  # noqa: BLE001
-                if attempt == 4 or not ratelimit._retryable(e) and "402" not in str(e):
-                    raise
-                d = ratelimit._retry_after(e) or (15.0 * (attempt + 1) if "402" in str(e) else min(60, 2.0 ** attempt))
-                await asyncio.sleep(d + random.uniform(0, 0.5))
-
-    oa = AsyncOpenAI(api_key=config.API_KEY, base_url="https://generativelanguage.googleapis.com/v1beta/openai/")
-    _create = oa.chat.completions.create
-
-    async def limited(*args, **kw):
-        est = sum(len(str(m.get("content", ""))) for m in kw.get("messages", [])) // 3
-        return await throttled("lite", _create, est, *args, **kw)
-    oa.chat.completions.create = limited
-    llm = llm_factory(config.MODELS["lite"], provider="openai", client=oa)
-
-    gclient = genai.Client(api_key=config.API_KEY)
-    _aembed = gclient.aio.models.embed_content
-
-    async def aembed(*x, **k):
-        return await throttled("embed", _aembed, 400, *x, **k)
-    gclient.aio.models.embed_content = aembed
-    emb = GoogleEmbeddings(client=gclient, model=config.MODELS["embed"])
-
-    metrics = {}
-    if "faithfulness" in want:
-        metrics["faithfulness"] = Faithfulness(llm=llm)
-    if "answer_relevancy" in want:
-        metrics["answer_relevancy"] = AnswerRelevancy(llm=llm, embeddings=emb)
-    if "context_precision" in want:
-        metrics["context_precision"] = ContextPrecision(llm=llm)
-    if "context_recall" in want:
-        metrics["context_recall"] = ContextRecall(llm=llm)
-
+    want = a.metrics.split(",")
+    st = Status("ragas")
     qs = {q["id"]: q for q in (json.loads(l) for l in open(HERE / "questions.jsonl"))}
     res = json.load(open(HERE / "results_latest.json"))["answers"]
     rows = [r for i, r in enumerate(res) if i % a.every == 0 and r.get("contexts_text")]
     if a.limit:
         rows = rows[:a.limit]
     if not rows:
-        sys.exit("No rows with contexts_text. Re-run brain/eval/run_eval.py first (it now stores contexts).")
-    print(f"RAGAS on {len(rows)} questions, metrics={list(metrics)}, judge={config.MODELS['lite']}")
-
-    async def score_one(r):
+        st.finish("failed", error="no rows with contexts_text; run run_eval.py first")
+        sys.exit("run brain/eval/run_eval.py first")
+    emb = None
+    if "answer_relevancy" in want:
+        from app.index import Embedder
+        emb = Embedder()
+    st.update(progress={"done": 0, "total": len(rows)}, judge=JUDGE, embed=config.LOCAL_EMBED_MODEL, metrics_list=want)
+    st.log(f"RAGAS-definitions, local judge {JUDGE}, {len(rows)} questions, metrics {want}")
+    scored = []
+    for r in rows:
         q = qs[r["id"]]
-        ctx = r["contexts_text"]
-        kw = {"user_input": q["question"], "response": r["answer"], "retrieved_contexts": ctx, "reference": q["reference"]}
-        out = {}
-        for name, m in metrics.items():
+        ctx = [c[:a.ctx_chars] for c in r["contexts_text"][:a.max_ctx]]
+        out = {"id": r["id"], "category": r["category"], "question": q["question"]}
+        for name in want:
+            st.update(current=f"{r['id']} {name}")
+            t = time.time()
             try:
                 if name == "faithfulness":
-                    v = await m.ascore(user_input=kw["user_input"], response=kw["response"], retrieved_contexts=ctx)
+                    v = faithfulness(q["question"], r["answer"], ctx)
                 elif name == "answer_relevancy":
-                    v = await m.ascore(user_input=kw["user_input"], response=kw["response"])
+                    v = answer_relevancy(q["question"], r["answer"], emb)
+                elif name == "context_precision":
+                    v = context_precision(q["question"], q["reference"], ctx)
                 else:
-                    v = await m.ascore(user_input=kw["user_input"], retrieved_contexts=ctx, reference=kw["reference"])
-                out[name] = None if v.value is None else float(v.value)
+                    v = context_recall(q["reference"], ctx)
+                out[name] = None if v is None else round(float(v), 3)
             except Exception as e:  # noqa: BLE001
                 out[name] = None
                 out[name + "_error"] = f"{type(e).__name__}: {str(e)[:140]}"
-        return {"id": r["id"], "category": r["category"], **out}
-
-    async def run():
-        scored = []
-        for r in rows:
-            t = time.time()
-            s = await score_one(r)
-            scored.append(s)
-            show = {k: (round(v, 2) if isinstance(v, float) else v) for k, v in s.items() if not k.endswith("_error") and k not in ("id", "category")}
-            print(f"{s['id']} [{s['category']}] {show} ({time.time()-t:.0f}s)", flush=True)
-        return scored
-
-    scored = asyncio.run(run())
-    print("\nMEAN SCORES")
-    summary = {}
-    for name in metrics:
-        vals = [s[name] for s in scored if isinstance(s.get(name), float)]
-        summary[name] = {"mean": round(statistics.mean(vals), 3) if vals else None, "n": len(vals), "of": len(scored)}
-        print(f"  {name:18s} {summary[name]['mean']}  (n={len(vals)}/{len(scored)})")
-    cats = {}
-    for s in scored:
-        for name in metrics:
-            if isinstance(s.get(name), float):
-                cats.setdefault(s["category"], {}).setdefault(name, []).append(s[name])
-    print("\nBY CATEGORY (mean)")
-    by_cat = {c: {n: round(statistics.mean(v), 2) for n, v in d.items()} for c, d in cats.items()}
-    for c, d in sorted(by_cat.items()):
-        print(f"  {c:16s} {d}")
-    (HERE / "ragas_latest.json").write_text(json.dumps({"judge": config.MODELS["lite"], "summary": summary,
-                                                        "by_category": by_cat, "rows": scored}, indent=1))
-    print("wrote brain/eval/ragas_latest.json")
+            st.log(f"{r['id']} {name} = {out[name]} ({time.time()-t:.0f}s)")
+        scored.append(out)
+        st.item(**out)
+        means = {}
+        for n in want:
+            vals = [x[n] for x in scored if isinstance(x.get(n), float)]
+            means[n] = {"mean": round(statistics.mean(vals), 3) if vals else None, "n": len(vals), "of": len(scored)}
+        st.update(metrics=means)
+        (HERE / "ragas_latest.json").write_text(json.dumps(
+            {"judge": JUDGE, "embed": config.LOCAL_EMBED_MODEL, "impl": "ragas definitions, local judge",
+             "summary": means, "rows": scored, "partial": len(scored) < len(rows)}, indent=1))
+    st.finish("done")
 
 
 if __name__ == "__main__":

@@ -1,52 +1,39 @@
 {
- "judge": "gemini-3.1-flash-lite",
+ "judge": "phi3:3.8b",
+ "embed": "BAAI/bge-small-en-v1.5",
+ "impl": "ragas definitions, local judge",
  "summary": {
   "faithfulness": {
-   "mean": null,
-   "n": 0,
-   "of": 2
+   "mean": 1.0,
+   "n": 1,
+   "of": 1
   },
   "answer_relevancy": {
-   "mean": null,
-   "n": 0,
-   "of": 2
+   "mean": 0.752,
+   "n": 1,
+   "of": 1
   },
   "context_precision": {
-   "mean": null,
-   "n": 0,
-   "of": 2
+   "mean": 1.0,
+   "n": 1,
+   "of": 1
   },
   "context_recall": {
-   "mean": null,
-   "n": 0,
-   "of": 2
+   "mean": 1.0,
+   "n": 1,
+   "of": 1
   }
  },
- "by_category": {},
  "rows": [
   {
    "id": "Q01",
    "category": "who_to_page",
-   "faithfulness": null,
-   "faithfulness_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
-   "answer_relevancy": null,
-   "answer_relevancy_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
-   "context_precision": null,
-   "context_precision_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
-   "context_recall": null,
-   "context_recall_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead."
-  },
-  {
-   "id": "Q03",
-   "category": "who_to_page",
-   "faithfulness": null,
-   "faithfulness_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
-   "answer_relevancy": null,
-   "answer_relevancy_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
-   "context_precision": null,
-   "context_precision_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
-   "context_recall": null,
-   "context_recall_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead."
+   "question": "Who do I page for M05 on shift A?",
+   "faithfulness": 1.0,
+   "answer_relevancy": 0.752,
+   "context_precision": 1.0,
+   "context_recall": 1.0
   }
- ]
+ ],
+ "partial": true
 }
