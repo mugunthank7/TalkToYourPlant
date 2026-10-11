@@ -44,7 +44,11 @@ _EXPAND = [
      "who to page escalation chain L1 primary technician L2 backup L3 supervisor"),
     (re.compile(r"lock ?out|tag ?out|loto|isolat", re.I), "lockout tagout SOP-SAF-01"),
     (re.compile(r"spare|in stock|part number|on hand", re.I), "spare part stock on hand lead time"),
+    (re.compile(r"why is .{0,30}(red|alarm|alert|down|stopped)|what('s| is) wrong|what should we do", re.I),
+     "symptom cause diagnosis fault mode repair procedure SOP"),
 ]
+_MEANING = re.compile(r"what does .{0,40}(mean|stand for)|meaning of|what is (the )?(fault|alarm|error) code|explain .{0,20}(code|alarm)", re.I)
+_PREFER_BONUS = 0.03
 _SHIFT = re.compile(r"\bshift\s+([abc])\b", re.I)
 
 
@@ -147,7 +151,8 @@ class DocIndex:
             if machine_id:
                 same = c["machine_id"] == mid
                 famdoc = include_family_docs and fam and md.get("family") == fam and c["source_type"] == "manual"
-                if not (same or famdoc):
+                glob = include_family_docs and c["source_type"] == "sop"   # plant/area SOPs apply to every machine
+                if not (same or famdoc or glob):
                     mask[i] = False
                     continue
             if doc_type and c["source_type"] not in ([doc_type] if isinstance(doc_type, str) else doc_type):
@@ -168,6 +173,7 @@ class DocIndex:
         if shift is None:
             m = _SHIFT.search(query)
             shift = m.group(1).upper() if m else None
+        prefer = ("manual", "sop") if _MEANING.search(query) else ()
         query = expand_query(query)
         mask = None
         if any([machine_id, doc_type, family, area, fault_code, shift]):
@@ -189,6 +195,10 @@ class DocIndex:
         for rank, i in enumerate(bm_top):
             if bm[i] > 0 and (mask is None or mask[i]):
                 fused[i] = fused.get(i, 0) + 1.0 / (rrf_k + rank + 1)
+        if prefer:
+            for i in list(fused):
+                if self.chunks[i]["source_type"] in prefer:
+                    fused[i] += _PREFER_BONUS
         top = sorted(fused.items(), key=lambda kv: -kv[1])[:k]
         out = []
         for i, s in top:
