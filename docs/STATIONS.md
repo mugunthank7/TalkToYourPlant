@@ -84,4 +84,4 @@ Rules: people stay on marked walkways. Anyone inside a robot cell's safety zone 
 
 - Yellow-painted pedestrian lanes along both sides of the conveyor.
 - Cell fencing with light curtains at S05 and S06.
-- Waypoint graph for pedestrian pathfinding is defined in `twin/src/data/waypoints.json` (to be created in the scene-layout step).
+- Positions, walkways and the pedestrian waypoint graph are generated into `data/out/layout.json` (see DATA_SPEC.md). Station IDs there match this file.

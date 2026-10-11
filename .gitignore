@@ -6,3 +6,6 @@ dist/
 *.blend2
 # large raw sources stay out of git; list them in docs/ASSETS.md instead
 assets/source/raw/
+
+# regenerable sensor data (python -m plantdata)
+data/out/*.parquet

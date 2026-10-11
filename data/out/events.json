@@ -1,0 +1,43 @@
+{
+ "fault": {
+  "machine_id": "M05",
+  "component_id": "m05_joint1_bearing",
+  "shift": "A",
+  "onset_s": 10800,
+  "ramp_s": 10800,
+  "tau_s": 3600,
+  "vib_gain": 2.6,
+  "band_gain": 14.0,
+  "temp_rise_c": 14.0,
+  "current_gain": 0.12,
+  "alert_vib_multiple": 2.0
+ },
+ "t_onset_s": 10800,
+ "t_alert_s": 18436.1,
+ "t_dispatch_s": 18736.1,
+ "t_pickup_s": 18784.9,
+ "t_repair_start_s": 18926.8,
+ "t_repair_end_s": 20426.8,
+ "preventive_maintenance": [
+  {
+   "t_s": 3000,
+   "machine_id": "M03",
+   "station": "S04"
+  },
+  {
+   "t_s": 9500,
+   "machine_id": "M04",
+   "station": "S05"
+  },
+  {
+   "t_s": 15500,
+   "machine_id": "M07",
+   "station": "S07"
+  },
+  {
+   "t_s": 25000,
+   "machine_id": "M06",
+   "station": "S04"
+  }
+ ]
+}

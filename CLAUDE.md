@@ -21,6 +21,10 @@ The flow in one line: Data 1 -> simulation engine -> (dashboard, 3D twin, what-i
 - `docs/ASSETS.md`: asset list, sourcing buckets, licence log, Blender workflow.
 - `DECISIONS.md`: append-only decision log. **Add an entry whenever you make a non-trivial choice** (stack, format, naming, scope cut, interface change). Never rewrite old entries; supersede them.
 
+## Build order (D-015)
+
+1. Synthetic data (done, v1). 2. 3D live window (next; plays `schedule.json` back so people move before the engine exists). 3. SimPy engine + what-if. 4. LLM data pipeline (FastAPI tools: state, station, kpis, scenario). 5. KPI dashboard.
+
 ## Rules
 
 1. Fictional plant, no real brands (D-002).
@@ -39,7 +43,8 @@ twin/                 Vite + React + TS app (react-three-fiber)
   src/dashboard/      KPI dashboard (throughput, forecast, scenario compare)
   src/state/          zustand stores (alerts, sensors, people scripts)
   src/data/           waypoints.json, station layout, mock sensor stream
-sim/                  Simulation engine (location and language per D-013)
+sim/                  Simulation engine, SimPy + FastAPI (D-016)
+data/plantdata/       Synthetic data generator (layout, people, tasks, sensors); outputs in data/out/
 assets/
   models/             exported .glb (committed)
   textures/           PBR textures / HDRI
@@ -98,6 +103,7 @@ Twin behaviour per message: `sensor` updates HUD and gauges; `alert` turns the m
 ## Commands (fill in as the app is scaffolded)
 
 ```bash
+cd data && pip install -r requirements.txt && python -m plantdata --seed 42 --out out --copy-to ../twin/public/data   # regenerate data
 cd twin && npm install && npm run dev      # app
 blender --background --python assets/source/blender/<asset>.py   # regenerate a model
 ```
@@ -106,11 +112,13 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 
 - [x] Repo skeleton, docs, decisions
 - [x] System flowchart in README (whiteboard v1 -> improved v2, D-011, D-012)
-- [ ] Decide simulation engine home and who owns anomaly detection / synthetic data (D-013, D-014)
+- [x] Decisions D-013..D-017: SimPy engine, M owns Data 1 + anomaly detection, build order
+- [x] Synthetic data generator `data/plantdata/` (layout, 24 employees, tasks, transfer times, per-person schedules, sensors with hero fault); spec in `docs/DATA_SPEC.md`
+- [ ] NEXT (priority 2): scaffold `twin/` (Vite + R3F) that loads `layout.json` + `schedule.json`: floor, stations as boxes, people as capsules walking the schedule
 - [ ] Install Blender, confirm headless export works
-- [ ] Scaffold `twin/` (Vite + R3F), empty plant with floor and lighting
 - [ ] P0 assets: weld robot (rigged), conveyor, press, BIW
 - [ ] P0 people: operator + maintenance tech with walk/idle/work
-- [ ] Mock sensor stream + fault glow on M05
-- [ ] Technician scripted walk on work order
+- [ ] Replay `sensors_shiftA_fault.parquet` as the mock stream + fault glow on M05
+- [ ] SimPy engine + what-if + FastAPI tool endpoints (D-016)
+- [ ] KPI dashboard
 - [ ] Wire to real WebSocket
