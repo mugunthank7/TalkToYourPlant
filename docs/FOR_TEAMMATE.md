@@ -46,6 +46,6 @@ Run `cd sim && .venv/bin/uvicorn plantsim.api:app --port 8000`. `GET /tools` ret
 - Everything here is synthetic.
 
 ## 6. Questions for you
-1. Who builds anomaly detection (Isolation Forest plus SHAP)? It is not in my scope. I can run it on the stream if you prefer.
+1. ~~Who builds anomaly detection?~~ Done by M inside the engine (docs/ANOMALY.md). Use `GET /anomaly/{machine}` or the `get_anomaly_report` tool; alerts carry `contributors` and an RUL interval.
 2. Are `failure_modes.csv` and the component names OK for your graph, or do you want different IDs?
 3. Which transport: WebSocket from your FastAPI app, or should I host the one FastAPI app?

@@ -35,7 +35,7 @@ function useRows(): Row[] {
     if (r.state === "repair") return { id: s.id, name: nm, sub: r.reason, cls: "amber", label: "Repair" };
     if (r.state === "micro") return { id: s.id, name: nm, sub: r.reason, cls: "warn", label: "Micro-stop" };
     if (r.state === "starved" || r.state === "blocked") return { id: s.id, name: nm, sub: r.reason, cls: "warn", label: r.state === "starved" ? "Starved" : "Blocked" };
-    if (hero && L.status === "alert") return { id: s.id, name: nm, sub: `Bearing wear, RUL ${Math.ceil(L.rulMin ?? 0)} min`, cls: "bad", label: "Alert" };
+    if (hero && L.status === "alert") return { id: s.id, name: nm, sub: `Bearing wear, RUL ${Math.ceil(L.rulMin ?? 0)} min${detectorNote()}`, cls: "bad", label: "Alert" };
     if (f.level !== "ok") return { id: s.id, name: nm, sub: f.text, cls: "warn", label: f.level === "risk" ? "At risk" : "Watch" };
     return { id: s.id, name: nm, sub: "", cls: "ok", label: "Running" };
   });
@@ -201,6 +201,17 @@ function FaultCard() {
   );
 }
 
+/** Detector output for the hero machine when the SimPy engine is connected: top SHAP contributors and the RUL interval. */
+function detectorNote(): string {
+  if (!simLink.on) return "";
+  const m = simLink.snap?.machines?.M05;
+  if (!m?.contributors?.length) return "";
+  const top = m.contributors.slice(0, 3).map((c) => `${c.signal} ${c.shap >= 0 ? "+" : ""}${c.shap.toFixed(2)}`).join(", ");
+  const r = m.rul_range_s;
+  const rul = r ? ` · RUL ${Math.round(r[0] / 60)} to ${Math.round(r[1] / 60)} min (80%)` : "";
+  return ` — driven by ${top}${rul}`;
+}
+
 function AlertToast() {
   const { data, shift, faults } = useTwin();
   useTick();
@@ -209,7 +220,7 @@ function AlertToast() {
   const active = faults.find((f) => clock.t >= f.t0 && clock.t < f.fixAt);
   if (active && clock.t < active.arriveAt) return <div className="toast blink">⛔ FAULT: {active.machine} {active.machineName} stopped the line</div>;
   if (active) return <div className="toast warn">🔧 Repairing {active.machine}: line stopped</div>;
-  if (L.status === "alert") return <div className="toast bad">⚠ ALERT: weld robot 2 bearing wear detected</div>;
+  if (L.status === "alert") return <div className="toast bad">⚠ ALERT: weld robot 2 bearing wear detected{detectorNote()}</div>;
   if (L.status === "repair") return <div className="toast warn">🔧 Technician replacing the joint 1 bearing: line stopped</div>;
   return null;
 }

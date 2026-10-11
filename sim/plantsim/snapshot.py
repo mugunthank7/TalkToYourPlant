@@ -51,6 +51,24 @@ def machine_info(sim: PlantSim, mid: str) -> dict:
     m = sim.machines[mid]
     out = {"id": mid, "name": m.name, "type": m.type, "station": m.station, "state": m.state, "since_s": round(m.since, 1),
            "sensors": machine_sensors(sim, mid), "reset": m.reset_degradation}
+    if sim.monitor is not None and mid in sim.monitor.state:
+        cur = sim.monitor.current(mid)
+        out["anomaly"] = {k: cur.get(k) for k in ("score", "features", "watch_t", "critical_t", "thresholds")}
+        crit = next((a for a in reversed(sim.alerts) if a["machine"] == mid and a["severity"] == "critical"), None)
+        watch = next((a for a in reversed(sim.alerts) if a["machine"] == mid), None)
+        out["alert"] = "critical" if crit and cur.get("critical_t") else "watch" if watch and cur.get("watch_t") else None
+        if crit and cur.get("critical_t"):
+            out["rul_s"] = max(0.0, crit["rul_s"] - (sim.now - crit["t"]))
+            out["rul_range_s"] = [max(0.0, crit["rul_low_s"] - (sim.now - crit["t"])), max(0.0, crit["rul_high_s"] - (sim.now - crit["t"]))]
+            out["contributors"] = crit["contributors"]
+        if mid == HERO and sim.p.hero_fault and not m.reset_degradation:
+            f = ev.FAULT
+            d, x = sim._degr(sim.now)
+            out["component_id"] = f["component_id"]
+            out["degradation"] = round(d, 4)
+            out["vib_multiple"] = round(1 + f["vib_gain"] * d, 2)
+            out["ground_truth_rul_s"] = round(max(0.0, f["onset_s"] + f["ramp_s"] - sim.now), 0)
+        return out
     if mid == HERO and sim.p.hero_fault and not m.reset_degradation:
         f = ev.FAULT
         d, x = sim._degr(sim.now)

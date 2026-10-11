@@ -6,7 +6,7 @@ import { useTwin } from "./state";
 export interface SimSnap {
   t: number;
   stations: Record<string, { state: string; reason: string; machine: string | null; mode: string; utilization: number }>;
-  machines: Record<string, { state: string; alert?: string | null; rul_s?: number; vib_multiple?: number; reset?: boolean; sensors: Record<string, number> }>;
+  machines: Record<string, { state: string; alert?: string | null; rul_s?: number; rul_range_s?: [number, number]; contributors?: { signal: string; shap: number }[]; anomaly?: { score: number; thresholds: { watch: number; critical: number } }; vib_multiple?: number; reset?: boolean; sensors: Record<string, number> }>;
   belt: { moving: boolean; cars: { k: number; stage: string; d_m: number; progress: number; loc: string }[]; speed_mult: number };
   kpis: { units: number; good_units: number; oee: number; availability: number; performance: number; quality: number; downtime_min: number; downtime_cost_usd: number; throughput_per_hour: number; plan_units: number };
   alerts: { t: number; severity: string; text: string; machine: string; rul_s?: number }[];

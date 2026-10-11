@@ -17,14 +17,14 @@ from .config import Params
 from .model import PlantSim, REPAIR_MIN
 from .scenarios import what_if
 from .snapshot import kpi_live, machine_info, snapshot, stations_info
-from .tools import TOOLS, call_tool
+from .tools import TOOLS, anomaly_report, call_tool
 
 
 class Live:
     """The running plant. Deterministic: seeking just rebuilds the model and runs it to the requested time."""
 
     def __init__(self) -> None:
-        self.params = Params()
+        self.params = Params(detector="all")
         self.speed = 60.0
         self.playing = False
         self.clients: set[WebSocket] = set()
@@ -147,6 +147,19 @@ def machine(mid: str) -> dict:
     if mid not in live.sim.machines:
         raise HTTPException(404, f"unknown machine {mid}")
     return machine_info(live.sim, mid)
+
+
+@app.get("/anomaly")
+def anomaly() -> dict:
+    return anomaly_report(live.sim)
+
+
+@app.get("/anomaly/{mid}")
+def anomaly_machine(mid: str) -> dict:
+    r = anomaly_report(live.sim, mid)
+    if "error" in r:
+        raise HTTPException(404, r["error"])
+    return r
 
 
 @app.get("/kpis")

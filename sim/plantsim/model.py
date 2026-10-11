@@ -242,6 +242,12 @@ class PlantSim:
         env.process(self._technician())
         env.process(self._ticker())
         env.process(self._seed_cars())
+        self.monitor = None
+        self.hero_alert_ev = env.event()
+        if self.p.detector:
+            from .anomaly.detector import Monitor
+            self.monitor = Monitor()
+            env.process(self._health_monitor())
         if self.p.hero_fault:
             env.process(self._hero())
         if self.p.micro_stops and not self.p.ideal:
@@ -449,8 +455,8 @@ class PlantSim:
         env = self.env
         while True:
             wo: WorkOrder = yield self.wo_store.get()
-            if wo.dispatch_at > env.now:
-                yield env.timeout(wo.dispatch_at - env.now)
+            while wo.dispatch_at > env.now:         # re-checked so a work order can be expedited while it waits
+                yield env.timeout(min(30.0, wo.dispatch_at - env.now))
             while env.now < self.hold_dispatch_until:
                 yield env.timeout(60)
             wo.status = "dispatched"
@@ -484,10 +490,14 @@ class PlantSim:
     def _hero(self) -> Iterator:
         f = ev.FAULT
         t_alert, fail_t = ev.alert_time(), f["onset_s"] + f["ramp_s"]
-        yield self.env.timeout(max(0.0, f["onset_s"] - 1800 - self.env.now))
-        self._alert("watch", "Vibration trending up on weld robot 2")
-        yield self.env.timeout(max(0.0, t_alert - self.env.now))
-        self._alert("critical", "Weld robot 2 bearing wear detected")
+        if self.monitor is not None:
+            # real detection: wait for the Isolation Forest monitor to raise a critical alert on the hero machine
+            yield self.hero_alert_ev
+        else:
+            yield self.env.timeout(max(0.0, f["onset_s"] - 1800 - self.env.now))
+            self._alert("watch", "Vibration trending up on weld robot 2")
+            yield self.env.timeout(max(0.0, t_alert - self.env.now))
+            self._alert("critical", "Weld robot 2 bearing wear detected")
         policy = self.hero_policy
         fail_ev_t = fail_t
         if policy in ("timely", "delayed"):
@@ -517,6 +527,45 @@ class PlantSim:
         self.alerts.append(a)
         self.events.append(a)
 
+    # -- anomaly detection -----------------------------------------------------------------------------------
+    def _health_monitor(self) -> Iterator:
+        """Every 10 s note each machine's state; every minute build its telemetry and feed the streaming monitor."""
+        from .health import Telemetry
+        env = self.env
+        mids = [HERO] if self.p.detector == "hero" else [m for m in self.machines if m in sensors_mod.PROFILE]
+        clock0 = 6 * 3600 if self.p.shift == "A" else 14 * 3600
+        tel = Telemetry(self.p.seed, clock0)
+        marks = {m: [] for m in mids}
+
+        def hero_degr(t):
+            m5 = self.machines[HERO]
+            if not self.p.hero_fault or m5.reset_degradation:
+                return np.zeros(len(t)), np.zeros(len(t))
+            return ev.degradation(t), ev.progress(t)
+
+        while True:
+            yield env.timeout(10.0)
+            if env.now < 0:
+                continue
+            for mid in mids:
+                mach = self.machines[mid]
+                st = self.stations[mach.station]
+                marks[mid].append((mach.state == "up", mach.state == "up" and st.mode == "run" and not st.is_down()))
+            if round(env.now) % 60 == 0 and env.now > 0:
+                for mid in mids:
+                    ms = marks[mid][-6:]
+                    marks[mid] = []
+                    if len(ms) < 6:
+                        continue
+                    up = np.repeat([u for u, _ in ms], 10)
+                    prod = np.repeat([p for _, p in ms], 10)
+                    row = tel.minute(mid, env.now - 60.0, up, prod, hero_degr if mid == HERO else None)
+                    for al in self.monitor.push(mid, row, env.now):
+                        self.alerts.append(al)
+                        self.events.append(al)
+                        if mid == HERO and al["severity"] == "critical" and not self.hero_alert_ev.triggered:
+                            self.hero_alert_ev.succeed()
+
     # -- what-if changes ---------------------------------------------------------------------------------
     def _change(self, c: dict) -> Iterator:
         yield self.env.timeout(max(0.0, c.get("at", self.env.now) - self.env.now))
@@ -526,7 +575,10 @@ class PlantSim:
             self._log("change", op=op, hours=c.get("hours", 2.0))
         elif op == "dispatch_now":
             self._log("change", op=op)
-            if not self.hero_done:
+            pend = [w for w in self.work_orders if w.machine == HERO and w.status == "open"]
+            if pend:
+                pend[0].dispatch_at = self.env.now          # expedite the order already raised instead of opening a second one
+            elif not self.hero_done and not any(w.machine == HERO and w.status in ("dispatched", "on_site") for w in self.work_orders):
                 self._open_wo(HERO, "predictive", self.env.now, self.p.hero_repair_s)
         elif op in ("add_operator", "remove_operator"):
             f = 0.75 if op == "add_operator" else 1.3

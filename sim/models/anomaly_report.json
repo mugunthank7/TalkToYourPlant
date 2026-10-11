@@ -1,0 +1,414 @@
+{
+ "trained_on": {
+  "healthy_shifts": 24,
+  "rows": 110687
+ },
+ "thresholds": {
+  "watch": 0.5730336508545757,
+  "critical": 0.6193603353478486
+ },
+ "persist": {
+  "watch": 10,
+  "critical": 5
+ },
+ "test": {
+  "faulty_episodes": 40,
+  "healthy_machine_shifts": 160,
+  "window_auroc": 0.9993,
+  "window_average_precision": 0.9714,
+  "episodes_detected_before_failure": "40/40",
+  "median_lead_vs_2x_rule_min": 104.3,
+  "median_minutes_after_wear_starts": 15.6,
+  "median_warning_before_failure_min": 160.1,
+  "median_vibration_multiple_at_critical_alert": 1.05,
+  "2x_rule_vibration_multiple": 2.0,
+  "watch_lead_vs_2x_rule_median_min": 87.5,
+  "false_watch_alerts_on_other_machines_in_faulty_shifts": 0,
+  "false_alerts_healthy": {},
+  "false_alerts_per_100_machine_shifts": 0.0,
+  "rul_mae_min_within_90min": 7.1,
+  "rul_80pct_interval_coverage": 0.988
+ },
+ "shap": {
+  "agreement_with_shap_library_spearman": 1.0,
+  "mean_abs_early": {
+   "vib_ratio": 0.0709,
+   "band_ratio": 0.074,
+   "temp_resid": 0.0663,
+   "cur_ratio": 0.0593,
+   "vib_slope": 0.0597,
+   "band_slope": 0.068
+  },
+  "mean_abs_late": {
+   "vib_ratio": 0.0659,
+   "band_ratio": 0.0681,
+   "temp_resid": 0.0934,
+   "cur_ratio": 0.0697,
+   "vib_slope": 0.055,
+   "band_slope": 0.0624
+  }
+ },
+ "episodes": [
+  {
+   "shift": "F10000-M02",
+   "machine": "M02",
+   "onset_min": 105.35023728315471,
+   "watch_min": null,
+   "critical_min": 119.0,
+   "rule_min": 238.27990010101672,
+   "fail_min": 280.4807022973688
+  },
+  {
+   "shift": "F10001-M05",
+   "machine": "M05",
+   "onset_min": 144.8582847593467,
+   "watch_min": null,
+   "critical_min": 160.0,
+   "rule_min": 251.47811504271297,
+   "fail_min": 297.3528304947482
+  },
+  {
+   "shift": "F10002-M10",
+   "machine": "M10",
+   "onset_min": 72.00287394352887,
+   "watch_min": null,
+   "critical_min": 86.0,
+   "rule_min": 211.728560688399,
+   "fail_min": 244.74721713706006
+  },
+  {
+   "shift": "F10003-M04",
+   "machine": "M04",
+   "onset_min": 165.71986070662626,
+   "watch_min": null,
+   "critical_min": 189.0,
+   "rule_min": 336.3329967549244,
+   "fail_min": 381.5338714697375
+  },
+  {
+   "shift": "F10004-M05",
+   "machine": "M05",
+   "onset_min": 81.98717827526522,
+   "watch_min": null,
+   "critical_min": 96.0,
+   "rule_min": 199.20104941982555,
+   "fail_min": 246.10635219245515
+  },
+  {
+   "shift": "F10005-M04",
+   "machine": "M04",
+   "onset_min": 87.04094706930987,
+   "watch_min": null,
+   "critical_min": 107.0,
+   "rule_min": 238.57899883421385,
+   "fail_min": 300.7290036943193
+  },
+  {
+   "shift": "F10006-M04",
+   "machine": "M04",
+   "onset_min": 161.52809455146968,
+   "watch_min": null,
+   "critical_min": 175.0,
+   "rule_min": 263.3582248190511,
+   "fail_min": 321.157936356653
+  },
+  {
+   "shift": "F10007-M02",
+   "machine": "M02",
+   "onset_min": 33.98353487044376,
+   "watch_min": null,
+   "critical_min": 48.0,
+   "rule_min": 132.1794003261238,
+   "fail_min": 191.07174080880804
+  },
+  {
+   "shift": "F10008-M05",
+   "machine": "M05",
+   "onset_min": 110.75471096410541,
+   "watch_min": null,
+   "critical_min": 124.0,
+   "rule_min": 228.50689824236665,
+   "fail_min": 291.77304688293174
+  },
+  {
+   "shift": "F10009-M08",
+   "machine": "M08",
+   "onset_min": 131.74739953936086,
+   "watch_min": null,
+   "critical_min": 147.0,
+   "rule_min": 259.19875027815374,
+   "fail_min": 309.7060405784406
+  },
+  {
+   "shift": "F10010-M07",
+   "machine": "M07",
+   "onset_min": 31.954680748333782,
+   "watch_min": null,
+   "critical_min": 53.0,
+   "rule_min": 154.16772567019973,
+   "fail_min": 221.65687552725427
+  },
+  {
+   "shift": "F10011-M08",
+   "machine": "M08",
+   "onset_min": 190.3993608177059,
+   "watch_min": null,
+   "critical_min": 206.0,
+   "rule_min": 299.1799828372546,
+   "fail_min": 339.55100048380757
+  },
+  {
+   "shift": "F10012-M06",
+   "machine": "M06",
+   "onset_min": 62.318680612780945,
+   "watch_min": null,
+   "critical_min": 87.0,
+   "rule_min": 225.49527779753348,
+   "fail_min": 264.05613820749716
+  },
+  {
+   "shift": "F10013-M05",
+   "machine": "M05",
+   "onset_min": 133.0459530907809,
+   "watch_min": null,
+   "critical_min": 148.0,
+   "rule_min": 264.1382150811263,
+   "fail_min": 316.86835417268844
+  },
+  {
+   "shift": "F10014-M03",
+   "machine": "M03",
+   "onset_min": 190.8793407353942,
+   "watch_min": null,
+   "critical_min": 207.0,
+   "rule_min": 283.27311037629414,
+   "fail_min": 345.00843878923394
+  },
+  {
+   "shift": "F10015-M09",
+   "machine": "M09",
+   "onset_min": 83.24666699557696,
+   "watch_min": null,
+   "critical_min": 96.0,
+   "rule_min": 180.4617079921587,
+   "fail_min": 224.12984857207437
+  },
+  {
+   "shift": "F10016-M08",
+   "machine": "M08",
+   "onset_min": 99.73163277030267,
+   "watch_min": null,
+   "critical_min": 122.0,
+   "rule_min": 198.54234668671953,
+   "fail_min": 242.73197730380707
+  },
+  {
+   "shift": "F10017-M10",
+   "machine": "M10",
+   "onset_min": 77.23278629410355,
+   "watch_min": null,
+   "critical_min": 95.0,
+   "rule_min": 210.1896252171707,
+   "fail_min": 256.8528164736093
+  },
+  {
+   "shift": "F10018-M07",
+   "machine": "M07",
+   "onset_min": 84.34005072602025,
+   "watch_min": null,
+   "critical_min": 96.0,
+   "rule_min": 186.47126360696763,
+   "fail_min": 240.83050477530247
+  },
+  {
+   "shift": "F10019-M07",
+   "machine": "M07",
+   "onset_min": 125.04612334083343,
+   "watch_min": null,
+   "critical_min": 139.0,
+   "rule_min": 232.23032820389764,
+   "fail_min": 268.6434325822454
+  },
+  {
+   "shift": "F10020-M02",
+   "machine": "M02",
+   "onset_min": 211.3208365925139,
+   "watch_min": null,
+   "critical_min": 227.0,
+   "rule_min": 331.06145311531753,
+   "fail_min": 368.4055596431835
+  },
+  {
+   "shift": "F10021-M02",
+   "machine": "M02",
+   "onset_min": 77.77724266046003,
+   "watch_min": null,
+   "critical_min": 96.0,
+   "rule_min": 224.82700926736769,
+   "fail_min": 277.97931141165753
+  },
+  {
+   "shift": "F10022-M08",
+   "machine": "M08",
+   "onset_min": 165.70802921278403,
+   "watch_min": null,
+   "critical_min": 196.0,
+   "rule_min": 315.7759444354906,
+   "fail_min": 358.28988108258517
+  },
+  {
+   "shift": "F10023-M02",
+   "machine": "M02",
+   "onset_min": 165.13519995089703,
+   "watch_min": null,
+   "critical_min": 183.0,
+   "rule_min": 294.6586260578373,
+   "fail_min": 357.41370812765956
+  },
+  {
+   "shift": "F10024-M05",
+   "machine": "M05",
+   "onset_min": 134.20452313573293,
+   "watch_min": null,
+   "critical_min": 150.0,
+   "rule_min": 281.51953036226774,
+   "fail_min": 316.6524232777905
+  },
+  {
+   "shift": "F10025-M06",
+   "machine": "M06",
+   "onset_min": 213.31103853981875,
+   "watch_min": null,
+   "critical_min": 236.0,
+   "rule_min": 352.47685358850697,
+   "fail_min": 409.71603368055474
+  },
+  {
+   "shift": "F10026-M06",
+   "machine": "M06",
+   "onset_min": 35.81630558508883,
+   "watch_min": null,
+   "critical_min": 55.0,
+   "rule_min": 182.73151176032255,
+   "fail_min": 238.22289728766484
+  },
+  {
+   "shift": "F10027-M01",
+   "machine": "M01",
+   "onset_min": 32.2264852605654,
+   "watch_min": null,
+   "critical_min": 55.0,
+   "rule_min": 180.76305548371192,
+   "fail_min": 234.69198805718358
+  },
+  {
+   "shift": "F10028-M03",
+   "machine": "M03",
+   "onset_min": 179.75660692671877,
+   "watch_min": null,
+   "critical_min": 195.0,
+   "rule_min": 273.2145006738393,
+   "fail_min": 316.88636939584535
+  },
+  {
+   "shift": "F10029-M02",
+   "machine": "M02",
+   "onset_min": 211.9516171020493,
+   "watch_min": null,
+   "critical_min": 221.0,
+   "rule_min": 302.1959484718119,
+   "fail_min": 354.2467860412625
+  },
+  {
+   "shift": "F10030-M03",
+   "machine": "M03",
+   "onset_min": 81.93857447831341,
+   "watch_min": null,
+   "critical_min": 104.0,
+   "rule_min": 217.54851567536014,
+   "fail_min": 283.2299370715542
+  },
+  {
+   "shift": "F10031-M02",
+   "machine": "M02",
+   "onset_min": 108.50138877555874,
+   "watch_min": null,
+   "critical_min": 127.0,
+   "rule_min": 253.14485639704338,
+   "fail_min": 312.7549651912205
+  },
+  {
+   "shift": "F10032-M08",
+   "machine": "M08",
+   "onset_min": 30.833991886111175,
+   "watch_min": null,
+   "critical_min": 46.0,
+   "rule_min": 127.67128254086762,
+   "fail_min": 191.9030830990566
+  },
+  {
+   "shift": "F10033-M08",
+   "machine": "M08",
+   "onset_min": 159.89342996861527,
+   "watch_min": 184.0,
+   "critical_min": 186.0,
+   "rule_min": 271.48623489348563,
+   "fail_min": 333.6991020854133
+  },
+  {
+   "shift": "F10034-M09",
+   "machine": "M09",
+   "onset_min": 121.5737750603257,
+   "watch_min": null,
+   "critical_min": 140.0,
+   "rule_min": 240.4768953034317,
+   "fail_min": 298.2192204290156
+  },
+  {
+   "shift": "F10035-M05",
+   "machine": "M05",
+   "onset_min": 114.75119742764998,
+   "watch_min": null,
+   "critical_min": 129.0,
+   "rule_min": 224.67295516570422,
+   "fail_min": 279.7753567695099
+  },
+  {
+   "shift": "F10036-M06",
+   "machine": "M06",
+   "onset_min": 118.14677655411494,
+   "watch_min": null,
+   "critical_min": 129.0,
+   "rule_min": 215.54166009095744,
+   "fail_min": 272.5864578559922
+  },
+  {
+   "shift": "F10037-M02",
+   "machine": "M02",
+   "onset_min": 45.93641025512214,
+   "watch_min": null,
+   "critical_min": 63.0,
+   "rule_min": 178.35181760686888,
+   "fail_min": 246.26908454645442
+  },
+  {
+   "shift": "F10038-M06",
+   "machine": "M06",
+   "onset_min": 168.68689347935623,
+   "watch_min": null,
+   "critical_min": 181.0,
+   "rule_min": 289.9556838398283,
+   "fail_min": 350.02929432699773
+  },
+  {
+   "shift": "F10039-M04",
+   "machine": "M04",
+   "onset_min": 50.02605712418825,
+   "watch_min": null,
+   "critical_min": 63.0,
+   "rule_min": 158.26036032971206,
+   "fail_min": 205.32523559663247
+  }
+ ],
+ "runtime_s": 141.3
+}

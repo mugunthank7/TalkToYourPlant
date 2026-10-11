@@ -9,7 +9,7 @@ The **simulation engine + live 3D digital twin + dashboard** for "Talk to Your P
 Ownership (from the team whiteboard, marked M and T):
 - **M (this repo, Mugu):** Data 1 (layout, employees, sensor time series, timing), simulation engine, what-if scenarios, KPI dashboard (throughput, forecast), live 3D window with moving people, fault glow/heatmap, graph-path animation, work-order beat.
 - **T (teammate):** Data 2 (maintenance logs, service logs, procedures/protocols), knowledge base (graph + vector RAG), LLM brain (Gemini Flash), chat interface, diagnosing bot, voice/vision input.
-- **Not M's:** anomaly detection (grey box, owner open, D-019). M exposes live state + what-if via API and renders alerts/graph paths it is sent.
+- **Anomaly detection is now M's too (D-031):** Isolation Forest + Shapley + RUL inside the engine, see `docs/ANOMALY.md`. M exposes live state, anomaly reports and what-if via API and renders alerts/graph paths.
 
 Hero scenario: Weld robot 2 (`M05`) develops joint bearing wear; the twin shows the fault, the LLM explains it and can run a what-if ("keep running 2 more hours?"), then the maintenance tech walks to fix it.
 
@@ -135,5 +135,6 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 - [ ] (old) NEXT: people spots inside the new rooms (supervisor at the S11 desk, seated breaks, technician at the S10 bench, S12 pickup, sit pose), check performance on a real GPU, replace Cells/old safety zone code, then SimPy engine detailed models in this order: S11, S12, S10, S09, S02, S03 (then S01, S08); Blender-built hero models (press, robot, conveyor) and rigged Mixamo/Quaternius characters replacing the procedural ones; match the ChatGPT mockup's density (racks, glass control room, more props) (Blender weld robot etc.) and Mixamo characters replacing the placeholders
 - [ ] Replay `scenarios/hero_timely_repair_sensors.parquet` as the mock stream + fault glow on M05
 - [x] SimPy engine + what-if + FastAPI tool endpoints + WebSocket stream (D-016, D-030); twin connected to it. Calibrated to the scenario data within 8 percent (tests).
+- [x] Real anomaly detector (Isolation Forest + exact Shapley + conformal RUL) in the engine; 40/40 faults caught, 0 false alerts on held-out data (docs/ANOMALY.md, D-031). Retrain: `cd sim && .venv/bin/python -m plantsim.anomaly.train`
 - [ ] KPI dashboard
 - [ ] Wire to real WebSocket

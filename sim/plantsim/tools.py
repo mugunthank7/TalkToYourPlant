@@ -15,6 +15,8 @@ TOOLS: list[dict] = [
      "parameters": {"type": "object", "properties": {"station_id": {"type": "string", "description": "S01 to S12"}}, "required": ["station_id"]}},
     {"name": "get_machine_health", "description": "Sensors, degradation, remaining useful life and alert level of one machine.",
      "parameters": {"type": "object", "properties": {"machine_id": {"type": "string", "description": "M01 to M10"}}, "required": ["machine_id"]}},
+    {"name": "get_anomaly_report", "description": "Machine-learning anomaly detector output (Isolation Forest trained on healthy data): anomaly score, alert level, SHAP-style top contributing signals, predicted remaining useful life with an 80% interval, and recent score history. Omit machine_id for all machines.",
+     "parameters": {"type": "object", "properties": {"machine_id": {"type": "string", "description": "M01 to M10, optional"}}}},
     {"name": "get_kpis", "description": "Live OEE, availability, performance, quality, throughput, downtime and its cost.",
      "parameters": {"type": "object", "properties": {}}},
     {"name": "get_diagnosis_context", "description": "Everything needed to diagnose a machine: sensor trends, alerts, work orders, affected stations, likely failure modes from the knowledge catalogue and what happens if we wait versus act now.",
@@ -68,6 +70,24 @@ def diagnosis_context(live, machine_id: str) -> dict:
     return out
 
 
+def anomaly_report(sim, machine_id: str | None = None) -> dict:
+    mon = getattr(sim, "monitor", None)
+    if mon is None:
+        return {"error": "anomaly detector not running"}
+    ids = [machine_id] if machine_id else list(mon.state)
+    if machine_id and machine_id not in sim.machines:
+        return {"error": f"unknown machine {machine_id}"}
+    out = {}
+    for mid in ids:
+        info = machine_info(sim, mid)
+        out[mid] = {"anomaly": info.get("anomaly"), "alert": info.get("alert"), "contributors": info.get("contributors"),
+                    "rul_s": info.get("rul_s"), "rul_range_s": info.get("rul_range_s"),
+                    "history": [{"t": h[0], "score": h[1], "vib_ratio": h[2], "band_ratio": h[3]} for h in list(mon.history.get(mid, []))[-60:]]}
+    thr = mon.m["thresholds"]
+    res = {"thresholds": thr, "model": "IsolationForest on load-normalised features, healthy-only training", "machines": out}
+    return {"machine_id": machine_id, **out[machine_id], "thresholds": thr} if machine_id else res
+
+
 def call_tool(live, name: str, args: dict) -> dict:
     sim = live.sim
     if name == "get_plant_state":
@@ -82,6 +102,8 @@ def call_tool(live, name: str, args: dict) -> dict:
         if args["machine_id"] not in sim.machines:
             return {"error": f"unknown machine {args['machine_id']}"}
         return machine_info(sim, args["machine_id"])
+    if name == "get_anomaly_report":
+        return anomaly_report(sim, args.get("machine_id"))
     if name == "get_kpis":
         return {**kpi_live(sim), "bottleneck": bottleneck(sim)}
     if name == "get_diagnosis_context":

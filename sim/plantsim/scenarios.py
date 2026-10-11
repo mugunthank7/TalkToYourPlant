@@ -12,7 +12,7 @@ def _curve(sim: PlantSim, every: int = 10) -> list[int]:
 
 
 def run_branch(base: Params, changes: list[dict] | None = None, now_s: float | None = None) -> dict:
-    p = base.copy(changes=[dict(c) for c in (changes or [])])
+    p = base.copy(changes=[dict(c) for c in (changes or [])], detector=("hero" if base.detector else False))
     for c in p.changes:
         c.setdefault("at", now_s if now_s is not None else 0.0)
     sim = PlantSim(p).run()
