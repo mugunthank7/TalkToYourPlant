@@ -84,3 +84,15 @@ def test_api_endpoints():
     f = c.post("/fault", json={"machine": "M07"}).json()
     assert f["injected"]["machine"] == "M07"
     live.control({"action": "reset"})
+
+
+def test_exported_dashboard_matches_live_engine():
+    """kpi.json comes from the engine: the 'repaired on alert' scenario is exactly the live run (same seed)."""
+    import json
+    k = json.loads((C.OUT / "kpi.json").read_text())
+    s = PlantSim(Params(detector="hero")).run()
+    ex = k["summary"]["hero_timely_repair"]
+    kp = s.kpis()
+    assert ex["units"] == kp["units"] and abs(ex["downtime_min"] - kp["downtime_min"]) < 0.1
+    assert k["series"]["hero_timely_repair"]["cum_units"][-1] == kp["units"]
+    assert k["summary"]["ideal"]["units"] == 320 and k["summary"]["hero_ignored"]["units"] < ex["units"]

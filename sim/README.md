@@ -56,3 +56,11 @@ curl -s -X POST localhost:8000/control -H 'content-type: application/json' -d '{
 curl -s -X POST localhost:8000/tools/run_what_if -H 'content-type: application/json' \
   -d '{"changes":[{"op":"keep_running","hours":2}]}' | python3 -m json.tool | head -30
 ```
+
+## Dashboard export
+
+```bash
+.venv/bin/python -m plantsim.export   # about 30 s; writes data/out/{kpi,dashboard}.json and copies them to twin/public/data/
+```
+
+Five scenarios (same seed as the live engine) and 30 days of shifts with M05 wear incidents. The 12-month maintenance statistics are kept from the data generator.
