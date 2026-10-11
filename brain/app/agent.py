@@ -250,6 +250,203 @@ class Brain:
         ctx["mid"] = mid
         return mid
 
+
+    # ---- structured report: the one output format every answer follows ---------
+    SECTIONS = (("what_happened", "WHAT HAPPENED"), ("impact", "IMPACT"), ("do_now", "DO NOW"),
+                ("contacts", "WHO TO PAGE"), ("parts", "PART"), ("procedure", "PROCEDURE"))
+
+    @staticmethod
+    def _card(r):
+        sev = {"critical": "CRITICAL", "warning": "WARNING", "ok": "OK", "info": "INFO"}.get(r["severity"], "INFO")
+        L = [f"{r['title']}  |  {sev}", r["headline"]]
+        for key, label in Brain.SECTIONS:
+            v = r.get(key)
+            if not v:
+                continue
+            L.append("")
+            L.append(label)
+            if key == "do_now":
+                L += [f"{i}. {x}" for i, x in enumerate(v, 1)]
+            else:
+                L += [f"- {x}" for x in v]
+        if r.get("sources"):
+            L += ["", "Sources: " + " ".join(f"[{x}]" for x in r["sources"])]
+        return "\n".join(L)
+
+    def _report(self, ctx):
+        """Build the structured report for the matched intent from tool results. None if not covered."""
+        raw = {}
+        for n, a, o in ctx.get("raw", []):
+            raw.setdefault(n, []).append((a, o))
+        first = lambda name, pred=lambda a, o: True: next((o for a, o in raw.get(name, []) if pred(a, o)), None)
+        intent, mid = ctx.get("intent"), ctx.get("mid")
+        g = self.g
+        m = g.get_machine(mid) if mid else None
+        name = f"{mid} {m['name']}" if m else (mid or "Plant")
+        st_id = (m or {}).get("twin_station")
+        title = name + (f" (station {st_id})" if st_id else "")
+        esc = first("escalation_chain")
+        src = []
+
+        def contacts(e, n=3):
+            out = []
+            for l in (e or {}).get("chain", [])[1:1 + n]:
+                lvl = l["level"].split("_")[0]
+                after = "now" if lvl == "L1" else f"after {l.get('page_after_min')} min if no answer"
+                out.append(f"{lvl} {l.get('name')} ({l.get('role')}), {self._contact(l)}: {after}")
+            return out
+
+        if intent == "page" and esc and "chain" in esc:
+            src.append(esc["id"])
+            return {"title": title, "severity": "info", "headline": f"On shift {esc['shift']}, page in this order.",
+                    "what_happened": [], "impact": [], "do_now": [esc["operator_action"]] if esc.get("operator_action") else [],
+                    "contacts": [f"L0 {esc['chain'][0].get('name')} (line lead), {self._contact(esc['chain'][0])}"] + contacts(esc)
+                    + [f"Beyond L3: {esc['vendor']['vendor']} hotline {esc['vendor']['hotline']}"],
+                    "sources": src, "intent": intent}
+
+        if intent == "work_order":
+            wo = first("create_work_order")
+            if wo and wo.get("id"):
+                src.append(wo["id"])
+                return {"title": title, "severity": "info", "headline": f"Work order {wo['id']} created.",
+                        "what_happened": [f"Component {wo.get('component_id') or 'not specified'}; fault {wo.get('fault_code') or 'not specified'}."],
+                        "impact": [f"Downtime costs about ${wo.get('downtime_cost_per_min'):,} per minute until it is fixed."],
+                        "do_now": ["A technician is dispatched; the engine opens the work order."],
+                        "parts": [wo["spare_part"]] if wo.get("spare_part") else [], "sources": src, "intent": intent}
+
+        if intent == "keep_running":
+            sc, stt = first("run_scenario"), first("get_sensor_state")
+            if not (sc and "kpis" in sc):
+                return None
+            k, h = sc["kpis"], sc["query"]["hours"]
+            rul_h, rul_low = sc.get("rul_hours_at_alert"), sc.get("rul_low_hours")
+            rule = next((x for x in ctx["retrieved"] if x["source_id"] == "SOP-OPS-02"), None)
+            beyond = (rul_h is not None and h > rul_h) or sc.get("matched_scenario") == "hero_ignored"
+            over_rule = h > 1.0
+            verdict = ("NO. Longer than the remaining life; failure is likely." if beyond else
+                       "NOT RECOMMENDED. Exceeds the SOP-OPS-02 limit for a rising trend." if over_rule else
+                       "ONLY the current batch, with supervisor approval.")
+            sev = "critical" if beyond else "warning"
+            cost, cost_b = k.get("cost_usd"), k.get("cost_baseline_usd")
+            imp = [f"Downtime {k['downtime_min']['scenario']} min if you wait, versus {k['downtime_min']['baseline']} min if repaired now."]
+            if cost is not None and cost_b is not None:
+                imp.append(f"Downtime cost ${cost:,.0f} versus ${cost_b:,.0f}.")
+            imp.append(f"OEE {k['oee']['scenario']} versus {k['oee']['baseline']}.")
+            if rul_h is not None:
+                imp.append(f"Predicted remaining life {rul_h * 60:.0f} min" + (f" (safe lower bound {rul_low * 60:.0f} min)." if rul_low else "."))
+            do = ["Repair at the next buffer-protected stop; do not plan to run past the remaining life."]
+            if over_rule:
+                do.insert(0, "Anything beyond the current batch needs written Maintenance Manager approval, 15-minute re-checks and a technician on standby.")
+            if rule:
+                src.append("SOP-OPS-02")
+            return {"title": title, "severity": sev, "headline": f"Keep running {h:g} more hours? {verdict}",
+                    "what_happened": [sc.get("about")] if sc.get("about") else [], "impact": imp, "do_now": do,
+                    "contacts": contacts(first("escalation_chain")), "sources": src, "intent": intent}
+
+        if intent == "repeats":
+            r = first("graph_lookup", lambda a, o: "count_in_window" in o)
+            wos = first("graph_lookup", lambda a, o: "work_orders" in o) or {}
+            if r and "count_in_window" in r:
+                ids = [w["wo_id"] for w in wos.get("work_orders", [])]
+                src += ids[:3]
+                n = r["count_in_window"]
+                return {"title": title, "severity": "warning" if n >= 2 else "info",
+                        "headline": f"{ctx.get('code')} happened {n} times in the last {r['window_days']} days.",
+                        "what_happened": [f"{r['total']} times in the whole history; latest {r['latest'][:10]}."],
+                        "impact": ["Repeat faults should be treated as at least warning level (SOP-OPS-02)."] if n >= 2 else [],
+                        "do_now": ["Ask the engineer for a root-cause review if it keeps coming back."] if n >= 2 else [],
+                        "sources": src, "intent": intent}
+            return None
+
+        if intent in ("fault_code", "parts"):
+            fm = first("graph_lookup", lambda a, o: "fault_modes" in o)
+            if not fm:
+                return None
+            code = ctx.get("code")
+            modes = fm["fault_modes"]
+            f = next((x for x in modes if x["code"] == code), None) or (next((x for x in modes if x["code"] == "bearing_wear"), None) if mid == "M05" else None) or (modes[0] if modes else None)
+            if not f:
+                return None
+            if f.get("documents"):
+                src.append(f["documents"][0])
+            parts = [f"{p['part_no']} ({p['description']})" + (f", {p['on_hand']} in stock" if p.get("on_hand") is not None else "") for p in f["parts"]]
+            return {"title": title, "severity": "info", "headline": f"{f['code']}: {f['description']}.",
+                    "what_happened": ["Likely causes: " + "; ".join(c for c in f["causes"] if c)] if any(f["causes"]) else [],
+                    "impact": [("Shows in " + ", ".join(f"{s['channel']} ({s['shape']})" for s in f["sensors"]))] if f["sensors"] else [],
+                    "parts": parts, "sources": src, "intent": intent}
+
+        if intent == "sop":
+            res = first("search_docs") or {}
+            seen, lines = [], []
+            for r in res.get("results", []):
+                if r["id"] not in seen:
+                    seen.append(r["id"])
+                    lines.append(f"{r['id']}: " + r["text"].split("\n", 1)[0].strip("[]").split(": ", 1)[-1])
+            if not lines:
+                return None
+            return {"title": "Procedures", "severity": "info", "headline": f"{len(lines)} relevant procedure(s).",
+                    "procedure": lines, "sources": seen[:4], "intent": intent}
+
+        if intent == "status":
+            stt = first("get_sensor_state")
+            if not stt:
+                return None
+            alert = stt.get("alert") or {}
+            sev_raw = alert.get("severity") or stt.get("status")
+            stopped = stt.get("machine_state") in ("fault", "repair", "down") or stt.get("status") in ("fault", "repair")
+            sev = "critical" if (sev_raw in ("critical", "fault", "repair") or stopped) else "warning" if sev_raw in ("warning", "watch") else "ok"
+            fm = first("graph_lookup", lambda a, o: "fault_modes" in o)
+            want = stt.get("storyline_fault") or ("bearing_wear" if mid == "M05" and (alert or stt.get("vib_multiple", 0) and stt["vib_multiple"] > 1.2) else None)
+            f = next((x for x in (fm or {}).get("fault_modes", []) if x["code"] == want), None) if want else None
+            what = []
+            if stopped:
+                what.append(f"{name} is stopped ({stt.get('machine_state') or stt.get('status')}).")
+            if f:
+                what.append(f"{f['description']} ({f['code']}).")
+                if any(f["causes"]):
+                    what.append("Likely cause: " + f["causes"][0].lower() + ".")
+            if stt.get("vib_multiple") and stt["vib_multiple"] > 1.05:
+                what.append(f"Vibration is {stt['vib_multiple']}x the healthy level.")
+            if alert.get("contributors"):
+                top = [c for c in alert["contributors"] if c.get("shap") is not None][:2]
+                if top:
+                    what.append("Flagged because of: " + ", ".join(c["signal"] for c in top) + ".")
+            impact = []
+            if stt.get("remaining_useful_life_min") and not stopped:
+                impact.append(f"About {stt['remaining_useful_life_min']:.0f} minutes of useful life left.")
+            aff = [f"{a['station']} {a['state']}" for a in (stt.get("affected_stations") or []) if a.get("state") not in ("run", "micro")][:4]
+            if aff:
+                impact.append("Affected stations: " + ", ".join(aff) + ".")
+            if stopped:
+                impact.append("Downtime costs about $38,000 per minute.")
+            wos = stt.get("open_work_orders") or []
+            if wos:
+                impact.append("Open work order: " + ", ".join(w["id"] for w in wos[:2]) + ".")
+                src += [w["id"] for w in wos[:2]]
+            do = []
+            if stopped:
+                do.append("Operator: press the andon, tell the line lead, note the time.")
+            l1 = next((l for l in (esc or {}).get("chain", []) if l["level"] == "L1_primary_tech"), None)
+            if l1 and (sev != "ok"):
+                do.append(f"Page L1 {l1['name']} ({l1.get('extension')}) now.")
+            part = (f["parts"][0] if f and f["parts"] else None)
+            if part and sev != "ok":
+                do.append(f"Bring {part['part_no']} from the spares cage (S12)" + (f"; {part['on_hand']} in stock." if part.get("on_hand") is not None else "."))
+            sop = next((x for x in ctx["retrieved"] if x["source_id"].startswith("SOP-") and
+                        not (re.match(r"SOP-[A-Z]+-(M\d\d)-\d+", x["source_id"]) and re.match(r"SOP-[A-Z]+-(M\d\d)-\d+", x["source_id"]).group(1) != mid)), None)
+            if sop and sev != "ok":
+                do.append(f"Follow {sop['source_id']}.")
+                src.append(sop["source_id"])
+            if sev == "ok":
+                do = ["Nothing to do. Keep watching vibration and temperature."]
+            if esc and sev != "ok":
+                src.append(esc["id"])
+            headline = {"critical": "Needs action now." , "warning": "Needs attention soon.", "ok": "Running normally."}[sev]
+            return {"title": title, "severity": sev, "headline": headline, "what_happened": what, "impact": impact, "do_now": do,
+                    "contacts": contacts(esc, 2) if sev != "ok" else [], "parts": [f"{part['part_no']} ({part['description']})"] if part and sev != "ok" else [],
+                    "procedure": [sop["source_id"]] if sop and sev != "ok" else [], "sources": list(dict.fromkeys(src)), "intent": intent}
+        return None
+
     # ---- deterministic renderers: grounded, instant, no LLM -------------------
     @staticmethod
     def _contact(p):
@@ -436,6 +633,10 @@ class Brain:
     def _local(self, question, history, ctx, focus, shift):
         self._route(question, ctx, focus, shift)
         if config.get("LOCAL_NARRATE", "0") != "1":
+            rep = self._report(ctx)
+            if rep:
+                ctx["report"] = rep
+                return self._card(rep)
             text = self._render(ctx)
             if text:
                 return text
@@ -491,7 +692,7 @@ class Brain:
         t0 = time.time()
         sess = self.sessions.setdefault(session_id, {"history": []})
         focus = self.g.find_machines(question) or list(focus_hint or [])
-        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v7", config.get("SIM_MODE", "mock"), config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
+        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v9", config.get("SIM_MODE", "mock"), config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
                                        sess["history"][-2:] if sess["history"] else []]).encode()).hexdigest()
         live = config.get("SIM_MODE", "mock").lower() == "live"     # live plant state changes: never serve cached answers
         hit = None if live else self.cache.get(key)
@@ -518,6 +719,7 @@ class Brain:
         mids = [m for m in mids if m in self.g.machines] or mids
         result = {
             "answer": answer,
+            "report": ctx.get("report"),
             "highlight": {"machine_ids": mids[:8], "graph_path": self.graph_path_for(ctx)},
             "citations": citations,
             "actions": ctx["actions"],

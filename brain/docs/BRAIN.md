@@ -36,11 +36,28 @@ RAGAS needs its own venv and a judge model: see the header of `brain/eval/run_ra
 | `SIM_MODE` / `SIM_URL` | mock / http://localhost:8000 | M's engine |
 | `BRAIN_PORT` / `DASH_PORT` | 8100 / 8200 | ports |
 
+## Answer format (every answer follows it)
+`answer` is a plain-text card; `report` carries the same content as fields so a UI can lay it out:
+```
+M05 Weld robot 2 (station S06)  |  CRITICAL        <- title | severity (CRITICAL, WARNING, OK, INFO)
+Needs action now.                                   <- one-line headline
+
+WHAT HAPPENED   short facts: cause, the number that shows it, why it was flagged
+IMPACT          minutes of life left, affected stations, cost per minute, open work orders
+DO NOW          numbered, verb-first steps (who, what, which part)
+WHO TO PAGE     L1, L2, L3 with name, extension, and when to escalate
+PART            part number and stock
+PROCEDURE       SOP id
+Sources: [SOP-MNT-M05-01] [M05-A]                   <- ids that were actually retrieved
+```
+`report` = `{title, severity, headline, what_happened[], impact[], do_now[], contacts[], parts[], procedure[], sources[], intent}`. Sections with nothing to say are omitted. Covered intents: status/why-red, keep-running, who-to-page, fault code and parts, repeat failures, procedures, work order. Anything else falls back to retrieved passages and has `report: null`. The click-a-station panel renders `report` directly; the local LLM plan uses the same three sections.
+
 ## Chat API
 `POST /chat` `{message, session_id?, shift?}` returns:
 ```jsonc
 {
-  "answer": "text with inline [DOC-ID] citations",
+  "answer": "the plain-text card above (citations as [DOC-ID])",
+  "report": { "severity": "critical", "headline": "...", "do_now": ["..."] },   // structured version of the card, or null
   "highlight": {
     "machine_ids": ["M05"],                       // twin machine ids (or Voltara ids for non-rendered machines)
     "graph_path": [{"id":"vibration_high","kind":"symptom"}, {"id":"bearing_wear","kind":"failure_mode"},

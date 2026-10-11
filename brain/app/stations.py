@@ -65,8 +65,10 @@ class StationService:
             if with_answer:
                 q = f"What is wrong with {focus} and what should we do?"
                 a = self.b.ask(q, session_id=f"station-{sid}", focus_hint=[focus])
-                out["diagnosis"] = {"text": a["answer"], "citations": [c["id"] for c in a["citations"]],
+                out["diagnosis"] = {"text": a["answer"], "report": a.get("report"), "citations": [c["id"] for c in a["citations"]],
                                     "highlight": a["highlight"], "latency_s": a["meta"]["latency_s"]}
+                if a.get("report") and a["report"].get("do_now"):
+                    out["steps"] = a["report"]["do_now"]
         else:
             out["steps"] = ["Support area: no machines are monitored here."]
         return out
@@ -107,8 +109,11 @@ class StationService:
         facts = json.dumps({"station": b["station"]["name"], "state": b["engine_state"], "reason": b["reason"],
                             "machines": b["machines"], "escalation": b.get("escalation"), "steps": b.get("steps"),
                             "failure_catalog": b["failure_catalog"][:4]}, default=str)[:3500]
-        system = ("You are the plant brain. Using ONLY the FACTS, write a numbered action plan of at most 5 short steps for the "
-                  "person at this station. Say what went wrong first. Never invent names, numbers or parts.")
+        system = ("You are the plant brain. Using ONLY the FACTS, reply in exactly this format and nothing else:\n"
+                  "WHAT HAPPENED\n- one or two short lines\n"
+                  "DO NOW\n1. verb-first step\n2. ...(at most 4 steps)\n"
+                  "WHO TO PAGE\n- one line with name and extension\n"
+                  "Plain words, short sentences. Never invent names, numbers or parts.")
         try:
             text = self.b._ollama_chat(system, "FACTS:\n" + facts)
         except Exception as e:  # noqa: BLE001

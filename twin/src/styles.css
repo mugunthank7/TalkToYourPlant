@@ -219,3 +219,10 @@ kbd { background: rgba(148, 163, 184, .25); border-radius: 4px; padding: 0 5px; 
 .chatbox { position: absolute; right: 430px; bottom: 162px; width: 340px; pointer-events: auto; font-size: 12px; }
 .chatlog { max-height: 300px; overflow: auto; margin-bottom: 6px; }
 .chatq { font-weight: 600; margin-top: 6px; }
+
+.report { border-left: 4px solid #64748b; padding: 6px 10px; margin: 6px 0; background: rgba(0,0,0,.18); border-radius: 0 8px 8px 0; }
+.report.critical { border-color: #f87171; } .report.warning { border-color: #fbbf24; } .report.ok { border-color: #4ade80; }
+.rhead { font-weight: 600; font-size: 13px; }
+.rsev { font-size: 10px; letter-spacing: .06em; padding: 1px 6px; border-radius: 4px; background: rgba(255,255,255,.12); margin-right: 6px; }
+.rsec h5 { margin: 8px 0 2px; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; opacity: .65; }
+.rsec ul, .rsec ol { margin: 0; padding-left: 18px; } .rsec li { margin: 1px 0; }
