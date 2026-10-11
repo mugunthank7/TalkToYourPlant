@@ -114,6 +114,12 @@ class MockSim:
             "caveat": "failure_probability is an estimate chosen per matched scenario, not a model output.",
         }
 
+    def get_kpis(self):
+        k = (self.summary or {}).get("healthy_realistic", {})
+        return {"units": k.get("units"), "plan_units": k.get("ideal_units"), "oee": k.get("oee"),
+                "throughput_per_hour": k.get("units_per_hour_mean"), "downtime_min": k.get("downtime_min"),
+                "downtime_cost_usd": k.get("downtime_cost_usd"), "source": "mock:scenarios/summary.json healthy_realistic"}
+
     def get_station(self, station_id, machine_ids=(), graph=None):
         ms = [self.get_sensor_state(m, graph) for m in machine_ids]
         worst = next((m for m in ms if m.get("status") in ("critical", "warning")), None)
@@ -213,6 +219,11 @@ class LiveSim:
                             "component_id": h.get("component_id")}
         return out
 
+    def get_kpis(self):
+        k = dict(self._snap().get("kpis") or {})
+        k["source"] = "live:/state"
+        return k
+
     def get_station(self, station_id, machine_ids=(), graph=None):
         try:
             st = (self._snap().get("stations") or {}).get(station_id, {})
@@ -232,7 +243,9 @@ class LiveSim:
 
     def run_scenario(self, machine_id, hours, op="keep_running", baseline="live"):
         changes = [{"op": op, "hours": hours}]
-        if op != "keep_running":
+        if op == "inject_fault":
+            changes = [{"op": "inject_fault", "machine": machine_id, "repair_min": hours}]       # hours holds repair minutes here
+        elif op != "keep_running":
             changes = [{"op": op, "machine": machine_id}]
         res = self._tool("run_what_if", {"changes": changes})
         if res.get("error"):

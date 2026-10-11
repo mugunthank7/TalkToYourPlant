@@ -63,6 +63,13 @@ class PlantGraph:
             if r.get("voltara_id"):
                 self.alias[r["voltara_id"].lower()] = mid
             self.alias[r["name"].lower()] = mid
+        # a few distinctive single words of twin machine names also resolve to the machine
+        ok = {"conveyor", "decoiler", "stacker", "sealer", "fixture", "framing", "casting"}
+        for mid, r in self.machines.items():
+            if re.fullmatch(r"M\d\d", mid):
+                for w in re.findall(r"[a-z]+", r["name"].lower()):
+                    if w in ok:
+                        self.alias.setdefault(w, mid)
 
     def _wos(self):
         if self._wo_by_machine is None:

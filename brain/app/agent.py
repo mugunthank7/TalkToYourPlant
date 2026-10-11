@@ -119,6 +119,9 @@ class Brain:
                 ctx["machines"].append(mid)
             res = self.ix.search(a["query"], k=k, machine_id=a.get("machine_id"),
                                  doc_type=a.get("doc_type"), fault_code=a.get("fault_code"))
+            ctx.setdefault("search", []).extend(
+                {"source_id": r["source_id"], "type": r["source_type"], "dense": r["dense"], "bm25": r["bm25"],
+                 "text": r["text"], "machine": r["machine_id"]} for r in res)
             out, used = [], 0
             for r in res:
                 t = r["text"][:CTX_CHARS_PER_CHUNK]
@@ -129,6 +132,8 @@ class Brain:
                 ctx["retrieved"].append({"source_id": r["source_id"], "chunk_id": r["chunk_id"], "text": r["text"]})
                 out.append({"id": r["source_id"], "type": r["source_type"], "machine": r["machine_id"], "text": t})
             return {"results": out}
+        if name == "get_kpis":
+            return self.sim.get_kpis()
         if name == "get_sensor_state":
             mid = g.machine_id(a["machine_id"]) or a["machine_id"]
             ctx["machines"].append(mid)
@@ -181,6 +186,7 @@ class Brain:
     def _route(self, q, ctx, focus, shift):
         """Deterministic intent router: runs the right tools, no LLM needed to pick them."""
         ql = q.lower()
+        ctx["q"] = q
         mids = self.g.find_machines(q) or focus
         mid = mids[0] if mids else None
         codes = [c for c in _CODE_RX.findall(q) if c in self._known_codes()]
@@ -194,6 +200,21 @@ class Brain:
         if re.search(r"create|raise|open|issue|make", ql) and "work order" in ql and mid:
             self._run("create_work_order", {"machine_id": mid}, ctx)
             ctx["intent"] = "work_order"
+            did = True
+        elif re.search(r"how many (cars|vehicles|units|bodies)|\boutput\b|throughput|\boee\b(?! mean)|how are we doing|production (so far|today)|are we on (plan|target)", ql) \
+                and not re.search(r"(what is|what's|explain|define|meaning of|what does)\b.*\boee\b", ql):
+            self._run("get_kpis", {}, ctx)
+            ctx["intent"] = "kpi"
+            did = True
+        elif re.search(r"what (does|do|is)\b.*\b(do|for)\b|tell me about|describe|what happens (at|in)", ql) and \
+                not re.search(r"\bwrong|red|alarm|fault|fail", ql):
+            self._run("search_docs", {"query": q, "doc_type": ["station", "station_failures"], "k": 3}, ctx)
+            ctx["intent"] = "describe"
+            did = True
+        elif mid and re.search(r"what (happens|would happen)|what if|if (the |it )?.*(stops?|fails?|breaks?|goes down|is down)", ql) \
+                and re.search(r"stops?|fails?|break|down|jam", ql):
+            self._run("run_scenario", {"machine_id": mid, "hours": 30, "op": "inject_fault"}, ctx)
+            ctx["intent"] = "whatif_fault"
             did = True
         elif re.search(r"keep (it )?running|run (it )?(on|longer)|more hours?|continue running|extend", ql) and mid:
             self._run("get_sensor_state", {"machine_id": mid}, ctx)
@@ -248,6 +269,7 @@ class Brain:
         if mid:
             ctx["highlight_ids"] = ctx["highlight_ids"] or list(dict.fromkeys(mids))
         ctx["mid"] = mid
+        ctx["mids"] = mids
         return mid
 
 
@@ -303,6 +325,41 @@ class Brain:
                     "contacts": [f"L0 {esc['chain'][0].get('name')} (line lead), {self._contact(esc['chain'][0])}"] + contacts(esc)
                     + [f"Beyond L3: {esc['vendor']['vendor']} hotline {esc['vendor']['hotline']}"],
                     "sources": src, "intent": intent}
+
+        if intent == "whatif_fault":
+            sc = first("run_scenario")
+            if not (sc and "kpis" in sc):
+                return None
+            k = sc["kpis"]
+            u0, u1 = (k.get("units") or {}).get("baseline"), (k.get("units") or {}).get("scenario")
+            c0, c1 = k.get("cost_baseline_usd"), k.get("cost_usd")
+            lost = (u0 - u1) if (u0 is not None and u1 is not None) else None
+            head = f"If {name} stops for 30 minutes: " + (f"about {lost:.0f} fewer cars" if lost is not None else "output drops") + \
+                   (f" and ${c1 - c0:,.0f} extra downtime cost." if c0 is not None and c1 is not None else ".")
+            imp = [f"Downtime {k['downtime_min']['scenario']} min versus {k['downtime_min']['baseline']} min."]
+            if (k.get("oee") or {}).get("scenario") is not None:
+                imp.append(f"OEE {k['oee']['scenario']} versus {k['oee']['baseline']}.")
+            return {"title": title, "severity": "warning", "headline": head,
+                    "what_happened": [sc["about"]] if sc.get("about") else [], "impact": imp,
+                    "do_now": ["Keep a technician and the likely spare part ready; the line starves downstream and blocks upstream while it is down."],
+                    "sources": [], "intent": intent}
+
+        if intent == "kpi":
+            k = first("get_kpis")
+            if not k or k.get("units") is None:
+                return None
+            plan = k.get("plan_units")
+            line = f"{k['units']} cars so far this shift" + (f" against a plan of {plan}." if plan else ".")
+            imp = []
+            if k.get("oee") is not None:
+                imp.append(f"OEE {k['oee']}, throughput {k.get('throughput_per_hour')} cars per hour.")
+            if k.get("downtime_min") is not None:
+                imp.append(f"Downtime {k['downtime_min']} min, about ${k.get('downtime_cost_usd', 0):,}.")
+            note = []
+            if re.search(r"yesterday|last (week|month|shift)|previous", ctx.get("q", "").lower()):
+                note.append("I only have the current shift live, not earlier days.")
+            return {"title": "Plant output", "severity": "info", "headline": line, "what_happened": note, "impact": imp,
+                    "sources": [], "intent": intent}
 
         if intent == "work_order":
             wo = first("create_work_order")
@@ -446,6 +503,180 @@ class Brain:
                     "contacts": contacts(esc, 2) if sev != "ok" else [], "parts": [f"{part['part_no']} ({part['description']})"] if part and sev != "ok" else [],
                     "procedure": [sop["source_id"]] if sop and sev != "ok" else [], "sources": list(dict.fromkeys(src)), "intent": intent}
         return None
+
+
+    # ---- conversational fallback: what to say when no card applies --------------
+    _STOP = set("the a an is are was were do does did how what why who when where which can could should would to of in on for "
+                "and or it this that with at by from be as i we you my our me us tell about please there any some".split())
+    _TYPE_W = {"sop": 3.0, "manual": 3.0, "station": 3.0, "station_failures": 3.0, "machine_profile": 2.0, "rca": 2.0,
+               "incident": 2.0, "employee": 2.0, "vendor": 2.0, "escalation": 1.0, "service_log": 1.0,
+               "work_order": 0.5, "shift_handover": 0.5}
+    _LABEL = {"sop": "the procedure", "manual": "the machine manual", "station": "the station record",
+              "station_failures": "the failure catalogue", "rca": "the root-cause report", "incident": "an incident report",
+              "employee": "the staff list", "vendor": "the vendor record", "machine_profile": "the machine profile",
+              "service_log": "a vendor service log", "work_order": "a past work order", "shift_handover": "a shift handover note",
+              "escalation": "the escalation list"}
+
+    @staticmethod
+    def _clean_text(t):
+        out = []
+        for line in t.splitlines():
+            l = line.strip()
+            if not l or l.startswith("[") and l.endswith("]"):
+                continue
+            if "Synthetic training document" in l or l.startswith("**Area:**") or l.startswith("> **Synthetic"):
+                continue
+            l = re.sub(r"[#>*`]+", "", l)
+            l = re.sub(r"^\s*[-\d.)]+\s+", "", l)
+            l = re.sub(r"\s+", " ", l).strip()
+            if l:
+                out.append(l)
+        return " ".join(out)
+
+    def _best_sentences(self, text, question, n=2):
+        words = {w for w in re.findall(r"[a-z0-9\-]+", question.lower()) if w not in self._STOP and len(w) > 2}
+        sents = [x.strip() for x in re.split(r"(?<=[.!?])\s+(?=[A-Z0-9])", self._clean_text(text)) if len(x.strip()) > 25]
+        if not sents:
+            return ""
+        scored = sorted(((len(words & set(re.findall(r"[a-z0-9\-]+", x.lower()))), -i, x) for i, x in enumerate(sents)), reverse=True)
+        picked = sorted(scored[:n], key=lambda t: -t[1])
+        return " ".join(x for _, _, x in picked)[:420]
+
+    def _suggestions(self, focus):
+        m = focus[0] if focus else "M05"
+        return [f"Why is {m} red?", f"Who do I page for {m}?", f"Can we keep running {m} 2 more hours?"]
+
+    def _confidence_from_search(self, ctx):
+        hits = ctx.get("search") or []
+        if not hits:
+            return "low", 0.0, "nothing retrieved"
+        best = max(hits, key=lambda h: h["bm25"] * self._TYPE_W.get(h["type"], 1.0))
+        score = min(1.0, best["bm25"] / 15.0) * 0.7 + max(0.0, min(1.0, (best["dense"] - 0.55) / 0.3)) * 0.3
+        if best["bm25"] < 3:
+            return "low", round(score, 2), "no keyword overlap with the plant records"
+        return ("high" if score >= 0.6 else "medium" if score >= 0.35 else "low"), round(score, 2), f"best match {best['source_id']}"
+
+    def _fallback(self, question, ctx, focus):
+        """Plain, direct answer when no structured card applies. Never sounds like a model disclaimer."""
+        ql = question.lower().strip()
+        sug = self._suggestions(focus)
+        tips = "Try: " + " / ".join(f'"{x}"' for x in sug)
+        report = {"title": "Plant brain", "severity": "info", "intent": "fallback", "what_happened": [], "sources": []}
+
+        def done(text, level, score, reason, head=None):
+            report.update(headline=head or text.split("\n")[0], confidence={"level": level, "score": score, "reason": reason},
+                          suggestions=sug)
+            ctx["report"] = report
+            return text
+
+        if re.match(r"^(hi|hello|hey|good (morning|afternoon|evening)|yo)\b", ql):
+            return done("Hi. I'm watching the plant. Ask me about any machine or station, or click a station in the 3D view.\n" + tips,
+                        "high", 1.0, "greeting")
+        if re.search(r"\b(thanks|thank you|cheers|great)\b", ql) and len(ql) < 40:
+            return done("Anytime. Ask me the next one when you're ready.", "high", 1.0, "thanks")
+        if re.search(r"what can you do|what do you do|how (do|can) i use|help me|who are you|what are you", ql):
+            return done("I can tell you why a machine is alarming, what is likely wrong, who to page, which part and procedure apply, "
+                        "and what happens if you keep running. Click a station in the 3D view and I'll focus on it.\n" + tips,
+                        "high", 1.0, "capabilities")
+        if re.search(r"\bjoke\b|weather|football|cricket|news|stock price|movie", ql):
+            return done("That one is outside the plant. I can help with machines, stations, faults, parts and who to call.\n" + tips,
+                        "low", 0.0, "off topic")
+        gm = re.search(r"(what is|what's|what are|explain|define|meaning of|what does)\s+(a |an |the )?(oee|mtbf|mttr|rul|shap|andon|takt|loto|bom|rca|pm)\b", ql)
+        if gm:
+            G = {"oee": "OEE (overall equipment effectiveness) is availability x performance x quality: how much of the planned production time the line really produces good cars.",
+                 "mtbf": "MTBF is mean time between failures: the average running time before a machine breaks.",
+                 "mttr": "MTTR is mean time to repair: the average time from a breakdown to the machine running again.",
+                 "rul": "RUL is remaining useful life: the model's estimate of how many minutes a machine can keep running before it fails.",
+                 "shap": "SHAP values show which signals pushed the anomaly score up, so you can see why a machine was flagged.",
+                 "andon": "The andon is the light and button at a station that calls the line lead when something is wrong. Press it first when a machine stops.",
+                 "takt": "Takt is the pace of the line: one car every 90 seconds here.",
+                 "loto": "LOTO (lockout/tagout) is isolating and locking a machine's energy before anyone works on it. The procedure is SOP-SAF-01.",
+                 "bom": "A BOM is the bill of materials: the list of parts that go into a car.",
+                 "rca": "An RCA is a root-cause analysis written after a significant failure.",
+                 "pm": "PM is preventive maintenance: planned checks and part changes to stop failures before they happen."}
+            if gm.group(3) == "loto":
+                ctx["cite"].add("SOP-SAF-01")
+            return done(G[gm.group(3)] + (" [SOP-SAF-01]" if gm.group(3) == "loto" else ""), "high", 1.0, "glossary")
+        if "andon" in ql and re.search(r"reset|clear|turn off|acknowledge|how", ql):
+            ctx["cite"].add("SOP-OPS-01")
+            return done("The andon is the light and button that calls the line lead to a stopped station. The line lead clears it once the "
+                        "station is running again. I don't have a step-by-step reset in the plant records; the restart rules are in "
+                        "SOP-OPS-01 (line restart after a shutdown) [SOP-OPS-01].", "medium", 0.6, "partial: no reset steps recorded")
+        area = re.search(r"\b(paint|painting|stamping|general assembly|drive unit|e-axle|trim|chassis|body shop|body-in-white|logistics|utilities)\b", ql)
+        if area:
+            try:
+                stn = json.loads((config.BRAIN_DIR / "data" / "out" / "stations.json").read_text())["stations"]
+                line = " -> ".join(f"{k} {v['name']}" for k, v in stn.items() if k in [f"S{i:02d}" for i in range(1, 10)])
+                return done(f"This plant has no separate {area.group(1)} area. The line runs {line}. Ask about any of those, "
+                            "or click one in the 3D view.", "high", 0.8, "area not in this plant")
+            except Exception:  # noqa: BLE001
+                pass
+        if re.search(r"\b(order|buy|purchase|reorder|raise a po)\b", ql) and re.search(r"part|bearing|spare|seal|filter|motor", ql):
+            n = self.g.g.nodes.get("bearing_6208", {}) if "bearing" in ql else {}
+            extra = (f" Bearing 6208 for M05: {n.get('on_hand')} in stock at the spares cage (S12), lead time {n.get('lead_time_days')} days. "
+                     "Ask purchasing to reorder once stock drops below 1.") if n else ""
+            return done("I can't place purchase orders from here." + extra, "high", 0.9, "action outside scope")
+        bad = [m for m in re.findall(r"\bM(\d{1,3})\b", question, re.I) if f"M{int(m):02d}" not in self.g.machines]
+        if bad:
+            ids = ", ".join(sorted(k for k in self.g.machines if re.fullmatch(r"M\d\d", k)))
+            return done(f"There is no M{int(bad[0]):02d} in this plant. The line machines are {ids}.\n" + tips,
+                        "high", 0.9, "unknown machine id")
+
+        level, score, reason = self._confidence_from_search(ctx)
+        hits = ctx.get("search") or []
+        live = ""
+        if focus and level != "high":
+            try:
+                st = self.sim.get_sensor_state(focus[0], self.g)
+                if st.get("status") and st["status"] not in ("unknown",):
+                    live = f"{focus[0]} is {st['status']} right now" + (f", vibration {st['vib_multiple']}x normal" if st.get("vib_multiple") and st["vib_multiple"] > 1.05 else "") + ". "
+                    ctx["machines"].append(focus[0])
+            except Exception:  # noqa: BLE001
+                pass
+        if level == "low":
+            return done(f"{live}I don't have anything specific on that in the plant records. "
+                        "I can answer questions about machines, stations, faults, parts, procedures and who to page.\n" + tips,
+                        "low", score, reason, "No specific record found.")
+        best = max(hits, key=lambda h: h["bm25"] * self._TYPE_W.get(h["type"], 1.0))
+        title = ""
+        if best["type"] == "sop":
+            same = [h for h in hits if h["source_id"] == best["source_id"]]
+            purpose = next((h for h in same if re.search(r"##\s*Purpose", h["text"])), None)
+            if purpose:
+                best = purpose
+            mt = re.match(r"\[[A-Z0-9\-]+: ([^\]]+)\]", best["text"])
+            title = mt.group(1) if mt else ""
+        sent = self._best_sentences(best["text"], question)
+        words = {w for w in re.findall(r"[a-z0-9\-]+", ql) if w not in self._STOP and len(w) > 2}
+        chunk_words = set(re.findall(r"[a-z0-9\-]+", (best.get("text", "") + " " + best.get("source_id", "")).lower()))
+        overlap = max(len(words & set(re.findall(r"[a-z0-9\-]+", sent.lower()))), len(words & chunk_words) - 1)
+        if best["dense"] >= 0.78 and best["bm25"] >= 15:      # strong semantic and keyword agreement
+            overlap = max(overlap, 2)
+        if best["type"] == "employee":
+            mm = re.search(r"([A-Z][\w .'-]+?) \((BAP-E\d+|[A-Z]-[A-Z]+\d+)\) - ([^,]+)", self._clean_text(best["text"]).replace("*", ""))
+            ph = re.search(r"Contact: ([^\[]+)", self._clean_text(best["text"]))
+            if mm:
+                sent = f"{mm.group(1).strip()} is the {mm.group(3).strip()}." + (f" Contact: {ph.group(1).strip().split(',')[0]}." if ph else "")
+                overlap = 3
+        if sent and overlap < (1 if len(words) <= 2 else 2) and best["type"] != "employee":
+            return done(f"{live}I don't have a record that answers that. "
+                        "I can answer questions about machines, stations, faults, parts, procedures and who to page.\n" + tips,
+                        "low", min(score, 0.3), "retrieved text does not match the question terms", "No specific record found.")
+        if not sent:
+            return done(f"{live}That isn't something the plant records cover.\n" + tips, "low", score, "no usable sentence")
+        label = self._LABEL.get(best["type"], "the plant records")
+        ctx["cite"].add(best["source_id"])
+        ctx["retrieved"].append({"source_id": best["source_id"], "chunk_id": "", "text": best["text"]})
+        lead = "From " + label + ": " if level == "high" else "The closest thing I have is " + label + ": "
+        if title:
+            lead = f"From {best['source_id']}, {title}: " if level == "high" else f"The closest thing I have is {best['source_id']}, {title}: "
+        text = f"{live}{lead}{sent} [{best['source_id']}]"
+        if level != "high" and best["type"] != "employee":
+            text += "\nIf that isn't what you meant, tell me the machine or station.\n" + tips
+        elif level != "high":
+            text = text.replace("The closest thing I have is the staff list: ", "")
+        report["sources"] = [best["source_id"]]
+        return done(text, level, score, reason, sent.split(". ")[0][:140])
 
     # ---- deterministic renderers: grounded, instant, no LLM -------------------
     @staticmethod
@@ -639,7 +870,9 @@ class Brain:
                 return self._card(rep)
             text = self._render(ctx)
             if text:
+                ctx.setdefault("report", None)
                 return text
+            return self._fallback(question, ctx, focus or ctx.get("mids") or [])
         ctx["llm_calls"] += 1
         res = "\n\n".join(ctx["tool_outputs"])[:7000]
         allowed = ", ".join(sorted(ctx["cite"])[:30]) or "(none)"
@@ -692,7 +925,7 @@ class Brain:
         t0 = time.time()
         sess = self.sessions.setdefault(session_id, {"history": []})
         focus = self.g.find_machines(question) or list(focus_hint or [])
-        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v9", config.get("SIM_MODE", "mock"), config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
+        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v17", config.get("SIM_MODE", "mock"), config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
                                        sess["history"][-2:] if sess["history"] else []]).encode()).hexdigest()
         live = config.get("SIM_MODE", "mock").lower() == "live"     # live plant state changes: never serve cached answers
         hit = None if live else self.cache.get(key)
@@ -703,7 +936,10 @@ class Brain:
         q = question if not shift else f"{question} (shift {shift})"
         answer, used, err = None, None, None
         try:
-            answer = self._local(question if not shift else q, sess["history"], ctx, focus or sess.get("focus", []), shift)
+            follow = len(question.split()) <= 9 and re.search(
+                r"\b(it|its|this|that|there|here|them)\b|^(and|so|what should|how long|why|who do|who should)\b", question.lower())
+            answer = self._local(question if not shift else q, sess["history"], ctx,
+                                 focus or (sess.get("focus", []) if follow else []), shift)
             used = "ollama:" + config.OLLAMA_MODEL if ctx["llm_calls"] else "local-pipeline"
         except Exception as e:  # noqa: BLE001
             err = f"ollama: {type(e).__name__}: {str(e)[:160]}"
@@ -720,6 +956,7 @@ class Brain:
         result = {
             "answer": answer,
             "report": ctx.get("report"),
+            "confidence": (ctx.get("report") or {}).get("confidence") or {"level": "high", "score": 0.9, "reason": "matched a known question type"},
             "highlight": {"machine_ids": mids[:8], "graph_path": self.graph_path_for(ctx)},
             "citations": citations,
             "actions": ctx["actions"],
