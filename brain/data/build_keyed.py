@@ -317,6 +317,8 @@ def main():
         run_generator(a.seed, raw)
         mapped, emp_map = rekey(raw, out)
     counts = add_hero_and_gaps(out)
+    import build_stations
+    build_stations.build(out)
     errs = check(out, mapped)
     print(f"machines re-keyed: {len(mapped)}  employees re-keyed: {len(emp_map)}")
     print(f"chunks={counts[0]} nodes={counts[1]} edges={counts[2]}")
