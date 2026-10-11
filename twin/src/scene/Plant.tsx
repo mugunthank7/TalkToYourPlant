@@ -1,9 +1,5 @@
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import { Label } from "./Label";
-import * as THREE from "three";
-import { clock } from "../clock";
 import { toScene } from "../data";
 import { ConcreteFloor } from "./Env";
 import { useTwin } from "../state";
@@ -15,19 +11,19 @@ const PAD: Record<string, string> = {
 
 export function Floor() {
   const { plant } = useTwin((s) => s.data)!.layout;
+  const hw = plant.width_m / 2 + 3.4;
+  const hd = plant.depth_m / 2 + 3.4;
   return (
     <>
       <ConcreteFloor />
-      {/* perimeter wall */}
+      {/* painted safety border just inside the walls */}
       {[
-        { p: [0, 2, -plant.depth_m / 2], s: [plant.width_m, 4, 0.4] },
-        { p: [0, 2, plant.depth_m / 2], s: [plant.width_m, 4, 0.4] },
-        { p: [-plant.width_m / 2, 2, 0], s: [0.4, 4, plant.depth_m] },
-        { p: [plant.width_m / 2, 2, 0], s: [0.4, 4, plant.depth_m] },
-      ].map((w, i) => (
-        <mesh key={i} position={w.p as [number, number, number]} receiveShadow>
-          <boxGeometry args={w.s as [number, number, number]} />
-          <meshStandardMaterial color="#d1d5db" transparent opacity={0.28} />
+        [0, -hd, plant.width_m + 6.8, 0.3], [0, hd, plant.width_m + 6.8, 0.3],
+        [-hw, 0, 0.3, plant.depth_m + 6.8], [hw, 0, 0.3, plant.depth_m + 6.8],
+      ].map(([x, z, w, d], i) => (
+        <mesh key={i} position={[x, 0.02, z]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[w, d]} />
+          <meshStandardMaterial color="#facc15" roughness={0.6} />
         </mesh>
       ))}
     </>
@@ -70,11 +66,27 @@ export function Walkways() {
         const [ax, az] = pos.get(a)!;
         const [bx, bz] = pos.get(b)!;
         const len = Math.hypot(bx - ax, bz - az);
+        const rot: [number, number, number] = [-Math.PI / 2, 0, -Math.atan2(bz - az, bx - ax)];
+        const mid: [number, number, number] = [(ax + bx) / 2, 0.025, (az + bz) / 2];
+        const edge = (off: number) => {
+          const nx = -(bz - az) / len;
+          const nz = (bx - ax) / len;
+          return (
+            <mesh key={off} position={[mid[0] + nx * off, 0.03, mid[2] + nz * off]} rotation={rot}>
+              <planeGeometry args={[len, 0.12]} />
+              <meshStandardMaterial color="#facc15" roughness={0.5} />
+            </mesh>
+          );
+        };
         return (
-          <mesh key={a + b} position={[(ax + bx) / 2, 0.025, (az + bz) / 2]} rotation={[-Math.PI / 2, 0, -Math.atan2(bz - az, bx - ax)]}>
-            <planeGeometry args={[len, 1.2]} />
-            <meshStandardMaterial color="#facc15" roughness={0.9} transparent opacity={0.55} />
-          </mesh>
+          <group key={a + b}>
+            <mesh position={mid} rotation={rot}>
+              <planeGeometry args={[len, 1.5]} />
+              <meshStandardMaterial color="#22c55e" roughness={0.6} transparent opacity={0.38} />
+            </mesh>
+            {edge(0.75)}
+            {edge(-0.75)}
+          </group>
         );
       })}
     </>
@@ -95,75 +107,5 @@ export function SafetyZones() {
         return <Line key={z.station} points={pts} color="#ef4444" lineWidth={2} dashed dashSize={1} gapSize={0.6} />;
       })}
     </>
-  );
-}
-
-const carShape = (() => {
-  const sh = new THREE.Shape();
-  sh.moveTo(-2.3, 0.3); sh.lineTo(2.3, 0.3); sh.lineTo(2.3, 0.78); sh.lineTo(1.55, 0.9); sh.lineTo(0.75, 1.42);
-  sh.lineTo(-0.85, 1.45); sh.lineTo(-1.7, 0.98); sh.lineTo(-2.3, 0.9); sh.closePath();
-  return sh;
-})();
-const carGeo = new THREE.ExtrudeGeometry(carShape, { depth: 1.7, bevelEnabled: true, bevelSize: 0.08, bevelThickness: 0.08, bevelSegments: 2 });
-carGeo.translate(0, 0, -0.85);
-const CAR_COLORS = ["#f8fafc", "#cbd5e1", "#1d4ed8", "#e2e8f0", "#b91c1c"];
-
-function Car({ color }: { color: string }) {
-  return (
-    <group>
-      <mesh geometry={carGeo} castShadow>
-        <meshPhysicalMaterial color={color} metalness={0.6} roughness={0.25} clearcoat={1} clearcoatRoughness={0.1} />
-      </mesh>
-      <mesh position={[0.1, 1.14, 0]} castShadow>
-        <boxGeometry args={[1.9, 0.42, 1.74]} />
-        <meshStandardMaterial color="#0b1220" metalness={0.9} roughness={0.1} />
-      </mesh>
-      {[[-1.4, 0.88], [1.4, 0.88], [-1.4, -0.88], [1.4, -0.88]].map(([x, z], i) => (
-        <mesh key={i} position={[x, 0.36, z]} rotation={[Math.PI / 2, 0, 0]} castShadow>
-          <cylinderGeometry args={[0.36, 0.36, 0.28, 18]} />
-          <meshStandardMaterial color="#111827" roughness={0.8} />
-        </mesh>
-      ))}
-    </group>
-  );
-}
-
-export function Conveyor() {
-  const { conveyor_path, } = useTwin((s) => s.data)!.layout;
-  const [x0, z0] = toScene(conveyor_path[0][0], conveyor_path[0][1]);
-  const [x1] = toScene(conveyor_path[1][0], conveyor_path[1][1]);
-  const len = x1 - x0;
-  const cars = useRef<THREE.Group[]>([]);
-  const SPEED = 0.25;
-  const SPACING = 22.5;
-  const N = Math.ceil(len / SPACING) + 1;
-
-  useFrame(() => {
-    cars.current.forEach((c, i) => {
-      if (!c) return;
-      const d = (clock.t * SPEED + i * SPACING) % (N * SPACING);
-      c.position.x = x0 + d;
-      c.visible = d < len;
-    });
-  });
-
-  return (
-    <group position={[0, 0, z0]}>
-      <mesh position={[x0 + len / 2, 0.35, 0]} receiveShadow castShadow>
-        <boxGeometry args={[len, 0.5, 2.6]} />
-        <meshStandardMaterial color="#475569" roughness={0.6} metalness={0.4} />
-      </mesh>
-      <mesh position={[x0 + len / 2, 0.62, 0]}>
-        <boxGeometry args={[len, 0.04, 2.0]} />
-        <meshStandardMaterial color="#0f172a" />
-      </mesh>
-      {Array.from({ length: N }).map((_, i) => (
-        <group key={i} ref={(g) => { if (g) cars.current[i] = g; }}>
-          <group position={[0, 0.55, 0]}>
-            <Car color={CAR_COLORS[i % CAR_COLORS.length]} />
-          </group>
-        </group>
-      ))}
-    </group>
   );
 }

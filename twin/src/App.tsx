@@ -6,11 +6,13 @@ import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { camera as camGoal, clock } from "./clock";
 import { loadAll } from "./data";
 import { useTwin } from "./state";
-import { Conveyor, Floor, SafetyZones, Stations, Walkways } from "./scene/Plant";
+import { Floor, SafetyZones, Stations, Walkways } from "./scene/Plant";
+import { Conveyor, Logistics } from "./scene/Flow";
 import { Machines } from "./scene/Machines";
 import { People } from "./scene/People";
 import { Hud } from "./ui/Hud";
 import { Env } from "./scene/Env";
+import { Building } from "./scene/Building";
 import { Cells } from "./scene/Cells";
 import { Props } from "./scene/Props";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
@@ -22,6 +24,20 @@ function Clock() {
       if (clock.t >= clock.max) clock.t = 0;
     }
   });
+  return null;
+}
+
+/** Shift the render so the plant sits in the free area between the HUD panels. */
+function ViewFit() {
+  const { camera, size } = useThree();
+  useEffect(() => {
+    const L = 276, R = 352, T = 52, B = 184;
+    const cx = (L + size.width - R) / 2;
+    const cy = (T + size.height - B) / 2;
+    const cam = camera as THREE.PerspectiveCamera;
+    cam.setViewOffset(size.width, size.height, size.width / 2 - cx, size.height / 2 - cy, size.width, size.height);
+    return () => cam.clearViewOffset();
+  }, [camera, size]);
   return null;
 }
 
@@ -47,8 +63,7 @@ function CameraRig() {
 function Scene({ low }: { low: boolean }) {
   return (
     <>
-      <color attach="background" args={["#cfd8e3"]} />
-      <fog attach="fog" args={["#cfd8e3", 160, 340]} />
+
       <hemisphereLight args={["#ffffff", "#8a94a0", 0.9]} />
       <directionalLight
         position={[60, 90, 40]}
@@ -65,12 +80,14 @@ function Scene({ low }: { low: boolean }) {
         <Env />
         <Floor />
         <Props />
+        <Building />
       </Suspense>
       <Walkways />
       <SafetyZones />
       <Cells />
       <Stations />
       <Conveyor />
+      <Logistics />
       <Machines />
       <People />
       {!low && (
@@ -78,8 +95,9 @@ function Scene({ low }: { low: boolean }) {
           <Bloom intensity={0.9} luminanceThreshold={0.9} luminanceSmoothing={0.2} mipmapBlur />
         </EffectComposer>
       )}
+      <ViewFit />
       <CameraRig />
-      <OrbitControls makeDefault target={[0, 0, 8]} maxPolarAngle={Math.PI / 2.1} minDistance={15} maxDistance={220} />
+      <OrbitControls makeDefault target={[0, 0, 4]} maxPolarAngle={Math.PI / 2.1} minDistance={15} maxDistance={220} />
     </>
   );
 }
@@ -97,7 +115,7 @@ export default function App() {
 
   return (
     <>
-      <Canvas shadows camera={{ position: [0, 76, 92], fov: 45, near: 0.5, far: 600 }} dpr={low ? 1 : [1, 1.75]}>
+      <Canvas shadows camera={{ position: [0, 92, 104], fov: 45, near: 0.5, far: 600 }} dpr={low ? 1 : [1, 1.75]}>
         <PerformanceMonitor onDecline={() => setLow(true)} flipflops={0} />
         <Clock />
         <Scene low={low} />

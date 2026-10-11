@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { clock } from "../clock";
+import { carNear } from "../flow";
 import { Machine, Status, m05Status, toScene } from "../data";
 import { useTwin } from "../state";
 
@@ -122,7 +123,7 @@ function WeldRobot({ m, hero, color }: { m: Machine; hero: boolean; color?: stri
               <mesh position={[0.3, -0.45, 0.1]} castShadow><boxGeometry args={[0.1, 0.7, 0.08]} /><meshStandardMaterial color="#94a3b8" metalness={0.9} roughness={0.25} /></mesh>
               <mesh position={[0.3, -0.45, -0.1]} castShadow><boxGeometry args={[0.1, 0.7, 0.08]} /><meshStandardMaterial color="#94a3b8" metalness={0.9} roughness={0.25} /></mesh>
               <group position={[0.3, -0.85, 0]}>
-                <Spark on={() => status.current !== "repair"} />
+                <Spark on={() => status.current !== "repair" && carNear(m.x - 63, clock.t, 5)} />
               </group>
             </group>
           </group>

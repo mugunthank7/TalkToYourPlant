@@ -15,7 +15,7 @@ export const camera = {
   goal: null as null | { pos: [number, number, number]; target: [number, number, number] },
 };
 export const VIEWS = {
-  Overview: { pos: [0, 76, 92], target: [0, 0, 8] },
-  "Weld cells": { pos: [42, 24, 30], target: [42, 0, 0] },
-  "Maintenance bay": { pos: [-50, 22, 55], target: [-48, 0, 24] },
+  Overview: { pos: [0, 92, 104], target: [0, 0, 4] },
+  "Weld cells": { pos: [30, 20, 26], target: [30, 0, -4] },
+  "Maintenance bay": { pos: [-44, 18, 44], target: [-42, 0, 22] },
 } as const;

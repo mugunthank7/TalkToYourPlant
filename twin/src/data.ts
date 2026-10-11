@@ -33,6 +33,7 @@ export interface Layout {
   conveyor_path: Pt[];
   safety_zones: { station: string; x: number; z: number; w: number; d: number }[];
   gate: Pt;
+  logistics?: { id: string; name: string; vehicle: string; load: string; period_s: number; speed_mps: number; route: Pt[] }[];
   walk_graph: { nodes: { id: string; x: number; z: number }[]; edges: [string, string][] };
 }
 export interface Hero {
@@ -65,7 +66,7 @@ export async function loadAll(): Promise<TwinData> {
 }
 
 // The plant origin is its NW corner; scene is centred on the plant middle.
-export const CENTER: Pt = [80, 45];
+export const CENTER: Pt = [64, 36];
 export const toScene = (x: number, z: number): [number, number] => [x - CENTER[0], z - CENTER[1]];
 
 export type Status = "healthy" | "alert" | "repair" | "repaired";
