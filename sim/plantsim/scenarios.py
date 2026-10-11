@@ -20,15 +20,40 @@ def run_branch(base: Params, changes: list[dict] | None = None, now_s: float | N
     return {"kpis": k, "cum_units_10min": _curve(sim), "events": sim.events[-30:], "work_orders": [w.as_dict() for w in sim.work_orders]}
 
 
-def what_if(base: Params, changes: list[dict], now_s: float) -> dict:
-    """Baseline = nothing changes from now on. Scenario = the changes apply at `now_s`."""
-    baseline = run_branch(base, [], now_s)
-    scenario = run_branch(base, changes, now_s)
+_POOL = None
+
+
+def _pool():
+    global _POOL
+    if _POOL is None:
+        import multiprocessing as mp
+        from concurrent.futures import ProcessPoolExecutor
+        _POOL = ProcessPoolExecutor(max_workers=2, mp_context=mp.get_context("spawn"))
+    return _POOL
+
+
+def what_if_fast(base: Params, changes: list[dict], now_s: float) -> dict:
+    """what_if with the two branches run in worker processes: in parallel, and without competing with the API's event loop
+    for the interpreter lock (in the server, a what-if took 60 s with browser clients connected, 7 s alone)."""
+    try:
+        pool = _pool()
+        fb, fs = pool.submit(run_branch, base, [], now_s), pool.submit(run_branch, base, changes, now_s)
+        return _combine(base, changes, now_s, fb.result(), fs.result())
+    except Exception:       # noqa: BLE001  (pool broken or cannot spawn: fall back to this process)
+        return what_if(base, changes, now_s)
+
+
+def _combine(base: Params, changes: list[dict], now_s: float, baseline: dict, scenario: dict) -> dict:
     b, s = baseline["kpis"], scenario["kpis"]
     keys = ("units", "good_units", "oee", "availability", "downtime_min", "downtime_cost_usd", "units_lost_vs_ideal")
     delta = {k: round(s[k] - b[k], 3) for k in keys if k in s and k in b}
     return {"now_s": now_s, "changes": changes, "baseline": baseline, "scenario": scenario, "delta": delta,
             "summary": narrate(b, s, delta, changes)}
+
+
+def what_if(base: Params, changes: list[dict], now_s: float) -> dict:
+    """Baseline = nothing changes from now on. Scenario = the changes apply at `now_s`."""
+    return _combine(base, changes, now_s, run_branch(base, [], now_s), run_branch(base, changes, now_s))
 
 
 def narrate(b: dict, s: dict, d: dict, changes: list[dict]) -> str:

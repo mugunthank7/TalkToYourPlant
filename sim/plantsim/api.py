@@ -15,7 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import config as C
 from .config import Params
 from .model import PlantSim, REPAIR_MIN
-from .scenarios import what_if
+from .scenarios import what_if_fast as what_if
 from .snapshot import kpi_live, machine_info, snapshot, stations_info
 from .tools import TOOLS, anomaly_report, call_tool
 
@@ -87,9 +87,10 @@ class Live:
 
     async def broadcast(self, msg: dict) -> None:
         dead = []
+        text = json.dumps(msg)          # encode once, not once per client
         for ws in list(self.clients):
             try:
-                await ws.send_text(json.dumps(msg))
+                await ws.send_text(text)
             except Exception:
                 dead.append(ws)
         for ws in dead:
@@ -101,12 +102,16 @@ live = Live()
 
 async def _loop() -> None:
     dt = 0.1
+    tick = 0
     while True:
         await asyncio.sleep(dt)
         live.advance(dt)
-        if live.clients:
+        tick += 1
+        # playing: 5 state messages a second; paused: one a second (the clock does not move, so nothing changes)
+        if live.clients and (tick % (2 if live.playing else 10) == 0):
             snap = snapshot(live.sim)
             await live.broadcast({"type": "state", **snap})
+        if live.clients:
             new = live.sim.events[live.sent:]
             live.sent = len(live.sim.events)
             for e in new:

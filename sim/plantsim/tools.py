@@ -5,7 +5,7 @@ import pandas as pd
 
 from . import config as C
 from .model import HERO, ev
-from .scenarios import what_if
+from .scenarios import what_if_fast as what_if
 from .snapshot import bottleneck, kpi_live, machine_info, snapshot, stations_info
 
 TOOLS: list[dict] = [
