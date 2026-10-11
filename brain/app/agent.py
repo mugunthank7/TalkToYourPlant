@@ -82,6 +82,9 @@ class Brain:
                 return {"neighbors": g.neighbors(ent)[:40]}
             if what == "fault_modes":
                 fm = g.fault_modes(ent)
+                want = a.get("fault_code")
+                if want:                      # relevant fault mode first, so truncation never hides it
+                    fm = sorted(fm, key=lambda f: f["code"] != want)
                 for f in fm:
                     ctx["cite"].update(f.get("documents") or [])
                 return {"machine_id": mid, "fault_modes": fm[:14], "total": len(fm)}
@@ -217,7 +220,7 @@ class Brain:
             did = True
         elif re.search(r"what does .{0,40}mean|meaning|fault code", ql) or (code and re.search(r"\bpart|spare|replace|needed", ql)):
             if mid:
-                self._run("graph_lookup", {"entity": mid, "what": "fault_modes"}, ctx)
+                self._run("graph_lookup", {"entity": mid, "what": "fault_modes", **({"fault_code": code} if code else {})}, ctx)
             a = {"query": q, "k": 3}
             if mid:
                 a["machine_id"] = mid
@@ -227,12 +230,14 @@ class Brain:
             ctx["intent"], ctx["code"] = "fault_code", code
             did = True
         elif mid and re.search(r"part|spare|stock|bearing|replace|needed", ql):
-            self._run("graph_lookup", {"entity": mid, "what": "fault_modes"}, ctx)
+            fc = code or ("bearing_wear" if mid == "M05" else None)
+            self._run("graph_lookup", {"entity": mid, "what": "fault_modes", **({"fault_code": fc} if fc else {})}, ctx)
             ctx["intent"], ctx["code"] = "parts", code
             did = True
         elif mid:   # why red / what's wrong / status
-            self._run("get_sensor_state", {"machine_id": mid}, ctx)
-            self._run("graph_lookup", {"entity": mid, "what": "fault_modes"}, ctx)
+            st = self._run("get_sensor_state", {"machine_id": mid}, ctx)
+            fc = (st or {}).get("storyline_fault") or ("bearing_wear" if mid == "M05" else None)
+            self._run("graph_lookup", {"entity": mid, "what": "fault_modes", **({"fault_code": fc} if fc else {})}, ctx)
             self._run("graph_lookup", {"entity": mid, "what": "work_orders", "n": 3}, ctx)
             self._run("search_docs", {"query": q, "machine_id": mid, "k": 3}, ctx)
             self._run("escalation_chain", {"machine_id": mid, **({"shift": shift} if shift else {})}, ctx)
@@ -448,7 +453,7 @@ class Brain:
         t0 = time.time()
         sess = self.sessions.setdefault(session_id, {"history": []})
         focus = self.g.find_machines(question)
-        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v2", config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
+        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v3", config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
                                        sess["history"][-2:] if sess["history"] else []]).encode()).hexdigest()
         hit = self.cache.get(key)
         if hit:
