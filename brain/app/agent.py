@@ -363,6 +363,12 @@ class Brain:
                 out.append(f"{lvl} {l.get('name')} ({l.get('role')}), {self._contact(l)}: {after}")
             return out
 
+        if intent == "page" and not (esc and "chain" in esc) and mid:
+            return {"title": title, "severity": "info", "intent": intent, "headline": f"No paging chain is on file for {name}.",
+                    "what_happened": [], "impact": ["Chains exist for most machines; try one in the same area for the area contacts."],
+                    "do_now": ["Press the andon, tell the line lead, note the time.", "Tell the maintenance supervisor on shift."],
+                    "contacts": [], "parts": [], "procedure": [], "sources": []}
+
         if intent == "page" and esc and "chain" in esc:
             src.append(esc["id"])
             return {"title": title, "severity": "info", "headline": f"On shift {esc['shift']}, page in this order.",
@@ -540,6 +546,8 @@ class Brain:
             l1 = next((l for l in (esc or {}).get("chain", []) if l["level"] == "L1_primary_tech"), None)
             if l1 and (sev != "ok"):
                 do.append(f"Page L1 {l1['name']} ({l1.get('extension')}) now.")
+            elif sev != "ok" and not (esc and esc.get("chain")):
+                do.append(f"No paging chain is on file for {mid}: tell the line lead and the maintenance supervisor.")
             part = (f["parts"][0] if f and f["parts"] else None)
             if part and sev != "ok":
                 do.append(f"Bring {part['part_no']} from the spares cage (S12)" + (f"; {part['on_hand']} in stock." if part.get("on_hand") is not None else "."))
@@ -554,7 +562,7 @@ class Brain:
                 src.append(sop["source_id"])
             if sev == "ok":
                 do = ["Nothing to do. Keep watching vibration and temperature."]
-            if esc and sev != "ok":
+            if esc and esc.get("id") and sev != "ok":          # M03 and M10 have no escalation record: the tool returns an error dict
                 src.append(esc["id"])
             headline = {"critical": "Needs action now." , "warning": "Needs attention soon.", "ok": "Running normally."}[sev]
             return {"title": title, "severity": sev, "headline": headline, "what_happened": what, "impact": impact, "do_now": do,
