@@ -1,0 +1,48 @@
+{
+  "alert_m05": {
+    "type": "alert",
+    "machine_id": "M05",
+    "severity": "warning",
+    "score": 0.93,
+    "contributors": [
+      {
+        "signal": "vibration_rms",
+        "shap": 0.61
+      },
+      {
+        "signal": "temperature_c",
+        "shap": 0.22
+      },
+      {
+        "signal": "motor_current_a",
+        "shap": 0.1
+      }
+    ],
+    "component_id": "m05_joint1_bearing"
+  },
+  "graph_path_m05": {
+    "type": "graph_path",
+    "nodes": [
+      {
+        "id": "vibration_high",
+        "kind": "symptom"
+      },
+      {
+        "id": "bearing_wear",
+        "kind": "failure_mode"
+      },
+      {
+        "id": "m05_joint1_bearing",
+        "kind": "component"
+      },
+      {
+        "id": "replace_bearing",
+        "kind": "repair"
+      },
+      {
+        "id": "bearing_6208",
+        "kind": "spare_part"
+      }
+    ]
+  }
+}

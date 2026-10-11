@@ -1,0 +1,144 @@
+{
+  "plant": {
+    "id": "BAP",
+    "name": "Voltara Motors Bastrop Assembly Plant",
+    "city": "Bastrop, Texas",
+    "products": [
+      "Voltara V1 (mid-size sedan)",
+      "Voltara V2 (mid-size crossover)"
+    ],
+    "nominal_rate_vph": 38,
+    "shifts": {
+      "A": [
+        "06:00",
+        "14:00"
+      ],
+      "B": [
+        "14:00",
+        "22:00"
+      ],
+      "C": [
+        "22:00",
+        "06:00"
+      ]
+    }
+  },
+  "areas": {
+    "CAS": {
+      "name": "Giga Casting & Machining",
+      "bay": "Bay 1",
+      "supervisor_trade": "MECH"
+    },
+    "STP": {
+      "name": "Stamping",
+      "bay": "Bay 2",
+      "supervisor_trade": "MECH"
+    },
+    "BIW": {
+      "name": "Body-in-White",
+      "bay": "Bay 3",
+      "supervisor_trade": "ROBO"
+    },
+    "PNT": {
+      "name": "Paint Shop",
+      "bay": "Bay 4",
+      "supervisor_trade": "ROBO"
+    },
+    "BAT": {
+      "name": "Battery Pack Assembly",
+      "bay": "Bay 5",
+      "supervisor_trade": "ELEC"
+    },
+    "DRV": {
+      "name": "Drive Unit / E-Axle",
+      "bay": "Bay 6",
+      "supervisor_trade": "MECH"
+    },
+    "GA": {
+      "name": "General Assembly",
+      "bay": "Bay 7",
+      "supervisor_trade": "MECH"
+    },
+    "EOL": {
+      "name": "End-of-Line Test & Release",
+      "bay": "Bay 8",
+      "supervisor_trade": "ELEC"
+    },
+    "UTL": {
+      "name": "Utilities & Facilities",
+      "bay": "Yard",
+      "supervisor_trade": "ELEC"
+    },
+    "LOG": {
+      "name": "Intralogistics",
+      "bay": "All bays",
+      "supervisor_trade": "CTRL"
+    }
+  },
+  "trades": {
+    "MECH": "Mechanical",
+    "ELEC": "Electrical",
+    "HYD": "Hydraulics / Pneumatics",
+    "ROBO": "Robotics",
+    "CTRL": "Controls / PLC",
+    "PROC": "Process / Quality"
+  },
+  "roles": {
+    "PLM": "Plant Manager",
+    "OPD": "Operations Director",
+    "MTM": "Maintenance Manager",
+    "ARM": "Area Manager",
+    "PSV": "Production Supervisor",
+    "MSV": "Maintenance Supervisor",
+    "LDH": "Line Lead",
+    "OPR": "Machine Operator",
+    "TEC": "Maintenance Technician",
+    "REL": "Reliability Engineer",
+    "CTE": "Controls Engineer",
+    "PRE": "Process Engineer",
+    "QAI": "Quality Inspector",
+    "QAE": "Quality Engineer",
+    "EHS": "EHS Officer",
+    "PLN": "Maintenance Planner",
+    "STK": "Storekeeper",
+    "HVE": "HV Safety Engineer"
+  },
+  "certifications": {
+    "LOTO": "Authorized LOTO (OSHA 1910.147)",
+    "HV": "NFPA 70E qualified person (HV)",
+    "HVB": "EV high-voltage battery safe-work (non-electrical)",
+    "FANUC": "FANUC certified robot maintenance",
+    "KUKA": "KUKA robot maintenance (KRC4/KRC5)",
+    "ABB": "ABB robot service",
+    "HYD": "Fluid power specialist (CFPS-equivalent)",
+    "LASER": "Laser safety officer (Class 4)",
+    "CRANE": "Overhead crane operator/inspector",
+    "FORK": "Powered industrial truck",
+    "CS": "Confined space entry",
+    "FIRE": "Fire watch / hot work",
+    "TORQ": "Torque tool calibration",
+    "ATEX": "Ex-zone (paint) competent person"
+  },
+  "zones": {
+    "Z1": [
+      "CAS",
+      "STP"
+    ],
+    "Z2": [
+      "BIW",
+      "PNT"
+    ],
+    "Z3": [
+      "BAT",
+      "DRV"
+    ],
+    "Z4": [
+      "GA",
+      "EOL",
+      "LOG",
+      "UTL"
+    ]
+  },
+  "as_of": "2026-10-10",
+  "start_of_production": "2024-03-04"
+}
