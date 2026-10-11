@@ -1,0 +1,12 @@
+twin_id,twin_name,twin_station,voltara_id,match,note
+M01,Casting press,S02,CAS-GP-02,clean,Giga Press 2 (GP-01 has a shot-slow storyline; kept separate)
+M02,Press transfer robot,S02,STP-BLK-01,close,Blank handling robot
+M03,Framing fixture,S04,,gap,No Voltara family; added as synthetic machine
+M04,Weld robot 1,S05,BIW-WF-01,clean,FANUC spot weld robot; healthy reference
+M05,Weld robot 2,S06,BIW-WK-05,clean,KUKA spot weld robot; HERO joint 1 bearing wear injected (hero_m05.json)
+M06,Main conveyor,S04,GA-CV-01,close,Skillet/overhead conveyor
+M07,Vision inspection gate,S07,BIW-MET-01,close,Inline metrology station
+M08,Battery module stacker,S08,BAT-BS-01,clean,Cell stacking robot
+M09,Pack sealer,S09,BAT-BT-01,close,Pack fastening station
+M10,Decoiler,S01,,gap,No Voltara family; added as synthetic machine
+M11,Rack AGV,S03,LOG-AM-01,close,Autonomous mobile robot (optional in twin)
