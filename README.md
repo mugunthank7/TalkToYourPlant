@@ -43,6 +43,13 @@ sequenceDiagram
   S->>T: Robot returns to green, KPIs recover
 ```
 
+## Run it
+
+```bash
+cd data && pip install -r requirements.txt && python -m plantdata --seed 42 --out out --copy-to ../twin/public/data
+cd ../twin && npm install && npm run dev   # http://localhost:5180
+```
+
 ## Credits
 
 Third-party assets are listed with licences in [docs/ASSETS.md](docs/ASSETS.md).

@@ -12,6 +12,26 @@ from . import layout as L
 from . import history, maintenance, outputs, people, scenarios, schedule, transfers, validate
 
 
+def kpi_json(mins: dict, summaries: dict) -> dict:
+    """Per-minute cumulative KPIs for the twin's dashboard (cumulative OEE, units, downtime, cost)."""
+    series = {}
+    for name, m in mins.items():
+        n = np.arange(1, len(m) + 1)
+        down = m["downtime_s"].cumsum()
+        units = m["units_completed"].cumsum()
+        good = m["good_units"].cumsum()
+        avail = 1 - down / (60 * n)
+        perf = np.clip(outputs.TAKT_S / m["effective_cycle_s"].expanding().mean(), 0, 1)
+        qual = np.where(units > 0, good / np.maximum(units, 1), 1.0)
+        series[name] = {
+            "cum_units": units.tolist(), "cum_down_s": down.tolist(),
+            "cum_cost": m["downtime_cost_usd"].cumsum().astype(int).tolist(),
+            "oee": (avail * perf * qual).round(3).tolist(),
+        }
+    return {"minutes": len(next(iter(mins.values()))), "plan_units": 320,
+            "cost_per_min": outputs.DOWNTIME_COST_PER_MIN_USD, "series": series, "summary": summaries}
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--seed", type=int, default=42)
@@ -51,15 +71,16 @@ def main() -> None:
 
     sdir = out / "scenarios"
     sdir.mkdir(exist_ok=True)
-    summaries, sens = {}, {}
+    summaries, sens, mins = {}, {}, {}
     for i, name in enumerate(scenarios.SCENARIOS):
         df, minutes, hourly, summ = scenarios.run(name, args.seed + 10 + i, hero)
         df.to_parquet(sdir / f"{name}_sensors.parquet", compression="zstd", index=False)
         minutes.to_parquet(sdir / f"{name}_output_minute.parquet", compression="zstd", index=False)
         hourly.to_csv(sdir / f"{name}_output_hourly.csv", index=False)
-        summaries[name], sens[name] = summ, df
+        summaries[name], sens[name], mins[name] = summ, df, minutes
     validate.scenarios(summaries, sens)
     (sdir / "summary.json").write_text(json.dumps(summaries, indent=1))
+    (out / "kpi.json").write_text(json.dumps(kpi_json(mins, summaries), separators=(",", ":")))
 
     if not args.skip_history:
         hdir = out / "history"
@@ -81,7 +102,7 @@ def main() -> None:
     if args.copy_to:
         dst = Path(args.copy_to)
         dst.mkdir(parents=True, exist_ok=True)
-        for f in ("layout.json", "schedule.json", "events.json"):
+        for f in ("layout.json", "schedule.json", "events.json", "kpi.json"):
             (dst / f).write_bytes((out / f).read_bytes())
 
     print(f"employees: {len(roster)}  tasks: {len(people.TASKS)}")

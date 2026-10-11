@@ -114,10 +114,11 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 - [x] System flowchart in README (whiteboard v1 -> improved v2, D-011, D-012)
 - [x] Decisions D-013..D-017: SimPy engine, M owns Data 1 + anomaly detection, build order
 - [x] Synthetic data generator `data/plantdata/` (layout, 24 employees, tasks, transfer times, per-person schedules, 5 scenarios with sensors + production output, 30-day history with RUL labels); spec in `docs/DATA_SPEC.md`
-- [ ] NEXT (priority 2): scaffold `twin/` (Vite + R3F) that loads `layout.json` + `schedule.json`: floor, stations as boxes, people as capsules walking the schedule
+- [x] `twin/` v0 (Vite + R3F): floor, stations, walkways, conveyor + cars, placeholder machines, people (capsules) playing `schedule.json`, M05 fault glow, HUD (clock, speed, shift, jump to alert, camera views). Run: `cd twin && npm run dev` (port 5180) the schedule
 - [ ] Install Blender, confirm headless export works
 - [ ] P0 assets: weld robot (rigged), conveyor, press, BIW
-- [ ] P0 people: operator + maintenance tech with walk/idle/work
+- [x] HUD v1 matching the ChatGPT concept mockup (top bar, live plant state, KPIs, forecast, timeline, what-if, camera shortcuts) with live numbers from `kpi.json`
+- [ ] NEXT: 3D realism pass (fences, shelving, car shape, limbed workers, lighting), then real models (Blender weld robot etc.) and Mixamo characters replacing the placeholders
 - [ ] Replay `scenarios/hero_timely_repair_sensors.parquet` as the mock stream + fault glow on M05
 - [ ] SimPy engine + what-if + FastAPI tool endpoints (D-016)
 - [ ] KPI dashboard
