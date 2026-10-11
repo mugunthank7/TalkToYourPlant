@@ -162,9 +162,13 @@ class LiveSim:
     def get_sensor_state(self, machine_id, graph=None):
         if machine_id not in self.SIMULATED:
             return self.fallback.get_sensor_state(machine_id, graph)
-        h = self._tool("get_machine_health", {"machine_id": machine_id})
-        if h.get("error"):
-            return {"machine_id": machine_id, "status": "unknown", "source": "live", "error": h["error"]}
+        try:
+            dc = self._tool("get_diagnosis_context", {"machine_id": machine_id})
+            h = dc.get("machine") or {}
+        except Exception:  # noqa: BLE001
+            dc, h = {}, self._tool("get_machine_health", {"machine_id": machine_id})
+        if not h or h.get("error"):
+            return {"machine_id": machine_id, "status": "unknown", "source": "live", "error": (h or {}).get("error", "no data")}
         try:
             an = self._tool("get_anomaly_report", {"machine_id": machine_id})
         except Exception:  # noqa: BLE001
@@ -173,8 +177,12 @@ class LiveSim:
         status = {"critical": "critical", "watch": "warning"}.get(level, "ok" if h.get("state") in (None, "run", "idle") else h.get("state"))
         readings = {k: {"value": v} for k, v in (h.get("sensors") or {}).items()}
         out = {"machine_id": machine_id, "status": status, "machine_state": h.get("state"),
-               "readings": readings, "source": "live:/tools/get_machine_health",
-               "vib_multiple": h.get("vib_multiple")}
+               "readings": readings, "source": "live:/tools/get_diagnosis_context",
+               "vib_multiple": h.get("vib_multiple"),
+               "evidence": dc.get("evidence"), "affected_stations": dc.get("affected_stations"),
+               "open_work_orders": [{"id": w.get("id"), "status": w.get("status")} for w in dc.get("open_work_orders", [])],
+               "candidate_failure_modes": [f.get("name") or f.get("code") or str(f)[:40] for f in dc.get("candidate_failure_modes", [])][:6],
+               "decision": dc.get("decision")}
         if h.get("rul_s") is not None:
             out["remaining_useful_life_min"] = round(h["rul_s"] / 60.0, 1)
         if level:
@@ -194,11 +202,13 @@ class LiveSim:
             return {"error": res["error"], "source": "live:/tools/run_what_if"}
         b, s = (res.get("baseline") or {}).get("kpis", {}), (res.get("scenario") or {}).get("kpis", {})
         shift_h = max(((res.get("baseline") or {}).get("kpis", {}).get("t_s") or 28800) / 3600.0, 1.0)
-        rul_h = None
+        rul_h = rul_low_h = None
         try:
             h = self._tool("get_machine_health", {"machine_id": machine_id})
             if h.get("rul_s") is not None:
                 rul_h = round(h["rul_s"] / 3600.0, 2)
+            if h.get("rul_range_s"):
+                rul_low_h = round(h["rul_range_s"][0] / 3600.0, 2)
         except Exception:  # noqa: BLE001
             pass
         pick = lambda k: {"baseline": b.get(k), "scenario": s.get(k)}
@@ -206,9 +216,11 @@ class LiveSim:
             "type": "scenario_result", "id": f"SC-{next(_wo_counter)}", "source": "live:/tools/run_what_if",
             "query": {"op": op, "machine_id": machine_id, "hours": hours},
             "matched_scenario": "live simulation (branch from now to end of shift)", "rul_hours_at_alert": rul_h,
+            "rul_low_hours": rul_low_h,
             "kpis": {"throughput_per_hr": {"baseline": round((b.get("units") or 0) / 8.0, 1), "scenario": round((s.get("units") or 0) / 8.0, 1)},
                      "downtime_min": pick("downtime_min"), "oee": pick("oee"), "units": pick("units"),
-                     "failure_probability": None, "cost_usd": s.get("downtime_cost_usd")},
+                     "failure_probability": None, "cost_usd": s.get("downtime_cost_usd"),
+                     "cost_baseline_usd": b.get("downtime_cost_usd")},
             "about": res.get("summary"), "delta": res.get("delta"),
             "caveat": "throughput_per_hr = units / 8 h shift; failure probability is not modelled by the engine.",
         }

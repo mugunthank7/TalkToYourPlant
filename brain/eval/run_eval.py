@@ -73,6 +73,7 @@ def check_answer(q, res):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--retrieval-only", action="store_true")
+    ap.add_argument("--out", default="results_latest.json", help="results file name (use results_live.json for live-engine runs)")
     ap.add_argument("--cats", default="")
     ap.add_argument("--limit", type=int, default=0)
     a = ap.parse_args()
@@ -120,7 +121,7 @@ def main():
     for c, v in sorted(by_cat.items()):
         print(f"  {c:16s} {sum(v)}/{len(v)}")
     st.finish("done", summary={"pass": n_ok, "total": len(results), "by_category": {c: [sum(v), len(v)] for c, v in by_cat.items()}})
-    (HERE / "results_latest.json").write_text(json.dumps(
+    (HERE / a.out).write_text(json.dumps(
         {"retrieval": {"hit_at_6": hit, "mrr": mrr, "n": len(rows)}, "answers": results}, indent=1))
 
 

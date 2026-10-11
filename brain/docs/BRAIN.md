@@ -70,11 +70,21 @@ RAGAS needs its own venv and a judge model: see the header of `brain/eval/run_ra
 If Ollama is down or errors, the brain answers in degraded mode straight from the graph and retrieval (flagged `degraded`). Answers are cached by question, shift and pipeline version.
 
 ## Connecting to M's engine (SIM_MODE=live)
-`brain/app/sim_adapter.py` `LiveSim` calls the engine in `sim/` through its `/tools` endpoints:
-`get_machine_health` + `get_anomaly_report` (sensors, alert level, contributors, RUL), `run_what_if` (baseline vs scenario KPIs), `create_work_order`.
-Start the engine (`sim/README.md`, port 8000), then `SIM_MODE=live python3 brain/app/api.py`. Machines the engine does not simulate (all except `M01..M10`) fall back to the mock storyline data.
-Status: verified against a stub that returns the shapes read from `sim/plantsim/tools.py`; **not yet run against the real engine** (its saved anomaly model needs a newer numpy than this machine has, and there was no network to install it).
-Mock mode (default) builds from `data/out/events.json` and `data/out/scenarios/summary.json`.
+`LiveSim` in `brain/app/sim_adapter.py` uses the engine's `/tools`: `get_diagnosis_context` (sensors, evidence, affected stations, open work orders, candidate failure modes, anomaly alert with SHAP contributors and RUL interval), `get_anomaly_report`, `run_what_if`, `create_work_order`. Machines the engine does not simulate (all except `M01..M10`) fall back to the mock storyline data. Answers are never cached in live mode.
+
+**Verified end to end** against the real engine on this machine: why-is-M05-red (real SHAP contributors, RUL 157 min), keep-running-2h (engine branch: baseline vs scenario), injected fault on M03 (S04 stops, brain explains with affected stations and the work order).
+
+### Run everything
+```
+python3 -m venv sim/.venv                       # engine venv (needs numpy 2 / scikit-learn 1.9 to read its saved model)
+for p in simpy numpy pandas scipy scikit-learn joblib fastapi "uvicorn[standard]" websockets pyarrow httpx matplotlib pytest; do sim/.venv/bin/pip install "$p"; done
+brain/scripts/start_all.sh                      # :8000 engine, :8100 brain, :8200 runs, :8300 monitor
+brain/scripts/stop_all.sh
+```
+Dependency notes: the engine's `anomaly.joblib` was pickled with numpy 2.x / scikit-learn 1.9.1; loading it with numpy 1.26 / sklearn 1.3 fails (BitGenerator, `numpy._core`, then `AbsoluteError`), so the engine runs from its own `sim/.venv`. A single bulk `pip install -r` failed with DNS errors on this network; installing package by package worked. The brain itself keeps the older numpy; the two never share an environment.
+
+### Integration monitor (http://localhost:8300)
+Polls the engine every 2 s, draws OEE / throughput / M05 vibration + RUL / downtime cost with event markers, lists what changed (alerts, machine states, stopped stations, work orders), shows the brain's answer to each new alert or fault (auto-asked, with latency, tools, highlight, citations), has Inject fault / Clear faults / Ask buttons and a baseline-vs-now impact table.
 
 ## Evaluation
 `brain/eval/questions.jsonl`: 40 questions with gold answers drawn from the data (who to page, fault codes, SOPs, parts, repeat failures, keep-running, live storylines, hero path). `run_eval.py` reports retrieval hit@6/MRR (free) and end-to-end pass rate. `run_ragas.py` adds RAGAS metrics (faithfulness, answer relevancy, context precision/recall) with a local Ollama judge in an isolated venv. `embed_experiment.py` compares local embedding models (dense / BM25 / hybrid). Latest numbers: `brain/eval/results_latest.json`, `brain/eval/ragas_latest.json`.
