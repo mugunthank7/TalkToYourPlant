@@ -234,7 +234,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.05,
+   "latency_s": 0.06,
    "contexts": [
     "SOP-ROB-02",
     "MAN-WF"
@@ -265,7 +265,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.05,
+   "latency_s": 0.07,
    "contexts": [
     "MAN-WK",
     "WO-2026-007480"
@@ -296,7 +296,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.05,
+   "latency_s": 0.06,
    "contexts": [
     "MAN-GP",
     "SOP-CAS-01"
@@ -327,7 +327,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.05,
+   "latency_s": 0.08,
    "contexts": [
     "SOP-BAT-01",
     "MAN-TQ"
@@ -358,7 +358,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.07,
+   "latency_s": 0.06,
    "contexts": [
     "MAN-BL",
     "SOP-BAT-02"
@@ -389,7 +389,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.05,
+   "latency_s": 0.08,
    "contexts": [
     "MAN-CP",
     "SOP-UTL-01"
@@ -417,7 +417,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.05,
+   "latency_s": 0.06,
    "contexts": [
     "SOP-SAF-01"
    ],
@@ -443,7 +443,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.08,
+   "latency_s": 0.07,
    "contexts": [
     "SOP-MNT-01"
    ],
@@ -455,26 +455,37 @@
    "id": "Q17",
    "category": "sop",
    "question": "Which procedure covers FANUC backup battery alarms SRVO-062 and SRVO-065?",
-   "pass": true,
-   "fails": [],
+   "pass": false,
+   "fails": [
+    "missing any of ['SOP-ROB-02']",
+    "no verified citation"
+   ],
    "gold_source_seen": true,
-   "answer": "Procedures  |  INFO\n1 relevant procedure(s).\n\nPROCEDURE\n- SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering\n\nSources: [SOP-ROB-02]",
-   "citations": [
-    "SOP-ROB-02"
-   ],
+   "answer": "M08 Battery module stacker (station S08)  |  OK\nRunning normally.\n\nDO NOW\n1. Nothing to do. Keep watching vibration and temperature.",
+   "citations": [],
    "tools": [
-    "search_docs"
+    "get_sensor_state",
+    "graph_lookup",
+    "graph_lookup",
+    "search_docs",
+    "escalation_chain"
    ],
-   "highlight": [],
+   "highlight": [
+    "M08"
+   ],
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.06,
+   "latency_s": 0.37,
    "contexts": [
     "SOP-ROB-02"
    ],
    "contexts_text": [
-    "search_docs({\"query\": \"Which procedure covers FANUC backup battery alarms SRVO-062 and SRVO-065?\", \"doc_type\": \"sop\", \"k\": 4}) -> {\"results\": [{\"id\": \"SOP-ROB-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering]\\n## SRVO-065 BLAL (low battery) - do this the same shift\\n1. Keep the controller **powered ON** during replacement so data stays alive.\\n2. Replace the controller battery and the robot-base battery one at a time, checking polarity.\\n3. Record the date on the robot tag; clear the alarm.\"}, {\"id\": \"SOP-ROB-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering]\\n## Background\\nFANUC controllers keep absolute position (mastering) data in pulse coders powered by backup batteries. Two alarms matter:\\n- **SRVO-065 BLAL:** battery voltage is low, data is still intact. Warning, replace soon.\\n- **SRVO-062 BZAL:** battery voltage is zero, encoder data lost. Critical, the axis must be re-mastered.\\n\\nBatteries (lithium A02B-0200-K102 in the controller and robot base on many models) typically last 1-2 years. Replace on a schedule or at the first BLAL.\"}, {\"id\": \"SOP-ROB-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering]\\n## Notes\\nTypical downtime for BZAL is 90-300 minutes. Keep a controller backup current so that mastering data can be compared to the backup (p"
+    "get_sensor_state({\"machine_id\": \"M08\"}) -> {\"machine_id\": \"M08\", \"status\": \"ok\", \"machine_state\": \"up\", \"station\": \"S08\", \"readings\": {\"vibration_rms_mm_s\": {\"value\": 1.096}, \"vib_bpfo_band\": {\"value\": 0.0592}, \"temperature_c\": {\"value\": 37.77}, \"motor_current_a\": {\"value\": 15.8}, \"load_pct\": {\"value\": 100.0}, \"degradation\": {\"value\": 0.0}}, \"source\": \"live:/state\", \"vib_multiple\": null, \"evidence\": [\"Machine state: up. Station S08 is run.\"], \"affected_stations\": [], \"open_work_orders\": []}",
+    "graph_lookup({\"entity\": \"M08\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"M08\", \"fault_modes\": [{\"fault_id\": \"FAULT:BS:SRVO-062\", \"code\": \"SRVO-062\", \"description\": \"BZAL alarm: pulsecoder backup battery voltage zero, absolute position lost\", \"severity\": 3, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"FAN-A02B-0200-K102\", \"description\": \"Lithium backup battery A02B-0200-K102\", \"unit_cost\": 38.0, \"on_hand\": null}], \"causes\": [\"Encoder backup battery fully discharged\", \"Battery cable disconnected or broken inside base\", \"Controller powered off for a long period with dead battery\"], \"sensors\": [{\"channel\": \"battery_voltage_v\", \"shape\": \"decay\"}], \"documents\": [\"MAN-BS\"]}, {\"fault_id\": \"FAULT:BS:SRVO-065\", \"code\": \"SRVO-065\", \"description\": \"BLAL alarm: pulsecoder battery voltage low (data still intact)\", \"severity\": 1, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"FAN-A02B-0200-K102\", \"description\": \"Lithium backup battery A02B-0200-K102\", \"unit_cost\": 38.0, \"on_hand\": null}], \"causes\": [\"Battery approaching end of life (1-2 year typical life)\", \"Missed preventive battery replacement\"], \"sensors\": [{\"channel\": \"battery_voltage_v\", \"shape\": \"decay\"}], \"documents\": [\"MAN-BS\"]}, {\"fault_id\": \"FAULT:BS:SRVO-050\", \"code\": \"SRVO-050\", \"description\": \"Collision detect alarm\", \"severity\": 2, \"source\": \"oem_public\", \"parts\": [], \"causes\": [\"Part or fixture misplaced in the cell\", \"Gun tip stuck to panel\", \"Wrong payload setting\", \"Reducer wear",
+    "graph_lookup({\"entity\": \"M08\", \"what\": \"work_orders\", \"n\": 3}) -> {\"machine_id\": \"M08\", \"work_orders\": [{\"wo_id\": \"WO-2026-007829\", \"wo_type\": \"PM\", \"priority\": \"P3\", \"machine_id\": \"M08\", \"title\": \"Grease replenishment (J4-J6) per OEM table\", \"opened_ts\": \"2026-10-05T05:30\", \"closed_ts\": \"2026-10-05T21:48\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": null, \"symptom\": null, \"diagnosis\": null, \"root_cause\": null, \"action_taken\": \"[x] Purge grease at drain ports\\n[x] Apply specified grease volume per axis\\n[x] Wipe, run-in cycle\", \"parts_used\": [{\"part_no\": \"ROBO-GREASE-VIGO\", \"description\": \"Reducer grease 400 g\", \"qty\": 1, \"unit_cost\": 55.0}], \"downtime_min\": 0, \"assigned_tech\": \"BAP-E0399\", \"escalation_level_reached\": 0, \"sensor_snapshot\": null}, {\"wo_id\": \"WO-2026-007750\", \"wo_type\": \"PM\", \"priority\": \"P3\", \"machine_id\": \"M08\", \"title\": \"Backup battery replacement (controller + robot base)\", \"opened_ts\": \"2026-10-02T05:30\", \"closed_ts\": \"2026-10-02T10:23\", \"status\": \"completed\", \"shift\": \"A\", \"fault_code\": null, \"symptom\": null, \"diagnosis\": null, \"root_cause\": null, \"action_taken\": \"[x] Power ON; replace batteries one at a time\\n[x] Record date\\n[x] Confirm no BLAL/BZAL alarm\", \"parts_used\": [{\"part_no\": \"FAN-A02B-0200-K102\", \"description\": \"Lithium backup battery A02B-0200-K102\", \"qty\": 1, \"unit_cost\": 38.0}], \"downtime_min\": 0, \"assigned_tech\": \"BAP-E0348\", \"escalation_level_reached\": 0, \"sensor_snapshot\": null}, {\"wo_id\": \"WO-2026",
+    "search_docs({\"query\": \"Which procedure covers FANUC backup battery alarms SRVO-062 and SRVO-065?\", \"machine_id\": \"M08\", \"k\": 3}) -> {\"results\": [{\"id\": \"SOP-ROB-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering]\\n## SRVO-065 BLAL (low battery) - do this the same shift\\n1. Keep the controller **powered ON** during replacement so data stays alive.\\n2. Replace the controller battery and the robot-base battery one at a time, checking polarity.\\n3. Record the date on the robot tag; clear the alarm.\"}, {\"id\": \"SOP-ROB-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering]\\n## Background\\nFANUC controllers keep absolute position (mastering) data in pulse coders powered by backup batteries. Two alarms matter:\\n- **SRVO-065 BLAL:** battery voltage is low, data is still intact. Warning, replace soon.\\n- **SRVO-062 BZAL:** battery voltage is zero, encoder data lost. Critical, the axis must be re-mastered.\\n\\nBatteries (lithium A02B-0200-K102 in the controller and robot base on many models) typically last 1-2 years. Replace on a schedule or at the first BLAL.\"}, {\"id\": \"SOP-ROB-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering]\\n## Notes\\nTypical downtime for BZAL is 90-300 minutes. Keep a controller backup current so that mastering data can be compared to the backup (p",
+    "escalation_chain({\"machine_id\": \"M08\"}) -> {\"id\": \"M08-A\", \"machine_id\": \"M08\", \"shift\": \"A\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0123\", \"name\": \"Frank Morgan\", \"role\": \"Line Lead\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4223\", \"radio\": \"BAT-5D\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0348\", \"name\": \"Dennis Patterson\", \"role\": \"Robotics Technician (L2)\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4448\", \"radio\": \"PLT-6D\", \"pager\": \"\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0349\", \"name\": \"Timothy Allen\", \"role\": \"Robotics Technician (L2)\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4449\", \"radio\": \"PLT-87\", \"pager\": \"\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0166\", \"name\": \"Dmitri Foster\", \"role\": \"Maintenance Supervisor\", \"shift\": \"A\", \"mobile\": \"737-555-0176\", \"extension\": \"x4266\", \"radio\": \"PLT-47\", \"pager\": \"PG-82790\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0047\", \"name\": \"Arthur Vasquez\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"512-555-0128\", \"extension\": \"x4147\", \"radio\": \"BAT-54\", \"pager\": \"PG-D1349\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0048\", \"name\": \"George Adams\", \"role\": \"Controls Engineer\", \"shift\": \"D\", \"mobile\": \"737-5"
    ]
   },
   {
@@ -497,7 +508,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.07,
+   "latency_s": 0.05,
    "contexts": [
     "SOP-QA-01",
     "SOP-BAT-01",
@@ -511,26 +522,38 @@
    "id": "Q19",
    "category": "sop",
    "question": "Which SOP covers safe work on the high-voltage EV battery?",
-   "pass": true,
-   "fails": [],
+   "pass": false,
+   "fails": [
+    "missing any of ['SOP-SAF-02']",
+    "no verified citation"
+   ],
    "gold_source_seen": true,
-   "answer": "Procedures  |  INFO\n1 relevant procedure(s).\n\nPROCEDURE\n- SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure\n\nSources: [SOP-SAF-02]",
-   "citations": [
-    "SOP-SAF-02"
-   ],
+   "answer": "M08 Battery module stacker (station S08)  |  OK\nRunning normally.\n\nDO NOW\n1. Nothing to do. Keep watching vibration and temperature.",
+   "citations": [],
    "tools": [
-    "search_docs"
+    "get_sensor_state",
+    "graph_lookup",
+    "graph_lookup",
+    "search_docs",
+    "escalation_chain"
    ],
-   "highlight": [],
+   "highlight": [
+    "M08"
+   ],
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
    "latency_s": 0.08,
    "contexts": [
-    "SOP-SAF-02"
+    "SOP-SAF-02",
+    "SOP-SAF-04"
    ],
    "contexts_text": [
-    "search_docs({\"query\": \"Which SOP covers safe work on the high-voltage EV battery?\", \"doc_type\": \"sop\", \"k\": 4}) -> {\"results\": [{\"id\": \"SOP-SAF-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure]\\n## Records\\nEnergized work permits, insulation resistance logs, PPE glove test log, and incident reports.\"}, {\"id\": \"SOP-SAF-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure]\\n## Purpose\\nControl electrical shock, arc-flash and thermal risks when working on EV battery modules, packs and HV test equipment (typically 400 V to 800 V nominal; a pack with ~198 cells in series can operate from roughly 610 to 835 V).\"}, {\"id\": \"SOP-SAF-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure]\\n## Escalation\\nAny HV incident or suspected fault is **Level 6 immediately**: page HV Safety Engineer and EHS. Quarantine the pack in the marked battery quarantine bay (outdoors cage, 3 m separation).\"}, {\"id\": \"SOP-SAF-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure]\\n**Area:** BAT  |  **Owner:** HV Safety Engineer  |  **Revision:** C  |  **Effective:** 2025-03-01\\n\\n> **Synthetic training document.** Written for the Voltara Motors digital-twin demo. It is modeled on public OEM and industry information but it is NOT an OEM document. Items tagged `oem_public` were checked against public sources; items ta"
+    "get_sensor_state({\"machine_id\": \"M08\"}) -> {\"machine_id\": \"M08\", \"status\": \"ok\", \"machine_state\": \"up\", \"station\": \"S08\", \"readings\": {\"vibration_rms_mm_s\": {\"value\": 1.096}, \"vib_bpfo_band\": {\"value\": 0.0592}, \"temperature_c\": {\"value\": 37.77}, \"motor_current_a\": {\"value\": 15.8}, \"load_pct\": {\"value\": 100.0}, \"degradation\": {\"value\": 0.0}}, \"source\": \"live:/state\", \"vib_multiple\": null, \"evidence\": [\"Machine state: up. Station S08 is run.\"], \"affected_stations\": [], \"open_work_orders\": []}",
+    "graph_lookup({\"entity\": \"M08\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"M08\", \"fault_modes\": [{\"fault_id\": \"FAULT:BS:SRVO-062\", \"code\": \"SRVO-062\", \"description\": \"BZAL alarm: pulsecoder backup battery voltage zero, absolute position lost\", \"severity\": 3, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"FAN-A02B-0200-K102\", \"description\": \"Lithium backup battery A02B-0200-K102\", \"unit_cost\": 38.0, \"on_hand\": null}], \"causes\": [\"Encoder backup battery fully discharged\", \"Battery cable disconnected or broken inside base\", \"Controller powered off for a long period with dead battery\"], \"sensors\": [{\"channel\": \"battery_voltage_v\", \"shape\": \"decay\"}], \"documents\": [\"MAN-BS\"]}, {\"fault_id\": \"FAULT:BS:SRVO-065\", \"code\": \"SRVO-065\", \"description\": \"BLAL alarm: pulsecoder battery voltage low (data still intact)\", \"severity\": 1, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"FAN-A02B-0200-K102\", \"description\": \"Lithium backup battery A02B-0200-K102\", \"unit_cost\": 38.0, \"on_hand\": null}], \"causes\": [\"Battery approaching end of life (1-2 year typical life)\", \"Missed preventive battery replacement\"], \"sensors\": [{\"channel\": \"battery_voltage_v\", \"shape\": \"decay\"}], \"documents\": [\"MAN-BS\"]}, {\"fault_id\": \"FAULT:BS:SRVO-050\", \"code\": \"SRVO-050\", \"description\": \"Collision detect alarm\", \"severity\": 2, \"source\": \"oem_public\", \"parts\": [], \"causes\": [\"Part or fixture misplaced in the cell\", \"Gun tip stuck to panel\", \"Wrong payload setting\", \"Reducer wear",
+    "graph_lookup({\"entity\": \"M08\", \"what\": \"work_orders\", \"n\": 3}) -> {\"machine_id\": \"M08\", \"work_orders\": [{\"wo_id\": \"WO-2026-007829\", \"wo_type\": \"PM\", \"priority\": \"P3\", \"machine_id\": \"M08\", \"title\": \"Grease replenishment (J4-J6) per OEM table\", \"opened_ts\": \"2026-10-05T05:30\", \"closed_ts\": \"2026-10-05T21:48\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": null, \"symptom\": null, \"diagnosis\": null, \"root_cause\": null, \"action_taken\": \"[x] Purge grease at drain ports\\n[x] Apply specified grease volume per axis\\n[x] Wipe, run-in cycle\", \"parts_used\": [{\"part_no\": \"ROBO-GREASE-VIGO\", \"description\": \"Reducer grease 400 g\", \"qty\": 1, \"unit_cost\": 55.0}], \"downtime_min\": 0, \"assigned_tech\": \"BAP-E0399\", \"escalation_level_reached\": 0, \"sensor_snapshot\": null}, {\"wo_id\": \"WO-2026-007750\", \"wo_type\": \"PM\", \"priority\": \"P3\", \"machine_id\": \"M08\", \"title\": \"Backup battery replacement (controller + robot base)\", \"opened_ts\": \"2026-10-02T05:30\", \"closed_ts\": \"2026-10-02T10:23\", \"status\": \"completed\", \"shift\": \"A\", \"fault_code\": null, \"symptom\": null, \"diagnosis\": null, \"root_cause\": null, \"action_taken\": \"[x] Power ON; replace batteries one at a time\\n[x] Record date\\n[x] Confirm no BLAL/BZAL alarm\", \"parts_used\": [{\"part_no\": \"FAN-A02B-0200-K102\", \"description\": \"Lithium backup battery A02B-0200-K102\", \"qty\": 1, \"unit_cost\": 38.0}], \"downtime_min\": 0, \"assigned_tech\": \"BAP-E0348\", \"escalation_level_reached\": 0, \"sensor_snapshot\": null}, {\"wo_id\": \"WO-2026",
+    "search_docs({\"query\": \"Which SOP covers safe work on the high-voltage EV battery?\", \"machine_id\": \"M08\", \"k\": 3}) -> {\"results\": [{\"id\": \"SOP-SAF-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure]\\n## Records\\nEnergized work permits, insulation resistance logs, PPE glove test log, and incident reports.\"}, {\"id\": \"SOP-SAF-04\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-04: Robot Cell Entry, Teaching and Safeguarding]\\n## Safeguards\\nFence with interlocked gate, trapped-key or safety-rated door switch, light curtains at material windows, safety scanners at open cells, E-stops on each operator station and on the teach pendant. Safety circuit validation is part of the annual PM (ISO 10218 requires verification at defined intervals).\"}, {\"id\": \"SOP-SAF-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure]\\n## Escalation\\nAny HV incident or suspected fault is **Level 6 immediately**: page HV Safety Engineer and EHS. Quarantine the pack in the marked battery quarantine bay (outdoors cage, 3 m separation).\"}]}",
+    "escalation_chain({\"machine_id\": \"M08\"}) -> {\"id\": \"M08-A\", \"machine_id\": \"M08\", \"shift\": \"A\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0123\", \"name\": \"Frank Morgan\", \"role\": \"Line Lead\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4223\", \"radio\": \"BAT-5D\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0348\", \"name\": \"Dennis Patterson\", \"role\": \"Robotics Technician (L2)\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4448\", \"radio\": \"PLT-6D\", \"pager\": \"\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0349\", \"name\": \"Timothy Allen\", \"role\": \"Robotics Technician (L2)\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4449\", \"radio\": \"PLT-87\", \"pager\": \"\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0166\", \"name\": \"Dmitri Foster\", \"role\": \"Maintenance Supervisor\", \"shift\": \"A\", \"mobile\": \"737-555-0176\", \"extension\": \"x4266\", \"radio\": \"PLT-47\", \"pager\": \"PG-82790\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0047\", \"name\": \"Arthur Vasquez\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"512-555-0128\", \"extension\": \"x4147\", \"radio\": \"BAT-54\", \"pager\": \"PG-D1349\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0048\", \"name\": \"George Adams\", \"role\": \"Controls Engineer\", \"shift\": \"D\", \"mobile\": \"737-5"
    ]
   },
   {
@@ -586,7 +609,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.06,
+   "latency_s": 0.04,
    "contexts": [
     "WO-2026-001413",
     "WO-2025-002650",
@@ -650,7 +673,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.06,
+   "latency_s": 0.07,
    "contexts": [
     "WO-2025-002675",
     "WO-2026-007566",
@@ -710,7 +733,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.33,
+   "latency_s": 0.0,
    "contexts": [],
    "contexts_text": [
     "graph_lookup({\"entity\": \"CAS-GP-01\", \"what\": \"repeats\", \"fault_code\": \"GP-SHOT-SLOW\"}) -> {\"fault_code\": \"GP-SHOT-SLOW\", \"count_in_window\": 2, \"window_days\": 90, \"latest\": \"2026-10-02T15:14\", \"total\": 16}",
@@ -814,7 +837,7 @@
    "pass": true,
    "fails": [],
    "gold_source_seen": true,
-   "answer": "M05 Weld robot 2 (station S06)  |  WARNING\nKeep running 2 more hours? NOT RECOMMENDED. Exceeds the SOP-OPS-02 limit for a rising trend.\n\nWHAT HAPPENED\n- With the alert ignored for 2.0 h: 202 cars instead of 253 (51 fewer), downtime 173 min vs 96 min, OEE 63% vs 78%, 2,907,000 dollars extra in downtime cost.\n\nIMPACT\n- Downtime 172.8 min if you wait, versus 96.3 min if repaired now.\n- Downtime cost $6,565,600 versus $3,658,600.\n- OEE 0.627 versus 0.779.\n- Predicted remaining life 146 min (safe lower bound 20 min).\n\nDO NOW\n1. Anything beyond the current batch needs written Maintenance Manager approval, 15-minute re-checks and a technician on standby.\n2. Repair at the next buffer-protected stop; do not plan to run past the remaining life.\n\nSources: [SOP-OPS-02]",
+   "answer": "M05 Weld robot 2 (station S06)  |  WARNING\nKeep running 2 more hours? NOT RECOMMENDED. Exceeds the SOP-OPS-02 limit for a rising trend.\n\nWHAT HAPPENED\n- With the alert ignored for 2.0 h: 260 cars instead of 267 (7 fewer), downtime 69 min vs 77 min, OEE 79% vs 82%, 274,070 dollars saved in downtime cost.\n\nIMPACT\n- Downtime 69.4 min if you wait, versus 76.6 min if repaired now.\n- Downtime cost $2,636,109 versus $2,910,179.\n- OEE 0.792 versus 0.82.\n- Predicted remaining life 155 min (safe lower bound 22 min).\n\nDO NOW\n1. Anything beyond the current batch needs written Maintenance Manager approval, 15-minute re-checks and a technician on standby.\n2. Repair at the next buffer-protected stop; do not plan to run past the remaining life.\n\nSources: [SOP-OPS-02]",
    "citations": [
     "SOP-OPS-02"
    ],
@@ -829,13 +852,13 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 3.8,
+   "latency_s": 4.22,
    "contexts": [
     "SOP-OPS-02"
    ],
    "contexts_text": [
-    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"critical\", \"machine_state\": \"up\", \"station\": \"S06\", \"readings\": {\"vibration_rms_mm_s\": {\"value\": 0.941}, \"vib_bpfo_band\": {\"value\": 0.0749}, \"temperature_c\": {\"value\": 35.44}, \"motor_current_a\": {\"value\": 6.71}, \"load_pct\": {\"value\": 26.9}, \"degradation\": {\"value\": 0.0402}}, \"source\": \"live:/state\", \"vib_multiple\": 1.1, \"evidence\": [\"Vibration is 1.1x its healthy level.\", \"Machine state: up. Station S06 is run.\"], \"affected_stations\": [{\"station\": \"S01\", \"state\": \"fault\", \"reason\": \"M10 fault\"}, {\"station\": \"S04\", \"state\": \"starved\", \"reason\": \"waiting for cars\"}], \"open_work_orders\": [{\"id\": \"WO-SIM-0002\", \"status\": \"dispatched\"}], \"remaining_useful_life_min\": 147.0, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"critical\", \"score\": 0.7397, \"contributors\": [{\"signal\": \"bearing-defect band\", \"shap\": 0.0985}, {\"signal\": \"bearing-band trend\", \"shap\": 0.0908}, {\"signal\": \"vibration\", \"shap\": 0.0655}, {\"signal\": \"vibration trend\", \"shap\": 0.0595}], \"component_id\": \"m05_joint1_bearing\"}}",
-    "run_scenario({\"machine_id\": \"M05\", \"hours\": 2.0}) -> {\"type\": \"scenario_result\", \"id\": \"SC-1042\", \"source\": \"live:/tools/run_what_if\", \"query\": {\"op\": \"keep_running\", \"machine_id\": \"M05\", \"hours\": 2.0}, \"matched_scenario\": \"live simulation (branch from now to end of shift)\", \"rul_hours_at_alert\": 2.44, \"rul_low_hours\": 0.33, \"kpis\": {\"throughput_per_hr\": {\"baseline\": 31.6, \"scenario\": 25.2}, \"downtime_min\": {\"baseline\": 96.3, \"scenario\": 172.8}, \"oee\": {\"baseline\": 0.779, \"scenario\": 0.627}, \"units\": {\"baseline\": 253, \"scenario\": 202}, \"failure_probability\": null, \"cost_usd\": 6565600, \"cost_baseline_usd\": 3658600}, \"about\": \"With the alert ignored for 2.0 h: 202 cars instead of 253 (51 fewer), downtime 173 min vs 96 min, OEE 63% vs 78%, 2,907,000 dollars extra in downtime cost.\", \"delta\": {\"units\": -51, \"good_units\": -49, \"oee\": -0.152, \"availability\": -0.159, \"downtime_min\": 76.5, \"downtime_cost_usd\": 2907000, \"units_lost_vs_ideal\": 51.0}, \"caveat\": \"throughput_per_hr = units / 8 h shift; failure probability is not modelled by the engine.\"}",
+    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"critical\", \"machine_state\": \"up\", \"station\": \"S06\", \"readings\": {\"vibration_rms_mm_s\": {\"value\": 0.75}, \"vib_bpfo_band\": {\"value\": 0.08}, \"temperature_c\": {\"value\": 31.87}, \"motor_current_a\": {\"value\": 4.8}, \"load_pct\": {\"value\": 8.0}, \"degradation\": {\"value\": 0.0338}}, \"source\": \"live:/state\", \"vib_multiple\": 1.09, \"evidence\": [\"Vibration is 1.09x its healthy level.\", \"Machine state: up. Station S06 is run.\"], \"affected_stations\": [], \"open_work_orders\": [{\"id\": \"WO-SIM-0001\", \"status\": \"open\"}], \"remaining_useful_life_min\": 155.4, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"critical\", \"score\": 0.7379, \"contributors\": [{\"signal\": \"bearing-defect band\", \"shap\": 0.121}, {\"signal\": \"bearing-band trend\", \"shap\": 0.1113}, {\"signal\": \"vibration trend\", \"shap\": 0.0246}, {\"signal\": \"temperature\", \"shap\": 0.021}], \"component_id\": \"m05_joint1_bearing\"}}",
+    "run_scenario({\"machine_id\": \"M05\", \"hours\": 2.0}) -> {\"type\": \"scenario_result\", \"id\": \"SC-1042\", \"source\": \"live:/tools/run_what_if\", \"query\": {\"op\": \"keep_running\", \"machine_id\": \"M05\", \"hours\": 2.0}, \"matched_scenario\": \"live simulation (branch from now to end of shift)\", \"rul_hours_at_alert\": 2.58, \"rul_low_hours\": 0.37, \"kpis\": {\"throughput_per_hr\": {\"baseline\": 33.4, \"scenario\": 32.5}, \"downtime_min\": {\"baseline\": 76.6, \"scenario\": 69.4}, \"oee\": {\"baseline\": 0.82, \"scenario\": 0.792}, \"units\": {\"baseline\": 267, \"scenario\": 260}, \"failure_probability\": null, \"cost_usd\": 2636109, \"cost_baseline_usd\": 2910179}, \"about\": \"With the alert ignored for 2.0 h: 260 cars instead of 267 (7 fewer), downtime 69 min vs 77 min, OEE 79% vs 82%, 274,070 dollars saved in downtime cost.\", \"delta\": {\"units\": -7, \"good_units\": -8, \"oee\": -0.028, \"availability\": 0.015, \"downtime_min\": -7.2, \"downtime_cost_usd\": -274070, \"units_lost_vs_ideal\": 7.0}, \"caveat\": \"throughput_per_hr = units / 8 h shift; failure probability is not modelled by the engine.\"}",
     "search_docs({\"query\": \"run-extension risk decision keep running more hours\", \"doc_type\": \"sop\", \"k\": 2}) -> {\"results\": [{\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Purpose\\nProvide a consistent, risk-based way to decide whether a machine showing warning signs may keep producing until a planned stop, a shift end, or a defined time extension.\"}, {\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Documentation\\nRecord the decision, approver, time limit, mitigations and monitoring in the work order and shift handover. After the extension, close the loop: confirm outcome and update the PdM/anomaly model feedback.\"}]}"
    ]
   },
@@ -846,7 +869,7 @@
    "pass": true,
    "fails": [],
    "gold_source_seen": true,
-   "answer": "M05 Weld robot 2 (station S06)  |  WARNING\nKeep running 0.5 more hours? ONLY the current batch, with supervisor approval.\n\nWHAT HAPPENED\n- With the alert ignored for 0.5 h: 253 cars instead of 253 (0 more), downtime 96 min vs 96 min, OEE 78% vs 78%, 0 dollars extra in downtime cost.\n\nIMPACT\n- Downtime 96.3 min if you wait, versus 96.3 min if repaired now.\n- Downtime cost $3,658,600 versus $3,658,600.\n- OEE 0.779 versus 0.779.\n- Predicted remaining life 146 min (safe lower bound 19 min).\n\nDO NOW\n1. Repair at the next buffer-protected stop; do not plan to run past the remaining life.\n\nSources: [SOP-OPS-02]",
+   "answer": "M05 Weld robot 2 (station S06)  |  WARNING\nKeep running 0.5 more hours? ONLY the current batch, with supervisor approval.\n\nWHAT HAPPENED\n- With the alert ignored for 0.5 h: 267 cars instead of 267 (0 more), downtime 77 min vs 77 min, OEE 82% vs 82%, 0 dollars extra in downtime cost.\n\nIMPACT\n- Downtime 76.6 min if you wait, versus 76.6 min if repaired now.\n- Downtime cost $2,910,179 versus $2,910,179.\n- OEE 0.82 versus 0.82.\n- Predicted remaining life 154 min (safe lower bound 22 min).\n\nDO NOW\n1. Repair at the next buffer-protected stop; do not plan to run past the remaining life.\n\nSources: [SOP-OPS-02]",
    "citations": [
     "SOP-OPS-02"
    ],
@@ -861,13 +884,13 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 4.39,
+   "latency_s": 4.23,
    "contexts": [
     "SOP-OPS-02"
    ],
    "contexts_text": [
-    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"critical\", \"machine_state\": \"up\", \"station\": \"S06\", \"readings\": {\"vibration_rms_mm_s\": {\"value\": 1.009}, \"vib_bpfo_band\": {\"value\": 0.0849}, \"temperature_c\": {\"value\": 39.99}, \"motor_current_a\": {\"value\": 10.21}, \"load_pct\": {\"value\": 59.3}, \"degradation\": {\"value\": 0.0412}}, \"source\": \"live:/state\", \"vib_multiple\": 1.11, \"evidence\": [\"Vibration is 1.11x its healthy level.\", \"Machine state: up. Station S06 is run.\"], \"affected_stations\": [{\"station\": \"S01\", \"state\": \"fault\", \"reason\": \"M10 fault\"}], \"open_work_orders\": [{\"id\": \"WO-SIM-0002\", \"status\": \"dispatched\"}], \"remaining_useful_life_min\": 146.4, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"critical\", \"score\": 0.7397, \"contributors\": [{\"signal\": \"bearing-defect band\", \"shap\": 0.0985}, {\"signal\": \"bearing-band trend\", \"shap\": 0.0908}, {\"signal\": \"vibration\", \"shap\": 0.0655}, {\"signal\": \"vibration trend\", \"shap\": 0.0595}], \"component_id\": \"m05_joint1_bearing\"}}",
-    "run_scenario({\"machine_id\": \"M05\", \"hours\": 0.5}) -> {\"type\": \"scenario_result\", \"id\": \"SC-1043\", \"source\": \"live:/tools/run_what_if\", \"query\": {\"op\": \"keep_running\", \"machine_id\": \"M05\", \"hours\": 0.5}, \"matched_scenario\": \"live simulation (branch from now to end of shift)\", \"rul_hours_at_alert\": 2.43, \"rul_low_hours\": 0.32, \"kpis\": {\"throughput_per_hr\": {\"baseline\": 31.6, \"scenario\": 31.6}, \"downtime_min\": {\"baseline\": 96.3, \"scenario\": 96.3}, \"oee\": {\"baseline\": 0.779, \"scenario\": 0.779}, \"units\": {\"baseline\": 253, \"scenario\": 253}, \"failure_probability\": null, \"cost_usd\": 3658600, \"cost_baseline_usd\": 3658600}, \"about\": \"With the alert ignored for 0.5 h: 253 cars instead of 253 (0 more), downtime 96 min vs 96 min, OEE 78% vs 78%, 0 dollars extra in downtime cost.\", \"delta\": {\"units\": 0, \"good_units\": 0, \"oee\": 0.0, \"availability\": 0.0, \"downtime_min\": 0.0, \"downtime_cost_usd\": 0, \"units_lost_vs_ideal\": 0.0}, \"caveat\": \"throughput_per_hr = units / 8 h shift; failure probability is not modelled by the engine.\"}",
+    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"critical\", \"machine_state\": \"up\", \"station\": \"S06\", \"readings\": {\"vibration_rms_mm_s\": {\"value\": 0.794}, \"vib_bpfo_band\": {\"value\": 0.0657}, \"temperature_c\": {\"value\": 32.19}, \"motor_current_a\": {\"value\": 5.21}, \"load_pct\": {\"value\": 8.0}, \"degradation\": {\"value\": 0.035}}, \"source\": \"live:/state\", \"vib_multiple\": 1.09, \"evidence\": [\"Vibration is 1.09x its healthy level.\", \"Machine state: up. Station S06 is run.\"], \"affected_stations\": [], \"open_work_orders\": [{\"id\": \"WO-SIM-0001\", \"status\": \"dispatched\"}], \"remaining_useful_life_min\": 154.6, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"critical\", \"score\": 0.7375, \"contributors\": [{\"signal\": \"bearing-defect band\", \"shap\": 0.121}, {\"signal\": \"bearing-band trend\", \"shap\": 0.1113}, {\"signal\": \"vibration trend\", \"shap\": 0.0246}, {\"signal\": \"temperature\", \"shap\": 0.021}], \"component_id\": \"m05_joint1_bearing\"}}",
+    "run_scenario({\"machine_id\": \"M05\", \"hours\": 0.5}) -> {\"type\": \"scenario_result\", \"id\": \"SC-1043\", \"source\": \"live:/tools/run_what_if\", \"query\": {\"op\": \"keep_running\", \"machine_id\": \"M05\", \"hours\": 0.5}, \"matched_scenario\": \"live simulation (branch from now to end of shift)\", \"rul_hours_at_alert\": 2.56, \"rul_low_hours\": 0.36, \"kpis\": {\"throughput_per_hr\": {\"baseline\": 33.4, \"scenario\": 33.4}, \"downtime_min\": {\"baseline\": 76.6, \"scenario\": 76.6}, \"oee\": {\"baseline\": 0.82, \"scenario\": 0.82}, \"units\": {\"baseline\": 267, \"scenario\": 267}, \"failure_probability\": null, \"cost_usd\": 2910179, \"cost_baseline_usd\": 2910179}, \"about\": \"With the alert ignored for 0.5 h: 267 cars instead of 267 (0 more), downtime 77 min vs 77 min, OEE 82% vs 82%, 0 dollars extra in downtime cost.\", \"delta\": {\"units\": 0, \"good_units\": 0, \"oee\": 0.0, \"availability\": 0.0, \"downtime_min\": 0.0, \"downtime_cost_usd\": 0, \"units_lost_vs_ideal\": 0.0}, \"caveat\": \"throughput_per_hr = units / 8 h shift; failure probability is not modelled by the engine.\"}",
     "search_docs({\"query\": \"run-extension risk decision keep running more hours\", \"doc_type\": \"sop\", \"k\": 2}) -> {\"results\": [{\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Purpose\\nProvide a consistent, risk-based way to decide whether a machine showing warning signs may keep producing until a planned stop, a shift end, or a defined time extension.\"}, {\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Documentation\\nRecord the decision, approver, time limit, mitigations and monitoring in the work order and shift handover. After the extension, close the loop: confirm outcome and update the PdM/anomaly model feedback.\"}]}"
    ]
   },
@@ -878,7 +901,7 @@
    "pass": true,
    "fails": [],
    "gold_source_seen": true,
-   "answer": "M05 Weld robot 2 (station S06)  |  CRITICAL\nKeep running 4 more hours? NO. Longer than the remaining life; failure is likely.\n\nWHAT HAPPENED\n- With the alert ignored for 4.0 h: 159 cars instead of 253 (94 fewer), downtime 251 min vs 96 min, OEE 47% vs 78%, 5,871,000 dollars extra in downtime cost.\n\nIMPACT\n- Downtime 250.8 min if you wait, versus 96.3 min if repaired now.\n- Downtime cost $9,529,600 versus $3,658,600.\n- OEE 0.466 versus 0.779.\n- Predicted remaining life 145 min (safe lower bound 19 min).\n\nDO NOW\n1. Anything beyond the current batch needs written Maintenance Manager approval, 15-minute re-checks and a technician on standby.\n2. Repair at the next buffer-protected stop; do not plan to run past the remaining life.\n\nSources: [SOP-OPS-02]",
+   "answer": "M05 Weld robot 2 (station S06)  |  CRITICAL\nKeep running 4 more hours? NO. Longer than the remaining life; failure is likely.\n\nWHAT HAPPENED\n- With the alert ignored for 4.0 h: 267 cars instead of 267 (0 more), downtime 77 min vs 77 min, OEE 82% vs 82%, 0 dollars extra in downtime cost.\n\nIMPACT\n- Downtime 76.6 min if you wait, versus 76.6 min if repaired now.\n- Downtime cost $2,910,179 versus $2,910,179.\n- OEE 0.82 versus 0.82.\n- Predicted remaining life 153 min (safe lower bound 21 min).\n\nDO NOW\n1. Anything beyond the current batch needs written Maintenance Manager approval, 15-minute re-checks and a technician on standby.\n2. Repair at the next buffer-protected stop; do not plan to run past the remaining life.\n\nSources: [SOP-OPS-02]",
    "citations": [
     "SOP-OPS-02"
    ],
@@ -893,13 +916,13 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 3.45,
+   "latency_s": 4.3,
    "contexts": [
     "SOP-OPS-02"
    ],
    "contexts_text": [
-    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"critical\", \"machine_state\": \"micro\", \"station\": \"S06\", \"readings\": {\"vibration_rms_mm_s\": {\"value\": 0.05}, \"vib_bpfo_band\": {\"value\": 0.0763}, \"temperature_c\": {\"value\": 31.28}, \"motor_current_a\": {\"value\": 4.18}, \"load_pct\": {\"value\": 0.0}, \"degradation\": {\"value\": 0.0423}}, \"source\": \"live:/state\", \"vib_multiple\": 1.11, \"evidence\": [\"Vibration is 1.11x its healthy level.\", \"Machine state: micro. Station S06 is micro (M05 micro-stop).\"], \"affected_stations\": [{\"station\": \"S01\", \"state\": \"fault\", \"reason\": \"M10 fault\"}, {\"station\": \"S06\", \"state\": \"micro\", \"reason\": \"M05 micro-stop\"}], \"open_work_orders\": [{\"id\": \"WO-SIM-0002\", \"status\": \"dispatched\"}], \"remaining_useful_life_min\": 145.7, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"critical\", \"score\": 0.7397, \"contributors\": [{\"signal\": \"bearing-defect band\", \"shap\": 0.0985}, {\"signal\": \"bearing-band trend\", \"shap\": 0.0908}, {\"signal\": \"vibration\", \"shap\": 0.0655}, {\"signal\": \"vibration trend\", \"shap\": 0.0595}], \"component_id\": \"m05_joint1_bearing\"}}",
-    "run_scenario({\"machine_id\": \"M05\", \"hours\": 4.0}) -> {\"type\": \"scenario_result\", \"id\": \"SC-1044\", \"source\": \"live:/tools/run_what_if\", \"query\": {\"op\": \"keep_running\", \"machine_id\": \"M05\", \"hours\": 4.0}, \"matched_scenario\": \"live simulation (branch from now to end of shift)\", \"rul_hours_at_alert\": 2.42, \"rul_low_hours\": 0.31, \"kpis\": {\"throughput_per_hr\": {\"baseline\": 31.6, \"scenario\": 19.9}, \"downtime_min\": {\"baseline\": 96.3, \"scenario\": 250.8}, \"oee\": {\"baseline\": 0.779, \"scenario\": 0.466}, \"units\": {\"baseline\": 253, \"scenario\": 159}, \"failure_probability\": null, \"cost_usd\": 9529600, \"cost_baseline_usd\": 3658600}, \"about\": \"With the alert ignored for 4.0 h: 159 cars instead of 253 (94 fewer), downtime 251 min vs 96 min, OEE 47% vs 78%, 5,871,000 dollars extra in downtime cost.\", \"delta\": {\"units\": -94, \"good_units\": -92, \"oee\": -0.313, \"availability\": -0.321, \"downtime_min\": 154.5, \"downtime_cost_usd\": 5871000, \"units_lost_vs_ideal\": 94.0}, \"caveat\": \"throughput_per_hr = units / 8 h shift; failure probability is not modelled by the engine.\"}",
+    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"critical\", \"machine_state\": \"up\", \"station\": \"S06\", \"readings\": {\"vibration_rms_mm_s\": {\"value\": 0.768}, \"vib_bpfo_band\": {\"value\": 0.0777}, \"temperature_c\": {\"value\": 32.02}, \"motor_current_a\": {\"value\": 4.99}, \"load_pct\": {\"value\": 8.0}, \"degradation\": {\"value\": 0.036}}, \"source\": \"live:/state\", \"vib_multiple\": 1.09, \"evidence\": [\"Vibration is 1.09x its healthy level.\", \"Machine state: up. Station S06 is run.\"], \"affected_stations\": [{\"station\": \"S04\", \"state\": \"micro\", \"reason\": \"M03 micro-stop\"}], \"open_work_orders\": [{\"id\": \"WO-SIM-0001\", \"status\": \"dispatched\"}], \"remaining_useful_life_min\": 153.9, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"critical\", \"score\": 0.7513, \"contributors\": [{\"signal\": \"bearing-defect band\", \"shap\": 0.121}, {\"signal\": \"bearing-band trend\", \"shap\": 0.1113}, {\"signal\": \"vibration trend\", \"shap\": 0.0246}, {\"signal\": \"temperature\", \"shap\": 0.021}], \"component_id\": \"m05_joint1_bearing\"}}",
+    "run_scenario({\"machine_id\": \"M05\", \"hours\": 4.0}) -> {\"type\": \"scenario_result\", \"id\": \"SC-1044\", \"source\": \"live:/tools/run_what_if\", \"query\": {\"op\": \"keep_running\", \"machine_id\": \"M05\", \"hours\": 4.0}, \"matched_scenario\": \"live simulation (branch from now to end of shift)\", \"rul_hours_at_alert\": 2.55, \"rul_low_hours\": 0.35, \"kpis\": {\"throughput_per_hr\": {\"baseline\": 33.4, \"scenario\": 33.4}, \"downtime_min\": {\"baseline\": 76.6, \"scenario\": 76.6}, \"oee\": {\"baseline\": 0.82, \"scenario\": 0.82}, \"units\": {\"baseline\": 267, \"scenario\": 267}, \"failure_probability\": null, \"cost_usd\": 2910179, \"cost_baseline_usd\": 2910179}, \"about\": \"With the alert ignored for 4.0 h: 267 cars instead of 267 (0 more), downtime 77 min vs 77 min, OEE 82% vs 82%, 0 dollars extra in downtime cost.\", \"delta\": {\"units\": 0, \"good_units\": 0, \"oee\": 0.0, \"availability\": 0.0, \"downtime_min\": 0.0, \"downtime_cost_usd\": 0, \"units_lost_vs_ideal\": 0.0}, \"caveat\": \"throughput_per_hr = units / 8 h shift; failure probability is not modelled by the engine.\"}",
     "search_docs({\"query\": \"run-extension risk decision keep running more hours\", \"doc_type\": \"sop\", \"k\": 2}) -> {\"results\": [{\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Purpose\\nProvide a consistent, risk-based way to decide whether a machine showing warning signs may keep producing until a planned stop, a shift end, or a defined time extension.\"}, {\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Documentation\\nRecord the decision, approver, time limit, mitigations and monitoring in the work order and shift handover. After the extension, close the loop: confirm outcome and update the PdM/anomaly model feedback.\"}]}"
    ]
   },
@@ -925,7 +948,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.28,
+   "latency_s": 0.09,
    "contexts": [
     "WO-2025-005764",
     "WO-2025-005569",
@@ -961,7 +984,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.17,
+   "latency_s": 0.08,
    "contexts": [
     "WO-2025-002045",
     "WO-2025-000537",
@@ -997,7 +1020,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.08,
+   "latency_s": 0.09,
    "contexts": [
     "INC-0060",
     "INC-0056",
@@ -1069,7 +1092,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.1,
+   "latency_s": 0.07,
    "contexts": [
     "SOP-UTL-02",
     "INC-0004",
@@ -1126,7 +1149,7 @@
    "pass": true,
    "fails": [],
    "gold_source_seen": true,
-   "answer": "M05 Weld robot 2 (station S06)  |  CRITICAL\nNeeds action now.\n\nWHAT HAPPENED\n- M05 Weld robot 2 is stopped (repair).\n- Joint bearing wear (bearing_wear).\n- Likely cause: lubricant breakdown or missed regrease interval.\n- Vibration is 1.11x the healthy level.\n- Flagged because of: bearing-defect band, bearing-band trend.\n\nIMPACT\n- Affected stations: S01 fault, S06 repair.\n- Downtime costs about $38,000 per minute.\n- Open work order: WO-SIM-0002.\n\nDO NOW\n1. Operator: press the andon, tell the line lead, note the time.\n2. Page L1 Yuki Alvarez (x4438) now.\n3. Bring bearing_6208 from the spares cage (S12); 2 in stock.\n4. Follow SOP-MNT-M05-01.\n\nWHO TO PAGE\n- L1 Yuki Alvarez (Robotics Technician (L1)), x4438, radio PLT-22: now\n- L2 Nicholas Mukherjee (Robotics Technician (L2)), x4434, radio PLT-CA: after 8 min if no answer\n\nPART\n- bearing_6208 (Deep groove ball bearing 6208 (A1 joint))\n\nPROCEDURE\n- SOP-MNT-M05-01\n\nSources: [WO-SIM-0002] [SOP-MNT-M05-01] [M05-A]",
+   "answer": "M05 Weld robot 2 (station S06)  |  CRITICAL\nNeeds action now.\n\nWHAT HAPPENED\n- Joint bearing wear (bearing_wear).\n- Likely cause: lubricant breakdown or missed regrease interval.\n- Vibration is 1.1x the healthy level.\n- Flagged because of: bearing-defect band, bearing-band trend.\n\nIMPACT\n- About 153 minutes of useful life left.\n- Open work order: WO-SIM-0001.\n\nDO NOW\n1. Page L1 Yuki Alvarez (x4438) now.\n2. Bring bearing_6208 from the spares cage (S12); 2 in stock.\n3. Follow SOP-MNT-M05-01.\n\nWHO TO PAGE\n- L1 Yuki Alvarez (Robotics Technician (L1)), x4438, radio PLT-22: now\n- L2 Nicholas Mukherjee (Robotics Technician (L2)), x4434, radio PLT-CA: after 8 min if no answer\n\nPART\n- bearing_6208 (Deep groove ball bearing 6208 (A1 joint))\n\nPROCEDURE\n- SOP-MNT-M05-01\n\nSources: [WO-SIM-0001] [SOP-MNT-M05-01] [M05-A]",
    "citations": [
     "SOP-MNT-M05-01",
     "M05-A"
@@ -1144,13 +1167,13 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.07,
+   "latency_s": 0.06,
    "contexts": [
     "SOP-MNT-M05-01",
     "S06-FAIL"
    ],
    "contexts_text": [
-    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"critical\", \"machine_state\": \"repair\", \"station\": \"S06\", \"readings\": {\"vibration_rms_mm_s\": {\"value\": 0.05}, \"vib_bpfo_band\": {\"value\": 0.0822}, \"temperature_c\": {\"value\": 31.48}, \"motor_current_a\": {\"value\": 4.17}, \"load_pct\": {\"value\": 0.0}, \"degradation\": {\"value\": 0.0434}}, \"source\": \"live:/state\", \"vib_multiple\": 1.11, \"evidence\": [\"Vibration is 1.11x its healthy level.\", \"Machine state: repair. Station S06 is repair (M05 under repair).\"], \"affected_stations\": [{\"station\": \"S01\", \"state\": \"fault\", \"reason\": \"M10 fault\"}, {\"station\": \"S06\", \"state\": \"repair\", \"reason\": \"M05 under repair\"}], \"open_work_orders\": [{\"id\": \"WO-SIM-0002\", \"status\": \"on_site\"}], \"remaining_useful_life_min\": 145.0, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"critical\", \"score\": 0.7397, \"contributors\": [{\"signal\": \"bearing-defect band\", \"shap\": 0.0985}, {\"signal\": \"bearing-band trend\", \"shap\": 0.0908}, {\"signal\": \"vibration\", \"shap\": 0.0655}, {\"signal\": \"vibration trend\", \"shap\": 0.0595}], \"component_id\": \"m05_joint1_bearing\"}}",
+    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"critical\", \"machine_state\": \"up\", \"station\": \"S06\", \"readings\": {\"vibration_rms_mm_s\": {\"value\": 1.286}, \"vib_bpfo_band\": {\"value\": 0.107}, \"temperature_c\": {\"value\": 46.06}, \"motor_current_a\": {\"value\": 14.06}, \"load_pct\": {\"value\": 100.0}, \"degradation\": {\"value\": 0.0371}}, \"source\": \"live:/state\", \"vib_multiple\": 1.1, \"evidence\": [\"Vibration is 1.1x its healthy level.\", \"Machine state: up. Station S06 is run.\"], \"affected_stations\": [{\"station\": \"S04\", \"state\": \"micro\", \"reason\": \"M03 micro-stop\"}], \"open_work_orders\": [{\"id\": \"WO-SIM-0001\", \"status\": \"dispatched\"}], \"remaining_useful_life_min\": 153.1, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"critical\", \"score\": 0.7513, \"contributors\": [{\"signal\": \"bearing-defect band\", \"shap\": 0.121}, {\"signal\": \"bearing-band trend\", \"shap\": 0.1113}, {\"signal\": \"vibration trend\", \"shap\": 0.0246}, {\"signal\": \"temperature\", \"shap\": 0.021}], \"component_id\": \"m05_joint1_bearing\"}}",
     "graph_lookup({\"entity\": \"M05\", \"what\": \"fault_modes\", \"fault_code\": \"bearing_wear\"}) -> {\"machine_id\": \"M05\", \"fault_modes\": [{\"fault_id\": \"bearing_wear\", \"code\": \"bearing_wear\", \"description\": \"Joint bearing wear\", \"severity\": null, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"bearing_6208\", \"description\": \"Deep groove ball bearing 6208 (A1 joint)\", \"unit_cost\": null, \"on_hand\": 2}], \"causes\": [\"Lubricant breakdown or missed regrease interval\", \"Contamination at the axis 1 joint\", \"Collision or overload event\"], \"sensors\": [{\"channel\": \"vibration_rms\", \"shape\": null}], \"documents\": [\"SOP-MNT-M05-01\"]}, {\"fault_id\": \"FAULT:WK:KSS-MAINT-OIL\", \"code\": \"KSS-MAINT-OIL\", \"description\": \"Maintenance reminder: gear oil change due (A1-A3)\", \"severity\": 1, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"KUKA-OIL-S150-20L\", \"description\": \"Shell Tivela S150 gear oil 20 L\", \"unit_cost\": 310.0, \"on_hand\": null}], \"causes\": [\"Operating hours reached service interval (10,000-20,000 h or 3-4 years depending on model)\"], \"sensors\": [{\"channel\": \"gearbox_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-27008\", \"code\": \"KSS-27008\", \"description\": \"Brake test failed on axis\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"KUKA-MTR-A4\", \"description\": \"Axis 4 motor with brake\", \"unit_cost\": 4900.0, \"on_hand\": null}], \"causes\": [\"Brake wear (excess braking angle)\", \"Brake contamination with lubricant\", \"Brake release voltage low\"], \"se",
     "graph_lookup({\"entity\": \"M05\", \"what\": \"work_orders\", \"n\": 3}) -> {\"machine_id\": \"M05\", \"work_orders\": [{\"wo_id\": \"WO-2026-007948\", \"wo_type\": \"PM\", \"priority\": \"P3\", \"machine_id\": \"M05\", \"title\": \"Tip dress / change per count, cooling flow check\", \"opened_ts\": \"2026-10-10T05:30\", \"closed_ts\": \"2026-10-10T09:08\", \"status\": \"completed\", \"shift\": \"A\", \"fault_code\": null, \"symptom\": null, \"diagnosis\": null, \"root_cause\": null, \"action_taken\": \"[x] Dress tips\\n[x] Check cooling flow >= 4 l/min\", \"parts_used\": [{\"part_no\": \"WLD-TIP-CAP-16\", \"description\": \"Copper cap tip 16 mm (box 50)\", \"qty\": 1, \"unit_cost\": 62.0}], \"downtime_min\": 0, \"assigned_tech\": \"A-TECH01\", \"escalation_level_reached\": 0, \"sensor_snapshot\": null}, {\"wo_id\": \"WO-2026-007895\", \"wo_type\": \"PM\", \"priority\": \"P3\", \"machine_id\": \"M05\", \"title\": \"Tip dress / change per count, cooling flow check\", \"opened_ts\": \"2026-10-08T05:30\", \"closed_ts\": \"2026-10-10T15:49\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": null, \"symptom\": null, \"diagnosis\": null, \"root_cause\": null, \"action_taken\": \"[x] Dress tips\\n[x] Check cooling flow >= 4 l/min\", \"parts_used\": [{\"part_no\": \"WLD-TIP-CAP-16\", \"description\": \"Copper cap tip 16 mm (box 50)\", \"qty\": 1, \"unit_cost\": 62.0}], \"downtime_min\": 0, \"assigned_tech\": \"B-TECH01\", \"escalation_level_reached\": 0, \"sensor_snapshot\": null}, {\"wo_id\": \"WO-2026-007889\", \"wo_type\": \"CM\", \"priority\": \"P4\", \"machine_id\": \"M05\", \"title\": \"WG-TIP-WEAR: Electrode t",
     "search_docs({\"query\": \"Why is M05 red?\", \"machine_id\": \"M05\", \"k\": 3}) -> {\"results\": [{\"id\": \"SOP-MNT-M05-01\", \"type\": \"sop\", \"machine\": \"M05\", \"text\": \"[SOP-MNT-M05-01: Likely cause (failure mode: bearing_wear)]\\n## Likely cause (failure mode: bearing_wear)\\nLubricant breakdown or contamination at the axis 1 joint bearing (`m05_joint1_bearing`), often after a collision event or a missed regrease interval. Left running, wear accelerates and can seize the joint (long unplanned stop).\"}, {\"id\": \"S06-FAIL\", \"type\": \"station_failures\", \"machine\": \"M05\", \"text\": \"Failure modes the simulator can inject on M05 Weld robot 2 (station S06): bearing_wear on joint1_bearing: symptom high vibration, rising temperature; cause lubrication loss and fatigue; repair: Replace joint bearing and regrease (about 90 min, part bearing_6208) | bearing_wear on joint2_bearing: symptom high vibration, rising temperature; cause lubrication loss and fatigue; repair: Replace joint bearing and regrease (about 90 min, part bearing_6208) | servo_motor_fault on servo_motor: symptom high motor current, overheating; cause winding degradation; repair: Replace servo motor and recalibrat\"}, {\"id\": \"SOP-MNT-M05-01\", \"type\": \"sop\", \"machine\": \"M05\", \"text\": \"[SOP-MNT-M05-01: Symptom pattern]\\n## Symptom pattern\\n- `vibration_rms` rises steadily over hours, with energy in the bearing defect band growing faster than overall RMS.\\n- `temperature_c` (axis 1 housing) climbs 10 to 15 C above basel",
@@ -1190,9 +1213,9 @@
    "pass": true,
    "fails": [],
    "gold_source_seen": true,
-   "answer": "M05 Weld robot 2 (station S06)  |  INFO\nWork order WO-SIM-0004 created.\n\nWHAT HAPPENED\n- Component m05_joint1_bearing; fault bearing_wear.\n\nIMPACT\n- Downtime costs about $38,000 per minute until it is fixed.\n\nDO NOW\n1. A technician is dispatched; the engine opens the work order.\n\nPART\n- bearing_6208\n\nSources: [WO-SIM-0004]",
+   "answer": "M05 Weld robot 2 (station S06)  |  INFO\nWork order WO-SIM-0002 created.\n\nWHAT HAPPENED\n- Component m05_joint1_bearing; fault bearing_wear.\n\nIMPACT\n- Downtime costs about $38,000 per minute until it is fixed.\n\nDO NOW\n1. A technician is dispatched; the engine opens the work order.\n\nPART\n- bearing_6208\n\nSources: [WO-SIM-0002]",
    "citations": [
-    "WO-SIM-0004"
+    "WO-SIM-0002"
    ],
    "tools": [
     "create_work_order"
@@ -1206,7 +1229,7 @@
    "latency_s": 0.01,
    "contexts": [],
    "contexts_text": [
-    "create_work_order({\"machine_id\": \"M05\"}) -> {\"type\": \"work_order\", \"id\": \"WO-SIM-0004\", \"machine_id\": \"M05\", \"component_id\": \"m05_joint1_bearing\", \"spare_part\": \"bearing_6208\", \"fault_code\": \"bearing_wear\", \"priority\": \"P2\", \"note\": \"bearing_wear on m05_joint1_bearing\", \"downtime_cost_per_min\": 38000, \"source\": \"live:/tools/create_work_order\", \"engine_response\": {\"id\": \"WO-SIM-0004\", \"machine\": \"M05\", \"station\": \"S06\", \"kind\": \"breakdown\", \"opened_at\": 12974.0, \"dispatch_at\": 13274.0, \"repair_s\": 1500.0, \"part\": \"bearing_6208\", \"status\": \"open\", \"arrived_at\": null, \"closed_at\": null, \"started_down_at\": null, \"reason\": \"bearing_wear on m05_joint1_bearing\"}}"
+    "create_work_order({\"machine_id\": \"M05\"}) -> {\"type\": \"work_order\", \"id\": \"WO-SIM-0002\", \"machine_id\": \"M05\", \"component_id\": \"m05_joint1_bearing\", \"spare_part\": \"bearing_6208\", \"fault_code\": \"bearing_wear\", \"priority\": \"P2\", \"note\": \"bearing_wear on m05_joint1_bearing\", \"downtime_cost_per_min\": 38000, \"source\": \"live:/tools/create_work_order\", \"engine_response\": {\"id\": \"WO-SIM-0002\", \"machine\": \"M05\", \"station\": \"S06\", \"kind\": \"breakdown\", \"opened_at\": 12729.0, \"dispatch_at\": 13029.0, \"repair_s\": 1500.0, \"part\": \"bearing_6208\", \"status\": \"open\", \"arrived_at\": null, \"closed_at\": null, \"started_down_at\": null, \"reason\": \"bearing_wear on m05_joint1_bearing\"}}"
    ]
   }
  ]

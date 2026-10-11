@@ -52,6 +52,14 @@ Sources: [SOP-MNT-M05-01] [M05-A]                   <- ids that were actually re
 ```
 `report` = `{title, severity, headline, what_happened[], impact[], do_now[], contacts[], parts[], procedure[], sources[], intent}`. Sections with nothing to say are omitted. Covered intents: status/why-red, keep-running, who-to-page, fault code and parts, repeat failures, procedures, work order. Anything else falls back to retrieved passages and has `report: null`. The click-a-station panel renders `report` directly; the local LLM plan uses the same three sections.
 
+## When there is no card: confidence and plain answers
+Every response carries `confidence: {level: high|medium|low, score, reason}`. If no structured card applies, `Brain._fallback` answers in plain sentences and never in disclaimer language:
+- **Small talk and scope:** greeting, thanks, "what can you do", off-topic questions, unknown machine ids (lists the real ones).
+- **Direct answers without retrieval:** glossary (OEE, MTBF, MTTR, RUL, SHAP, andon, takt, LOTO, BOM, RCA, PM), "no such area in this plant" (lists the line), purchase requests (what it cannot do, plus stock and lead time).
+- **Live numbers:** output and OEE from the engine; what-if "what happens if the conveyor stops" runs the engine's fault branch.
+- **From the records:** best passage, cleaned of markup and trimmed to one or two sentences, named by source ("From SOP-SAF-04, ..."). High confidence states it; medium says "The closest thing I have is ..." and asks which machine or station; low says what it does not have and offers three questions to try.
+Confidence comes from keyword match (BM25) and semantic similarity of the best passage and whether the passage shares terms with the question.
+
 ## Chat API
 `POST /chat` `{message, session_id?, shift?}` returns:
 ```jsonc

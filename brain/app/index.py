@@ -44,6 +44,7 @@ _EXPAND = [
      "who to page escalation chain L1 primary technician L2 backup L3 supervisor"),
     (re.compile(r"lock ?out|tag ?out|loto|isolat", re.I), "lockout tagout SOP-SAF-01"),
     (re.compile(r"spare|in stock|part number|on hand", re.I), "spare part stock on hand lead time"),
+    (re.compile(r"^(?!.*\b(voltage|battery|hv|electrical)\b).*\b(safety|hazards?|danger|ppe)\b", re.I | re.S), "safety SOP-SAF-04 robot cell entry teaching safeguarding SOP-SAF-01 lockout"),
     (re.compile(r"why is .{0,30}(red|alarm|alert|down|stopped)|what('s| is) wrong|what should we do", re.I),
      "symptom cause diagnosis fault mode repair procedure SOP"),
 ]
