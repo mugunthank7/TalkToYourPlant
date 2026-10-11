@@ -32,7 +32,6 @@ export function TopBar() {
         {(["A", "B"] as const).map((s) => (
           <button key={s} className={`pill ${s === shift ? "on" : ""}`} onClick={() => { setShift(s); if (sim === "on") ctl.send?.({ type: "control", action: "reset", shift: s }); else clock.t = 0; }}>Shift {s}</button>
         ))}
-        <button className="pill" onClick={() => ctl.play(!clock.playing)}>{clock.playing ? "❚❚" : "▶"}</button>
         <div className="clockbox">
           <b>{fmt(clock.t, shift)}</b>
           <span>Oct 10, 2026</span>

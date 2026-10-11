@@ -14,7 +14,12 @@ interface TwinState {
   setView: (v: "live" | "dash") => void;
   error: string | null;
   selectedStation: string | null;
+  askOpen: boolean;
+  setAskOpen: (v: boolean) => void;
   setSelectedStation: (id: string | null) => void;
+  selectQuiet: (id: string | null) => void;     // highlight a station without switching the side panel to its tab (used by chat answers)
+  sideTab: "station" | "ask";
+  setSideTab: (t: "station" | "ask") => void;
   setData: (d: TwinData) => void;
   setShift: (s: "A" | "B") => void;
   setError: (e: string) => void;
@@ -31,7 +36,12 @@ export const useTwin = create<TwinState>((set) => ({
   setView: (view) => set({ view }),
   error: null,
   selectedStation: null,
-  setSelectedStation: (selectedStation) => set({ selectedStation }),
+  askOpen: false,
+  setAskOpen: (askOpen) => set({ askOpen }),
+  setSelectedStation: (selectedStation) => set((st) => ({ selectedStation, sideTab: selectedStation ? "station" : st.sideTab })),
+  selectQuiet: (selectedStation) => set({ selectedStation }),
+  sideTab: "station",
+  setSideTab: (sideTab) => set({ sideTab }),
   setData: (data) => set({ data }),
   setShift: (shift) => set({ shift }),
   setError: (error) => set({ error }),

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { brainGet, brainPost } from "../brain";
 import { useTwin } from "../state";
 
@@ -14,23 +14,25 @@ interface Report {
 }
 
 function ReportView({ r }: { r: Report }) {
-  const sec = (label: string, items?: string[], numbered = false) =>
+  const sec = (label: string, items: string[] | undefined, open = false, numbered = false) =>
     items && items.length > 0 ? (
-      <div className="rsec">
-        <h5>{label}</h5>
+      <details open={open}>
+        <summary>{label}</summary>
         {numbered ? <ol>{items.map((x, i) => <li key={i}>{x}</li>)}</ol> : <ul>{items.map((x, i) => <li key={i}>{x}</li>)}</ul>}
-      </div>
+      </details>
     ) : null;
   return (
-    <div className={`report ${r.severity}`}>
-      <div className="rhead"><span className="rsev">{r.severity.toUpperCase()}</span> {r.headline}</div>
-      {sec("What happened", r.what_happened)}
-      {sec("Impact", r.impact)}
-      {sec("Do now", r.do_now, true)}
+    <div>
+      <div className={`sev ${r.severity}`}>
+        <span className="tag">{r.severity.toUpperCase()}</span><span className="hd">{r.headline}</span>
+      </div>
+      {sec("Do now", r.do_now, true, true)}
+      {sec("What happened", r.what_happened, true)}
+      {sec("Impact", r.impact, true)}
       {sec("Who to page", r.contacts)}
       {sec("Part", r.parts)}
       {sec("Procedure", r.procedure)}
-      {r.sources && r.sources.length > 0 && <div className="stmut">Sources: {r.sources.join(" · ")}</div>}
+      {r.sources && r.sources.length > 0 && <div className="note" style={{ marginTop: 10 }}>Sources: {r.sources.join(" · ")}</div>}
     </div>
   );
 }
@@ -45,9 +47,7 @@ interface Briefing {
   failure_catalog: { machine_id: string; mode: string; component: string; symptom: string; cause: string; repair: string; spare_part: string; repair_min: number }[];
 }
 
-export function StationPanel() {
-  const sid = useTwin((s) => s.selectedStation);
-  const close = useTwin((s) => s.setSelectedStation);
+function StationView({ sid }: { sid: string }) {
   const [b, setB] = useState<Briefing | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [plan, setPlan] = useState<string | null>(null);
@@ -56,71 +56,134 @@ export function StationPanel() {
 
   useEffect(() => {
     setB(null); setErr(null); setPlan(null); setMsg(null);
-    if (!sid) return;
     let alive = true;
     const load = async () => {
       try { const d = await brainGet<Briefing>(`/station/${sid}`); if (alive) { setB(d); setErr(null); } }
-      catch (e) { if (alive) setErr("Brain not reachable on :8100. Start it with brain/scripts/start_all.sh"); }
+      catch { if (alive) setErr("The brain is not running on :8100. Start it with brain/scripts/start_all.sh"); }
     };
     void load();
     const id = setInterval(load, 4000);
     return () => { alive = false; clearInterval(id); };
   }, [sid]);
 
-  if (!sid) return null;
   const askPlan = async () => {
     setBusy(true); setPlan(null);
     try { const r = await brainPost(`/station/${sid}/plan`); setPlan(r.plan ?? r.error ?? "no plan"); }
-    catch { setPlan("local LLM did not answer"); }
+    catch { setPlan("The local LLM did not answer."); }
     setBusy(false);
   };
   const simulate = async () => {
-    setMsg("injecting...");
-    try { const r = await brainPost(`/station/${sid}/simulate`, { repair_minutes: 30 }); setMsg(r.error ?? `fault injected on ${r.injected?.machine ?? "machine"}`); }
-    catch { setMsg("failed"); }
+    setMsg("Injecting…");
+    try { const r = await brainPost(`/station/${sid}/simulate`, { repair_minutes: 30 }); setMsg(r.error ?? `Fault injected on ${r.injected?.machine ?? "the machine"}.`); }
+    catch { setMsg("Could not reach the brain."); }
   };
-  const bad = b?.problem;
+  if (err) return <div className="pb"><div className="item bad">{err}</div></div>;
+  if (!b) return <div className="pb"><div className="note">Asking the brain…</div></div>;
+  if (b.error) return <div className="pb"><div className="item warn">{b.error}</div></div>;
+  const bad = b.problem;
   return (
-    <div className="card stpanel">
-      <div className="card-h">
-        <span>{sid} {b?.station.name ?? ""}</span>
-        <span>
-          {b && <span className={`stpill ${bad ? "bad" : "ok"}`}>{b.engine_state ?? (bad ? "problem" : "running")}</span>}
-          <button className="stx" onClick={() => close(null)} aria-label="Close">x</button>
-        </span>
+    <div className="pb">
+      <div className="row" style={{ justifyContent: "space-between" }}>
+        <b style={{ fontSize: 15 }}>{sid} · {b.station.name}</b>
+        <span className={`tagp ${bad ? "bad" : "ok"}`}>{b.engine_state ?? (bad ? "problem" : "running")}</span>
       </div>
-      {err && <div className="fitem bad">{err}</div>}
-      {!b && !err && <div className="stmut">Asking the brain...</div>}
-      {b && !b.error && (
-        <>
-          <div className="stmut">{b.station.what_happens}</div>
-          {bad && <div className="fitem bad"><b>Problem</b> {b.reason || b.focus_machine}: see below</div>}
-          {b.diagnosis?.report
-            ? <ReportView r={b.diagnosis.report} />
-            : (<><h4>What to do</h4><ol className="stsub">{b.steps.map((s, i) => <li key={i}>{s}</li>)}</ol></>)}
-          <div className="frow">
-            <button onClick={askPlan} disabled={busy}>{busy ? "LLM thinking (up to 1 min)..." : "Ask the local LLM for a plan"}</button>
-            <button className="danger" onClick={simulate}>Simulate failure here</button>
+      <div className="note" style={{ marginTop: 4 }}>{b.station.what_happens.replace(/\*\*/g, "")}</div>
+      {b.diagnosis?.report
+        ? <ReportView r={b.diagnosis.report} />
+        : <><h5>What to do</h5><ol style={{ margin: 0, paddingLeft: 18 }}>{b.steps.map((s, i) => <li key={i}>{s}</li>)}</ol></>}
+      <div className="row" style={{ marginTop: 14 }}>
+        <button className="btn dng" onClick={simulate}>Simulate failure here</button>
+        <button className="btn" onClick={askPlan} disabled={busy}>{busy ? "LLM thinking…" : "Ask the local LLM"}</button>
+      </div>
+      {msg && <div className="note" style={{ marginTop: 6 }}>{msg}</div>}
+      {plan && <pre className="txt">{plan}</pre>}
+      <h5>Machines</h5>
+      {b.machines.map((m) => (
+        <div key={m.id} className={`mach ${m.alert === "critical" || m.machine_state === "fault" ? "crit" : ""}`}>
+          <b>{m.id}</b> {m.name} · {m.machine_state ?? m.status}{m.alert ? ` · ${m.alert}` : ""}
+          {(m.vib_multiple || m.rul_min) ? <div className="mu">{m.vib_multiple ? `vibration ${m.vib_multiple}× healthy` : ""}{m.vib_multiple && m.rul_min ? " · " : ""}{m.rul_min ? `about ${Math.round(m.rul_min)} min of life left` : ""}</div> : null}
+          {m.contributors && m.contributors.length > 0 && <div className="mu">Flagged because of {m.contributors.slice(0, 3).map((c) => c.signal).join(", ")}</div>}
+          <div className="mu">{Object.entries(m.readings).slice(0, 4).map(([k, v]) => `${k.replace(/_/g, " ")} ${v}`).join(" · ")}</div>
+        </div>
+      ))}
+      {b.diagnosis && !b.diagnosis.report && <><h5>The brain says</h5><pre className="txt">{b.diagnosis.text}</pre></>}
+      <details>
+        <summary>Failure modes that can be simulated ({b.failure_catalog.length})</summary>
+        {b.failure_catalog.map((f, i) => <div key={i} className="note" style={{ marginTop: 6 }}><b>{f.machine_id} {f.mode}</b> ({f.component}): {f.symptom}. Fix: {f.repair}, {f.repair_min} min, part {f.spare_part}.</div>)}
+      </details>
+    </div>
+  );
+}
+
+const SUGGEST = ["Why is M05 red?", "What should I do?", "Can we keep running M05 2 more hours?", "What happens if the conveyor stops?", "How many cars have we built so far?"];
+
+function AskView() {
+  const { data, selectedStation, selectQuiet } = useTwin();
+  const [q, setQ] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [log, setLog] = useState<{ q: string; a: string; report?: Report | null }[]>([]);
+  const [sid] = useState(() => Math.random().toString(36).slice(2));
+  const end = useRef<HTMLDivElement>(null);
+  useEffect(() => { end.current?.scrollIntoView({ block: "end" }); }, [log, busy]);
+  const ask = async (text: string) => {
+    text = text.trim();
+    if (!text || busy) return;
+    setBusy(true); setQ("");
+    setLog((l) => [...l, { q: text, a: "" }]);
+    try {
+      const r = await brainPost("/chat", { message: text, session_id: sid, station_id: selectedStation });
+      setLog((l) => l.map((m, i) => (i === l.length - 1 ? { q: text, a: r.answer, report: r.report } : m)));
+      const first = r.highlight?.machine_ids?.[0];
+      const st = data?.layout.machines.find((m) => m.id === first)?.station;
+      if (st) selectQuiet(st);
+    } catch { setLog((l) => l.map((m, i) => (i === l.length - 1 ? { q: text, a: "The brain is not running on :8100." } : m))); }
+    setBusy(false);
+  };
+  return (
+    <div className="askv">
+      <div className="log">
+        {log.length === 0 && (
+          <div>
+            <div className="note">Ask about a machine, a fault, what to do, or what happens if something stops.{selectedStation ? ` Questions are about ${selectedStation}.` : ""}</div>
+            <div className="chips3">{SUGGEST.map((s) => <button key={s} onClick={() => void ask(s)}>{s}</button>)}</div>
           </div>
-          {msg && <div className="stmut">{msg}</div>}
-          {plan && <pre className="stpre">{plan}</pre>}
-          <h4>Machines</h4>
-          {b.machines.map((m) => (
-            <div key={m.id} className={`fitem ${m.alert === "critical" || m.machine_state === "fault" ? "bad" : m.alert ? "warn" : "ok"}`}>
-              <b>{m.id}</b> {m.name}: {m.machine_state ?? m.status}{m.alert ? `, ${m.alert} alert` : ""}
-              {m.vib_multiple ? `, vibration ${m.vib_multiple}x` : ""}{m.rul_min ? `, RUL ${Math.round(m.rul_min)} min` : ""}
-              {m.contributors && m.contributors.length > 0 && (
-                <div className="stmut">why flagged: {m.contributors.slice(0, 3).map((c) => `${c.signal} ${c.shap}`).join(", ")}</div>
-              )}
-              <div className="stmut">{Object.entries(m.readings).slice(0, 5).map(([k, v]) => `${k} ${v}`).join(" · ")}</div>
-            </div>
-          ))}
-          {b.diagnosis && !b.diagnosis.report && (<><h4>Brain says</h4><pre className="stpre">{b.diagnosis.text}</pre></>)}
-          <details><summary>Failure modes that can be simulated ({b.failure_catalog.length})</summary>
-            {b.failure_catalog.map((f, i) => <div key={i} className="stmut"><b>{f.machine_id} {f.mode}</b> ({f.component}): {f.symptom}; fix: {f.repair}, {f.repair_min} min, part {f.spare_part}</div>)}
-          </details>
-        </>
-      )}
+        )}
+        {log.map((m, i) => (
+          <div key={i} style={{ display: "contents" }}>
+            <div className="bub">{m.q}</div>
+            <div className="ans">{m.report ? <ReportView r={m.report} /> : m.a ? <pre className="txt" style={{ margin: 0 }}>{m.a}</pre> : <div className="note">Thinking…</div>}</div>
+          </div>
+        ))}
+        <div ref={end} />
+      </div>
+      <div className="compose">
+        <input type="text" className="inp" value={q} placeholder="Why is M05 red?" onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void ask(q)} />
+        <button className="btn pri" onClick={() => void ask(q)} disabled={busy}>Ask</button>
+      </div>
+    </div>
+  );
+}
+
+/** Right dock: station briefing and chat share one panel so nothing overlaps the scene. */
+export function SidePanel() {
+  const sid = useTwin((s) => s.selectedStation);
+  const setSid = useTwin((s) => s.setSelectedStation);
+  const askOpen = useTwin((s) => s.askOpen);
+  const setAskOpen = useTwin((s) => s.setAskOpen);
+  const tab = useTwin((s) => s.sideTab);
+  const setTab = useTwin((s) => s.setSideTab);
+  useEffect(() => { if (askOpen) setTab("ask"); }, [askOpen, setTab]);
+  if (!sid && !askOpen) return null;
+  const shown = tab === "station" && !sid ? "ask" : tab;
+  const close = () => { setSid(null); setAskOpen(false); };
+  return (
+    <div className={`dock gl ${shown === "ask" ? "fill" : ""}`}>
+      <div className="tabs3">
+        {sid && <button className={shown === "station" ? "on" : ""} onClick={() => setTab("station")}>{sid}</button>}
+        <button className={shown === "ask" ? "on" : ""} onClick={() => { setAskOpen(true); setTab("ask"); }}>Ask</button>
+        <button className="x" onClick={close} aria-label="Close">×</button>
+      </div>
+      {shown === "station" && sid ? <StationView sid={sid} /> : <AskView />}
     </div>
   );
 }
