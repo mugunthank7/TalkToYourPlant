@@ -6,6 +6,8 @@ import { injectedStopSeconds, TAKT } from "../plant";
 import { useTwin } from "../state";
 import { Bar, ColMeta, Columns, ForecastChart2, HBars, LineChart, Series, WithTip } from "./charts";
 import { Help, type HelpText } from "./Help";
+import { AnomalyScores, ScoreHistory, StationLoad, WhyFlagged, WorkOrders, useAnomaly } from "./EngineCards";
+import { simLink } from "../simlink";
 import { money, rateSeries, seriesName, SHIFT_S } from "./live";
 
 const SCEN: { key: string; label: string; color: string }[] = [
@@ -23,6 +25,11 @@ const H: Record<string, HelpText> = {
   qual: { title: "Quality", what: "Share of cars that come out right the first time.", read: "Scrap units are cars rejected at inspection. Worn robots weld worse, so quality drops with wear.", why: "Scrap wastes material, energy and the whole line time already spent." },
   units: { title: "Units", what: "Cars completed so far this shift against the shift plan of 320.", read: "The caption projects the end-of-shift total at the current pace.", why: "The plan is the promise to the customer." },
   cost: { title: "Downtime cost", what: "Money lost to line stops: stopped minutes x $38,000.", read: "Climbs whenever the line is stopped. The figure is from Siemens' 2024 True Cost of Downtime report for a large automotive plant.", why: "Makes the business case for fixing things before they break." },
+  anomaly: { title: "Anomaly detector", what: "Score from a machine-learning model (Isolation Forest) trained only on healthy data, per machine, updated every minute.", read: "Each bar is how unlike a healthy machine at the same load this one looks. Amber = watch, red = critical (both must persist several minutes, so noise does not alarm).", why: "Finds wear while vibration is still only 5% above normal, hours before the old 2x rule." },
+  scorehist: { title: "Score history", what: "The last hour of anomaly scores for the flagged machine (or M05).", read: "A steady climb through the dashed thresholds is real wear; a single spike is noise.", why: "Shows how early and how clearly the model saw it." },
+  why: { title: "Why it was flagged", what: "Shapley values: how much each signal pushed the score up versus a healthy machine.", read: "The longest bar is the main evidence. The interval is the predicted remaining useful life (80% confidence).", why: "An alert the team can check against the machine, not a black box." },
+  load: { title: "Station load", what: "Share of time each station has been working, from the engine.", read: "Blue = running, amber = repair, red = fault, yellow = starved or blocked.", why: "Shows where the line is waiting." },
+  wos: { title: "Work orders", what: "Maintenance orders raised in the engine and how far they have got.", read: "Predictive orders come from the detector; emergency ones from a breakdown.", why: "Closes the loop from alert to repair." },
   robot: { title: "Weld robot 2", what: "Health of the hero machine from its bearing-wear model.", read: "Healthy, then ALERT with the remaining useful life (RUL) in minutes before it would fail, then Repair.", why: "RUL is the window in which acting is cheap." },
   year: { title: "12-month downtime", what: "Unplanned line-down hours over the last year (estimated).", read: "Hours of line stoppage, and the cost at $38,000 per minute.", why: "The scale of the problem the system addresses." },
   cum: { title: "Cumulative output vs ideal", what: "Cars completed over the shift for each scenario. The dashed grey line is the ideal.", read: "The gap below the ideal is lost output. Toggle scenarios with the chips above. The white dashed line marks the current clock.", why: "Shows what each decision costs in cars, not just in dollars." },
@@ -73,6 +80,7 @@ export function Dashboard() {
   const { data, shift } = useTwin();
   const [on, setOn] = useState<Record<string, boolean>>({ ideal: true, healthy_realistic: true, hero_timely_repair: true, hero_delayed_repair: false, hero_ignored: true });
   useTick();
+  const anom = useAnomaly();
   const dash = data?.dash;
   const kpi = data?.kpi;
 
@@ -103,16 +111,18 @@ export function Dashboard() {
   const status = m05Status(clock.t, shift, data.hero);
   const extra = injectedStopSeconds(clock.t, shift, data.hero);
   const frac = extra / Math.max(clock.t, 60);
-  const A = Math.max(0, s.avail[i] - frac), P = s.perf[i], Q = s.qual[i], OEE = s.oee[i] * Math.max(0, 1 - frac);
-  const units = Math.max(0, Math.round(s.cum_units[i] - extra / TAKT));
+  const ek = simLink.on ? simLink.snap?.kpis : undefined;      // engine KPIs replace the precomputed series when connected
+  const A = ek ? ek.availability : Math.max(0, s.avail[i] - frac), P = ek ? ek.performance : s.perf[i], Q = ek ? ek.quality : s.qual[i], OEE = ek ? ek.oee : s.oee[i] * Math.max(0, 1 - frac);
+  const units = ek ? ek.units : Math.max(0, Math.round(s.cum_units[i] - extra / TAKT));
   const elapsed = Math.max(clock.t, 60);
   const projected = Math.round((units / elapsed) * SHIFT_S);
-  const downMin = s.cum_down_s[i] / 60 + extra / 60;
-  const cost = s.cum_cost[i] + (extra / 60) * kpi.cost_per_min;
+  const downMin = ek ? ek.downtime_min : s.cum_down_s[i] / 60 + extra / 60;
+  const cost = ek ? ek.downtime_cost_usd : s.cum_cost[i] + (extra / 60) * kpi.cost_per_min;
   const sum = kpi.summary;
   const timely = sum.hero_timely_repair, ignored = sum.hero_ignored;
-  const alertLive = shift === "A" && status === "alert";
-  const rul = alertLive ? Math.max(0, ((timely.t_fail_if_ignored_s ?? 0) - clock.t) / 60) : null;
+  const eng0 = simLink.on ? simLink.snap?.machines?.M05 : undefined;
+  const alertLive = eng0 ? eng0.alert === "critical" : shift === "A" && status === "alert";
+  const rul = eng0 ? (eng0.alert && eng0.rul_s != null ? eng0.rul_s / 60 : null) : alertLive ? Math.max(0, ((timely.t_fail_if_ignored_s ?? 0) - clock.t) / 60) : null;
   const nowIdx = Math.min(Math.floor(clock.t / 600), rates.length - 1);
 
   const causes: Bar[] = Object.entries(dash.downtime_h_by_cause).map(([k, v]) => ({ label: k.replace(/_/g, " "), value: v, tip: "Unplanned line downtime attributed to this cause over 12 months." }));
@@ -157,10 +167,10 @@ export function Dashboard() {
           <Tile help={H.oee} label="OEE (so far)" value={pct(OEE)} sub="availability x performance x quality" tone={OEE > 0.8 ? "ok" : OEE > 0.65 ? "warn" : "bad"} />
           <Tile help={H.avail} label="Availability" value={pct(A)} sub={`${downMin.toFixed(0)} min line stopped`} />
           <Tile help={H.perf} label="Performance" value={pct(P)} sub="speed vs 90 s takt" />
-          <Tile help={H.qual} label="Quality" value={pct(Q)} sub={`${s.cum_scrap[i]} scrap units`} />
+          <Tile help={H.qual} label="Quality" value={pct(Q)} sub={`${ek ? ek.units - ek.good_units : s.cum_scrap[i]} scrap units`} />
           <Tile help={H.units} label="Units" value={`${units} / ${kpi.plan_units}`} sub={`projected ${projected} at this pace`} />
           <Tile help={H.cost} label="Downtime cost" value={money(cost)} sub={`$${kpi.cost_per_min.toLocaleString()} per minute`} tone="bad" />
-          <Tile help={H.robot} label="Weld robot 2" value={alertLive ? "ALERT" : status === "repair" ? "Repair" : "Healthy"} sub={rul !== null ? `RUL ${Math.ceil(rul)} min to failure` : "bearing wear model"} tone={alertLive ? "bad" : status === "repair" ? "warn" : "ok"} />
+          <Tile help={H.robot} label="Weld robot 2" value={alertLive ? "ALERT" : status === "repair" ? "Repair" : "Healthy"} sub={rul !== null ? `RUL ${Math.ceil(rul)} min to failure` : eng0 ? "ML anomaly detector" : "bearing wear model"} tone={alertLive ? "bad" : status === "repair" ? "warn" : "ok"} />
           <Tile help={H.year} label="12-month downtime" value={hrs(maint.unplanned_line_down_h)} sub={`${money(maint.line_downtime_cost_usd)} line cost`} />
         </div>
 
@@ -195,7 +205,7 @@ export function Dashboard() {
                 </div>
               ))}
             </div>
-            <div className="callout">Waiting costs {money(ignored.downtime_cost_usd - timely.downtime_cost_usd)} and {timely.units - ignored.units} units. At the alert there are about {timely.remaining_useful_life_at_alert_min} minutes before weld robot 2 would fail.</div>
+            <div className="callout">Waiting costs {money(ignored.downtime_cost_usd - timely.downtime_cost_usd)} and {timely.units - ignored.units} units. {eng0?.alert && eng0.rul_s != null && eng0.rul_range_s ? `The detector predicts about ${Math.round(eng0.rul_s / 60)} minutes of life left (80% interval ${Math.round(eng0.rul_range_s[0] / 60)} to ${Math.round(eng0.rul_range_s[1] / 60)}) for weld robot 2.` : `At the alert there are about ${timely.remaining_useful_life_at_alert_min} minutes before weld robot 2 would fail.`}</div>
           </Card>
 
           <Card help={H.days30} title="Last 30 days: units per shift" note="red = incident, grey = Saturday" wide>
@@ -228,6 +238,30 @@ export function Dashboard() {
               </tbody>
             </table>
           </Card>
+
+          {anom && (
+            <>
+              <Card help={H.anomaly} title="Anomaly detector" note="live, per machine, from the engine">
+                <AnomalyScores a={anom} />
+              </Card>
+              <Card help={H.scorehist} title="Score history" note="last hour">
+                <ScoreHistory a={anom} />
+              </Card>
+              <Card help={H.why} title="Why it was flagged" note="Shapley contributions">
+                <WhyFlagged a={anom} />
+              </Card>
+            </>
+          )}
+          {simLink.on && (
+            <>
+              <Card help={H.load} title="Station load" note="engine, utilisation">
+                <StationLoad />
+              </Card>
+              <Card help={H.wos} title="Work orders" note="engine, latest" wide>
+                <WorkOrders />
+              </Card>
+            </>
+          )}
 
           <Card help={H.health} title="Machine health" note="12 months, estimated" wide>
             <table className="tbl">
