@@ -16,31 +16,6 @@ function useTick(ms = 200) {
   }, [ms]);
 }
 
-function TopBar() {
-  const { shift, setShift } = useTwin();
-  useTick();
-  return (
-    <div className="topbar">
-      <div className="brand">
-        <span className="bolt">⚡</span>
-        <b>Voltline EV Works</b>
-        <i />
-        <span className="sub">Talk to Your Plant ▾</span>
-      </div>
-      <div className="topright">
-        {(["A", "B"] as const).map((s) => (
-          <button key={s} className={`pill ${s === shift ? "on" : ""}`} onClick={() => { setShift(s); clock.t = 0; }}>Shift {s}</button>
-        ))}
-        <div className="clockbox">
-          <b>{fmt(clock.t, shift)}</b>
-          <span>Oct 10, 2026</span>
-        </div>
-        <div className="live"><i /> LIVE</div>
-      </div>
-    </div>
-  );
-}
-
 function StatePanel() {
   const { data, shift } = useTwin();
   useTick();
@@ -237,7 +212,6 @@ function ChatButton() {
 export function Hud() {
   return (
     <div className="hud">
-      <TopBar />
       <StatePanel />
       <KpiPanel />
       <CameraChips />

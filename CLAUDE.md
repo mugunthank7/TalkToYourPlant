@@ -120,7 +120,9 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 - [x] HUD v1 matching the ChatGPT concept mockup (top bar, live plant state, KPIs, forecast, timeline, what-if, camera shortcuts) with live numbers from `kpi.json`
 - [x] 3D realism pass v1: CC0 HDRI + concrete floor + Poly Haven props (licence log in docs/ASSETS.md), limbed workers with walk/work/crouch, fenced weld cells + andon lights, car bodies, articulated robots with sparks and the glowing `m05_joint1_bearing` ring, bloom, adaptive quality (`?q=low` forces low)
 - [x] Compact 128x72 layout, material flow (AGVs, forklift, cart), car built along the belt, factory shell with walls/crane/HDRI backdrop (D-027)
-- [ ] NEXT: station-by-station detailed models in this order: S11, S12, S10, S09, S02, S03 (then S01, S08); Blender-built hero models (press, robot, conveyor) and rigged Mixamo/Quaternius characters replacing the procedural ones; match the ChatGPT mockup's density (racks, glass control room, more props) (Blender weld robot etc.) and Mixamo characters replacing the placeholders
+- [x] Dashboard tab (in-depth KPIs): tiles, cumulative output, OEE, loss waterfall, forecast, what-if, 30-day trend, downtime Pareto, machine health, incidents. Data: `data/out/dashboard.json` + `kpi.json`
+- [x] Blender 5.2.2 installed at /Applications/Blender.app (CLI: /Applications/Blender.app/Contents/MacOS/Blender)
+- [ ] NEXT: station-by-station (reference prompts in docs/STATION_PROMPTS.md, user sends ChatGPT images named S##_*.png) detailed models in this order: S11, S12, S10, S09, S02, S03 (then S01, S08); Blender-built hero models (press, robot, conveyor) and rigged Mixamo/Quaternius characters replacing the procedural ones; match the ChatGPT mockup's density (racks, glass control room, more props) (Blender weld robot etc.) and Mixamo characters replacing the placeholders
 - [ ] Replay `scenarios/hero_timely_repair_sensors.parquet` as the mock stream + fault glow on M05
 - [ ] SimPy engine + what-if + FastAPI tool endpoints (D-016)
 - [ ] KPI dashboard
