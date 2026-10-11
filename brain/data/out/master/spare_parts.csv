@@ -1,0 +1,67 @@
+part_no,description,unit_cost_usd,vendors,families,annual_usage,min_stock,on_hand,lead_time_days,bin_location,critical_spare
+HYD-CART-VLV,Proportional valve cartridge,1850.0,IDRA/Schuler,GP/PRS/TRM,9.9,6,11,126,MS2-C10,True
+HYD-FLT-10M,10 micron return filter,140.0,IDRA/Schuler,GP/PRS/TRM,96.3,6,2,14,LINE-D23,False
+HYD-COOLER-PLATE,Plate-type oil cooler cleaning kit,220.0,IDRA/Schuler,GP/PRS/TRM,11.9,1,1,7,MS1-D35,False
+HYD-HOSE-ASM,High-pressure hose assembly,420.0,IDRA/Schuler,GP/PRS/TRM,10.9,1,1,7,MS2-F35,False
+HYD-VLV-SERVO,Servo valve,4100.0,IDRA/Schuler,GP/PRS/TRM,4.4,3,1,126,MS1-B14,True
+GP-TIEBAR-SNSR,Tie-bar strain sensor,1900.0,IDRA,GP,3.0,2,2,84,MS2-C14,True
+GP-PLUNGER-TIP,Plunger tip,2800.0,IDRA,GP,30.1,16,2,126,MS1-E22,True
+GP-ORING-KIT,Die cooling O-ring kit,140.0,IDRA,GP,3.0,1,2,21,MS1-C28,False
+GP-SNSR-GUARD,Guard safety sensor,260.0,IDRA,GP,3.0,1,0,14,MS1-A31,False
+DOS-TC-SHEATH,Thermocouple with ceramic sheath,340.0,Striko Westofen,DOS,11.4,1,1,14,LINE-A07,False
+DOS-HTR-ELEM,Heating element,1900.0,Striko Westofen,DOS,4.0,2,1,84,LINE-C17,True
+KUKA-OIL-S150-20L,Shell Tivela S150 gear oil 20 L,310.0,KUKA,DSR/GR/WK,17.3,1,2,7,MS2-E01,False
+KUKA-MTR-A4,Axis 4 motor with brake,4900.0,KUKA,DSR/GR/WK,6.4,4,7,126,MS2-D18,True
+KUKA-RDC-BAT,RDC battery pack,85.0,KUKA,DSR/GR/WK,6.9,1,1,21,MS1-A31,False
+KUKA-SEAL-A2,Axis 2 shaft seal kit,240.0,KUKA,DSR/GR/WK,7.4,1,1,21,MS2-A02,False
+WLD-TIP-CAP-16,Copper cap tip 16 mm (box 50),62.0,FANUC/KUKA,DSR/GR/WF/WK,2789.6,81,133,7,MS1-A19,False
+KUKA-BELT-WRIST,Wrist timing belt,220.0,KUKA,DSR/GR/WK,11.4,1,2,14,MS2-C27,False
+TST-SNSR-REF,Reference sensor kit,1300.0,AVL/Chroma/Duerr/Hunter/INFICON/MAHA/Nordson/Yxlon/ZEISS,AD/ADH/BD/BE/BH/DN/DY/FL/MET/WT/XRY,46.4,3,2,14,MS2-C20,False
+TST-POGO,Pogo pin contact set,480.0,AVL/Chroma/Duerr/Hunter/INFICON/MAHA/Nordson/Yxlon/ZEISS,AD/ADH/BD/BE/BH/DN/DY/FL/MET/WT/XRY,62.7,6,3,21,LINE-E26,False
+TST-HV-CBL,HV test cable assembly,890.0,AVL/Chroma/Duerr/Hunter/INFICON/MAHA/Nordson/Yxlon/ZEISS,AD/ADH/BD/BE/BH/DN/DY/MET/XRY,20.7,2,3,14,MS1-D40,False
+CNC-SPINDLE-EX,Spindle exchange unit,21000.0,DMG MORI/MAHA,CNC/DY,6.9,1,1,35,MS2-E29,True
+CNC-FLT-BAG,Coolant filter bag,60.0,DMG MORI,CNC,12.3,1,1,7,MS2-D21,False
+CNC-GRIP-ATC,ATC gripper set,540.0,DMG MORI,CNC,4.0,1,0,7,MS2-E18,False
+CNC-ENC-LIN,Linear scale,1650.0,DMG MORI,CNC,3.5,2,3,126,MS1-C08,True
+PRS-SEAL-CUSH,Cushion cylinder seal kit,720.0,Schuler,PRS,4.4,1,0,7,LINE-B18,False
+PRS-MTR-BRG,Main drive motor bearing set,1900.0,Schuler,PRS,1.0,1,0,84,LINE-C23,True
+PRS-FINGER-SET,Transfer finger set,540.0,Schuler,PRS,7.4,1,1,14,MS1-F03,False
+FAN-A02B-0200-K102,Lithium backup battery A02B-0200-K102,38.0,FANUC,BLK/BS/WF,51.4,5,2,21,LINE-D26,False
+SAF-PILZ-PNOZ-S4,Pilz PNOZ s4 safety relay,210.0,FANUC,BLK/BS/WF,22.2,2,1,14,MS2-E38,False
+FAN-A05B-2255-C103,iPendant cable 10 m,480.0,FANUC,BLK/BS/WF,7.9,1,2,7,MS2-D18,False
+FAN-A06B-6290-H208,Servo amplifier module,2450.0,FANUC,BLK/BS/WF,4.0,3,2,126,MS2-A10,True
+ROBO-GREASE-VIGO,Reducer grease 400 g,55.0,FANUC,BLK/BS/WF,103.2,3,3,7,LINE-E15,False
+ROBO-OIL-RV,Reducer oil 4 L,140.0,FANUC,BLK/BS/WF,18.3,2,1,14,LINE-C40,False
+WLD-XFMR-MFDC,MFDC weld transformer,3600.0,FANUC/KUKA,WF/WK,4.0,1,1,56,MS2-B24,True
+WLD-SHUNT,Flexible shunt set,180.0,FANUC/KUKA,WF/WK,13.3,1,1,14,MS2-F38,False
+WLD-SCREW-GUN,Servo gun ball screw,1450.0,FANUC/KUKA,WF/WK,6.4,1,0,7,LINE-B37,False
+ABB-3HAC-DRV,Axis drive unit,3200.0,ABB,WA,7.4,2,2,56,MS2-D25,True
+ABB-MTR-AX2,Axis 2 motor,5200.0,ABB,WA,2.0,1,0,84,LINE-A06,True
+ABB-SMB-BAT,SMB battery 3.6 V,95.0,ABB,WA,12.8,1,0,7,MS1-B38,False
+ABB-CBL-SMB,SMB signal cable,780.0,ABB,WA,6.4,1,1,21,LINE-B18,False
+ABB-OIL-SYN,Synthetic gear oil 5 L,150.0,ABB,WA,10.4,1,1,14,MS2-B15,False
+LSR-PROT-GLASS,Protective cover glass (box 10),180.0,Aumann/TRUMPF,BL/DW/LB,29.1,1,0,7,MS2-E10,False
+CHL-FLT-5U,Chiller water filter,95.0,Carrier/TRUMPF,BL/CH/LB,18.3,2,2,14,MS2-D07,False
+LSR-SNSR-SHUT,Shutter proximity sensor,130.0,TRUMPF,BL/LB,9.9,1,2,14,LINE-C37,False
+PR-TURBINE,Atomizer turbine,4800.0,Duerr,PR,19.3,7,1,84,MS1-C03,True
+PR-CC-VALVE,Color changer valve,650.0,Duerr,PR,32.1,1,1,7,LINE-B24,False
+PR-SNSR-PURGE,Purge pressure sensor,340.0,Duerr,PR,22.2,2,1,14,LINE-C28,False
+OVN-TC-K,Type K thermocouple,75.0,Duerr,OV,5.9,1,1,14,MS2-E19,False
+OVN-BRG-FAN,Fan bearing set,640.0,Duerr,ASU/OV,15.8,1,1,14,LINE-F19,False
+OVN-DMP-ACT,Damper actuator,520.0,Duerr,ASU/OV,12.8,1,1,7,MS1-C12,False
+OVN-LUBE-HT,High-temp chain lubricant,85.0,Duerr,OV,8.9,1,0,7,MS1-C35,False
+CNV-GMOTOR,Gearmotor 5.5 kW,1900.0,Aumann/Duerr/Konecranes,CR/CV/DW/ECT,26.7,7,1,56,MS1-C33,True
+CNV-CHAIN-SEC,Drive chain section,760.0,Aumann/Duerr/Konecranes,CR/CV/DW/ECT,9.9,1,1,14,LINE-E18,False
+TQ-SOCKET-13,13 mm impact-grade socket,28.0,Atlas Copco/Desoutter,BT/TQ,66.7,6,0,21,MS1-E40,False
+TQ-CBL-5M,Tool cable 5 m,210.0,Atlas Copco/Desoutter,BT/TQ,35.6,3,5,14,MS1-B35,False
+TQ-GEARHEAD,Gear head assembly,760.0,Atlas Copco/Desoutter,BT/TQ,19.8,2,4,14,MS1-D34,False
+CNV-ENC-INC,Incremental encoder,320.0,Aumann/Duerr,CV/DW,10.4,1,0,7,LINE-F24,False
+AGV-CONTACT,Charge contact set,180.0,KUKA/MiR,AM/DK,39.5,3,6,14,LINE-D40,False
+AGV-SCAN-SICK,Safety laser scanner,2200.0,KUKA/MiR,AM/DK,29.1,7,4,56,LINE-E11,True
+AGV-WHEEL,Drive wheel assembly,950.0,KUKA/MiR,AM/DK,16.8,1,0,7,LINE-A24,False
+CMP-OIL-S,Compressor oil 20 L,260.0,Atlas Copco,CP,27.7,3,4,21,MS2-C05,False
+CMP-SEP-ELEM,Oil separator element,420.0,Atlas Copco,CP,24.7,1,1,7,MS2-F02,False
+CMP-DRAIN,Zero-loss condensate drain,190.0,Atlas Copco/Carrier,CH/CP,26.7,1,0,7,MS2-B16,False
+CMP-MTR-BRG,Motor bearing kit,380.0,Atlas Copco/Carrier,CH/CP,13.3,1,1,14,MS1-E05,False
+SS-FAN,Cooling fan set,520.0,Siemens,SS,3.5,1,0,14,LINE-D39,False
+bearing_6208,Deep groove ball bearing 6208 (A1 joint),38.0,generic,WK,2.0,1,2,9,S12-A3,True

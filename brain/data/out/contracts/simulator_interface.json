@@ -1,0 +1,2214 @@
+{
+  "description": "Sensor channels, thresholds and fault signatures per machine family; use to drive the simulator and anomaly detection.",
+  "families": {
+    "GP": {
+      "vendor": "IDRA",
+      "model": "GIGAPRESS NEO 6100",
+      "area": "CAS",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "hyd_pressure_bar",
+          "unit": "bar",
+          "nominal": 280,
+          "sigma": 4,
+          "warn": 255,
+          "alarm": 235
+        },
+        {
+          "name": "hyd_temp_c",
+          "unit": "C",
+          "nominal": 46,
+          "sigma": 1.5,
+          "warn": 58,
+          "alarm": 65
+        },
+        {
+          "name": "hyd_filter_dp_bar",
+          "unit": "bar",
+          "nominal": 1.2,
+          "sigma": 0.2,
+          "warn": 3.0,
+          "alarm": 4.0
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 2.1,
+          "sigma": 0.3,
+          "warn": 5.0,
+          "alarm": 8.0
+        },
+        {
+          "name": "hyd_level_pct",
+          "unit": "%",
+          "nominal": 92,
+          "sigma": 1,
+          "warn": 80,
+          "alarm": 70
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "GP-PRESS-LOW",
+          "sev": 3,
+          "sensor": "hyd_pressure_bar",
+          "shape": "drift_down",
+          "mttr_min": 60,
+          "mttr_max": 360,
+          "weight": 3.0
+        },
+        {
+          "code": "GP-TEMP-HIGH",
+          "sev": 2,
+          "sensor": "hyd_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 30,
+          "mttr_max": 180,
+          "weight": 3.0
+        },
+        {
+          "code": "GP-LEAK",
+          "sev": 2,
+          "sensor": "hyd_level_pct",
+          "shape": "drift_down",
+          "mttr_min": 45,
+          "mttr_max": 240,
+          "weight": 4.0
+        },
+        {
+          "code": "GP-FILTER-DP",
+          "sev": 1,
+          "sensor": "hyd_filter_dp_bar",
+          "shape": "drift_up",
+          "mttr_min": 20,
+          "mttr_max": 60,
+          "weight": 5.0
+        },
+        {
+          "code": "GP-VALVE-STICK",
+          "sev": 3,
+          "sensor": "vibration_mm_s",
+          "shape": "spike",
+          "mttr_min": 90,
+          "mttr_max": 420,
+          "weight": 1.5
+        },
+        {
+          "code": "GP-TIEBAR",
+          "sev": 3,
+          "sensor": "vibration_mm_s",
+          "shape": "drift_up",
+          "mttr_min": 90,
+          "mttr_max": 360,
+          "weight": 2.0
+        },
+        {
+          "code": "GP-SHOT-SLOW",
+          "sev": 3,
+          "sensor": "hyd_pressure_bar",
+          "shape": "drift_down",
+          "mttr_min": 120,
+          "mttr_max": 480,
+          "weight": 2.0
+        }
+      ]
+    },
+    "DOS": {
+      "vendor": "Striko Westofen",
+      "model": "Dosing furnace 12t holding",
+      "area": "CAS",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "melt_temp_c",
+          "unit": "C",
+          "nominal": 700,
+          "sigma": 3,
+          "warn": 725,
+          "alarm": 740
+        },
+        {
+          "name": "furnace_power_kw",
+          "unit": "kW",
+          "nominal": 210,
+          "sigma": 8,
+          "warn": 260,
+          "alarm": 300
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.0,
+          "sigma": 0.2,
+          "warn": 3.5,
+          "alarm": 6.0
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "DOS-TC-DRIFT",
+          "sev": 2,
+          "sensor": "melt_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 45,
+          "mttr_max": 180,
+          "weight": 3.0
+        },
+        {
+          "code": "DOS-HEATER",
+          "sev": 3,
+          "sensor": "furnace_power_kw",
+          "shape": "drift_up",
+          "mttr_min": 240,
+          "mttr_max": 1200,
+          "weight": 1.0
+        }
+      ]
+    },
+    "DSR": {
+      "vendor": "KUKA",
+      "model": "KR 120 R2700 extra",
+      "area": "CAS",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 18.0,
+          "sigma": 1.2,
+          "warn": 26.0,
+          "alarm": 32.0
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 52.0,
+          "sigma": 2.5,
+          "warn": 78.0,
+          "alarm": 90.0
+        },
+        {
+          "name": "gearbox_temp_c",
+          "unit": "C",
+          "nominal": 48.0,
+          "sigma": 2.0,
+          "warn": 70.0,
+          "alarm": 82.0
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.8,
+          "sigma": 0.3,
+          "warn": 4.5,
+          "alarm": 7.1
+        },
+        {
+          "name": "battery_voltage_v",
+          "unit": "V",
+          "nominal": 3.6,
+          "sigma": 0.02,
+          "warn": 3.1,
+          "alarm": 2.6
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "KSS-MAINT-OIL",
+          "sev": 1,
+          "sensor": "gearbox_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 300,
+          "weight": 3.0
+        },
+        {
+          "code": "KSS-27008",
+          "sev": 3,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 480,
+          "weight": 1.5
+        },
+        {
+          "code": "KSS-RDC-BAT",
+          "sev": 2,
+          "sensor": "battery_voltage_v",
+          "shape": "decay",
+          "mttr_min": 30,
+          "mttr_max": 90,
+          "weight": 2.0
+        },
+        {
+          "code": "KSS-OVERTEMP-A2",
+          "sev": 2,
+          "sensor": "motor_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 20,
+          "mttr_max": 120,
+          "weight": 2.5
+        },
+        {
+          "code": "KSS-GEAR-LEAK",
+          "sev": 2,
+          "sensor": "gearbox_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 360,
+          "weight": 1.5
+        }
+      ]
+    },
+    "TRM": {
+      "vendor": "Schuler",
+      "model": "Hydraulic trim press 1,200 t",
+      "area": "CAS",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "hyd_pressure_bar",
+          "unit": "bar",
+          "nominal": 250,
+          "sigma": 4,
+          "warn": 225,
+          "alarm": 205
+        },
+        {
+          "name": "hyd_temp_c",
+          "unit": "C",
+          "nominal": 44,
+          "sigma": 1.5,
+          "warn": 58,
+          "alarm": 65
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 2.0,
+          "sigma": 0.3,
+          "warn": 5.0,
+          "alarm": 8.0
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "TRM-PRESS-LOW",
+          "sev": 3,
+          "sensor": "hyd_pressure_bar",
+          "shape": "drift_down",
+          "mttr_min": 60,
+          "mttr_max": 360,
+          "weight": 3.0
+        },
+        {
+          "code": "TRM-TEMP-HIGH",
+          "sev": 2,
+          "sensor": "hyd_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 30,
+          "mttr_max": 180,
+          "weight": 3.0
+        },
+        {
+          "code": "TRM-LEAK",
+          "sev": 2,
+          "sensor": "hyd_level_pct",
+          "shape": "drift_down",
+          "mttr_min": 45,
+          "mttr_max": 240,
+          "weight": 4.0
+        },
+        {
+          "code": "TRM-FILTER-DP",
+          "sev": 1,
+          "sensor": "hyd_filter_dp_bar",
+          "shape": "drift_up",
+          "mttr_min": 20,
+          "mttr_max": 60,
+          "weight": 5.0
+        },
+        {
+          "code": "TRM-VALVE-STICK",
+          "sev": 3,
+          "sensor": "vibration_mm_s",
+          "shape": "spike",
+          "mttr_min": 90,
+          "mttr_max": 420,
+          "weight": 1.5
+        }
+      ]
+    },
+    "XRY": {
+      "vendor": "Yxlon",
+      "model": "Inline X-ray cell",
+      "area": "CAS",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "tube_current_ma",
+          "unit": "mA",
+          "nominal": 5.0,
+          "sigma": 0.1,
+          "warn": 5.8,
+          "alarm": 6.5
+        },
+        {
+          "name": "tube_temp_c",
+          "unit": "C",
+          "nominal": 38,
+          "sigma": 1.2,
+          "warn": 52,
+          "alarm": 60
+        }
+      ],
+      "fault_signatures": []
+    },
+    "CNC": {
+      "vendor": "DMG MORI",
+      "model": "DMU 340 G",
+      "area": "CAS",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.2,
+          "sigma": 0.25,
+          "warn": 4.0,
+          "alarm": 6.5
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 22,
+          "sigma": 1.5,
+          "warn": 32,
+          "alarm": 38
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 48,
+          "sigma": 2,
+          "warn": 72,
+          "alarm": 85
+        },
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 22,
+          "sigma": 0.8,
+          "warn": 30,
+          "alarm": 36
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "CNC-SPINDLE-VIB",
+          "sev": 3,
+          "sensor": "vibration_mm_s",
+          "shape": "drift_up",
+          "mttr_min": 180,
+          "mttr_max": 720,
+          "weight": 1.0
+        },
+        {
+          "code": "CNC-AXIS-DEV",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 90,
+          "mttr_max": 420,
+          "weight": 1.5
+        }
+      ]
+    },
+    "PRS": {
+      "vendor": "Schuler",
+      "model": "MSP 2000 servo press",
+      "area": "STP",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "hyd_pressure_bar",
+          "unit": "bar",
+          "nominal": 160,
+          "sigma": 3,
+          "warn": 140,
+          "alarm": 125
+        },
+        {
+          "name": "hyd_temp_c",
+          "unit": "C",
+          "nominal": 43,
+          "sigma": 1.5,
+          "warn": 56,
+          "alarm": 63
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 2.5,
+          "sigma": 0.4,
+          "warn": 6.0,
+          "alarm": 9.5
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 120,
+          "sigma": 6,
+          "warn": 175,
+          "alarm": 200
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "PRS-PRESS-LOW",
+          "sev": 3,
+          "sensor": "hyd_pressure_bar",
+          "shape": "drift_down",
+          "mttr_min": 60,
+          "mttr_max": 360,
+          "weight": 3.0
+        },
+        {
+          "code": "PRS-TEMP-HIGH",
+          "sev": 2,
+          "sensor": "hyd_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 30,
+          "mttr_max": 180,
+          "weight": 3.0
+        },
+        {
+          "code": "PRS-LEAK",
+          "sev": 2,
+          "sensor": "hyd_level_pct",
+          "shape": "drift_down",
+          "mttr_min": 45,
+          "mttr_max": 240,
+          "weight": 4.0
+        },
+        {
+          "code": "PRS-FILTER-DP",
+          "sev": 1,
+          "sensor": "hyd_filter_dp_bar",
+          "shape": "drift_up",
+          "mttr_min": 20,
+          "mttr_max": 60,
+          "weight": 5.0
+        },
+        {
+          "code": "PRS-VALVE-STICK",
+          "sev": 3,
+          "sensor": "vibration_mm_s",
+          "shape": "spike",
+          "mttr_min": 90,
+          "mttr_max": 420,
+          "weight": 1.5
+        },
+        {
+          "code": "PRS-CLUTCH",
+          "sev": 3,
+          "sensor": "motor_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 600,
+          "weight": 1.5
+        }
+      ]
+    },
+    "BLK": {
+      "vendor": "FANUC",
+      "model": "M-900iB/360",
+      "area": "STP",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 18.0,
+          "sigma": 1.2,
+          "warn": 26.0,
+          "alarm": 32.0
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 52.0,
+          "sigma": 2.5,
+          "warn": 78.0,
+          "alarm": 90.0
+        },
+        {
+          "name": "gearbox_temp_c",
+          "unit": "C",
+          "nominal": 48.0,
+          "sigma": 2.0,
+          "warn": 70.0,
+          "alarm": 82.0
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.8,
+          "sigma": 0.3,
+          "warn": 4.5,
+          "alarm": 7.1
+        },
+        {
+          "name": "battery_voltage_v",
+          "unit": "V",
+          "nominal": 3.6,
+          "sigma": 0.02,
+          "warn": 3.1,
+          "alarm": 2.6
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "SRVO-062",
+          "sev": 3,
+          "sensor": "battery_voltage_v",
+          "shape": "decay",
+          "mttr_min": 90,
+          "mttr_max": 300,
+          "weight": 2.0
+        },
+        {
+          "code": "SRVO-065",
+          "sev": 1,
+          "sensor": "battery_voltage_v",
+          "shape": "decay",
+          "mttr_min": 20,
+          "mttr_max": 45,
+          "weight": 5.0
+        },
+        {
+          "code": "SRVO-050",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "spike",
+          "mttr_min": 15,
+          "mttr_max": 120,
+          "weight": 4.0
+        },
+        {
+          "code": "SRVO-021",
+          "sev": 2,
+          "sensor": "motor_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 60,
+          "mttr_max": 300,
+          "weight": 1.0
+        }
+      ]
+    },
+    "WK": {
+      "vendor": "KUKA",
+      "model": "KR 210 R2700 prime",
+      "area": "BIW",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 18.0,
+          "sigma": 1.2,
+          "warn": 26.0,
+          "alarm": 32.0
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 52.0,
+          "sigma": 2.5,
+          "warn": 78.0,
+          "alarm": 90.0
+        },
+        {
+          "name": "gearbox_temp_c",
+          "unit": "C",
+          "nominal": 48.0,
+          "sigma": 2.0,
+          "warn": 70.0,
+          "alarm": 82.0
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.8,
+          "sigma": 0.3,
+          "warn": 4.5,
+          "alarm": 7.1
+        },
+        {
+          "name": "battery_voltage_v",
+          "unit": "V",
+          "nominal": 3.6,
+          "sigma": 0.02,
+          "warn": 3.1,
+          "alarm": 2.6
+        },
+        {
+          "name": "weld_current_ka",
+          "unit": "kA",
+          "nominal": 9.0,
+          "sigma": 0.2,
+          "warn": 7.8,
+          "alarm": 7.0
+        },
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 28,
+          "sigma": 1.0,
+          "warn": 38,
+          "alarm": 45
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "KSS-MAINT-OIL",
+          "sev": 1,
+          "sensor": "gearbox_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 300,
+          "weight": 3.0
+        },
+        {
+          "code": "KSS-27008",
+          "sev": 3,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 480,
+          "weight": 1.5
+        },
+        {
+          "code": "KSS-RDC-BAT",
+          "sev": 2,
+          "sensor": "battery_voltage_v",
+          "shape": "decay",
+          "mttr_min": 30,
+          "mttr_max": 90,
+          "weight": 2.0
+        },
+        {
+          "code": "KSS-OVERTEMP-A2",
+          "sev": 2,
+          "sensor": "motor_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 20,
+          "mttr_max": 120,
+          "weight": 2.5
+        },
+        {
+          "code": "KSS-GEAR-LEAK",
+          "sev": 2,
+          "sensor": "gearbox_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 360,
+          "weight": 1.5
+        },
+        {
+          "code": "WG-TIP-WEAR",
+          "sev": 1,
+          "sensor": "weld_current_ka",
+          "shape": "drift_down",
+          "mttr_min": 10,
+          "mttr_max": 45,
+          "weight": 8.0
+        },
+        {
+          "code": "WG-TRANSF-TEMP",
+          "sev": 3,
+          "sensor": "coolant_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 90,
+          "mttr_max": 420,
+          "weight": 1.5
+        },
+        {
+          "code": "WG-SERVO",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 60,
+          "mttr_max": 240,
+          "weight": 1.5
+        }
+      ]
+    },
+    "WA": {
+      "vendor": "ABB",
+      "model": "IRB 6700-235/2.65",
+      "area": "BIW",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 18.0,
+          "sigma": 1.2,
+          "warn": 26.0,
+          "alarm": 32.0
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 52.0,
+          "sigma": 2.5,
+          "warn": 78.0,
+          "alarm": 90.0
+        },
+        {
+          "name": "gearbox_temp_c",
+          "unit": "C",
+          "nominal": 48.0,
+          "sigma": 2.0,
+          "warn": 70.0,
+          "alarm": 82.0
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.8,
+          "sigma": 0.3,
+          "warn": 4.5,
+          "alarm": 7.1
+        },
+        {
+          "name": "battery_voltage_v",
+          "unit": "V",
+          "nominal": 3.6,
+          "sigma": 0.02,
+          "warn": 3.1,
+          "alarm": 2.6
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "ABB-38103",
+          "sev": 3,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 180,
+          "mttr_max": 600,
+          "weight": 1.0
+        },
+        {
+          "code": "ABB-50026",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "spike",
+          "mttr_min": 15,
+          "mttr_max": 120,
+          "weight": 3.0
+        },
+        {
+          "code": "ABB-39007",
+          "sev": 2,
+          "sensor": "battery_voltage_v",
+          "shape": "decay",
+          "mttr_min": 30,
+          "mttr_max": 90,
+          "weight": 2.0
+        },
+        {
+          "code": "ABB-GEAR-NOISE",
+          "sev": 2,
+          "sensor": "vibration_mm_s",
+          "shape": "drift_up",
+          "mttr_min": 90,
+          "mttr_max": 480,
+          "weight": 2.0
+        }
+      ]
+    },
+    "WF": {
+      "vendor": "FANUC",
+      "model": "R-2000iC/210F",
+      "area": "BIW",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 18.0,
+          "sigma": 1.2,
+          "warn": 26.0,
+          "alarm": 32.0
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 52.0,
+          "sigma": 2.5,
+          "warn": 78.0,
+          "alarm": 90.0
+        },
+        {
+          "name": "gearbox_temp_c",
+          "unit": "C",
+          "nominal": 48.0,
+          "sigma": 2.0,
+          "warn": 70.0,
+          "alarm": 82.0
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.8,
+          "sigma": 0.3,
+          "warn": 4.5,
+          "alarm": 7.1
+        },
+        {
+          "name": "battery_voltage_v",
+          "unit": "V",
+          "nominal": 3.6,
+          "sigma": 0.02,
+          "warn": 3.1,
+          "alarm": 2.6
+        },
+        {
+          "name": "weld_current_ka",
+          "unit": "kA",
+          "nominal": 9.0,
+          "sigma": 0.2,
+          "warn": 7.8,
+          "alarm": 7.0
+        },
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 28,
+          "sigma": 1.0,
+          "warn": 38,
+          "alarm": 45
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "SRVO-062",
+          "sev": 3,
+          "sensor": "battery_voltage_v",
+          "shape": "decay",
+          "mttr_min": 90,
+          "mttr_max": 300,
+          "weight": 2.0
+        },
+        {
+          "code": "SRVO-065",
+          "sev": 1,
+          "sensor": "battery_voltage_v",
+          "shape": "decay",
+          "mttr_min": 20,
+          "mttr_max": 45,
+          "weight": 5.0
+        },
+        {
+          "code": "SRVO-050",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "spike",
+          "mttr_min": 15,
+          "mttr_max": 120,
+          "weight": 4.0
+        },
+        {
+          "code": "SRVO-021",
+          "sev": 2,
+          "sensor": "motor_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 60,
+          "mttr_max": 300,
+          "weight": 1.0
+        },
+        {
+          "code": "WG-TIP-WEAR",
+          "sev": 1,
+          "sensor": "weld_current_ka",
+          "shape": "drift_down",
+          "mttr_min": 10,
+          "mttr_max": 45,
+          "weight": 8.0
+        },
+        {
+          "code": "WG-TRANSF-TEMP",
+          "sev": 3,
+          "sensor": "coolant_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 90,
+          "mttr_max": 420,
+          "weight": 1.5
+        },
+        {
+          "code": "WG-SERVO",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 60,
+          "mttr_max": 240,
+          "weight": 1.5
+        }
+      ]
+    },
+    "LB": {
+      "vendor": "TRUMPF",
+      "model": "TruDisk 6001 brazing cell",
+      "area": "BIW",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "laser_power_pct",
+          "unit": "%",
+          "nominal": 100,
+          "sigma": 0.7,
+          "warn": 94,
+          "alarm": 90
+        },
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 22,
+          "sigma": 0.5,
+          "warn": 27,
+          "alarm": 31
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 0.6,
+          "sigma": 0.1,
+          "warn": 2.0,
+          "alarm": 3.5
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "LSR-PWR-LOW",
+          "sev": 3,
+          "sensor": "laser_power_pct",
+          "shape": "drift_down",
+          "mttr_min": 30,
+          "mttr_max": 240,
+          "weight": 4.0
+        },
+        {
+          "code": "LSR-CHL-TEMP",
+          "sev": 2,
+          "sensor": "coolant_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 30,
+          "mttr_max": 180,
+          "weight": 2.5
+        }
+      ]
+    },
+    "ADH": {
+      "vendor": "Duerr",
+      "model": "EcoShot",
+      "area": "BIW",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "hyd_pressure_bar",
+          "unit": "bar",
+          "nominal": 120,
+          "sigma": 3,
+          "warn": 100,
+          "alarm": 85
+        },
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 40,
+          "sigma": 0.8,
+          "warn": 48,
+          "alarm": 55
+        }
+      ],
+      "fault_signatures": []
+    },
+    "MET": {
+      "vendor": "ZEISS",
+      "model": "ScanBox inline",
+      "area": "BIW",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 21,
+          "sigma": 0.3,
+          "warn": 24,
+          "alarm": 26
+        }
+      ],
+      "fault_signatures": []
+    },
+    "PR": {
+      "vendor": "Duerr",
+      "model": "EcoRP E033i",
+      "area": "PNT",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 9,
+          "sigma": 0.8,
+          "warn": 14,
+          "alarm": 18
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 46,
+          "sigma": 2,
+          "warn": 70,
+          "alarm": 82
+        },
+        {
+          "name": "bell_speed_krpm",
+          "unit": "krpm",
+          "nominal": 45,
+          "sigma": 0.3,
+          "warn": 42,
+          "alarm": 38
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.3,
+          "sigma": 0.25,
+          "warn": 4.0,
+          "alarm": 6.5
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "PR-BELL-SPEED",
+          "sev": 3,
+          "sensor": "bell_speed_krpm",
+          "shape": "drift_down",
+          "mttr_min": 60,
+          "mttr_max": 240,
+          "weight": 2.0
+        }
+      ]
+    },
+    "OV": {
+      "vendor": "Duerr",
+      "model": "Convection cure oven",
+      "area": "PNT",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "oven_temp_c",
+          "unit": "C",
+          "nominal": 165,
+          "sigma": 1.5,
+          "warn": 155,
+          "alarm": 148
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 2.0,
+          "sigma": 0.3,
+          "warn": 5.0,
+          "alarm": 8.0
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 45,
+          "sigma": 2,
+          "warn": 62,
+          "alarm": 70
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "OVN-ZONE-TEMP",
+          "sev": 2,
+          "sensor": "oven_temp_c",
+          "shape": "drift_down",
+          "mttr_min": 30,
+          "mttr_max": 180,
+          "weight": 3.0
+        },
+        {
+          "code": "OVN-FAN-VIB",
+          "sev": 3,
+          "sensor": "vibration_mm_s",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 480,
+          "weight": 2.0
+        }
+      ]
+    },
+    "ECT": {
+      "vendor": "Duerr",
+      "model": "EcoDip system",
+      "area": "PNT",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 32,
+          "sigma": 0.4,
+          "warn": 35,
+          "alarm": 37
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 38,
+          "sigma": 2,
+          "warn": 52,
+          "alarm": 60
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "CNV-DRV-OVL",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 45,
+          "mttr_max": 240,
+          "weight": 2.5
+        },
+        {
+          "code": "CNV-CHAIN-STRETCH",
+          "sev": 2,
+          "sensor": "vibration_mm_s",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 480,
+          "weight": 1.0
+        }
+      ]
+    },
+    "ASU": {
+      "vendor": "Duerr",
+      "model": "EcoSupply",
+      "area": "PNT",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 55,
+          "sigma": 2,
+          "warn": 70,
+          "alarm": 80
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 2.2,
+          "sigma": 0.3,
+          "warn": 5.0,
+          "alarm": 8.0
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "OVN-FAN-VIB",
+          "sev": 3,
+          "sensor": "vibration_mm_s",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 480,
+          "weight": 2.0
+        }
+      ]
+    },
+    "BL": {
+      "vendor": "TRUMPF",
+      "model": "TruDisk 8001 busbar cell",
+      "area": "BAT",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "laser_power_pct",
+          "unit": "%",
+          "nominal": 100,
+          "sigma": 0.6,
+          "warn": 94,
+          "alarm": 90
+        },
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 22,
+          "sigma": 0.5,
+          "warn": 27,
+          "alarm": 31
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 0.6,
+          "sigma": 0.1,
+          "warn": 2.0,
+          "alarm": 3.5
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "LSR-PWR-LOW",
+          "sev": 3,
+          "sensor": "laser_power_pct",
+          "shape": "drift_down",
+          "mttr_min": 30,
+          "mttr_max": 240,
+          "weight": 4.0
+        },
+        {
+          "code": "LSR-CHL-TEMP",
+          "sev": 2,
+          "sensor": "coolant_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 30,
+          "mttr_max": 180,
+          "weight": 2.5
+        }
+      ]
+    },
+    "BS": {
+      "vendor": "FANUC",
+      "model": "M-10iD/12",
+      "area": "BAT",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 18.0,
+          "sigma": 1.2,
+          "warn": 26.0,
+          "alarm": 32.0
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 52.0,
+          "sigma": 2.5,
+          "warn": 78.0,
+          "alarm": 90.0
+        },
+        {
+          "name": "gearbox_temp_c",
+          "unit": "C",
+          "nominal": 48.0,
+          "sigma": 2.0,
+          "warn": 70.0,
+          "alarm": 82.0
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.8,
+          "sigma": 0.3,
+          "warn": 4.5,
+          "alarm": 7.1
+        },
+        {
+          "name": "battery_voltage_v",
+          "unit": "V",
+          "nominal": 3.6,
+          "sigma": 0.02,
+          "warn": 3.1,
+          "alarm": 2.6
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "SRVO-062",
+          "sev": 3,
+          "sensor": "battery_voltage_v",
+          "shape": "decay",
+          "mttr_min": 90,
+          "mttr_max": 300,
+          "weight": 2.0
+        },
+        {
+          "code": "SRVO-065",
+          "sev": 1,
+          "sensor": "battery_voltage_v",
+          "shape": "decay",
+          "mttr_min": 20,
+          "mttr_max": 45,
+          "weight": 5.0
+        },
+        {
+          "code": "SRVO-050",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "spike",
+          "mttr_min": 15,
+          "mttr_max": 120,
+          "weight": 4.0
+        },
+        {
+          "code": "SRVO-021",
+          "sev": 2,
+          "sensor": "motor_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 60,
+          "mttr_max": 300,
+          "weight": 1.0
+        }
+      ]
+    },
+    "BT": {
+      "vendor": "Desoutter",
+      "model": "4-spindle synchronous fastening (20 Nm)",
+      "area": "BAT",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "torque_nm",
+          "unit": "Nm",
+          "nominal": 18.0,
+          "sigma": 0.35,
+          "warn": 16.5,
+          "alarm": 15.0
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 40,
+          "sigma": 2,
+          "warn": 62,
+          "alarm": 75
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 6.0,
+          "sigma": 0.4,
+          "warn": 9.5,
+          "alarm": 12
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "TQ-NOK",
+          "sev": 2,
+          "sensor": "torque_nm",
+          "shape": "drift_down",
+          "mttr_min": 10,
+          "mttr_max": 60,
+          "weight": 6.0
+        },
+        {
+          "code": "TQ-MOTOR-TEMP",
+          "sev": 2,
+          "sensor": "motor_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 30,
+          "mttr_max": 120,
+          "weight": 1.5
+        }
+      ]
+    },
+    "BD": {
+      "vendor": "Nordson",
+      "model": "Two-component gap-filler dispense",
+      "area": "BAT",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "hyd_pressure_bar",
+          "unit": "bar",
+          "nominal": 90,
+          "sigma": 2.5,
+          "warn": 75,
+          "alarm": 60
+        },
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 35,
+          "sigma": 0.8,
+          "warn": 42,
+          "alarm": 48
+        }
+      ],
+      "fault_signatures": []
+    },
+    "BH": {
+      "vendor": "INFICON",
+      "model": "Helium leak test chamber",
+      "area": "BAT",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "leak_rate_mbar_ls",
+          "unit": "mbar l/s",
+          "nominal": 1e-06,
+          "sigma": 2e-07,
+          "warn": 5e-06,
+          "alarm": 1e-05
+        }
+      ],
+      "fault_signatures": []
+    },
+    "BE": {
+      "vendor": "Chroma",
+      "model": "Battery pack EOL test system",
+      "area": "BAT",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 24,
+          "sigma": 0.5,
+          "warn": 30,
+          "alarm": 35
+        }
+      ],
+      "fault_signatures": []
+    },
+    "DW": {
+      "vendor": "Aumann",
+      "model": "Hairpin winding line",
+      "area": "DRV",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.4,
+          "sigma": 0.25,
+          "warn": 4.2,
+          "alarm": 7.0
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 30,
+          "sigma": 2,
+          "warn": 45,
+          "alarm": 55
+        },
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 24,
+          "sigma": 0.5,
+          "warn": 30,
+          "alarm": 35
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "CNV-DRV-OVL",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 45,
+          "mttr_max": 240,
+          "weight": 2.5
+        },
+        {
+          "code": "CNV-CHAIN-STRETCH",
+          "sev": 2,
+          "sensor": "vibration_mm_s",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 480,
+          "weight": 1.0
+        },
+        {
+          "code": "LSR-PWR-LOW",
+          "sev": 3,
+          "sensor": "laser_power_pct",
+          "shape": "drift_down",
+          "mttr_min": 30,
+          "mttr_max": 240,
+          "weight": 4.0
+        }
+      ]
+    },
+    "DN": {
+      "vendor": "AVL",
+      "model": "E-drive NVH end-of-line bench",
+      "area": "DRV",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 0.9,
+          "sigma": 0.15,
+          "warn": 3.0,
+          "alarm": 5.0
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 80,
+          "sigma": 4,
+          "warn": 120,
+          "alarm": 150
+        }
+      ],
+      "fault_signatures": []
+    },
+    "TQ": {
+      "vendor": "Atlas Copco",
+      "model": "Power Focus 6000 + Tensor ST",
+      "area": "GA",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "torque_nm",
+          "unit": "Nm",
+          "nominal": 55.0,
+          "sigma": 0.9,
+          "warn": 50.0,
+          "alarm": 46.0
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 38,
+          "sigma": 2,
+          "warn": 62,
+          "alarm": 75
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 7.0,
+          "sigma": 0.5,
+          "warn": 11,
+          "alarm": 14
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "TQ-NOK",
+          "sev": 2,
+          "sensor": "torque_nm",
+          "shape": "drift_down",
+          "mttr_min": 10,
+          "mttr_max": 60,
+          "weight": 6.0
+        },
+        {
+          "code": "TQ-MOTOR-TEMP",
+          "sev": 2,
+          "sensor": "motor_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 30,
+          "mttr_max": 120,
+          "weight": 1.5
+        }
+      ]
+    },
+    "CV": {
+      "vendor": "Duerr",
+      "model": "EcoProFlex skillet conveyor",
+      "area": "GA",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 28,
+          "sigma": 1.5,
+          "warn": 40,
+          "alarm": 48
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.9,
+          "sigma": 0.3,
+          "warn": 5.0,
+          "alarm": 8.0
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 55,
+          "sigma": 2.5,
+          "warn": 80,
+          "alarm": 95
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "CNV-DRV-OVL",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 45,
+          "mttr_max": 240,
+          "weight": 2.5
+        },
+        {
+          "code": "CNV-CHAIN-STRETCH",
+          "sev": 2,
+          "sensor": "vibration_mm_s",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 480,
+          "weight": 1.0
+        }
+      ]
+    },
+    "DK": {
+      "vendor": "KUKA",
+      "model": "Omnimove heavy-load AGV",
+      "area": "GA",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "battery_soc_pct",
+          "unit": "%",
+          "nominal": 70,
+          "sigma": 8,
+          "warn": 25,
+          "alarm": 15
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 35,
+          "sigma": 3,
+          "warn": 55,
+          "alarm": 70
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.1,
+          "sigma": 0.2,
+          "warn": 3.5,
+          "alarm": 6.0
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "AGV-BAT-LOW",
+          "sev": 1,
+          "sensor": "battery_soc_pct",
+          "shape": "drift_down",
+          "mttr_min": 15,
+          "mttr_max": 60,
+          "weight": 5.0
+        },
+        {
+          "code": "AGV-DRIVE-WHEEL",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 45,
+          "mttr_max": 180,
+          "weight": 2.0
+        }
+      ]
+    },
+    "GR": {
+      "vendor": "KUKA",
+      "model": "KR 150 R3100 glazing",
+      "area": "GA",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 18.0,
+          "sigma": 1.2,
+          "warn": 26.0,
+          "alarm": 32.0
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 52.0,
+          "sigma": 2.5,
+          "warn": 78.0,
+          "alarm": 90.0
+        },
+        {
+          "name": "gearbox_temp_c",
+          "unit": "C",
+          "nominal": 48.0,
+          "sigma": 2.0,
+          "warn": 70.0,
+          "alarm": 82.0
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.8,
+          "sigma": 0.3,
+          "warn": 4.5,
+          "alarm": 7.1
+        },
+        {
+          "name": "battery_voltage_v",
+          "unit": "V",
+          "nominal": 3.6,
+          "sigma": 0.02,
+          "warn": 3.1,
+          "alarm": 2.6
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "KSS-MAINT-OIL",
+          "sev": 1,
+          "sensor": "gearbox_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 300,
+          "weight": 3.0
+        },
+        {
+          "code": "KSS-27008",
+          "sev": 3,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 480,
+          "weight": 1.5
+        },
+        {
+          "code": "KSS-RDC-BAT",
+          "sev": 2,
+          "sensor": "battery_voltage_v",
+          "shape": "decay",
+          "mttr_min": 30,
+          "mttr_max": 90,
+          "weight": 2.0
+        },
+        {
+          "code": "KSS-OVERTEMP-A2",
+          "sev": 2,
+          "sensor": "motor_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 20,
+          "mttr_max": 120,
+          "weight": 2.5
+        },
+        {
+          "code": "KSS-GEAR-LEAK",
+          "sev": 2,
+          "sensor": "gearbox_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 360,
+          "weight": 1.5
+        }
+      ]
+    },
+    "FL": {
+      "vendor": "Duerr",
+      "model": "EcoFill",
+      "area": "GA",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "hyd_pressure_bar",
+          "unit": "bar",
+          "nominal": 6,
+          "sigma": 0.1,
+          "warn": 5,
+          "alarm": 4
+        },
+        {
+          "name": "vacuum_mbar",
+          "unit": "mbar",
+          "nominal": 20,
+          "sigma": 1,
+          "warn": 40,
+          "alarm": 80
+        }
+      ],
+      "fault_signatures": []
+    },
+    "DY": {
+      "vendor": "MAHA",
+      "model": "Chassis dynamometer AWD",
+      "area": "EOL",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.5,
+          "sigma": 0.25,
+          "warn": 4.5,
+          "alarm": 7.5
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 60,
+          "sigma": 4,
+          "warn": 95,
+          "alarm": 120
+        },
+        {
+          "name": "motor_temp_c",
+          "unit": "C",
+          "nominal": 50,
+          "sigma": 2.5,
+          "warn": 80,
+          "alarm": 95
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "CNC-SPINDLE-VIB",
+          "sev": 3,
+          "sensor": "vibration_mm_s",
+          "shape": "drift_up",
+          "mttr_min": 180,
+          "mttr_max": 720,
+          "weight": 1.0
+        }
+      ]
+    },
+    "AD": {
+      "vendor": "Hunter",
+      "model": "ADAS target system",
+      "area": "EOL",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 22,
+          "sigma": 0.3,
+          "warn": 26,
+          "alarm": 29
+        }
+      ],
+      "fault_signatures": []
+    },
+    "WT": {
+      "vendor": "Duerr",
+      "model": "Water leak test booth",
+      "area": "EOL",
+      "criticality": "C",
+      "sensors": [
+        {
+          "name": "hyd_pressure_bar",
+          "unit": "bar",
+          "nominal": 4,
+          "sigma": 0.1,
+          "warn": 3.2,
+          "alarm": 2.8
+        }
+      ],
+      "fault_signatures": []
+    },
+    "CP": {
+      "vendor": "Atlas Copco",
+      "model": "GA 250 VSD+",
+      "area": "UTL",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "discharge_temp_c",
+          "unit": "C",
+          "nominal": 85,
+          "sigma": 2,
+          "warn": 100,
+          "alarm": 108
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 280,
+          "sigma": 10,
+          "warn": 350,
+          "alarm": 390
+        },
+        {
+          "name": "hyd_filter_dp_bar",
+          "unit": "bar",
+          "nominal": 0.4,
+          "sigma": 0.05,
+          "warn": 0.9,
+          "alarm": 1.2
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 2.0,
+          "sigma": 0.3,
+          "warn": 5.0,
+          "alarm": 8.0
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "CMP-DISCH-TEMP",
+          "sev": 3,
+          "sensor": "discharge_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 45,
+          "mttr_max": 240,
+          "weight": 2.0
+        },
+        {
+          "code": "CMP-OIL-SEP",
+          "sev": 2,
+          "sensor": "hyd_filter_dp_bar",
+          "shape": "drift_up",
+          "mttr_min": 60,
+          "mttr_max": 180,
+          "weight": 2.0
+        },
+        {
+          "code": "CMP-MOTOR-OL",
+          "sev": 3,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 90,
+          "mttr_max": 360,
+          "weight": 1.5
+        }
+      ]
+    },
+    "CH": {
+      "vendor": "Carrier",
+      "model": "30XF water-cooled chiller",
+      "area": "UTL",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "coolant_temp_c",
+          "unit": "C",
+          "nominal": 20,
+          "sigma": 0.5,
+          "warn": 25,
+          "alarm": 29
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 140,
+          "sigma": 6,
+          "warn": 190,
+          "alarm": 220
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 2.0,
+          "sigma": 0.3,
+          "warn": 5.0,
+          "alarm": 8.0
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "LSR-CHL-TEMP",
+          "sev": 2,
+          "sensor": "coolant_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 30,
+          "mttr_max": 180,
+          "weight": 2.5
+        },
+        {
+          "code": "CMP-MOTOR-OL",
+          "sev": 3,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 90,
+          "mttr_max": 360,
+          "weight": 1.5
+        }
+      ]
+    },
+    "SS": {
+      "vendor": "Siemens",
+      "model": "15 kV / 480 V substation",
+      "area": "UTL",
+      "criticality": "A",
+      "sensors": [
+        {
+          "name": "transformer_temp_c",
+          "unit": "C",
+          "nominal": 62,
+          "sigma": 3,
+          "warn": 95,
+          "alarm": 110
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 900,
+          "sigma": 40,
+          "warn": 1250,
+          "alarm": 1400
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "SS-XFMR-TEMP",
+          "sev": 3,
+          "sensor": "transformer_temp_c",
+          "shape": "drift_up",
+          "mttr_min": 60,
+          "mttr_max": 300,
+          "weight": 1.5
+        }
+      ]
+    },
+    "AM": {
+      "vendor": "MiR",
+      "model": "MiR1350",
+      "area": "LOG",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "battery_soc_pct",
+          "unit": "%",
+          "nominal": 65,
+          "sigma": 10,
+          "warn": 25,
+          "alarm": 15
+        },
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 12,
+          "sigma": 1.2,
+          "warn": 22,
+          "alarm": 28
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "AGV-BAT-LOW",
+          "sev": 1,
+          "sensor": "battery_soc_pct",
+          "shape": "drift_down",
+          "mttr_min": 15,
+          "mttr_max": 60,
+          "weight": 5.0
+        },
+        {
+          "code": "AGV-DRIVE-WHEEL",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 45,
+          "mttr_max": 180,
+          "weight": 2.0
+        }
+      ]
+    },
+    "CR": {
+      "vendor": "Konecranes",
+      "model": "CXT 20 t",
+      "area": "LOG",
+      "criticality": "B",
+      "sensors": [
+        {
+          "name": "motor_current_a",
+          "unit": "A",
+          "nominal": 40,
+          "sigma": 3,
+          "warn": 60,
+          "alarm": 75
+        },
+        {
+          "name": "vibration_mm_s",
+          "unit": "mm/s",
+          "nominal": 1.5,
+          "sigma": 0.25,
+          "warn": 4.5,
+          "alarm": 7.0
+        }
+      ],
+      "fault_signatures": [
+        {
+          "code": "CNV-DRV-OVL",
+          "sev": 2,
+          "sensor": "motor_current_a",
+          "shape": "drift_up",
+          "mttr_min": 45,
+          "mttr_max": 240,
+          "weight": 2.5
+        },
+        {
+          "code": "CNV-CHAIN-STRETCH",
+          "sev": 2,
+          "sensor": "vibration_mm_s",
+          "shape": "drift_up",
+          "mttr_min": 120,
+          "mttr_max": 480,
+          "weight": 1.0
+        }
+      ]
+    }
+  },
+  "bad_actors": {
+    "CAS-GP-01": {
+      "fault_code": "GP-SHOT-SLOW",
+      "window_start": "2025-06-01",
+      "window_end": "2026-10-10"
+    },
+    "PNT-PR-04": {
+      "fault_code": "PR-BELL-SPEED",
+      "window_start": "2025-09-01",
+      "window_end": "2026-10-10"
+    },
+    "BAT-BL-01": {
+      "fault_code": "LSR-PWR-LOW",
+      "window_start": "2025-03-01",
+      "window_end": "2026-10-10"
+    },
+    "BIW-WK-03": {
+      "fault_code": "KSS-GEAR-LEAK",
+      "window_start": "2025-11-01",
+      "window_end": "2026-10-10"
+    },
+    "UTL-CP-02": {
+      "fault_code": "CMP-DISCH-TEMP",
+      "window_start": "2025-05-01",
+      "window_end": "2026-10-10"
+    },
+    "STP-PRS-02": {
+      "fault_code": "PRS-DOUBLE-BLANK",
+      "window_start": "2025-01-01",
+      "window_end": "2026-06-30"
+    },
+    "GA-TQ-07": {
+      "fault_code": "TQ-NOK",
+      "window_start": "2025-08-01",
+      "window_end": "2026-10-10"
+    },
+    "BIW-WF-02": {
+      "fault_code": "SRVO-065",
+      "window_start": "2025-01-01",
+      "window_end": "2026-10-10"
+    }
+  }
+}

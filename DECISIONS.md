@@ -118,3 +118,8 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 
 ## D-025, Estimated maintenance and downtime history | 2026-10-10 | accepted
 **Decision:** Generate a year of estimated work orders, downtime events and a failure-mode catalogue (data/plantdata/maintenance.py). Structured numbers for dashboards and forecasts are M's; free-text manuals and logs remain the teammate's Data 2. The failure-mode catalogue uses our component IDs so the teammate can reuse it for the graph.
+
+## D-026, Generated brain dataset is committed | 2026-10-11 | accepted
+**Context:** M and T both need to inspect the same generated data on GitHub. D-017 commits small outputs and regenerates large ones.
+**Decision:** `brain/data/out/` (about 46 MB, 169 files, largest 20 MB) is committed on request of T so the whole team sees both datasets: M's in `data/out/`, T's in `brain/data/out/`. Source of truth stays the generators; outputs are deterministic (seed 42). (Renumbered from D-024 after M's D-024 and D-025.)
+**Consequences:** Repo grows by about 10 MB compressed. If the data is regenerated with a new seed or schema, the diff will be large; prefer rebuilding only on schema changes.

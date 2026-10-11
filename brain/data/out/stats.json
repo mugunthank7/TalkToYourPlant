@@ -1,0 +1,17 @@
+{
+  "machines": 119,
+  "employees": 452,
+  "roster_rows": 47008,
+  "assignments": 2967,
+  "work_orders": 20114,
+  "daily_checks": 17776,
+  "service_logs": 783,
+  "incidents": 340,
+  "rca_reports": 60,
+  "handover_notes": 2580,
+  "documents": 83,
+  "rag_chunks": 11094,
+  "rag_words": 655706,
+  "graph_nodes": 5674,
+  "graph_edges": 18014
+}
