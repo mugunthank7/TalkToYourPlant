@@ -90,4 +90,14 @@ Prerequisite: install Blender (`brew install --cask blender`) and confirm `blend
 
 | Asset | Source URL | Author | Licence | Attribution needed |
 |-------|------------|--------|---------|--------------------|
-| (none yet) | | | | |
+| HDRI `small_hangar_01_1k.hdr` | https://polyhaven.com/a/small_hangar_01 | Sergej Majboroda | CC0 | no |
+| Texture `Concrete034` 1K-JPG (colour, normal, roughness) | https://ambientcg.com/view?id=Concrete034 | ambientCG | CC0 | no |
+| Model `cardboard_box_01` 1k glTF | https://polyhaven.com/a/cardboard_box_01 | Rahul Chaudhary | CC0 | no |
+| Model `hand_truck` 1k glTF | https://polyhaven.com/a/hand_truck | Mutanzom3D | CC0 | no |
+| Model `industrial_storage_cart` 1k glTF | https://polyhaven.com/a/industrial_storage_cart | Jule Bielitz | CC0 | no |
+| Model `barrel_03` 1k glTF | https://polyhaven.com/a/barrel_03 | Serhii Khromov | CC0 | no |
+| Model `korean_fire_extinguisher_01` 1k glTF | https://polyhaven.com/a/korean_fire_extinguisher_01 | UM JOORIN | CC0 | no |
+
+Files live in `twin/public/assets/` (hdri, textures, models). Downloaded 2026-10-10 with the user's approval.
+
+Note: `hangar_concrete_floor` was downloaded but its colour map is too dark (average 50 of 255), so it was removed and `Concrete034` is used for the floor. Also downloaded and in use: `corrugated_iron_03`, `concrete_wall_004` (walls) and `blue_metal_plate` (machine frames), all Poly Haven CC0 (authors: Charlotte Baglioni; Dario Barresi and Charlotte Baglioni; Rob Tuytel).

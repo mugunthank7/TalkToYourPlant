@@ -17,9 +17,9 @@
  "t_onset_s": 10800,
  "t_alert_s": 18436.1,
  "t_dispatch_s": 18736.1,
- "t_pickup_s": 18784.9,
- "t_repair_start_s": 18926.8,
- "t_repair_end_s": 20426.8,
+ "t_pickup_s": 18778.1,
+ "t_repair_start_s": 18907.0,
+ "t_repair_end_s": 20407.0,
  "preventive_maintenance": [
   {
    "t_s": 3000,

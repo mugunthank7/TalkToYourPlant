@@ -1,9 +1,17 @@
 import { create } from "zustand";
 import type { TwinData } from "./data";
+import type { Injected } from "./plant";
 
 interface TwinState {
   data: TwinData | null;
   shift: "A" | "B";
+  faults: Injected[];
+  addFault: (f: Injected) => void;
+  clearFaults: () => void;
+  sim: "off" | "connecting" | "on";
+  setSim: (s: "off" | "connecting" | "on") => void;
+  view: "live" | "dash";
+  setView: (v: "live" | "dash") => void;
   error: string | null;
   setData: (d: TwinData) => void;
   setShift: (s: "A" | "B") => void;
@@ -12,6 +20,13 @@ interface TwinState {
 export const useTwin = create<TwinState>((set) => ({
   data: null,
   shift: "A",
+  faults: [],
+  addFault: (f) => set((s) => ({ faults: [...s.faults, f] })),
+  clearFaults: () => set({ faults: [] }),
+  sim: "off",
+  setSim: (sim) => set({ sim }),
+  view: "live",
+  setView: (view) => set({ view }),
   error: null,
   setData: (data) => set({ data }),
   setShift: (shift) => set({ shift }),

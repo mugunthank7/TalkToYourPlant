@@ -9,7 +9,7 @@ The **simulation engine + live 3D digital twin + dashboard** for "Talk to Your P
 Ownership (from the team whiteboard, marked M and T):
 - **M (this repo, Mugu):** Data 1 (layout, employees, sensor time series, timing), simulation engine, what-if scenarios, KPI dashboard (throughput, forecast), live 3D window with moving people, fault glow/heatmap, graph-path animation, work-order beat.
 - **T (teammate):** Data 2 (maintenance logs, service logs, procedures/protocols), knowledge base (graph + vector RAG), LLM brain (Gemini Flash), chat interface, diagnosing bot, voice/vision input.
-- **Not M's:** anomaly detection (grey box, owner open, D-019). M exposes live state + what-if via API and renders alerts/graph paths it is sent.
+- **Anomaly detection is now M's too (D-031):** Isolation Forest + Shapley + RUL inside the engine, see `docs/ANOMALY.md`. M exposes live state, anomaly reports and what-if via API and renders alerts/graph paths.
 
 Hero scenario: Weld robot 2 (`M05`) develops joint bearing wear; the twin shows the fault, the LLM explains it and can run a what-if ("keep running 2 more hours?"), then the maintenance tech walks to fix it.
 
@@ -100,9 +100,14 @@ If the simulation engine ends up in the same process as the twin (see D-013), th
 
 Twin behaviour per message: `sensor` updates HUD and gauges; `alert` turns the machine/component red with a SHAP-weighted heatmap and sets the andon light; `graph_path` highlights the 3D parts and animates a line through them; `work_order` starts the technician walk S10 -> S12 -> S06.
 
+## Simulation engine (sim/)
+
+SimPy model + FastAPI + WebSocket + LLM tool endpoints. See `sim/README.md`. The twin connects with `?sim=ws://localhost:8000/ws` or the top-bar button; when connected, station states, belt cars, KPIs, work orders, technician walks, fault injection, what-if and forecast all come from the engine, otherwise the client-side approximation in `twin/src/plant.ts` is used (D-029, D-030).
+
 ## Commands (fill in as the app is scaffolded)
 
 ```bash
+cd sim && .venv/bin/uvicorn plantsim.api:app --port 8000   # SimPy engine
 cd data && pip install -r requirements.txt && python -m plantdata --seed 42 --out out --copy-to ../twin/public/data   # regenerate data
 cd twin && npm install && npm run dev      # app
 blender --background --python assets/source/blender/<asset>.py   # regenerate a model
@@ -118,8 +123,18 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 - [ ] Install Blender, confirm headless export works
 - [ ] P0 assets: weld robot (rigged), conveyor, press, BIW
 - [x] HUD v1 matching the ChatGPT concept mockup (top bar, live plant state, KPIs, forecast, timeline, what-if, camera shortcuts) with live numbers from `kpi.json`
-- [ ] NEXT: 3D realism pass (fences, shelving, car shape, limbed workers, lighting), then real models (Blender weld robot etc.) and Mixamo characters replacing the placeholders
+- [x] 3D realism pass v1: CC0 HDRI + concrete floor + Poly Haven props (licence log in docs/ASSETS.md), limbed workers with walk/work/crouch, fenced weld cells + andon lights, car bodies, articulated robots with sparks and the glowing `m05_joint1_bearing` ring, bloom, adaptive quality (`?q=low` forces low)
+- [x] Compact 128x72 layout, material flow (AGVs, forklift, cart), car built along the belt, factory shell with walls/crane/HDRI backdrop (D-027)
+- [x] Dashboard tab (in-depth KPIs): tiles, cumulative output, OEE, loss waterfall, forecast, what-if, 30-day trend, downtime Pareto, machine health, incidents. Data: `data/out/dashboard.json` + `kpi.json`
+- [x] Blender 5.2.2 installed at /Applications/Blender.app (CLI: /Applications/Blender.app/Contents/MacOS/Blender)
+- [x] Detailed procedural station models from ChatGPT references (docs/reference/): all 12 stations (S01 to S12) in `twin/src/scene/stations/`, built with the kit in `scene/kit.tsx`. Preview one with `?station=S11&clean=1&q=low`
+- [x] S04 to S07 from references incl. S06 alert effects (halo, banner, callout, vibration trend, technician trail, technician carries the bearing box). URL helpers: `?station=S06&clean=1&t=18900&pause=1&q=low`
+- [x] Fault engine (twin/src/plant.ts): faults stop the belt (cars freeze), starve downstream and block upstream stations, blink red, on-call technician walks bay -> spares -> machine; fault simulator in the HUD; people have spots inside rooms and sit at breaks; belt keep-out for people
+- [x] HUD v2: forecast-aware live plant state (yellow = risk/starved/blocked), compact event timeline, 16 camera shots + tour/orbit/follow car/follow tech, 'Simulate a fault'
+- [x] Dashboard help popovers (?) and hover readouts on every chart; throughput forecast shows 'if repaired' vs 'if ignored'
+- [ ] (old) NEXT: people spots inside the new rooms (supervisor at the S11 desk, seated breaks, technician at the S10 bench, S12 pickup, sit pose), check performance on a real GPU, replace Cells/old safety zone code, then SimPy engine detailed models in this order: S11, S12, S10, S09, S02, S03 (then S01, S08); Blender-built hero models (press, robot, conveyor) and rigged Mixamo/Quaternius characters replacing the procedural ones; match the ChatGPT mockup's density (racks, glass control room, more props) (Blender weld robot etc.) and Mixamo characters replacing the placeholders
 - [ ] Replay `scenarios/hero_timely_repair_sensors.parquet` as the mock stream + fault glow on M05
-- [ ] SimPy engine + what-if + FastAPI tool endpoints (D-016)
+- [x] SimPy engine + what-if + FastAPI tool endpoints + WebSocket stream (D-016, D-030); twin connected to it. Calibrated to the scenario data within 8 percent (tests).
+- [x] Real anomaly detector (Isolation Forest + exact Shapley + conformal RUL) in the engine; 40/40 faults caught, 0 false alerts on held-out data (docs/ANOMALY.md, D-031). Retrain: `cd sim && .venv/bin/python -m plantsim.anomaly.train`
 - [ ] KPI dashboard
 - [ ] Wire to real WebSocket
