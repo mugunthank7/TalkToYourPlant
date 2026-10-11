@@ -9,7 +9,7 @@ The **simulation engine + live 3D digital twin + dashboard** for "Talk to Your P
 Ownership (from the team whiteboard, marked M and T):
 - **M (this repo, Mugu):** Data 1 (layout, employees, sensor time series, timing), simulation engine, what-if scenarios, KPI dashboard (throughput, forecast), live 3D window with moving people, fault glow/heatmap, graph-path animation, work-order beat.
 - **T (teammate):** Data 2 (maintenance logs, service logs, procedures/protocols), knowledge base (graph + vector RAG), LLM brain (Gemini Flash), chat interface, diagnosing bot, voice/vision input.
-- **Shared:** synthetic data generator, anomaly detection (SHAP). Owner not decided, see D-013.
+- **Not M's:** anomaly detection (grey box, owner open, D-019). M exposes live state + what-if via API and renders alerts/graph paths it is sent.
 
 Hero scenario: Weld robot 2 (`M05`) develops joint bearing wear; the twin shows the fault, the LLM explains it and can run a what-if ("keep running 2 more hours?"), then the maintenance tech walks to fix it.
 

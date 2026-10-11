@@ -87,3 +87,7 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 **Context:** To forecast, the data needs ideal outputs, realistic outputs, faulted outputs and a longer history, not only sensor streams.
 **Decision:** Five scenarios (ideal, healthy_realistic, hero_timely_repair, hero_delayed_repair, hero_ignored) with sensors and per-minute production output, a serial-line output model (buffer upstream, derate and scrap when a weld robot degrades), and a 30-day history with incidents and remaining-useful-life labels. Downtime cost uses an assumed $20,000 per minute from the brief.
 **Consequences:** The simulation engine must reproduce the same quantities (units, OEE, downtime) and can be sanity-checked against these scenario summaries. The cost figure must be cited with a real source before the pitch.
+
+## D-019, M's scope is the blue boxes only | 2026-10-10 | accepted
+**Decision:** M owns Data 1 generation, simulation engine, live plant state, what-if scenarios, dashboard (KPIs, throughput forecast) and the live 3D window. Not M's: knowledge base, LLM, chat, voice/vision, anomaly detection (grey box, owner open; supersedes the anomaly-detection part of D-014). M only exposes the live plant state and what-if as an API so the LLM side can read them, and renders what it is sent (alerts, graph path).
+**Consequences:** Data 1 files include ground-truth fault labels so whoever builds anomaly detection can train on them.
