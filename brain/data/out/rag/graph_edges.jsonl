@@ -18012,6 +18012,9 @@
 {"source": "SVC:SVC-00782", "rel": "ON_MACHINE", "target": "MACHINE:STP-PRS-03"}
 {"source": "SVC:SVC-00783", "rel": "BY_VENDOR", "target": "VENDOR:MAHA"}
 {"source": "SVC:SVC-00783", "rel": "ON_MACHINE", "target": "MACHINE:EOL-DY-02"}
+{"source": "bearing_wear", "rel": "CAUSED_BY", "target": "CAUSE:bearing-wear-1"}
+{"source": "bearing_wear", "rel": "CAUSED_BY", "target": "CAUSE:bearing-wear-2"}
+{"source": "bearing_wear", "rel": "CAUSED_BY", "target": "CAUSE:bearing-wear-3"}
 {"source": "m05_base", "rel": "PART_OF", "target": "MACHINE:M05"}
 {"source": "m05_joint1_bearing", "rel": "PART_OF", "target": "MACHINE:M05"}
 {"source": "m05_joint2_bearing", "rel": "PART_OF", "target": "MACHINE:M05"}

@@ -1,0 +1,52 @@
+{
+ "judge": "gemini-3.1-flash-lite",
+ "summary": {
+  "faithfulness": {
+   "mean": null,
+   "n": 0,
+   "of": 2
+  },
+  "answer_relevancy": {
+   "mean": null,
+   "n": 0,
+   "of": 2
+  },
+  "context_precision": {
+   "mean": null,
+   "n": 0,
+   "of": 2
+  },
+  "context_recall": {
+   "mean": null,
+   "n": 0,
+   "of": 2
+  }
+ },
+ "by_category": {},
+ "rows": [
+  {
+   "id": "Q01",
+   "category": "who_to_page",
+   "faithfulness": null,
+   "faithfulness_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
+   "answer_relevancy": null,
+   "answer_relevancy_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
+   "context_precision": null,
+   "context_precision_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
+   "context_recall": null,
+   "context_recall_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead."
+  },
+  {
+   "id": "Q03",
+   "category": "who_to_page",
+   "faithfulness": null,
+   "faithfulness_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
+   "answer_relevancy": null,
+   "answer_relevancy_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
+   "context_precision": null,
+   "context_precision_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead.",
+   "context_recall": null,
+   "context_recall_error": "TypeError: Cannot use agenerate() with a synchronous client. Use generate() instead."
+  }
+ ]
+}

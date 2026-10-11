@@ -50,3 +50,9 @@ TPM = {"agent": get_int("TPM_AGENT", 200000), "lite": get_int("TPM_LITE", 200000
        "premium": get_int("TPM_PREMIUM", 200000), "embed": get_int("TPM_EMBED", 25000)}
 EMBED_BACKEND = get("EMBED_BACKEND", "local")  # local | gemini
 LOCAL_EMBED_MODEL = get("LOCAL_EMBED_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+
+# LLM backend: "ollama" (local, free, default) or "gemini" (hosted, costs money / quota)
+LLM_BACKEND = get("LLM_BACKEND", "ollama")
+OLLAMA_URL = get("OLLAMA_URL", "http://localhost:11434")
+OLLAMA_MODEL = get("OLLAMA_MODEL", "qwen2.5:7b")
+OLLAMA_NUM_CTX = get_int("OLLAMA_NUM_CTX", 6144)

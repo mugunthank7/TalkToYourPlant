@@ -1,0 +1,1236 @@
+{
+ "retrieval": {
+  "hit_at_6": 0.9565217391304348,
+  "mrr": 0.8623188405797101,
+  "n": 23
+ },
+ "answers": [
+  {
+   "id": "Q01",
+   "category": "who_to_page",
+   "question": "Who do I page for M05 on shift A?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Shift A escalation for M05 [M05-A]:\n- L0 line lead: Latoya Joshi (Line Lead), x4199, radio BIW-FA\n- L1 primary tech: Yuki Alvarez (Robotics Technician (L1)), x4438, radio PLT-22, page after 2 min\n- L2 backup tech: Nicholas Mukherjee (Robotics Technician (L2)), x4434, radio PLT-CA, page after 8 min\n- L3 maintenance supervisor: George Sato (Maintenance Supervisor), x4265, 830-555-0126, radio PLT-4D, page after 15 min\n- Beyond L3: KUKA hotline +1-800-555-0112 (Gold 24/7, phone response 2 h)\n- Operator first: Press andon, tell Line Lead, note fault code/time",
+   "citations": [
+    "M05-A"
+   ],
+   "tools": [
+    "escalation_chain"
+   ],
+   "highlight": [
+    "M05"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.01,
+   "contexts": [],
+   "contexts_text": [
+    "escalation_chain({\"machine_id\": \"M05\", \"shift\": \"A\"}) -> {\"id\": \"M05-A\", \"machine_id\": \"M05\", \"shift\": \"A\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0099\", \"name\": \"Latoya Joshi\", \"role\": \"Line Lead\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4199\", \"radio\": \"BIW-FA\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"A-TECH01\", \"name\": \"Yuki Alvarez\", \"role\": \"Robotics Technician (L1)\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4438\", \"radio\": \"PLT-22\", \"pager\": \"\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0334\", \"name\": \"Nicholas Mukherjee\", \"role\": \"Robotics Technician (L2)\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4434\", \"radio\": \"PLT-CA\", \"pager\": \"\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0165\", \"name\": \"George Sato\", \"role\": \"Maintenance Supervisor\", \"shift\": \"A\", \"mobile\": \"830-555-0126\", \"extension\": \"x4265\", \"radio\": \"PLT-4D\", \"pager\": \"PG-E6234\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0031\", \"name\": \"Stephen Williams\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"979-555-0124\", \"extension\": \"x4131\", \"radio\": \"BIW-73\", \"pager\": \"PG-A41BA\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0032\", \"name\": \"Ronald Schmidt\", \"role\": \"Controls Engineer\", \"shift\": \"D\", \"mobile\": \"979"
+   ]
+  },
+  {
+   "id": "Q02",
+   "category": "who_to_page",
+   "question": "Who do I page for M01 on shift B?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Shift B escalation for M01 [M01-B]:\n- L0 line lead: Michael Taylor (Line Lead), x4269, radio CAS-11\n- L1 primary tech: Deepak Hicks (Hydraulics / Pneumatics Technician (L2)), x4475, radio PLT-BA, page after 2 min\n- L2 backup tech: Esperanza Anderson (Hydraulics / Pneumatics Technician (L2)), x4473, radio PLT-43, page after 8 min\n- L3 maintenance supervisor: Larry Banerjee (Maintenance Supervisor), x4348, 737-555-0121, radio PLT-16, page after 15 min\n- Beyond L3: IDRA hotline +1-800-555-0111 (Premium 24/7, phone response 2 h)\n- Operator first: Press andon, tell Line Lead, note fault code/time",
+   "citations": [
+    "M01-B"
+   ],
+   "tools": [
+    "escalation_chain"
+   ],
+   "highlight": [
+    "M01"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "escalation_chain({\"machine_id\": \"M01\", \"shift\": \"B\"}) -> {\"id\": \"M01-B\", \"machine_id\": \"M01\", \"shift\": \"B\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0169\", \"name\": \"Michael Taylor\", \"role\": \"Line Lead\", \"shift\": \"B\", \"mobile\": \"\", \"extension\": \"x4269\", \"radio\": \"CAS-11\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0375\", \"name\": \"Deepak Hicks\", \"role\": \"Hydraulics / Pneumatics Technician (L2)\", \"shift\": \"B\", \"mobile\": \"\", \"extension\": \"x4475\", \"radio\": \"PLT-BA\", \"pager\": \"\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0373\", \"name\": \"Esperanza Anderson\", \"role\": \"Hydraulics / Pneumatics Technician (L2)\", \"shift\": \"B\", \"mobile\": \"\", \"extension\": \"x4473\", \"radio\": \"PLT-43\", \"pager\": \"\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0248\", \"name\": \"Larry Banerjee\", \"role\": \"Maintenance Supervisor\", \"shift\": \"B\", \"mobile\": \"737-555-0121\", \"extension\": \"x4348\", \"radio\": \"PLT-16\", \"pager\": \"PG-A7FB9\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0015\", \"name\": \"Jin Mendoza\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"512-555-0135\", \"extension\": \"x4115\", \"radio\": \"CAS-A2\", \"pager\": \"PG-A3C98\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0016\", \"name\": \"Brian Gray\", \"role\": \"Controls Engineer\", \""
+   ]
+  },
+  {
+   "id": "Q03",
+   "category": "who_to_page",
+   "question": "Who do I page for CAS-GP-01 on shift A?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Shift A escalation for CAS-GP-01 [CAS-GP-01-A]:\n- L0 line lead: Matthew King (Line Lead), x4185, radio CAS-C4\n- L1 primary tech: Nadia Patterson (Hydraulics / Pneumatics Technician (L3)), x4423, 512-555-0197, radio PLT-C7, page after 2 min\n- L2 backup tech: Nicholas Jackson (Hydraulics / Pneumatics Technician (L3)), x4424, 979-555-0128, radio PLT-55, page after 8 min\n- L3 maintenance supervisor: Anthony Sanchez (Maintenance Supervisor), x4264, 512-555-0137, radio PLT-94, page after 15 min\n- Beyond L3: IDRA hotline +1-800-555-0111 (Premium 24/7, phone response 2 h)\n- Operator first: Press andon, tell Line Lead, note fault code/time",
+   "citations": [
+    "CAS-GP-01-A"
+   ],
+   "tools": [
+    "escalation_chain"
+   ],
+   "highlight": [
+    "CAS-GP-01"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "escalation_chain({\"machine_id\": \"CAS-GP-01\", \"shift\": \"A\"}) -> {\"id\": \"CAS-GP-01-A\", \"machine_id\": \"CAS-GP-01\", \"shift\": \"A\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0085\", \"name\": \"Matthew King\", \"role\": \"Line Lead\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4185\", \"radio\": \"CAS-C4\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0323\", \"name\": \"Nadia Patterson\", \"role\": \"Hydraulics / Pneumatics Technician (L3)\", \"shift\": \"A\", \"mobile\": \"512-555-0197\", \"extension\": \"x4423\", \"radio\": \"PLT-C7\", \"pager\": \"PG-CBBFF\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0324\", \"name\": \"Nicholas Jackson\", \"role\": \"Hydraulics / Pneumatics Technician (L3)\", \"shift\": \"A\", \"mobile\": \"979-555-0128\", \"extension\": \"x4424\", \"radio\": \"PLT-55\", \"pager\": \"PG-B37DA\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0164\", \"name\": \"Anthony Sanchez\", \"role\": \"Maintenance Supervisor\", \"shift\": \"A\", \"mobile\": \"512-555-0137\", \"extension\": \"x4264\", \"radio\": \"PLT-94\", \"pager\": \"PG-C4420\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0015\", \"name\": \"Jin Mendoza\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"512-555-0135\", \"extension\": \"x4115\", \"radio\": \"CAS-A2\", \"pager\": \"PG-A3C98\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0016\", "
+   ]
+  },
+  {
+   "id": "Q04",
+   "category": "who_to_page",
+   "question": "Who do I page for PNT-PR-04 on shift C?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Shift C escalation for PNT-PR-04 [PNT-PR-04-C]:\n- L0 line lead: Paul Ivanov (Line Lead), x4374, radio PNT-8A\n- L1 primary tech: Paul Jimenez (Robotics Technician (L2)), x4530, radio PLT-E0, page after 2 min\n- L2 backup tech: Gregory James (Robotics Technician (L3)), x4531, 512-555-0184, radio PLT-46, page after 8 min\n- L3 maintenance supervisor: Grace Gomez (Maintenance Supervisor), x4414, 737-555-0117, radio PLT-47, page after 15 min\n- Beyond L3: Duerr hotline +1-800-555-0120 (Premium 24/7, phone response 2 h)\n- Operator first: Press andon, tell Line Lead, note fault code/time",
+   "citations": [
+    "PNT-PR-04-C"
+   ],
+   "tools": [
+    "escalation_chain"
+   ],
+   "highlight": [
+    "PNT-PR-04"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "escalation_chain({\"machine_id\": \"PNT-PR-04\", \"shift\": \"C\"}) -> {\"id\": \"PNT-PR-04-C\", \"machine_id\": \"PNT-PR-04\", \"shift\": \"C\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0274\", \"name\": \"Paul Ivanov\", \"role\": \"Line Lead\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4374\", \"radio\": \"PNT-8A\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0430\", \"name\": \"Paul Jimenez\", \"role\": \"Robotics Technician (L2)\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4530\", \"radio\": \"PLT-E0\", \"pager\": \"\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0431\", \"name\": \"Gregory James\", \"role\": \"Robotics Technician (L3)\", \"shift\": \"C\", \"mobile\": \"512-555-0184\", \"extension\": \"x4531\", \"radio\": \"PLT-46\", \"pager\": \"PG-1EC30\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0314\", \"name\": \"Grace Gomez\", \"role\": \"Maintenance Supervisor\", \"shift\": \"C\", \"mobile\": \"737-555-0117\", \"extension\": \"x4414\", \"radio\": \"PLT-47\", \"pager\": \"PG-3926A\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0039\", \"name\": \"Edward Kim\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"979-555-0155\", \"extension\": \"x4139\", \"radio\": \"PNT-E1\", \"pager\": \"PG-427BB\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0040\", \"name\": \"Ravi Brown\", \"role\": \"Controls Engineer\", \"shift\": \"D"
+   ]
+  },
+  {
+   "id": "Q05",
+   "category": "who_to_page",
+   "question": "Who do I page for BAT-BL-01 on shift B?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Shift B escalation for BAT-BL-01 [BAT-BL-01-B]:\n- L0 line lead: James Bennett (Line Lead), x4307, radio BAT-5A\n- L1 primary tech: Andrew Mitchell (Process / Quality Technician (L1)), x4504, radio PLT-0A, page after 2 min\n- L2 backup tech: Carl Peterson (Process / Quality Technician (L3)), x4505, 737-555-0187, radio PLT-45, page after 8 min\n- L3 maintenance supervisor: Vikram Richardson (Maintenance Supervisor), x4350, 830-555-0192, radio PLT-89, page after 15 min\n- Beyond L3: TRUMPF hotline +1-800-555-0119 (Gold 24/7, phone response 2 h)\n- Operator first: Press andon, tell Line Lead, note fault code/time",
+   "citations": [
+    "BAT-BL-01-B"
+   ],
+   "tools": [
+    "escalation_chain"
+   ],
+   "highlight": [
+    "BAT-BL-01"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "escalation_chain({\"machine_id\": \"BAT-BL-01\", \"shift\": \"B\"}) -> {\"id\": \"BAT-BL-01-B\", \"machine_id\": \"BAT-BL-01\", \"shift\": \"B\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0207\", \"name\": \"James Bennett\", \"role\": \"Line Lead\", \"shift\": \"B\", \"mobile\": \"\", \"extension\": \"x4307\", \"radio\": \"BAT-5A\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0404\", \"name\": \"Andrew Mitchell\", \"role\": \"Process / Quality Technician (L1)\", \"shift\": \"B\", \"mobile\": \"\", \"extension\": \"x4504\", \"radio\": \"PLT-0A\", \"pager\": \"\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0405\", \"name\": \"Carl Peterson\", \"role\": \"Process / Quality Technician (L3)\", \"shift\": \"B\", \"mobile\": \"737-555-0187\", \"extension\": \"x4505\", \"radio\": \"PLT-45\", \"pager\": \"PG-08777\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0250\", \"name\": \"Vikram Richardson\", \"role\": \"Maintenance Supervisor\", \"shift\": \"B\", \"mobile\": \"830-555-0192\", \"extension\": \"x4350\", \"radio\": \"PLT-89\", \"pager\": \"PG-E3F12\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0047\", \"name\": \"Arthur Vasquez\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"512-555-0128\", \"extension\": \"x4147\", \"radio\": \"BAT-54\", \"pager\": \"PG-D1349\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0048\", \"name\": \"George Adams\", \"role"
+   ]
+  },
+  {
+   "id": "Q06",
+   "category": "who_to_page",
+   "question": "Who do I page for BIW-WK-03 on shift A?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Shift A escalation for BIW-WK-03 [BIW-WK-03-A]:\n- L0 line lead: Latoya Joshi (Line Lead), x4199, radio BIW-FA\n- L1 primary tech: Nicholas Mukherjee (Robotics Technician (L2)), x4434, radio PLT-CA, page after 2 min\n- L2 backup tech: Maria Thompson (Robotics Technician (L3)), x4435, 737-555-0158, radio PLT-D2, page after 8 min\n- L3 maintenance supervisor: George Sato (Maintenance Supervisor), x4265, 830-555-0126, radio PLT-4D, page after 15 min\n- Beyond L3: KUKA hotline +1-800-555-0112 (Gold 24/7, phone response 2 h)\n- Operator first: Press andon, tell Line Lead, note fault code/time",
+   "citations": [
+    "BIW-WK-03-A"
+   ],
+   "tools": [
+    "escalation_chain"
+   ],
+   "highlight": [
+    "BIW-WK-03"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "escalation_chain({\"machine_id\": \"BIW-WK-03\", \"shift\": \"A\"}) -> {\"id\": \"BIW-WK-03-A\", \"machine_id\": \"BIW-WK-03\", \"shift\": \"A\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0099\", \"name\": \"Latoya Joshi\", \"role\": \"Line Lead\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4199\", \"radio\": \"BIW-FA\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0334\", \"name\": \"Nicholas Mukherjee\", \"role\": \"Robotics Technician (L2)\", \"shift\": \"A\", \"mobile\": \"\", \"extension\": \"x4434\", \"radio\": \"PLT-CA\", \"pager\": \"\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0335\", \"name\": \"Maria Thompson\", \"role\": \"Robotics Technician (L3)\", \"shift\": \"A\", \"mobile\": \"737-555-0158\", \"extension\": \"x4435\", \"radio\": \"PLT-D2\", \"pager\": \"PG-287B2\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0165\", \"name\": \"George Sato\", \"role\": \"Maintenance Supervisor\", \"shift\": \"A\", \"mobile\": \"830-555-0126\", \"extension\": \"x4265\", \"radio\": \"PLT-4D\", \"pager\": \"PG-E6234\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0031\", \"name\": \"Stephen Williams\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"979-555-0124\", \"extension\": \"x4131\", \"radio\": \"BIW-73\", \"pager\": \"PG-A41BA\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0032\", \"name\": \"Ronald Schmidt\", \"role\": \"Controls Engi"
+   ]
+  },
+  {
+   "id": "Q07",
+   "category": "who_to_page",
+   "question": "Who do I page for UTL-CP-02 on shift C?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Shift C escalation for UTL-CP-02 [UTL-CP-02-C]:\n- L0 line lead: Anthony Moore (Line Lead), x4406, radio UTL-82\n- L1 primary tech: Mei Johnson (Mechanical Technician (L3)), x4546, 979-555-0119, radio PLT-90, page after 2 min\n- L2 backup tech: Harold Hughes (Mechanical Technician (L2)), x4545, radio PLT-C4, page after 8 min\n- L3 maintenance supervisor: Tanya Murphy (Maintenance Supervisor), x4416, 737-555-0112, radio PLT-D8, page after 15 min\n- Beyond L3: Atlas Copco hotline +1-800-555-0123 (Gold, phone response 4 h)\n- Operator first: Press andon, tell Line Lead, note fault code/time",
+   "citations": [
+    "UTL-CP-02-C"
+   ],
+   "tools": [
+    "escalation_chain"
+   ],
+   "highlight": [
+    "UTL-CP-02"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "escalation_chain({\"machine_id\": \"UTL-CP-02\", \"shift\": \"C\"}) -> {\"id\": \"UTL-CP-02-C\", \"machine_id\": \"UTL-CP-02\", \"shift\": \"C\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0306\", \"name\": \"Anthony Moore\", \"role\": \"Line Lead\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4406\", \"radio\": \"UTL-82\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0446\", \"name\": \"Mei Johnson\", \"role\": \"Mechanical Technician (L3)\", \"shift\": \"C\", \"mobile\": \"979-555-0119\", \"extension\": \"x4546\", \"radio\": \"PLT-90\", \"pager\": \"PG-7DCAC\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0445\", \"name\": \"Harold Hughes\", \"role\": \"Mechanical Technician (L2)\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4545\", \"radio\": \"PLT-C4\", \"pager\": \"\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0316\", \"name\": \"Tanya Murphy\", \"role\": \"Maintenance Supervisor\", \"shift\": \"C\", \"mobile\": \"737-555-0112\", \"extension\": \"x4416\", \"radio\": \"PLT-D8\", \"pager\": \"PG-B4AFE\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0077\", \"name\": \"Patrick Perez\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"979-555-0179\", \"extension\": \"x4177\", \"radio\": \"UTL-4F\", \"pager\": \"PG-A708C\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0078\", \"name\": \"Eric Mukherjee\", \"role\": \"Controls Engineer\""
+   ]
+  },
+  {
+   "id": "Q08",
+   "category": "who_to_page",
+   "question": "Who do I page for GA-TQ-07 on shift B?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Shift B escalation for GA-TQ-07 [GA-TQ-07-B]:\n- L0 line lead: Deepak Fuller (Line Lead), x4322, radio GA-65\n- L1 primary tech: Jonathan Bailey (Process / Quality Technician (L2)), x4518, radio PLT-41, page after 5 min\n- L2 backup tech: Sean Garcia (Process / Quality Technician (L1)), x4517, radio PLT-FE, page after 15 min\n- L3 maintenance supervisor: Priyanka Roberts (Maintenance Supervisor), x4351, 979-555-0168, radio PLT-9D, page after 30 min\n- Beyond L3: Atlas Copco hotline +1-800-555-0123 (Gold, phone response 4 h)\n- Operator first: Press andon, tell Line Lead, note fault code/time",
+   "citations": [
+    "GA-TQ-07-B"
+   ],
+   "tools": [
+    "escalation_chain"
+   ],
+   "highlight": [
+    "GA-TQ-07"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "escalation_chain({\"machine_id\": \"GA-TQ-07\", \"shift\": \"B\"}) -> {\"id\": \"GA-TQ-07-B\", \"machine_id\": \"GA-TQ-07\", \"shift\": \"B\", \"criticality\": \"B\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0222\", \"name\": \"Deepak Fuller\", \"role\": \"Line Lead\", \"shift\": \"B\", \"mobile\": \"\", \"extension\": \"x4322\", \"radio\": \"GA-65\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0418\", \"name\": \"Jonathan Bailey\", \"role\": \"Process / Quality Technician (L2)\", \"shift\": \"B\", \"mobile\": \"\", \"extension\": \"x4518\", \"radio\": \"PLT-41\", \"pager\": \"\", \"page_after_min\": 5}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0417\", \"name\": \"Sean Garcia\", \"role\": \"Process / Quality Technician (L1)\", \"shift\": \"B\", \"mobile\": \"\", \"extension\": \"x4517\", \"radio\": \"PLT-FE\", \"pager\": \"\", \"page_after_min\": 15}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0251\", \"name\": \"Priyanka Roberts\", \"role\": \"Maintenance Supervisor\", \"shift\": \"B\", \"mobile\": \"979-555-0168\", \"extension\": \"x4351\", \"radio\": \"PLT-9D\", \"pager\": \"PG-1446A\", \"page_after_min\": 30}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0061\", \"name\": \"Rachel Davis\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"830-555-0110\", \"extension\": \"x4161\", \"radio\": \"GA-AF\", \"pager\": \"PG-E44AA\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0062\", \"name\": \"Tariq Chen\", \"role\": \"Controls Engineer\", \"shift"
+   ]
+  },
+  {
+   "id": "Q09",
+   "category": "fault_code",
+   "question": "What does fault code SRVO-062 mean on M04?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "SRVO-062 on M04: BZAL alarm: pulsecoder backup battery voltage zero, absolute position lost [MAN-WF].\n- Likely causes: Encoder backup battery fully discharged; Battery cable disconnected or broken inside base; Controller powered off for a long period with dead battery\n- Parts: FAN-A02B-0200-K102 (Lithium backup battery A02B-0200-K102)\n- Shows in: battery_voltage_v (decay)",
+   "citations": [
+    "MAN-WF"
+   ],
+   "tools": [
+    "graph_lookup",
+    "search_docs"
+   ],
+   "highlight": [
+    "M04"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.03,
+   "contexts": [
+    "SOP-ROB-02",
+    "MAN-WF"
+   ],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"M04\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"M04\", \"fault_modes\": [{\"fault_id\": \"FAULT:WF:SRVO-062\", \"code\": \"SRVO-062\", \"description\": \"BZAL alarm: pulsecoder backup battery voltage zero, absolute position lost\", \"severity\": 3, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"FAN-A02B-0200-K102\", \"description\": \"Lithium backup battery A02B-0200-K102\", \"unit_cost\": 38.0, \"on_hand\": null}], \"causes\": [\"Encoder backup battery fully discharged\", \"Battery cable disconnected or broken inside base\", \"Controller powered off for a long period with dead battery\"], \"sensors\": [{\"channel\": \"battery_voltage_v\", \"shape\": \"decay\"}], \"documents\": [\"MAN-WF\"]}, {\"fault_id\": \"FAULT:WF:SRVO-065\", \"code\": \"SRVO-065\", \"description\": \"BLAL alarm: pulsecoder battery voltage low (data still intact)\", \"severity\": 1, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"FAN-A02B-0200-K102\", \"description\": \"Lithium backup battery A02B-0200-K102\", \"unit_cost\": 38.0, \"on_hand\": null}], \"causes\": [\"Battery approaching end of life (1-2 year typical life)\", \"Missed preventive battery replacement\"], \"sensors\": [{\"channel\": \"battery_voltage_v\", \"shape\": \"decay\"}], \"documents\": [\"MAN-WF\"]}, {\"fault_id\": \"FAULT:WF:SRVO-050\", \"code\": \"SRVO-050\", \"description\": \"Collision detect alarm\", \"severity\": 2, \"source\": \"oem_public\", \"parts\": [], \"causes\": [\"Part or fixture misplaced in the cell\", \"Gun tip stuck to panel\", \"Wrong payload setting\", \"Reducer wear",
+    "search_docs({\"query\": \"What does fault code SRVO-062 mean on M04?\", \"k\": 3, \"machine_id\": \"M04\", \"fault_code\": \"SRVO-062\"}) -> {\"results\": [{\"id\": \"SOP-ROB-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering]\\n## Background\\nFANUC controllers keep absolute position (mastering) data in pulse coders powered by backup batteries. Two alarms matter:\\n- **SRVO-065 BLAL:** battery voltage is low, data is still intact. Warning, replace soon.\\n- **SRVO-062 BZAL:** battery voltage is zero, encoder data lost. Critical, the axis must be re-mastered.\\n\\nBatteries (lithium A02B-0200-K102 in the controller and robot base on many models) typically last 1-2 years. Replace on a schedule or at the first BLAL.\"}, {\"id\": \"MAN-WF\", \"type\": \"manual\", \"machine\": null, \"text\": \"[Machine Manual: FANUC R-2000iC/210F (Spot Weld Robot (FANUC))]\\n## 2. Verified public reference facts\\n\\n- SRVO-062 BZAL: no backup battery voltage detected at the pulsecoder - mastering data lost, remastering required; SRVO-065 BLAL: low battery voltage warning, data still intact. Typical battery life 1-2 years. (source: https://industrialmonitordirect.com/blogs/knowledgebase/fanuc-srvo-062-bzal-alarm-troubleshooting-resolution)\\n- Typical battery: A02B-0200-K102 lithium (robot base); clear with RES_PCA then master. (source: https://industrialmonitordirect.com/blogs/knowledgebase/fanuc-srvo-062-\"}, {\"id\": \"SOP-ROB-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-ROB-"
+   ]
+  },
+  {
+   "id": "Q10",
+   "category": "fault_code",
+   "question": "What does fault code KSS-GEAR-LEAK mean on BIW-WK-03?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "KSS-GEAR-LEAK on BIW-WK-03: Oil leak detected at A1-A3 gearbox seal [MAN-WK].\n- Likely causes: Seal wear; Over-filled gearbox; Vent plug blocked\n- Parts: KUKA-SEAL-A2 (Axis 2 shaft seal kit)\n- Shows in: gearbox_temp_c (drift_up)",
+   "citations": [
+    "MAN-WK"
+   ],
+   "tools": [
+    "graph_lookup",
+    "search_docs"
+   ],
+   "highlight": [
+    "BIW-WK-03"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.05,
+   "contexts": [
+    "MAN-WK",
+    "WO-2026-007480"
+   ],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"BIW-WK-03\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"BIW-WK-03\", \"fault_modes\": [{\"fault_id\": \"FAULT:WK:KSS-MAINT-OIL\", \"code\": \"KSS-MAINT-OIL\", \"description\": \"Maintenance reminder: gear oil change due (A1-A3)\", \"severity\": 1, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"KUKA-OIL-S150-20L\", \"description\": \"Shell Tivela S150 gear oil 20 L\", \"unit_cost\": 310.0, \"on_hand\": null}], \"causes\": [\"Operating hours reached service interval (10,000-20,000 h or 3-4 years depending on model)\"], \"sensors\": [{\"channel\": \"gearbox_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-27008\", \"code\": \"KSS-27008\", \"description\": \"Brake test failed on axis\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"KUKA-MTR-A4\", \"description\": \"Axis 4 motor with brake\", \"unit_cost\": 4900.0, \"on_hand\": null}], \"causes\": [\"Brake wear (excess braking angle)\", \"Brake contamination with lubricant\", \"Brake release voltage low\"], \"sensors\": [{\"channel\": \"motor_current_a\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-SAFE-EMG\", \"code\": \"KSS-SAFE-EMG\", \"description\": \"Emergency stop active (external)\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [], \"causes\": [\"Fence door opened\", \"Light curtain interrupted\", \"E-stop pushed\"], \"sensors\": [], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-RDC-BAT\", \"code\": \"KSS-RDC-BAT\", \"description\": \"RDC (resolver digital converter",
+    "search_docs({\"query\": \"What does fault code KSS-GEAR-LEAK mean on BIW-WK-03?\", \"k\": 3, \"machine_id\": \"BIW-WK-03\", \"fault_code\": \"KSS-GEAR-LEAK\"}) -> {\"results\": [{\"id\": \"MAN-WK\", \"type\": \"manual\", \"machine\": null, \"text\": \"[Machine Manual: KUKA KR 210 R2700 prime (Spot Weld Robot (KUKA))]\\n### KSS-GEAR-LEAK: Oil leak detected at A1-A3 gearbox seal\\n- **Severity:** 2  |  **Typical MTTR:** 120-360 min  |  **Trade:** Mechanical  |  **Code source:** `synthetic`\\n- **Probable causes:** Seal wear; Over-filled gearbox; Vent plug blocked\\n- **Corrective actions:**\\n  1. Inspect and photograph leak source\\n  2. Replace shaft seal; refill to level\\n  3. Monitor for 5 shifts\\n- **Parts likely needed:** KUKA-SEAL-A2 (Axis 2 shaft seal kit)\\n- **Early-warning signature:** channel `gearbox_temp_c` shows drift up before failure.\"}, {\"id\": \"MAN-WK\", \"type\": \"manual\", \"machine\": null, \"text\": \"[Machine Manual: KUKA KR 210 R2700 prime (Spot Weld Robot (KUKA))]\\n## 7. Symptom-to-cause quick guide\\n\\n- If `gearbox_temp_c` is abnormal, think of: KSS-MAINT-OIL (maintenance reminder: gear oil change due (A1-A3)); KSS-GEAR-LEAK (oil leak detected at A1-A3 gearbox seal).\\n- If `motor_current_a` is abnormal, think of: KSS-27008 (brake test failed on axis); WG-SERVO (servo gun force deviation).\\n- If `battery_voltage_v` is abnormal, think of: KSS-RDC-BAT (rDC (resolver digital converter) battery low / mastering data at risk).\\n- If `motor_temp_c` is abnormal, think of: KSS-OVERTEMP-A2 (axis 2 motor\"}, {\"id\": \"WO-2026-007480\", \"type\": \"work_order\", \"m"
+   ]
+  },
+  {
+   "id": "Q11",
+   "category": "fault_code",
+   "question": "What does fault code GP-SHOT-SLOW mean on CAS-GP-01?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "GP-SHOT-SLOW on CAS-GP-01: Shot speed profile deviation / fill time out of window (~120 ms target) [MAN-GP].\n- Likely causes: Accumulator pre-charge low; Shot sleeve wear; Valve response degraded\n- Parts: GP-PLUNGER-TIP (Plunger tip)\n- Shows in: hyd_pressure_bar (drift_down)",
+   "citations": [
+    "MAN-GP"
+   ],
+   "tools": [
+    "graph_lookup",
+    "search_docs"
+   ],
+   "highlight": [
+    "CAS-GP-01"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.05,
+   "contexts": [
+    "SOP-CAS-01",
+    "MAN-GP",
+    "SOP-CAS-03"
+   ],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"CAS-GP-01\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"CAS-GP-01\", \"fault_modes\": [{\"fault_id\": \"FAULT:GP:GP-PRESS-LOW\", \"code\": \"GP-PRESS-LOW\", \"description\": \"Hydraulic system pressure below setpoint\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"HYD-CART-VLV\", \"description\": \"Proportional valve cartridge\", \"unit_cost\": 1850.0, \"on_hand\": null}, {\"part_no\": \"HYD-FLT-10M\", \"description\": \"10 micron return filter\", \"unit_cost\": 140.0, \"on_hand\": null}], \"causes\": [\"Pump wear\", \"Internal leakage in valve block\", \"Accumulator pre-charge loss\", \"Clogged suction strainer\"], \"sensors\": [{\"channel\": \"hyd_pressure_bar\", \"shape\": \"drift_down\"}], \"documents\": [\"MAN-GP\"]}, {\"fault_id\": \"FAULT:GP:GP-TEMP-HIGH\", \"code\": \"GP-TEMP-HIGH\", \"description\": \"Hydraulic oil temperature high\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"HYD-COOLER-PLATE\", \"description\": \"Plate-type oil cooler cleaning kit\", \"unit_cost\": 220.0, \"on_hand\": null}], \"causes\": [\"Cooler fouled\", \"Cooling water flow low\", \"Pump internal leakage\"], \"sensors\": [{\"channel\": \"hyd_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-GP\"]}, {\"fault_id\": \"FAULT:GP:GP-LEAK\", \"code\": \"GP-LEAK\", \"description\": \"Hydraulic oil leak at hose / fitting\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"HYD-HOSE-ASM\", \"description\": \"High-pressure hose assembly\", \"unit_cost\": 420.0, \"on_hand\": null}], \"causes\": [\"Hose abrasion\", \"Fitt",
+    "search_docs({\"query\": \"What does fault code GP-SHOT-SLOW mean on CAS-GP-01?\", \"k\": 3, \"machine_id\": \"CAS-GP-01\", \"fault_code\": \"GP-SHOT-SLOW\"}) -> {\"results\": [{\"id\": \"SOP-CAS-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-CAS-01: Giga Press Start-up, Shutdown and Daily Hydraulic Checks]\\n## During production\\n- Check the shot profile each shift: a slow fill or low accumulator recovery points to accumulator pre-charge loss, valve response issues or sleeve wear (GP-SHOT-SLOW).\\n- Record hydraulic temperature; above 58 C is a warn. Clean oil cooler and check water flow; above 65 C is an alarm: stop at end of shot.\\n- Trim, X-ray and machining cells downstream depend on this machine (criticality A).\"}, {\"id\": \"MAN-GP\", \"type\": \"manual\", \"machine\": null, \"text\": \"[Machine Manual: IDRA GIGAPRESS NEO 6100 (Giga Press)]\\n### GP-SHOT-SLOW: Shot speed profile deviation / fill time out of window (~120 ms target)\\n- **Severity:** 3  |  **Typical MTTR:** 120-480 min  |  **Trade:** Hydraulics / Pneumatics  |  **Code source:** `synthetic`\\n- **Probable causes:** Accumulator pre-charge low; Shot sleeve wear; Valve response degraded\\n- **Corrective actions:**\\n  1. Check accumulator pre-charge\\n  2. Inspect shot sleeve and plunger tip\\n  3. Calibrate injection valve\\n- **Parts likely needed:** GP-PLUNGER-TIP (Plunger tip)\\n- **Early-warning signature:** channel `hyd_pressu\"}, {\"id\": \"SOP-CAS-03\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-CAS-03: Shot Sleeve and Plunger Tip Inspection]\\n**Area:** CAS  |  **Owner:** Reliability Eng"
+   ]
+  },
+  {
+   "id": "Q12",
+   "category": "fault_code",
+   "question": "What does fault code TQ-NOK mean on GA-TQ-07?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "TQ-NOK on GA-TQ-07: Tightening result NOK: torque out of window [MAN-TQ].\n- Likely causes: Cross-threaded fastener; Tool transducer drift; Socket wear; Joint friction variation (bolt batch)\n- Parts: TQ-SOCKET-13 (13 mm impact-grade socket)\n- Shows in: torque_nm (drift_down)",
+   "citations": [
+    "MAN-TQ"
+   ],
+   "tools": [
+    "graph_lookup",
+    "search_docs"
+   ],
+   "highlight": [
+    "GA-TQ-07"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.05,
+   "contexts": [
+    "SOP-BAT-01",
+    "MAN-TQ"
+   ],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"GA-TQ-07\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"GA-TQ-07\", \"fault_modes\": [{\"fault_id\": \"FAULT:TQ:TQ-NOK\", \"code\": \"TQ-NOK\", \"description\": \"Tightening result NOK: torque out of window\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"TQ-SOCKET-13\", \"description\": \"13 mm impact-grade socket\", \"unit_cost\": 28.0, \"on_hand\": null}], \"causes\": [\"Cross-threaded fastener\", \"Tool transducer drift\", \"Socket wear\", \"Joint friction variation (bolt batch)\"], \"sensors\": [{\"channel\": \"torque_nm\", \"shape\": \"drift_down\"}], \"documents\": [\"MAN-TQ\"]}, {\"fault_id\": \"FAULT:TQ:TQ-CAL-DUE\", \"code\": \"TQ-CAL-DUE\", \"description\": \"Transducer calibration overdue\", \"severity\": 1, \"source\": \"synthetic\", \"parts\": [], \"causes\": [\"Calibration interval exceeded (12 months or 500k cycles)\"], \"sensors\": [], \"documents\": [\"MAN-TQ\"]}, {\"fault_id\": \"FAULT:TQ:TQ-CBL-FAULT\", \"code\": \"TQ-CBL-FAULT\", \"description\": \"Tool cable / communication fault\", \"severity\": 1, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"TQ-CBL-5M\", \"description\": \"Tool cable 5 m\", \"unit_cost\": 210.0, \"on_hand\": null}], \"causes\": [\"Flex fatigue in tool cable\"], \"sensors\": [], \"documents\": [\"MAN-TQ\"]}, {\"fault_id\": \"FAULT:TQ:TQ-MOTOR-TEMP\", \"code\": \"TQ-MOTOR-TEMP\", \"description\": \"Tool motor temperature high\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"TQ-GEARHEAD\", \"description\": \"Gear head assembly\", \"unit_cost\": 760.0, \"on_hand\": null}], \"cause",
+    "search_docs({\"query\": \"What does fault code TQ-NOK mean on GA-TQ-07?\", \"k\": 3, \"machine_id\": \"GA-TQ-07\", \"fault_code\": \"TQ-NOK\"}) -> {\"results\": [{\"id\": \"SOP-BAT-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-BAT-01: Pack Fastening, Torque Traceability and Isolated Tooling]\\n## Typical torque faults\\n- TQ-NOK: out-of-window torque - check cross-threading, socket wear, transducer drift and fastener lot friction.\\n- TQ-MOTOR-TEMP: tool temperature rising - verify duty cycle, replace gear head if abnormal.\"}, {\"id\": \"MAN-TQ\", \"type\": \"manual\", \"machine\": null, \"text\": \"[Machine Manual: Atlas Copco Power Focus 6000 + Tensor ST (Torque Station)]\\n### TQ-NOK: Tightening result NOK: torque out of window\\n- **Severity:** 2  |  **Typical MTTR:** 10-60 min  |  **Trade:** Process / Quality  |  **Code source:** `synthetic`\\n- **Probable causes:** Cross-threaded fastener; Tool transducer drift; Socket wear; Joint friction variation (bolt batch)\\n- **Corrective actions:**\\n  1. Inspect joint; do NOT re-tighten without quality approval\\n  2. Run calibration check on the tool\\n  3. Replace socket if worn\\n  4. Quarantine suspect fastener lot if repeating\\n- **Parts likely needed:\"}, {\"id\": \"MAN-TQ\", \"type\": \"manual\", \"machine\": null, \"text\": \"[Machine Manual: Atlas Copco Power Focus 6000 + Tensor ST (Torque Station)]\\n## 7. Symptom-to-cause quick guide\\n\\n- If `torque_nm` is abnormal, think of: TQ-NOK (tightening result NOK: torque out of window).\\n- If `motor_temp_c` is abnormal, think of: TQ-MOTOR-TEMP (tool motor tem"
+   ]
+  },
+  {
+   "id": "Q13",
+   "category": "fault_code",
+   "question": "What does fault code LSR-PWR-LOW mean on BAT-BL-01?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "LSR-PWR-LOW on BAT-BL-01: Laser output power below tolerance (measured vs. commanded) [MAN-BL].\n- Likely causes: Protective glass contaminated; Diode module degradation; Fiber connector contamination\n- Parts: LSR-PROT-GLASS (Protective cover glass (box 10))\n- Shows in: laser_power_pct (drift_down)",
+   "citations": [
+    "MAN-BL"
+   ],
+   "tools": [
+    "graph_lookup",
+    "search_docs"
+   ],
+   "highlight": [
+    "BAT-BL-01"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.05,
+   "contexts": [
+    "MAN-BL",
+    "SOP-BAT-02"
+   ],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"BAT-BL-01\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"BAT-BL-01\", \"fault_modes\": [{\"fault_id\": \"FAULT:BL:LSR-PWR-LOW\", \"code\": \"LSR-PWR-LOW\", \"description\": \"Laser output power below tolerance (measured vs. commanded)\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"LSR-PROT-GLASS\", \"description\": \"Protective cover glass (box 10)\", \"unit_cost\": 180.0, \"on_hand\": null}], \"causes\": [\"Protective glass contaminated\", \"Diode module degradation\", \"Fiber connector contamination\"], \"sensors\": [{\"channel\": \"laser_power_pct\", \"shape\": \"drift_down\"}], \"documents\": [\"MAN-BL\"]}, {\"fault_id\": \"FAULT:BL:LSR-CHL-TEMP\", \"code\": \"LSR-CHL-TEMP\", \"description\": \"Chiller outlet temperature out of range\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"CHL-FLT-5U\", \"description\": \"Chiller water filter\", \"unit_cost\": 95.0, \"on_hand\": null}], \"causes\": [\"Chiller refrigerant low\", \"Filter blocked\", \"Fouled condenser\"], \"sensors\": [{\"channel\": \"coolant_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-BL\"]}, {\"fault_id\": \"FAULT:BL:LSR-SHUTTER\", \"code\": \"LSR-SHUTTER\", \"description\": \"Safety shutter did not confirm open\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"LSR-SNSR-SHUT\", \"description\": \"Shutter proximity sensor\", \"unit_cost\": 130.0, \"on_hand\": null}], \"causes\": [\"Shutter sensor misaligned\", \"Cable fault\"], \"sensors\": [], \"documents\": [\"MAN-BL\"]}, {\"fault_id\": \"FAULT:BL:LSR-SEAM-VIS\", \"cod",
+    "search_docs({\"query\": \"What does fault code LSR-PWR-LOW mean on BAT-BL-01?\", \"k\": 3, \"machine_id\": \"BAT-BL-01\", \"fault_code\": \"LSR-PWR-LOW\"}) -> {\"results\": [{\"id\": \"MAN-BL\", \"type\": \"manual\", \"machine\": null, \"text\": \"[Machine Manual: TRUMPF TruDisk 8001 busbar cell (Busbar Laser Welder)]\\n### LSR-PWR-LOW: Laser output power below tolerance (measured vs. commanded)\\n- **Severity:** 3  |  **Typical MTTR:** 30-240 min  |  **Trade:** Process / Quality  |  **Code source:** `synthetic`\\n- **Probable causes:** Protective glass contaminated; Diode module degradation; Fiber connector contamination\\n- **Corrective actions:**\\n  1. Inspect/replace protective glass\\n  2. Clean fiber end-face\\n  3. Run power measurement; schedule diode module service\\n- **Parts likely needed:** LSR-PROT-GLASS (Protective cover glass (box 10))\\n\"}, {\"id\": \"MAN-BL\", \"type\": \"manual\", \"machine\": null, \"text\": \"[Machine Manual: TRUMPF TruDisk 8001 busbar cell (Busbar Laser Welder)]\\n## 7. Symptom-to-cause quick guide\\n\\n- If `laser_power_pct` is abnormal, think of: LSR-PWR-LOW (laser output power below tolerance (measured vs. commanded)).\\n- If `coolant_temp_c` is abnormal, think of: LSR-CHL-TEMP (chiller outlet temperature out of range).\\n- If the machine stops with no code: check E-stop chain/safety devices, air/water supply, and PLC/MES communication.\\n- Repeated faults within 14 days: escalate to the area engineer (see SOP-MNT-01) and review the work order history.\"}, {\"id\": \"SOP-BAT-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-BAT-02: Laser"
+   ]
+  },
+  {
+   "id": "Q14",
+   "category": "fault_code",
+   "question": "What does fault code CMP-DISCH-TEMP mean on UTL-CP-02?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "CMP-DISCH-TEMP on UTL-CP-02: Discharge temperature high [MAN-CP].\n- Likely causes: Cooler fouled; Oil level low; Thermostatic valve fault\n- Parts: CMP-OIL-S (Compressor oil 20 L)\n- Shows in: discharge_temp_c (drift_up)",
+   "citations": [
+    "MAN-CP"
+   ],
+   "tools": [
+    "graph_lookup",
+    "search_docs"
+   ],
+   "highlight": [
+    "UTL-CP-02"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.05,
+   "contexts": [
+    "MAN-CP",
+    "SOP-UTL-01"
+   ],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"UTL-CP-02\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"UTL-CP-02\", \"fault_modes\": [{\"fault_id\": \"FAULT:CP:CMP-DISCH-TEMP\", \"code\": \"CMP-DISCH-TEMP\", \"description\": \"Discharge temperature high\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"CMP-OIL-S\", \"description\": \"Compressor oil 20 L\", \"unit_cost\": 260.0, \"on_hand\": null}], \"causes\": [\"Cooler fouled\", \"Oil level low\", \"Thermostatic valve fault\"], \"sensors\": [{\"channel\": \"discharge_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-CP\"]}, {\"fault_id\": \"FAULT:CP:CMP-OIL-SEP\", \"code\": \"CMP-OIL-SEP\", \"description\": \"Oil separator differential pressure high\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"CMP-SEP-ELEM\", \"description\": \"Oil separator element\", \"unit_cost\": 420.0, \"on_hand\": null}], \"causes\": [\"Separator element loaded\"], \"sensors\": [{\"channel\": \"hyd_filter_dp_bar\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-CP\"]}, {\"fault_id\": \"FAULT:CP:CMP-DRYER-DEW\", \"code\": \"CMP-DRYER-DEW\", \"description\": \"Dryer dew point alarm (> +10 C)\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"CMP-DRAIN\", \"description\": \"Zero-loss condensate drain\", \"unit_cost\": 190.0, \"on_hand\": null}], \"causes\": [\"Dryer refrigerant low\", \"Condensate drain blocked\"], \"sensors\": [], \"documents\": [\"MAN-CP\"]}, {\"fault_id\": \"FAULT:CP:CMP-MOTOR-OL\", \"code\": \"CMP-MOTOR-OL\", \"description\": \"Main motor overload trip\", \"severity\": 3, \"source\": \"synthetic\", ",
+    "search_docs({\"query\": \"What does fault code CMP-DISCH-TEMP mean on UTL-CP-02?\", \"k\": 3, \"machine_id\": \"UTL-CP-02\", \"fault_code\": \"CMP-DISCH-TEMP\"}) -> {\"results\": [{\"id\": \"MAN-CP\", \"type\": \"manual\", \"machine\": null, \"text\": \"[Machine Manual: Atlas Copco GA 250 VSD+ (Air Compressor)]\\n### CMP-DISCH-TEMP: Discharge temperature high\\n- **Severity:** 3  |  **Typical MTTR:** 45-240 min  |  **Trade:** Mechanical  |  **Code source:** `synthetic`\\n- **Probable causes:** Cooler fouled; Oil level low; Thermostatic valve fault\\n- **Corrective actions:**\\n  1. Clean cooler; check oil level\\n  2. Replace thermostatic valve\\n- **Parts likely needed:** CMP-OIL-S (Compressor oil 20 L)\\n- **Early-warning signature:** channel `discharge_temp_c` shows drift up before failure.\\n- **Escalation:** page the Maintenance Supervisor at once for sev\"}, {\"id\": \"MAN-CP\", \"type\": \"manual\", \"machine\": null, \"text\": \"[Machine Manual: Atlas Copco GA 250 VSD+ (Air Compressor)]\\n## 7. Symptom-to-cause quick guide\\n\\n- If `discharge_temp_c` is abnormal, think of: CMP-DISCH-TEMP (discharge temperature high).\\n- If `hyd_filter_dp_bar` is abnormal, think of: CMP-OIL-SEP (oil separator differential pressure high).\\n- If `motor_current_a` is abnormal, think of: CMP-MOTOR-OL (main motor overload trip).\\n- If the machine stops with no code: check E-stop chain/safety devices, air/water supply, and PLC/MES communication.\\n- Repeated faults within 14 days: escalate to the area engineer (see SOP-MNT-01) and review the work orde\"}, {\"id\": \"SOP-UTL-01\", \"type\": \"sop\", \"mach"
+   ]
+  },
+  {
+   "id": "Q15",
+   "category": "sop",
+   "question": "Which SOP covers lockout tagout?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Relevant procedures:\n- [SOP-SAF-01] SOP-SAF-01: Lockout/Tagout (Control of Hazardous Energy)",
+   "citations": [
+    "SOP-SAF-01"
+   ],
+   "tools": [
+    "search_docs"
+   ],
+   "highlight": [],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.04,
+   "contexts": [
+    "SOP-SAF-01"
+   ],
+   "contexts_text": [
+    "search_docs({\"query\": \"Which SOP covers lockout tagout?\", \"doc_type\": \"sop\", \"k\": 4}) -> {\"results\": [{\"id\": \"SOP-SAF-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-01: Lockout/Tagout (Control of Hazardous Energy)]\\n## Lock removal when the owner is unavailable\\nOnly the Maintenance Manager (or delegate) after documented attempt to contact the owner, a physical check of the machine, and notification of the employee upon return.\"}, {\"id\": \"SOP-SAF-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-01: Lockout/Tagout (Control of Hazardous Energy)]\\n## Records\\nLOTO permit stored in CMMS attached to the work order. Annual periodic inspection by EHS for each machine-specific procedure.\"}, {\"id\": \"SOP-SAF-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-01: Lockout/Tagout (Control of Hazardous Energy)]\\n## Purpose\\nPrevent unexpected energization, start-up or release of stored energy while servicing machinery. Applies to every\\nmachine in the plant: electrical, hydraulic, pneumatic, gravitational, thermal, chemical and stored (accumulators, capacitors, springs, counterbalances).\"}, {\"id\": \"SOP-SAF-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-01: Lockout/Tagout (Control of Hazardous Energy)]\\n## Scope and authority\\nOnly **Authorized Employees** (cert code LOTO) may apply locks. Affected employees (operators) must be notified. Contractors and vendor engineers must follow this procedure or be escorted by an authorized employee and apply their o"
+   ]
+  },
+  {
+   "id": "Q16",
+   "category": "sop",
+   "question": "What is the fault escalation and paging protocol SOP?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Relevant procedures:\n- [SOP-MNT-01] SOP-MNT-01: Fault Escalation and Paging Protocol\n- [SOP-MNT-M05-01] SOP-MNT-M05-01: Escalation",
+   "citations": [
+    "SOP-MNT-01",
+    "SOP-MNT-M05-01"
+   ],
+   "tools": [
+    "search_docs"
+   ],
+   "highlight": [],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.05,
+   "contexts": [
+    "SOP-MNT-01",
+    "SOP-MNT-M05-01"
+   ],
+   "contexts_text": [
+    "search_docs({\"query\": \"What is the fault escalation and paging protocol SOP?\", \"doc_type\": \"sop\", \"k\": 4}) -> {\"results\": [{\"id\": \"SOP-MNT-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-MNT-01: Fault Escalation and Paging Protocol]\\n## Purpose\\nEnsure the right person is engaged at the right time when equipment faults, defining who to page, when, and how quickly they must acknowledge.\"}, {\"id\": \"SOP-MNT-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-MNT-01: Fault Escalation and Paging Protocol]\\n## Who to page when information is incomplete\\nPage the **Maintenance Supervisor** for the zone; they know the on-call rota. The on-call rota (weekly) lists primary and secondary engineers per discipline.\"}, {\"id\": \"SOP-MNT-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-MNT-01: Fault Escalation and Paging Protocol]\\n## Escalation timers (minutes of line-impacting downtime)\\n| Machine criticality | L1 tech | L2 backup | L3 supervisor | L4 engineer | L5 vendor | L6 plant mgmt |\\n|---|---|---|---|---|---|---|\\n| A (line-stopping) | 2 | 8 | 15 | 30 | 90 | 180 |\\n| B (buffered) | 5 | 15 | 30 | 60 | 180 | 360 |\\n| C (non-critical) | 10 | 30 | 60 | 120 | 360 | 720 |\\n\\nTimers run from the Andon. A repeat of the same fault within 24 hours moves the escalation straight to L4.\"}, {\"id\": \"SOP-MNT-M05-01\", \"type\": \"sop\", \"machine\": \"M05\", \"text\": \"[SOP-MNT-M05-01: Escalation]\\n## Escalation\\nFollow the M05 on-shift chain in the escalation matrix (L1 primary tech, L2 backup, L3 maintenance super"
+   ]
+  },
+  {
+   "id": "Q17",
+   "category": "sop",
+   "question": "Which procedure covers FANUC backup battery alarms SRVO-062 and SRVO-065?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Relevant procedures:\n- [SOP-ROB-02] SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering",
+   "citations": [
+    "SOP-ROB-02"
+   ],
+   "tools": [
+    "search_docs"
+   ],
+   "highlight": [],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.05,
+   "contexts": [
+    "SOP-ROB-02"
+   ],
+   "contexts_text": [
+    "search_docs({\"query\": \"Which procedure covers FANUC backup battery alarms SRVO-062 and SRVO-065?\", \"doc_type\": \"sop\", \"k\": 4}) -> {\"results\": [{\"id\": \"SOP-ROB-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering]\\n## SRVO-065 BLAL (low battery) - do this the same shift\\n1. Keep the controller **powered ON** during replacement so data stays alive.\\n2. Replace the controller battery and the robot-base battery one at a time, checking polarity.\\n3. Record the date on the robot tag; clear the alarm.\"}, {\"id\": \"SOP-ROB-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering]\\n## Background\\nFANUC controllers keep absolute position (mastering) data in pulse coders powered by backup batteries. Two alarms matter:\\n- **SRVO-065 BLAL:** battery voltage is low, data is still intact. Warning, replace soon.\\n- **SRVO-062 BZAL:** battery voltage is zero, encoder data lost. Critical, the axis must be re-mastered.\\n\\nBatteries (lithium A02B-0200-K102 in the controller and robot base on many models) typically last 1-2 years. Replace on a schedule or at the first BLAL.\"}, {\"id\": \"SOP-ROB-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-ROB-02: FANUC Backup Battery Alarms (SRVO-062 BZAL / SRVO-065 BLAL) and Re-mastering]\\n## Notes\\nTypical downtime for BZAL is 90-300 minutes. Keep a controller backup current so that mastering data can be compared to the backup (p"
+   ]
+  },
+  {
+   "id": "Q18",
+   "category": "sop",
+   "question": "Which SOP handles torque NOK and tool calibration in general assembly?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Relevant procedures:\n- [SOP-QA-01] SOP-QA-01: Torque NOK Handling and Tool Calibration (General Assembly)\n- [SOP-BAT-01] SOP-BAT-01: Pack Fastening, Torque Traceability and Isolated Tooling\n- [SOP-AREA-GA] SOP-AREA-GA: General Assembly Daily Start-up, Shutdown and Emergency Protocol",
+   "citations": [
+    "SOP-QA-01",
+    "SOP-BAT-01",
+    "SOP-AREA-GA"
+   ],
+   "tools": [
+    "search_docs"
+   ],
+   "highlight": [],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.04,
+   "contexts": [
+    "SOP-QA-01",
+    "SOP-BAT-01",
+    "SOP-AREA-GA"
+   ],
+   "contexts_text": [
+    "search_docs({\"query\": \"Which SOP handles torque NOK and tool calibration in general assembly?\", \"doc_type\": \"sop\", \"k\": 4}) -> {\"results\": [{\"id\": \"SOP-QA-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-QA-01: Torque NOK Handling and Tool Calibration (General Assembly)]\\n**Area:** GA  |  **Owner:** Quality Engineer  |  **Revision:** B  |  **Effective:** 2025-06-01\\n\\n> **Synthetic training document.** Written for the Voltara Motors digital-twin demo. It is modeled on public OEM and industry information but it is NOT an OEM document. Items tagged `oem_public` were checked against public sources; items tagged `synthetic` are invented for realism. Do not use for real equipment.\\n\\n- Atlas Copco Power Focus controllers log each tightening with VIN, torque, angle and status.\\n- NOK actions: stop th\"}, {\"id\": \"SOP-BAT-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-BAT-01: Pack Fastening, Torque Traceability and Isolated Tooling]\\n## Typical torque faults\\n- TQ-NOK: out-of-window torque - check cross-threading, socket wear, transducer drift and fastener lot friction.\\n- TQ-MOTOR-TEMP: tool temperature rising - verify duty cycle, replace gear head if abnormal.\"}, {\"id\": \"SOP-BAT-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-BAT-01: Pack Fastening, Torque Traceability and Isolated Tooling]\\n## Procedure\\n1. Daily torque verification on the test joint (record in the daily check). Reject the station if the verification falls outside +/- 5%.\\n2. All tightening results are recorded against the VIN/pack "
+   ]
+  },
+  {
+   "id": "Q19",
+   "category": "sop",
+   "question": "Which SOP covers safe work on the high-voltage EV battery?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Relevant procedures:\n- [SOP-SAF-02] SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure",
+   "citations": [
+    "SOP-SAF-02"
+   ],
+   "tools": [
+    "search_docs"
+   ],
+   "highlight": [],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.04,
+   "contexts": [
+    "SOP-SAF-02"
+   ],
+   "contexts_text": [
+    "search_docs({\"query\": \"Which SOP covers safe work on the high-voltage EV battery?\", \"doc_type\": \"sop\", \"k\": 4}) -> {\"results\": [{\"id\": \"SOP-SAF-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure]\\n## Records\\nEnergized work permits, insulation resistance logs, PPE glove test log, and incident reports.\"}, {\"id\": \"SOP-SAF-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure]\\n## Purpose\\nControl electrical shock, arc-flash and thermal risks when working on EV battery modules, packs and HV test equipment (typically 400 V to 800 V nominal; a pack with ~198 cells in series can operate from roughly 610 to 835 V).\"}, {\"id\": \"SOP-SAF-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure]\\n## Escalation\\nAny HV incident or suspected fault is **Level 6 immediately**: page HV Safety Engineer and EHS. Quarantine the pack in the marked battery quarantine bay (outdoors cage, 3 m separation).\"}, {\"id\": \"SOP-SAF-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-SAF-02: High-Voltage (EV Battery) Safe Work Procedure]\\n## Qualification\\n- **NFPA 70E qualified person (cert HV):** may work on or near exposed energized parts only with an approved energized work permit.\\n- **HVB (non-electrical HV awareness):** may handle sealed, isolated packs and use galvanically isolated fastening tools; may not open HV enclosures.\"}]}"
+   ]
+  },
+  {
+   "id": "Q20",
+   "category": "parts",
+   "question": "What spare part is needed to fix KSS-GEAR-LEAK on BIW-WK-03?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "KSS-GEAR-LEAK on BIW-WK-03: Oil leak detected at A1-A3 gearbox seal [MAN-WK].\n- Likely causes: Seal wear; Over-filled gearbox; Vent plug blocked\n- Parts: KUKA-SEAL-A2 (Axis 2 shaft seal kit)\n- Shows in: gearbox_temp_c (drift_up)",
+   "citations": [
+    "MAN-WK"
+   ],
+   "tools": [
+    "graph_lookup",
+    "search_docs"
+   ],
+   "highlight": [
+    "BIW-WK-03"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.07,
+   "contexts": [
+    "WO-2026-007480",
+    "WO-2026-004296",
+    "WO-2026-007938"
+   ],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"BIW-WK-03\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"BIW-WK-03\", \"fault_modes\": [{\"fault_id\": \"FAULT:WK:KSS-MAINT-OIL\", \"code\": \"KSS-MAINT-OIL\", \"description\": \"Maintenance reminder: gear oil change due (A1-A3)\", \"severity\": 1, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"KUKA-OIL-S150-20L\", \"description\": \"Shell Tivela S150 gear oil 20 L\", \"unit_cost\": 310.0, \"on_hand\": null}], \"causes\": [\"Operating hours reached service interval (10,000-20,000 h or 3-4 years depending on model)\"], \"sensors\": [{\"channel\": \"gearbox_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-27008\", \"code\": \"KSS-27008\", \"description\": \"Brake test failed on axis\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"KUKA-MTR-A4\", \"description\": \"Axis 4 motor with brake\", \"unit_cost\": 4900.0, \"on_hand\": null}], \"causes\": [\"Brake wear (excess braking angle)\", \"Brake contamination with lubricant\", \"Brake release voltage low\"], \"sensors\": [{\"channel\": \"motor_current_a\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-SAFE-EMG\", \"code\": \"KSS-SAFE-EMG\", \"description\": \"Emergency stop active (external)\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [], \"causes\": [\"Fence door opened\", \"Light curtain interrupted\", \"E-stop pushed\"], \"sensors\": [], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-RDC-BAT\", \"code\": \"KSS-RDC-BAT\", \"description\": \"RDC (resolver digital converter",
+    "search_docs({\"query\": \"What spare part is needed to fix KSS-GEAR-LEAK on BIW-WK-03?\", \"k\": 3, \"machine_id\": \"BIW-WK-03\", \"fault_code\": \"KSS-GEAR-LEAK\"}) -> {\"results\": [{\"id\": \"WO-2026-007480\", \"type\": \"work_order\", \"machine\": \"BIW-WK-03\", \"text\": \"Work order WO-2026-007480 (CM, P3) on BIW-WK-03 opened 2026-09-23T03:00 shift C. Fault KSS-GEAR-LEAK: KSS-GEAR-LEAK: Oil leak detected at A1-A3 gearbox seal. Symptom: Alarm KSS-GEAR-LEAK - oil leak detected at A1-A3 gearbox seal. Downstream buffer is draining. Diagnosis: Arrived 03:03. Inspected and photograph leak source. Measured gearbox_temp_c = 74.29 C (nominal 48.0, warn 70.0, alarm 82.0). Cause: over-filled gearbox. Action: Replaced shaft seal; refill to level. Root cause: Over-filled gearbox (Unknown / under investigation). Parts: 1x KUKA-SEAL-A2. Downtime 215 min, escalation reached L6\"}, {\"id\": \"WO-2026-004296\", \"type\": \"work_order\", \"machine\": \"BIW-WK-03\", \"text\": \"Work order WO-2026-004296 (CM, P3) on BIW-WK-03 opened 2026-06-04T05:02 shift C. Fault KSS-GEAR-LEAK: KSS-GEAR-LEAK: Oil leak detected at A1-A3 gearbox seal. Symptom: Spot Weld Robot (KUKA) 3 faulted (KSS-GEAR-LEAK). Line lead called maintenance via radio at 05:02. Diagnosis: Initial check 05:14, Spot Weld Robot (KUKA) 3 fault KSS-GEAR-LEAK confirmed. Measured gearbox_temp_c = 70.63 C (nominal 48.0, warn 70.0, alarm 82.0). Probable cause over-filled gearbox. Action: Inspected and photograph leak source. Replaced shaft seal; refill to level. Monitored for 5 shifts. Root cause: Over-filled gearb\"}, {\"id\": \"WO-2026-007"
+   ]
+  },
+  {
+   "id": "Q21",
+   "category": "parts",
+   "question": "Which part does SRVO-065 on M04 need?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "SRVO-065 on M04: BLAL alarm: pulsecoder battery voltage low (data still intact) [MAN-WF].\n- Likely causes: Battery approaching end of life (1-2 year typical life); Missed preventive battery replacement\n- Parts: FAN-A02B-0200-K102 (Lithium backup battery A02B-0200-K102)\n- Shows in: battery_voltage_v (decay)",
+   "citations": [
+    "MAN-WF"
+   ],
+   "tools": [
+    "graph_lookup",
+    "search_docs"
+   ],
+   "highlight": [
+    "M04"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.04,
+   "contexts": [
+    "WO-2026-001413",
+    "WO-2025-002650",
+    "SOP-ROB-02"
+   ],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"M04\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"M04\", \"fault_modes\": [{\"fault_id\": \"FAULT:WF:SRVO-062\", \"code\": \"SRVO-062\", \"description\": \"BZAL alarm: pulsecoder backup battery voltage zero, absolute position lost\", \"severity\": 3, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"FAN-A02B-0200-K102\", \"description\": \"Lithium backup battery A02B-0200-K102\", \"unit_cost\": 38.0, \"on_hand\": null}], \"causes\": [\"Encoder backup battery fully discharged\", \"Battery cable disconnected or broken inside base\", \"Controller powered off for a long period with dead battery\"], \"sensors\": [{\"channel\": \"battery_voltage_v\", \"shape\": \"decay\"}], \"documents\": [\"MAN-WF\"]}, {\"fault_id\": \"FAULT:WF:SRVO-065\", \"code\": \"SRVO-065\", \"description\": \"BLAL alarm: pulsecoder battery voltage low (data still intact)\", \"severity\": 1, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"FAN-A02B-0200-K102\", \"description\": \"Lithium backup battery A02B-0200-K102\", \"unit_cost\": 38.0, \"on_hand\": null}], \"causes\": [\"Battery approaching end of life (1-2 year typical life)\", \"Missed preventive battery replacement\"], \"sensors\": [{\"channel\": \"battery_voltage_v\", \"shape\": \"decay\"}], \"documents\": [\"MAN-WF\"]}, {\"fault_id\": \"FAULT:WF:SRVO-050\", \"code\": \"SRVO-050\", \"description\": \"Collision detect alarm\", \"severity\": 2, \"source\": \"oem_public\", \"parts\": [], \"causes\": [\"Part or fixture misplaced in the cell\", \"Gun tip stuck to panel\", \"Wrong payload setting\", \"Reducer wear",
+    "search_docs({\"query\": \"Which part does SRVO-065 on M04 need?\", \"k\": 3, \"machine_id\": \"M04\", \"fault_code\": \"SRVO-065\"}) -> {\"results\": [{\"id\": \"WO-2026-001413\", \"type\": \"work_order\", \"machine\": \"M04\", \"text\": \"Work order WO-2026-001413 (CM, P4) on M04 opened 2026-02-21T03:53 shift C. Fault SRVO-065: SRVO-065: BLAL alarm: pulsecoder battery voltage low (data still intact). Symptom: SRVO-065 displayed on HMI; Weld robot 1 stopped mid-cycle. Andon pulled at 03:53. Diagnosis: On site 04:04. Followed troubleshooting steps in the FANUC R-2000iC/210F manual for SRVO-065. Measured battery_voltage_v = 3.20 V (nominal 3.6, warn 3.1, alarm 2.6). Found: missed preventive battery replacement. Action: 1) Replaced batteries within the same shift while power is ON to keep mastering data. Root cause: Missed preventi\"}, {\"id\": \"WO-2025-002650\", \"type\": \"work_order\", \"machine\": \"M04\", \"text\": \"Work order WO-2025-002650 (CM, P4) on M04 opened 2025-04-17T14:25 shift B. Fault SRVO-065: SRVO-065: BLAL alarm: pulsecoder battery voltage low (data still intact). Symptom: SRVO-065 displayed on HMI; Weld robot 1 stopped mid-cycle. Andon pulled at 14:25. Diagnosis: On site 14:27. Followed troubleshooting steps in the FANUC R-2000iC/210F manual for SRVO-065. Measured battery_voltage_v = 3.15 V (nominal 3.6, warn 3.1, alarm 2.6). Found: battery approaching end of life (1-2 year typical life). Action: 1) Replaced batteries within the same shift while power is ON to keep mastering data. 2) Record\"}, {\"id\": \"SOP-ROB-02\", \"type\": \"s"
+   ]
+  },
+  {
+   "id": "Q22",
+   "category": "parts",
+   "question": "What part do we replace for LSR-PWR-LOW on BAT-BL-01?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "LSR-PWR-LOW on BAT-BL-01: Laser output power below tolerance (measured vs. commanded) [MAN-BL].\n- Likely causes: Protective glass contaminated; Diode module degradation; Fiber connector contamination\n- Parts: LSR-PROT-GLASS (Protective cover glass (box 10))\n- Shows in: laser_power_pct (drift_down)",
+   "citations": [
+    "MAN-BL"
+   ],
+   "tools": [
+    "graph_lookup",
+    "search_docs"
+   ],
+   "highlight": [
+    "BAT-BL-01"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.06,
+   "contexts": [
+    "WO-2026-001544",
+    "WO-2025-003829",
+    "WO-2025-009165"
+   ],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"BAT-BL-01\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"BAT-BL-01\", \"fault_modes\": [{\"fault_id\": \"FAULT:BL:LSR-PWR-LOW\", \"code\": \"LSR-PWR-LOW\", \"description\": \"Laser output power below tolerance (measured vs. commanded)\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"LSR-PROT-GLASS\", \"description\": \"Protective cover glass (box 10)\", \"unit_cost\": 180.0, \"on_hand\": null}], \"causes\": [\"Protective glass contaminated\", \"Diode module degradation\", \"Fiber connector contamination\"], \"sensors\": [{\"channel\": \"laser_power_pct\", \"shape\": \"drift_down\"}], \"documents\": [\"MAN-BL\"]}, {\"fault_id\": \"FAULT:BL:LSR-CHL-TEMP\", \"code\": \"LSR-CHL-TEMP\", \"description\": \"Chiller outlet temperature out of range\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"CHL-FLT-5U\", \"description\": \"Chiller water filter\", \"unit_cost\": 95.0, \"on_hand\": null}], \"causes\": [\"Chiller refrigerant low\", \"Filter blocked\", \"Fouled condenser\"], \"sensors\": [{\"channel\": \"coolant_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-BL\"]}, {\"fault_id\": \"FAULT:BL:LSR-SHUTTER\", \"code\": \"LSR-SHUTTER\", \"description\": \"Safety shutter did not confirm open\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"LSR-SNSR-SHUT\", \"description\": \"Shutter proximity sensor\", \"unit_cost\": 130.0, \"on_hand\": null}], \"causes\": [\"Shutter sensor misaligned\", \"Cable fault\"], \"sensors\": [], \"documents\": [\"MAN-BL\"]}, {\"fault_id\": \"FAULT:BL:LSR-SEAM-VIS\", \"cod",
+    "search_docs({\"query\": \"What part do we replace for LSR-PWR-LOW on BAT-BL-01?\", \"k\": 3, \"machine_id\": \"BAT-BL-01\", \"fault_code\": \"LSR-PWR-LOW\"}) -> {\"results\": [{\"id\": \"WO-2026-001544\", \"type\": \"work_order\", \"machine\": \"BAT-BL-01\", \"text\": \"Work order WO-2026-001544 (CM, P2) on BAT-BL-01 opened 2026-02-26T01:23 shift C. Fault LSR-PWR-LOW: LSR-PWR-LOW: Laser output power below tolerance (measured vs. commanded). Symptom: Intermittent LSR-PWR-LOW over last hour, now hard-stopped. Operator noted reject rate creeping up. Diagnosis: On site 01:28. Followed troubleshooting steps in the TRUMPF TruDisk 8001 busbar cell manual for LSR-PWR-LOW. Measured laser_power_pct = 93.01 % (nominal 100, warn 94, alarm 90). Found: protective glass contaminated. Action: 1) Inspect/replace protective glass. Root cause: Protective glass contaminated (Con\"}, {\"id\": \"WO-2025-003829\", \"type\": \"work_order\", \"machine\": \"BAT-BL-01\", \"text\": \"Work order WO-2025-003829 (CM, P2) on BAT-BL-01 opened 2025-06-03T14:14 shift B. Fault LSR-PWR-LOW: LSR-PWR-LOW: Laser output power below tolerance (measured vs. commanded). Symptom: Alarm LSR-PWR-LOW - laser output power below tolerance (measured vs. commanded). Downstream station is starved. Diagnosis: On site 14:22. Followed troubleshooting steps in the TRUMPF TruDisk 8001 busbar cell manual for LSR-PWR-LOW. Measured laser_power_pct = 93.07 % (nominal 100, warn 94, alarm 90). Found: protective glass contaminated. Action: 1) Inspect/replace protective glass. Root cause: Protective glass cont\"}, {\"id\": \"WO-2025-009"
+   ]
+  },
+  {
+   "id": "Q23",
+   "category": "parts",
+   "question": "Which part is needed for GP-SHOT-SLOW on CAS-GP-01?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "GP-SHOT-SLOW on CAS-GP-01: Shot speed profile deviation / fill time out of window (~120 ms target) [MAN-GP].\n- Likely causes: Accumulator pre-charge low; Shot sleeve wear; Valve response degraded\n- Parts: GP-PLUNGER-TIP (Plunger tip)\n- Shows in: hyd_pressure_bar (drift_down)",
+   "citations": [
+    "MAN-GP"
+   ],
+   "tools": [
+    "graph_lookup",
+    "search_docs"
+   ],
+   "highlight": [
+    "CAS-GP-01"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.04,
+   "contexts": [
+    "WO-2025-002675",
+    "WO-2026-007566",
+    "SVC-00565"
+   ],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"CAS-GP-01\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"CAS-GP-01\", \"fault_modes\": [{\"fault_id\": \"FAULT:GP:GP-PRESS-LOW\", \"code\": \"GP-PRESS-LOW\", \"description\": \"Hydraulic system pressure below setpoint\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"HYD-CART-VLV\", \"description\": \"Proportional valve cartridge\", \"unit_cost\": 1850.0, \"on_hand\": null}, {\"part_no\": \"HYD-FLT-10M\", \"description\": \"10 micron return filter\", \"unit_cost\": 140.0, \"on_hand\": null}], \"causes\": [\"Pump wear\", \"Internal leakage in valve block\", \"Accumulator pre-charge loss\", \"Clogged suction strainer\"], \"sensors\": [{\"channel\": \"hyd_pressure_bar\", \"shape\": \"drift_down\"}], \"documents\": [\"MAN-GP\"]}, {\"fault_id\": \"FAULT:GP:GP-TEMP-HIGH\", \"code\": \"GP-TEMP-HIGH\", \"description\": \"Hydraulic oil temperature high\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"HYD-COOLER-PLATE\", \"description\": \"Plate-type oil cooler cleaning kit\", \"unit_cost\": 220.0, \"on_hand\": null}], \"causes\": [\"Cooler fouled\", \"Cooling water flow low\", \"Pump internal leakage\"], \"sensors\": [{\"channel\": \"hyd_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-GP\"]}, {\"fault_id\": \"FAULT:GP:GP-LEAK\", \"code\": \"GP-LEAK\", \"description\": \"Hydraulic oil leak at hose / fitting\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"HYD-HOSE-ASM\", \"description\": \"High-pressure hose assembly\", \"unit_cost\": 420.0, \"on_hand\": null}], \"causes\": [\"Hose abrasion\", \"Fitt",
+    "search_docs({\"query\": \"Which part is needed for GP-SHOT-SLOW on CAS-GP-01?\", \"k\": 3, \"machine_id\": \"CAS-GP-01\", \"fault_code\": \"GP-SHOT-SLOW\"}) -> {\"results\": [{\"id\": \"WO-2025-002675\", \"type\": \"work_order\", \"machine\": \"CAS-GP-01\", \"text\": \"Work order WO-2025-002675 (CM, P2) on CAS-GP-01 opened 2025-04-18T17:15 shift B. Fault GP-SHOT-SLOW: GP-SHOT-SLOW: Shot speed profile deviation / fill time out of window (~120 ms target). Symptom: Intermittent GP-SHOT-SLOW over last hour, now hard-stopped. Operator noted warm housing. Diagnosis: Initial check 17:22, Giga Press 1 fault GP-SHOT-SLOW confirmed. Measured hyd_pressure_bar = 256.51 bar (nominal 280, warn 255, alarm 235). Probable cause accumulator pre-charge low. Action: Checked accumulator pre-charge. Root cause: Accumulator pre-charge low (Unknown / under investigation). Parts: 1x\"}, {\"id\": \"WO-2026-007566\", \"type\": \"work_order\", \"machine\": \"CAS-GP-01\", \"text\": \"Work order WO-2026-007566 (CM, P2) on CAS-GP-01 opened 2026-09-25T08:11 shift A. Fault GP-SHOT-SLOW: GP-SHOT-SLOW: Shot speed profile deviation / fill time out of window (~120 ms target). Symptom: Intermittent GP-SHOT-SLOW over last hour, now hard-stopped. Operator noted reject rate creeping up. Diagnosis: Initial check 08:20, Giga Press 1 fault GP-SHOT-SLOW confirmed. Measured hyd_pressure_bar = 254.83 bar (nominal 280, warn 255, alarm 235). Probable cause accumulator pre-charge low. Action: Checked accumulator pre-charge. Root cause: Accumulator pre-charge low (Unknown / under investigation)\"}, {\"id\": \"SVC-00565\","
+   ]
+  },
+  {
+   "id": "Q24",
+   "category": "parts",
+   "question": "What spare part do we need for the M05 bearing wear and how many are in stock?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "bearing_wear on M05: Joint bearing wear [SOP-MNT-M05-01].\n- Likely causes: Lubricant breakdown or missed regrease interval; Contamination at the axis 1 joint; Collision or overload event\n- Parts: bearing_6208 (Deep groove ball bearing 6208 (A1 joint), 2 on hand)\n- Shows in: vibration_rms (None)",
+   "citations": [
+    "SOP-MNT-M05-01"
+   ],
+   "tools": [
+    "graph_lookup"
+   ],
+   "highlight": [
+    "M05"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"M05\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"M05\", \"fault_modes\": [{\"fault_id\": \"FAULT:WK:KSS-MAINT-OIL\", \"code\": \"KSS-MAINT-OIL\", \"description\": \"Maintenance reminder: gear oil change due (A1-A3)\", \"severity\": 1, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"KUKA-OIL-S150-20L\", \"description\": \"Shell Tivela S150 gear oil 20 L\", \"unit_cost\": 310.0, \"on_hand\": null}], \"causes\": [\"Operating hours reached service interval (10,000-20,000 h or 3-4 years depending on model)\"], \"sensors\": [{\"channel\": \"gearbox_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-27008\", \"code\": \"KSS-27008\", \"description\": \"Brake test failed on axis\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"KUKA-MTR-A4\", \"description\": \"Axis 4 motor with brake\", \"unit_cost\": 4900.0, \"on_hand\": null}], \"causes\": [\"Brake wear (excess braking angle)\", \"Brake contamination with lubricant\", \"Brake release voltage low\"], \"sensors\": [{\"channel\": \"motor_current_a\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-SAFE-EMG\", \"code\": \"KSS-SAFE-EMG\", \"description\": \"Emergency stop active (external)\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [], \"causes\": [\"Fence door opened\", \"Light curtain interrupted\", \"E-stop pushed\"], \"sensors\": [], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-RDC-BAT\", \"code\": \"KSS-RDC-BAT\", \"description\": \"RDC (resolver digital converter) batt"
+   ]
+  },
+  {
+   "id": "Q25",
+   "category": "repeat_failure",
+   "question": "How many times has CAS-GP-01 had GP-SHOT-SLOW in the last 90 days?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "CAS-GP-01 had GP-SHOT-SLOW 2 times in the last 90 days (16 total in the history, latest 2026-10-02T15:14). Most recent work orders: [WO-2026-007763], [WO-2026-007566], [WO-2026-004772].",
+   "citations": [
+    "WO-2026-007763",
+    "WO-2026-007566",
+    "WO-2026-004772"
+   ],
+   "tools": [
+    "graph_lookup",
+    "graph_lookup"
+   ],
+   "highlight": [
+    "CAS-GP-01"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.33,
+   "contexts": [],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"CAS-GP-01\", \"what\": \"repeats\", \"fault_code\": \"GP-SHOT-SLOW\"}) -> {\"fault_code\": \"GP-SHOT-SLOW\", \"count_in_window\": 2, \"window_days\": 90, \"latest\": \"2026-10-02T15:14\", \"total\": 16}",
+    "graph_lookup({\"entity\": \"CAS-GP-01\", \"what\": \"work_orders\", \"fault_code\": \"GP-SHOT-SLOW\", \"n\": 3}) -> {\"machine_id\": \"CAS-GP-01\", \"work_orders\": [{\"wo_id\": \"WO-2026-007763\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"CAS-GP-01\", \"title\": \"GP-SHOT-SLOW: Shot speed profile deviation / fill time out of window (~120 ms target)\", \"opened_ts\": \"2026-10-02T15:14\", \"closed_ts\": \"2026-10-02T20:45\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": \"GP-SHOT-SLOW\", \"symptom\": \"Operator reports: shot speed profile deviation / fill time out of window (~120 ms target). Machine halted in cycle, alarm GP-SHOT-SLOW.\", \"diagnosis\": \"On site 15:21. Followed troubleshooting steps in the IDRA GIGAPRESS NEO 6100 manual for GP-SHOT-SLOW. Measured hyd_pressure_bar = 256.76 bar (nominal 280, warn 255, alarm 235). Found: accumulator pre-charge low.\", \"root_cause\": \"Accumulator pre-charge low\", \"action_taken\": \"1) Checked accumulator pre-charge.\", \"parts_used\": [{\"part_no\": \"GP-PLUNGER-TIP\", \"description\": \"Plunger tip\", \"qty\": 2, \"unit_cost\": 2713.28}], \"downtime_min\": 319, \"assigned_tech\": \"BAP-E0374\", \"escalation_level_reached\": 6, \"sensor_snapshot\": {\"hyd_pressure_bar\": 258.69, \"hyd_temp_c\": 46.65, \"hyd_filter_dp_bar\": 1.37, \"vibration_mm_s\": 1.72, \"hyd_level_pct\": 92.7}}, {\"wo_id\": \"WO-2026-007566\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"CAS-GP-01\", \"title\": \"GP-SHOT-SLOW: Shot speed profile deviation / fill time out of window (~120 ms target)\", \"opened_ts\": \"2026-09-25T08:11\", \"c"
+   ]
+  },
+  {
+   "id": "Q26",
+   "category": "repeat_failure",
+   "question": "How many times has PNT-PR-04 had PR-BELL-SPEED in the last 90 days?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "PNT-PR-04 had PR-BELL-SPEED 4 times in the last 90 days (15 total in the history, latest 2026-10-08T21:55). Most recent work orders: [WO-2026-007915], [WO-2026-007680], [WO-2026-006132].",
+   "citations": [
+    "WO-2026-007915",
+    "WO-2026-007680",
+    "WO-2026-006132"
+   ],
+   "tools": [
+    "graph_lookup",
+    "graph_lookup"
+   ],
+   "highlight": [
+    "PNT-PR-04"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"PNT-PR-04\", \"what\": \"repeats\", \"fault_code\": \"PR-BELL-SPEED\"}) -> {\"fault_code\": \"PR-BELL-SPEED\", \"count_in_window\": 4, \"window_days\": 90, \"latest\": \"2026-10-08T21:55\", \"total\": 15}",
+    "graph_lookup({\"entity\": \"PNT-PR-04\", \"what\": \"work_orders\", \"fault_code\": \"PR-BELL-SPEED\", \"n\": 3}) -> {\"machine_id\": \"PNT-PR-04\", \"work_orders\": [{\"wo_id\": \"WO-2026-007915\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"PNT-PR-04\", \"title\": \"PR-BELL-SPEED: Atomizer (EcoBell) speed deviation\", \"opened_ts\": \"2026-10-08T21:55\", \"closed_ts\": \"2026-10-08T23:47\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": \"PR-BELL-SPEED\", \"symptom\": \"Operator reports: atomizer (EcoBell) speed deviation. Machine halted in cycle, alarm PR-BELL-SPEED.\", \"diagnosis\": \"On site 22:03. Followed troubleshooting steps in the Duerr EcoRP E033i manual for PR-BELL-SPEED. Measured bell_speed_krpm = 42.27 krpm (nominal 45, warn 42, alarm 38). Found: turbine bearing wear.\", \"root_cause\": \"Turbine bearing wear\", \"action_taken\": \"1) Checked turbine air, clean bell cup. 2) Replaced turbine.\", \"parts_used\": [], \"downtime_min\": 104, \"assigned_tech\": \"B-TECH01\", \"escalation_level_reached\": 5, \"sensor_snapshot\": {\"motor_current_a\": 9.08, \"motor_temp_c\": 46.57, \"bell_speed_krpm\": 42.8, \"vibration_mm_s\": 0.8}}, {\"wo_id\": \"WO-2026-007680\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"PNT-PR-04\", \"title\": \"PR-BELL-SPEED: Atomizer (EcoBell) speed deviation\", \"opened_ts\": \"2026-09-29T18:10\", \"closed_ts\": \"2026-09-29T19:48\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": \"PR-BELL-SPEED\", \"symptom\": \"Intermittent PR-BELL-SPEED over last hour, now hard-stopped. Operator noted nothing unusual before the stop.\","
+   ]
+  },
+  {
+   "id": "Q27",
+   "category": "repeat_failure",
+   "question": "How many times has BAT-BL-01 had LSR-PWR-LOW in the last 90 days?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "BAT-BL-01 had LSR-PWR-LOW 7 times in the last 90 days (26 total in the history, latest 2026-10-08T02:23). Most recent work orders: [WO-2026-007888], [WO-2026-007642], [WO-2026-007640].",
+   "citations": [
+    "WO-2026-007888",
+    "WO-2026-007642",
+    "WO-2026-007640"
+   ],
+   "tools": [
+    "graph_lookup",
+    "graph_lookup"
+   ],
+   "highlight": [
+    "BAT-BL-01"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"BAT-BL-01\", \"what\": \"repeats\", \"fault_code\": \"LSR-PWR-LOW\"}) -> {\"fault_code\": \"LSR-PWR-LOW\", \"count_in_window\": 7, \"window_days\": 90, \"latest\": \"2026-10-08T02:23\", \"total\": 26}",
+    "graph_lookup({\"entity\": \"BAT-BL-01\", \"what\": \"work_orders\", \"fault_code\": \"LSR-PWR-LOW\", \"n\": 3}) -> {\"machine_id\": \"BAT-BL-01\", \"work_orders\": [{\"wo_id\": \"WO-2026-007888\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"BAT-BL-01\", \"title\": \"LSR-PWR-LOW: Laser output power below tolerance (measured vs. commanded)\", \"opened_ts\": \"2026-10-08T02:23\", \"closed_ts\": \"2026-10-08T04:19\", \"status\": \"completed\", \"shift\": \"C\", \"fault_code\": \"LSR-PWR-LOW\", \"symptom\": \"Intermittent LSR-PWR-LOW over last hour, now hard-stopped. Operator noted a small puddle near the base.\", \"diagnosis\": \"Initial check 02:25, Busbar Laser Welder 1 fault LSR-PWR-LOW confirmed. Measured laser_power_pct = 94.15 % (nominal 100, warn 94, alarm 90). Probable cause diode module degradation.\", \"root_cause\": \"Diode module degradation\", \"action_taken\": \"Inspect/replace protective glass.\", \"parts_used\": [{\"part_no\": \"LSR-PROT-GLASS\", \"description\": \"Protective cover glass (box 10)\", \"qty\": 1, \"unit_cost\": 196.45}], \"downtime_min\": 115, \"assigned_tech\": \"BAP-E0443\", \"escalation_level_reached\": 5, \"sensor_snapshot\": {\"laser_power_pct\": 93.81, \"coolant_temp_c\": 22.05, \"vibration_mm_s\": 0.738}}, {\"wo_id\": \"WO-2026-007642\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"BAT-BL-01\", \"title\": \"LSR-PWR-LOW: Laser output power below tolerance (measured vs. commanded)\", \"opened_ts\": \"2026-09-28T21:27\", \"closed_ts\": \"2026-09-28T23:55\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": \"LSR-PWR-LOW\", \"symptom\": \"Alarm LSR-P"
+   ]
+  },
+  {
+   "id": "Q28",
+   "category": "repeat_failure",
+   "question": "How many times has UTL-CP-02 had CMP-DISCH-TEMP in the last 90 days?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "UTL-CP-02 had CMP-DISCH-TEMP 6 times in the last 90 days (16 total in the history, latest 2026-10-06T21:22). Most recent work orders: [WO-2026-007861], [WO-2026-007644], [WO-2026-007571].",
+   "citations": [
+    "WO-2026-007861",
+    "WO-2026-007644",
+    "WO-2026-007571"
+   ],
+   "tools": [
+    "graph_lookup",
+    "graph_lookup"
+   ],
+   "highlight": [
+    "UTL-CP-02"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"UTL-CP-02\", \"what\": \"repeats\", \"fault_code\": \"CMP-DISCH-TEMP\"}) -> {\"fault_code\": \"CMP-DISCH-TEMP\", \"count_in_window\": 6, \"window_days\": 90, \"latest\": \"2026-10-06T21:22\", \"total\": 16}",
+    "graph_lookup({\"entity\": \"UTL-CP-02\", \"what\": \"work_orders\", \"fault_code\": \"CMP-DISCH-TEMP\", \"n\": 3}) -> {\"machine_id\": \"UTL-CP-02\", \"work_orders\": [{\"wo_id\": \"WO-2026-007861\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"UTL-CP-02\", \"title\": \"CMP-DISCH-TEMP: Discharge temperature high\", \"opened_ts\": \"2026-10-06T21:22\", \"closed_ts\": \"2026-10-06T22:52\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": \"CMP-DISCH-TEMP\", \"symptom\": \"Air Compressor 2 faulted (CMP-DISCH-TEMP). Line lead called maintenance via radio at 21:22.\", \"diagnosis\": \"Initial check 21:37, Air Compressor 2 fault CMP-DISCH-TEMP confirmed. Measured discharge_temp_c = 100.20 C (nominal 85, warn 100, alarm 108). Probable cause cooler fouled.\", \"root_cause\": \"Cooler fouled\", \"action_taken\": \"Cleaned cooler; check oil level. Replaced thermostatic valve.\", \"parts_used\": [], \"downtime_min\": 73, \"assigned_tech\": \"BAP-E0408\", \"escalation_level_reached\": 4, \"sensor_snapshot\": {\"discharge_temp_c\": 101.32, \"motor_current_a\": 283.01, \"hyd_filter_dp_bar\": 0.373, \"vibration_mm_s\": 1.76}}, {\"wo_id\": \"WO-2026-007644\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"UTL-CP-02\", \"title\": \"CMP-DISCH-TEMP: Discharge temperature high\", \"opened_ts\": \"2026-09-28T23:19\", \"closed_ts\": \"2026-09-29T01:49\", \"status\": \"completed\", \"shift\": \"C\", \"fault_code\": \"CMP-DISCH-TEMP\", \"symptom\": \"At 23:19 Air Compressor 2 went down with CMP-DISCH-TEMP. Operator tried reset twice, alarm returned.\", \"diagnosis\": \"Arrived 23:23. Cleaned cooler; ch"
+   ]
+  },
+  {
+   "id": "Q29",
+   "category": "keep_running",
+   "question": "M05 is vibrating high. Can we keep running 2 more hours?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "M05: keeping it running 2 more hours matches scenario 'hero_ignored' (Same fault, ignored: M05 seizes at 6.0 h, line down until emergency repair.)\n- Remaining useful life at alert: about 52.7 min (bearing wear).\n- Downtime: 133.6 min vs 70.2 min if repaired now.\n- Throughput: 27.2/h vs 33.0/h; OEE 0.628 vs 0.821.\n- Cost: $5,076,165; failure probability about 97% (estimate).\nRecommendation: Do not extend. Repair now. Rule: criticality A with a rising warn-level trend limits extension to the current batch (SOP-OPS-02) [SOP-OPS-02].",
+   "citations": [
+    "SOP-OPS-02"
+   ],
+   "tools": [
+    "get_sensor_state",
+    "run_scenario",
+    "search_docs"
+   ],
+   "highlight": [
+    "M05"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": true,
+   "latency_s": 0.0,
+   "contexts": [
+    "SOP-OPS-02"
+   ],
+   "contexts_text": [
+    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"warning\", \"source\": \"mock:events.json\", \"readings\": {\"vibration_rms\": {\"value\": 0.9, \"nominal\": 0.42, \"ratio\": 2.13, \"alert_at_ratio\": 2.0}, \"temperature_c\": {\"value\": 71.4, \"nominal\": 61.5}, \"motor_current_a\": {\"value\": 15.4, \"nominal\": 14.2}}, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"warning\", \"score\": 0.93, \"contributors\": [{\"signal\": \"vibration_rms\", \"shap\": 0.61}, {\"signal\": \"temperature_c\", \"shap\": 0.22}, {\"signal\": \"motor_current_a\", \"shap\": 0.1}], \"component_id\": \"m05_joint1_bearing\"}, \"remaining_useful_life_min\": 52.7, \"note\": \"SHAP contributors are illustrative until anomaly detection exists (D-019, D-023).\"}",
+    "run_scenario({\"machine_id\": \"M05\", \"hours\": 2.0}) -> {\"type\": \"scenario_result\", \"id\": \"SC-1042\", \"source\": \"mock:scenarios/summary.json\", \"query\": {\"op\": \"keep_running\", \"machine_id\": \"M05\", \"hours\": 2.0}, \"matched_scenario\": \"hero_ignored\", \"rul_hours_at_alert\": 0.88, \"kpis\": {\"throughput_per_hr\": {\"baseline\": 33.0, \"scenario\": 27.2}, \"downtime_min\": {\"baseline\": 70.2, \"scenario\": 133.6}, \"oee\": {\"baseline\": 0.821, \"scenario\": 0.628}, \"units\": {\"baseline\": 264, \"scenario\": 218}, \"failure_probability\": 0.97, \"cost_usd\": 5076165}, \"about\": \"Same fault, ignored: M05 seizes at 6.0 h, line down until emergency repair.\", \"caveat\": \"failure_probability is an estimate chosen per matched scenario, not a model output.\"}",
+    "search_docs({\"query\": \"run-extension risk decision keep running more hours\", \"doc_type\": \"sop\", \"k\": 2}) -> {\"results\": [{\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Purpose\\nProvide a consistent, risk-based way to decide whether a machine showing warning signs may keep producing until a planned stop, a shift end, or a defined time extension.\"}, {\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Documentation\\nRecord the decision, approver, time limit, mitigations and monitoring in the work order and shift handover. After the extension, close the loop: confirm outcome and update the PdM/anomaly model feedback.\"}]}"
+   ]
+  },
+  {
+   "id": "Q30",
+   "category": "keep_running",
+   "question": "M05 is vibrating high. Can we keep running 0.5 more hours?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "M05: keeping it running 0.5 more hours matches scenario 'hero_delayed_repair' (Same fault, repair starts 40 min late, just before the robot would fail.)\n- Remaining useful life at alert: about 52.7 min (bearing wear).\n- Downtime: 84.3 min vs 70.2 min if repaired now.\n- Throughput: 31.4/h vs 33.0/h; OEE 0.761 vs 0.821.\n- Cost: $3,204,662; failure probability about 35% (estimate).\nRecommendation: Extension is risky; finish the current batch only and repair at the next buffer-protected stop. Rule: criticality A with a rising warn-level trend limits extension to the current batch (SOP-OPS-02) [SOP-OPS-02].",
+   "citations": [
+    "SOP-OPS-02"
+   ],
+   "tools": [
+    "get_sensor_state",
+    "run_scenario",
+    "search_docs"
+   ],
+   "highlight": [
+    "M05"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.06,
+   "contexts": [
+    "SOP-OPS-02"
+   ],
+   "contexts_text": [
+    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"warning\", \"source\": \"mock:events.json\", \"readings\": {\"vibration_rms\": {\"value\": 0.9, \"nominal\": 0.42, \"ratio\": 2.13, \"alert_at_ratio\": 2.0}, \"temperature_c\": {\"value\": 71.4, \"nominal\": 61.5}, \"motor_current_a\": {\"value\": 15.4, \"nominal\": 14.2}}, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"warning\", \"score\": 0.93, \"contributors\": [{\"signal\": \"vibration_rms\", \"shap\": 0.61}, {\"signal\": \"temperature_c\", \"shap\": 0.22}, {\"signal\": \"motor_current_a\", \"shap\": 0.1}], \"component_id\": \"m05_joint1_bearing\"}, \"remaining_useful_life_min\": 52.7, \"note\": \"SHAP contributors are illustrative until anomaly detection exists (D-019, D-023).\"}",
+    "run_scenario({\"machine_id\": \"M05\", \"hours\": 0.5}) -> {\"type\": \"scenario_result\", \"id\": \"SC-1042\", \"source\": \"mock:scenarios/summary.json\", \"query\": {\"op\": \"keep_running\", \"machine_id\": \"M05\", \"hours\": 0.5}, \"matched_scenario\": \"hero_delayed_repair\", \"rul_hours_at_alert\": 0.88, \"kpis\": {\"throughput_per_hr\": {\"baseline\": 33.0, \"scenario\": 31.4}, \"downtime_min\": {\"baseline\": 70.2, \"scenario\": 84.3}, \"oee\": {\"baseline\": 0.821, \"scenario\": 0.761}, \"units\": {\"baseline\": 264, \"scenario\": 251}, \"failure_probability\": 0.35, \"cost_usd\": 3204662}, \"about\": \"Same fault, repair starts 40 min late, just before the robot would fail.\", \"caveat\": \"failure_probability is an estimate chosen per matched scenario, not a model output.\"}",
+    "search_docs({\"query\": \"run-extension risk decision keep running more hours\", \"doc_type\": \"sop\", \"k\": 2}) -> {\"results\": [{\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Purpose\\nProvide a consistent, risk-based way to decide whether a machine showing warning signs may keep producing until a planned stop, a shift end, or a defined time extension.\"}, {\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Documentation\\nRecord the decision, approver, time limit, mitigations and monitoring in the work order and shift handover. After the extension, close the loop: confirm outcome and update the PdM/anomaly model feedback.\"}]}"
+   ]
+  },
+  {
+   "id": "Q31",
+   "category": "keep_running",
+   "question": "M05 is vibrating high. Can we keep running 4 more hours?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "M05: keeping it running 4 more hours matches scenario 'hero_ignored' (Same fault, ignored: M05 seizes at 6.0 h, line down until emergency repair.)\n- Remaining useful life at alert: about 52.7 min (bearing wear).\n- Downtime: 133.6 min vs 70.2 min if repaired now.\n- Throughput: 27.2/h vs 33.0/h; OEE 0.628 vs 0.821.\n- Cost: $5,076,165; failure probability about 97% (estimate).\nRecommendation: Do not extend. Repair now. Rule: criticality A with a rising warn-level trend limits extension to the current batch (SOP-OPS-02) [SOP-OPS-02].",
+   "citations": [
+    "SOP-OPS-02"
+   ],
+   "tools": [
+    "get_sensor_state",
+    "run_scenario",
+    "search_docs"
+   ],
+   "highlight": [
+    "M05"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.06,
+   "contexts": [
+    "SOP-OPS-02"
+   ],
+   "contexts_text": [
+    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"warning\", \"source\": \"mock:events.json\", \"readings\": {\"vibration_rms\": {\"value\": 0.9, \"nominal\": 0.42, \"ratio\": 2.13, \"alert_at_ratio\": 2.0}, \"temperature_c\": {\"value\": 71.4, \"nominal\": 61.5}, \"motor_current_a\": {\"value\": 15.4, \"nominal\": 14.2}}, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"warning\", \"score\": 0.93, \"contributors\": [{\"signal\": \"vibration_rms\", \"shap\": 0.61}, {\"signal\": \"temperature_c\", \"shap\": 0.22}, {\"signal\": \"motor_current_a\", \"shap\": 0.1}], \"component_id\": \"m05_joint1_bearing\"}, \"remaining_useful_life_min\": 52.7, \"note\": \"SHAP contributors are illustrative until anomaly detection exists (D-019, D-023).\"}",
+    "run_scenario({\"machine_id\": \"M05\", \"hours\": 4.0}) -> {\"type\": \"scenario_result\", \"id\": \"SC-1043\", \"source\": \"mock:scenarios/summary.json\", \"query\": {\"op\": \"keep_running\", \"machine_id\": \"M05\", \"hours\": 4.0}, \"matched_scenario\": \"hero_ignored\", \"rul_hours_at_alert\": 0.88, \"kpis\": {\"throughput_per_hr\": {\"baseline\": 33.0, \"scenario\": 27.2}, \"downtime_min\": {\"baseline\": 70.2, \"scenario\": 133.6}, \"oee\": {\"baseline\": 0.821, \"scenario\": 0.628}, \"units\": {\"baseline\": 264, \"scenario\": 218}, \"failure_probability\": 0.97, \"cost_usd\": 5076165}, \"about\": \"Same fault, ignored: M05 seizes at 6.0 h, line down until emergency repair.\", \"caveat\": \"failure_probability is an estimate chosen per matched scenario, not a model output.\"}",
+    "search_docs({\"query\": \"run-extension risk decision keep running more hours\", \"doc_type\": \"sop\", \"k\": 2}) -> {\"results\": [{\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Purpose\\nProvide a consistent, risk-based way to decide whether a machine showing warning signs may keep producing until a planned stop, a shift end, or a defined time extension.\"}, {\"id\": \"SOP-OPS-02\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-OPS-02: Run-Extension and Run-to-Failure Risk Decision (e.g. 'Keep running 2 more hours?')]\\n## Documentation\\nRecord the decision, approver, time limit, mitigations and monitoring in the work order and shift handover. After the extension, close the loop: confirm outcome and update the PdM/anomaly model feedback.\"}]}"
+   ]
+  },
+  {
+   "id": "Q32",
+   "category": "storyline",
+   "question": "What is wrong with CAS-GP-01 and what should we do?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "CAS-GP-01 status: degrading.\n- hyd_pressure_bar: 261.25 bar (nominal 280, warn 255)\n- Ongoing fault: GP-SHOT-SLOW (drifting channel hyd_pressure_bar, drift_down).\n- Fault mode GP-SHOT-SLOW: Shot speed profile deviation / fill time out of window (~120 ms target). Causes: Accumulator pre-charge low; Shot sleeve wear; Valve response degraded. Parts: GP-PLUNGER-TIP.\n- Latest work order [WO-2026-007834] 2026-10-05: GP-TEMP-HIGH, root cause: Cooler fouled.\n- Page L1 Jamal Perez (x4522, radio PLT-9D) [CAS-GP-01-C]; then L2 after 8 min.",
+   "citations": [
+    "WO-2026-007834",
+    "CAS-GP-01-C"
+   ],
+   "tools": [
+    "get_sensor_state",
+    "graph_lookup",
+    "graph_lookup",
+    "search_docs",
+    "escalation_chain"
+   ],
+   "highlight": [
+    "CAS-GP-01"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.08,
+   "contexts": [
+    "WO-2025-005569",
+    "WO-2025-005764",
+    "WO-2024-001031"
+   ],
+   "contexts_text": [
+    "get_sensor_state({\"machine_id\": \"CAS-GP-01\"}) -> {\"machine_id\": \"CAS-GP-01\", \"status\": \"degrading\", \"source\": \"mock:contract+storyline\", \"storyline_fault\": \"GP-SHOT-SLOW\", \"drifting_channel\": \"hyd_pressure_bar\", \"shape\": \"drift_down\", \"readings\": {\"hyd_pressure_bar\": {\"value\": 261.25, \"nominal\": 280, \"warn\": 255, \"alarm\": 235, \"unit\": \"bar\"}, \"hyd_temp_c\": {\"value\": 46, \"nominal\": 46, \"warn\": 58, \"alarm\": 65, \"unit\": \"C\"}, \"hyd_filter_dp_bar\": {\"value\": 1.2, \"nominal\": 1.2, \"warn\": 3.0, \"alarm\": 4.0, \"unit\": \"bar\"}, \"vibration_mm_s\": {\"value\": 2.1, \"nominal\": 2.1, \"warn\": 5.0, \"alarm\": 8.0, \"unit\": \"mm/s\"}, \"hyd_level_pct\": {\"value\": 92, \"nominal\": 92, \"warn\": 80, \"alarm\": 70, \"unit\": \"%\"}}}",
+    "graph_lookup({\"entity\": \"CAS-GP-01\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"CAS-GP-01\", \"fault_modes\": [{\"fault_id\": \"FAULT:GP:GP-PRESS-LOW\", \"code\": \"GP-PRESS-LOW\", \"description\": \"Hydraulic system pressure below setpoint\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"HYD-CART-VLV\", \"description\": \"Proportional valve cartridge\", \"unit_cost\": 1850.0, \"on_hand\": null}, {\"part_no\": \"HYD-FLT-10M\", \"description\": \"10 micron return filter\", \"unit_cost\": 140.0, \"on_hand\": null}], \"causes\": [\"Pump wear\", \"Internal leakage in valve block\", \"Accumulator pre-charge loss\", \"Clogged suction strainer\"], \"sensors\": [{\"channel\": \"hyd_pressure_bar\", \"shape\": \"drift_down\"}], \"documents\": [\"MAN-GP\"]}, {\"fault_id\": \"FAULT:GP:GP-TEMP-HIGH\", \"code\": \"GP-TEMP-HIGH\", \"description\": \"Hydraulic oil temperature high\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"HYD-COOLER-PLATE\", \"description\": \"Plate-type oil cooler cleaning kit\", \"unit_cost\": 220.0, \"on_hand\": null}], \"causes\": [\"Cooler fouled\", \"Cooling water flow low\", \"Pump internal leakage\"], \"sensors\": [{\"channel\": \"hyd_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-GP\"]}, {\"fault_id\": \"FAULT:GP:GP-LEAK\", \"code\": \"GP-LEAK\", \"description\": \"Hydraulic oil leak at hose / fitting\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"HYD-HOSE-ASM\", \"description\": \"High-pressure hose assembly\", \"unit_cost\": 420.0, \"on_hand\": null}], \"causes\": [\"Hose abrasion\", \"Fitt",
+    "graph_lookup({\"entity\": \"CAS-GP-01\", \"what\": \"work_orders\", \"n\": 3}) -> {\"machine_id\": \"CAS-GP-01\", \"work_orders\": [{\"wo_id\": \"WO-2026-007834\", \"wo_type\": \"CM\", \"priority\": \"P3\", \"machine_id\": \"CAS-GP-01\", \"title\": \"GP-TEMP-HIGH: Hydraulic oil temperature high\", \"opened_ts\": \"2026-10-05T13:34\", \"closed_ts\": \"2026-10-05T15:42\", \"status\": \"completed\", \"shift\": \"A\", \"fault_code\": \"GP-TEMP-HIGH\", \"symptom\": \"At 13:34 Giga Press 1 went down with GP-TEMP-HIGH. Operator tried reset twice, alarm returned.\", \"diagnosis\": \"Arrived 13:40. Cleaned oil cooler, verify water flow. Measured hyd_temp_c = 54.95 C (nominal 46, warn 58, alarm 65). Cause: cooler fouled.\", \"root_cause\": \"Cooler fouled\", \"action_taken\": \"Cleaned oil cooler, verify water flow.\", \"parts_used\": [{\"part_no\": \"HYD-COOLER-PLATE\", \"description\": \"Plate-type oil cooler cleaning kit\", \"qty\": 2, \"unit_cost\": 226.29}], \"downtime_min\": 116, \"assigned_tech\": \"BAP-E0324\", \"escalation_level_reached\": 5, \"sensor_snapshot\": {\"hyd_pressure_bar\": 271.35, \"hyd_temp_c\": 55.82, \"hyd_filter_dp_bar\": 1.11, \"vibration_mm_s\": 1.99, \"hyd_level_pct\": 91.07}}, {\"wo_id\": \"WO-2026-007768\", \"wo_type\": \"PM\", \"priority\": \"P3\", \"machine_id\": \"CAS-GP-01\", \"title\": \"Toggle linkage lubrication check and tie-bar calibration\", \"opened_ts\": \"2026-10-03T05:30\", \"closed_ts\": \"2026-10-03T21:21\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": null, \"symptom\": null, \"diagnosis\": null, \"root_cause\": null, \"action_taken\": \"[x] Che",
+    "search_docs({\"query\": \"What is wrong with CAS-GP-01 and what should we do?\", \"machine_id\": \"CAS-GP-01\", \"k\": 3}) -> {\"results\": [{\"id\": \"WO-2025-005569\", \"type\": \"work_order\", \"machine\": \"CAS-GP-01\", \"text\": \"Work order WO-2025-005569 (CM, P1) on CAS-GP-01 opened 2025-08-07T08:51 shift A. Fault GP-DIE-LEAK: GP-DIE-LEAK: Die cooling circuit water leak into die cavity. Symptom: Alarm GP-DIE-LEAK - die cooling circuit water leak into die cavity. Downstream queue is building upstream. Diagnosis: Arrived 09:06. Stopped cycle and secure die; pull die per SOP-CAS-02. Cause: cracked cooling insert. Action: Stopped cycle and secure die; pull die per SOP-CAS-02. Root cause: Cracked cooling insert (Thermal / cooling). Parts: 1x GP-ORING-KIT. Downtime 410 min, escalation reached L6, vendor involved. Machine re\"}, {\"id\": \"WO-2025-005764\", \"type\": \"work_order\", \"machine\": \"CAS-GP-01\", \"text\": \"Work order WO-2025-005764 (CM, P1) on CAS-GP-01 opened 2025-08-15T00:06 shift C. Fault GP-DIE-LEAK: GP-DIE-LEAK: Die cooling circuit water leak into die cavity. Symptom: At 00:06 Giga Press 1 went down with GP-DIE-LEAK. Operator tried reset twice, alarm returned. Diagnosis: Initial check 00:09, Giga Press 1 fault GP-DIE-LEAK confirmed. Probable cause cracked cooling insert. Action: Stopped cycle and secure die; pull die per SOP-CAS-02. Root cause: Cracked cooling insert (Thermal / cooling). Parts: 1x GP-ORING-KIT. Downtime 380 min, escalation reached L6, vendor involved. Handed over to next sh\"}, {\"id\": \"WO-2024-001",
+    "escalation_chain({\"machine_id\": \"CAS-GP-01\"}) -> {\"id\": \"CAS-GP-01-C\", \"machine_id\": \"CAS-GP-01\", \"shift\": \"C\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0253\", \"name\": \"Maria Duarte\", \"role\": \"Line Lead\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4353\", \"radio\": \"CAS-55\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0422\", \"name\": \"Jamal Perez\", \"role\": \"Hydraulics / Pneumatics Technician (L2)\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4522\", \"radio\": \"PLT-9D\", \"pager\": \"\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0423\", \"name\": \"Sara Allen\", \"role\": \"Hydraulics / Pneumatics Technician (L2)\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4523\", \"radio\": \"PLT-FF\", \"pager\": \"\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0313\", \"name\": \"Mateo Cruz\", \"role\": \"Maintenance Supervisor\", \"shift\": \"C\", \"mobile\": \"737-555-0146\", \"extension\": \"x4413\", \"radio\": \"PLT-51\", \"pager\": \"PG-E2928\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0015\", \"name\": \"Jin Mendoza\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"512-555-0135\", \"extension\": \"x4115\", \"radio\": \"CAS-A2\", \"pager\": \"PG-A3C98\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0016\", \"name\": \"Brian Gray\", \"role\": \"Controls Engineer\", \"shi"
+   ]
+  },
+  {
+   "id": "Q33",
+   "category": "storyline",
+   "question": "What is wrong with PNT-PR-04 and what should we do?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "PNT-PR-04 status: degrading.\n- bell_speed_krpm: 42.75 krpm (nominal 45, warn 42)\n- Ongoing fault: PR-BELL-SPEED (drifting channel bell_speed_krpm, drift_down).\n- Fault mode PR-BELL-SPEED: Atomizer (EcoBell) speed deviation. Causes: Turbine bearing wear; Air supply pressure; Contamination. Parts: PR-TURBINE.\n- Latest work order [WO-2026-007915] 2026-10-08: PR-BELL-SPEED, root cause: Turbine bearing wear.\n- Page L1 Paul Jimenez (x4530, radio PLT-E0) [PNT-PR-04-C]; then L2 after 8 min.",
+   "citations": [
+    "WO-2026-007915",
+    "PNT-PR-04-C"
+   ],
+   "tools": [
+    "get_sensor_state",
+    "graph_lookup",
+    "graph_lookup",
+    "search_docs",
+    "escalation_chain"
+   ],
+   "highlight": [
+    "PNT-PR-04"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.06,
+   "contexts": [
+    "SVC-00179",
+    "WO-2025-000537",
+    "WO-2025-002045"
+   ],
+   "contexts_text": [
+    "get_sensor_state({\"machine_id\": \"PNT-PR-04\"}) -> {\"machine_id\": \"PNT-PR-04\", \"status\": \"degrading\", \"source\": \"mock:contract+storyline\", \"storyline_fault\": \"PR-BELL-SPEED\", \"drifting_channel\": \"bell_speed_krpm\", \"shape\": \"drift_down\", \"readings\": {\"motor_current_a\": {\"value\": 9, \"nominal\": 9, \"warn\": 14, \"alarm\": 18, \"unit\": \"A\"}, \"motor_temp_c\": {\"value\": 46, \"nominal\": 46, \"warn\": 70, \"alarm\": 82, \"unit\": \"C\"}, \"bell_speed_krpm\": {\"value\": 42.75, \"nominal\": 45, \"warn\": 42, \"alarm\": 38, \"unit\": \"krpm\"}, \"vibration_mm_s\": {\"value\": 1.3, \"nominal\": 1.3, \"warn\": 4.0, \"alarm\": 6.5, \"unit\": \"mm/s\"}}}",
+    "graph_lookup({\"entity\": \"PNT-PR-04\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"PNT-PR-04\", \"fault_modes\": [{\"fault_id\": \"FAULT:PR:PR-BELL-SPEED\", \"code\": \"PR-BELL-SPEED\", \"description\": \"Atomizer (EcoBell) speed deviation\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"PR-TURBINE\", \"description\": \"Atomizer turbine\", \"unit_cost\": 4800.0, \"on_hand\": null}], \"causes\": [\"Turbine bearing wear\", \"Air supply pressure\", \"Contamination\"], \"sensors\": [{\"channel\": \"bell_speed_krpm\", \"shape\": \"drift_down\"}], \"documents\": [\"MAN-PR\"]}, {\"fault_id\": \"FAULT:PR:PR-COLOR-CHANGE\", \"code\": \"PR-COLOR-CHANGE\", \"description\": \"Color changer valve stuck / contamination\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"PR-CC-VALVE\", \"description\": \"Color changer valve\", \"unit_cost\": 650.0, \"on_hand\": null}], \"causes\": [\"Valve wear\", \"Solvent contamination\"], \"sensors\": [], \"documents\": [\"MAN-PR\"]}, {\"fault_id\": \"FAULT:PR:PR-EXPL-INTERLOCK\", \"code\": \"PR-EXPL-INTERLOCK\", \"description\": \"Explosion-protection purge fault (Ex-zone)\", \"severity\": 4, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"PR-SNSR-PURGE\", \"description\": \"Purge pressure sensor\", \"unit_cost\": 340.0, \"on_hand\": null}], \"causes\": [\"Purge air flow low\", \"Pressure sensor drift\"], \"sensors\": [], \"documents\": [\"MAN-PR\"]}, {\"fault_id\": \"FAULT:PR:PR-FILM-DEFECT\", \"code\": \"PR-FILM-DEFECT\", \"description\": \"Film build out of tolerance (paint thickness)\", \"severity\": 2, \"source\": \"syn",
+    "graph_lookup({\"entity\": \"PNT-PR-04\", \"what\": \"work_orders\", \"n\": 3}) -> {\"machine_id\": \"PNT-PR-04\", \"work_orders\": [{\"wo_id\": \"WO-2026-007915\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"PNT-PR-04\", \"title\": \"PR-BELL-SPEED: Atomizer (EcoBell) speed deviation\", \"opened_ts\": \"2026-10-08T21:55\", \"closed_ts\": \"2026-10-08T23:47\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": \"PR-BELL-SPEED\", \"symptom\": \"Operator reports: atomizer (EcoBell) speed deviation. Machine halted in cycle, alarm PR-BELL-SPEED.\", \"diagnosis\": \"On site 22:03. Followed troubleshooting steps in the Duerr EcoRP E033i manual for PR-BELL-SPEED. Measured bell_speed_krpm = 42.27 krpm (nominal 45, warn 42, alarm 38). Found: turbine bearing wear.\", \"root_cause\": \"Turbine bearing wear\", \"action_taken\": \"1) Checked turbine air, clean bell cup. 2) Replaced turbine.\", \"parts_used\": [], \"downtime_min\": 104, \"assigned_tech\": \"B-TECH01\", \"escalation_level_reached\": 5, \"sensor_snapshot\": {\"motor_current_a\": 9.08, \"motor_temp_c\": 46.57, \"bell_speed_krpm\": 42.8, \"vibration_mm_s\": 0.8}}, {\"wo_id\": \"WO-2026-007767\", \"wo_type\": \"PdM\", \"priority\": \"P3\", \"machine_id\": \"PNT-PR-04\", \"title\": \"Condition alert: bell_speed_krpm trending\", \"opened_ts\": \"2026-10-02T21:55\", \"closed_ts\": \"2026-10-05T02:55\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": null, \"symptom\": \"Condition-based alert: bell_speed_krpm trending toward warning threshold over the last 3 days (current 42.25 krpm; nominal 45, w",
+    "search_docs({\"query\": \"What is wrong with PNT-PR-04 and what should we do?\", \"machine_id\": \"PNT-PR-04\", \"k\": 3}) -> {\"results\": [{\"id\": \"SVC-00179\", \"type\": \"service_log\", \"machine\": \"PNT-PR-04\", \"text\": \"Vendor service SVC-00179 (Duerr, Emergency callout, ticket DUE-973504) on PNT-PR-04, on site 2025-03-24T20:59 to 2025-03-25T10:42, engineer Jeffrey Taylor. Findings: PR-EXPL-INTERLOCK (Explosion-protection purge fault (Ex-zone)). Cause confirmed: Purge air flow low. Actions: Did not start; check purge supply and sensor; follow SOP-PNT-01. Parts: Purge pressure sensor (DUE-132319) warranty. Recommendations: Review operating parameters with process engineering. Cost $0. SLA met: True. Linked work order: WO-2025-002045.\"}, {\"id\": \"WO-2025-000537\", \"type\": \"work_order\", \"machine\": \"PNT-PR-04\", \"text\": \"Work order WO-2025-000537 (CM, P1) on PNT-PR-04 opened 2025-01-22T09:21 shift A. Fault PR-EXPL-INTERLOCK: PR-EXPL-INTERLOCK: Explosion-protection purge fault (Ex-zone). Symptom: Alarm PR-EXPL-INTERLOCK - explosion-protection purge fault (Ex-zone). Downstream station is starved. Diagnosis: Initial check 09:36, Paint Robot 4 fault PR-EXPL-INTERLOCK confirmed. Probable cause purge air flow low. Action: Did not start; check purge supply and sensor; follow SOP-PNT-01. Root cause: Purge air flow low (Unknown / under investigation). Parts: 1x PR-SNSR-PURGE. Downtime 157 min, escalation reached L5, ve\"}, {\"id\": \"WO-2025-002045\", \"type\": \"work_order\", \"machine\": \"PNT-PR-04\", \"text\": \"Work order WO-2025-00",
+    "escalation_chain({\"machine_id\": \"PNT-PR-04\"}) -> {\"id\": \"PNT-PR-04-C\", \"machine_id\": \"PNT-PR-04\", \"shift\": \"C\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0274\", \"name\": \"Paul Ivanov\", \"role\": \"Line Lead\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4374\", \"radio\": \"PNT-8A\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0430\", \"name\": \"Paul Jimenez\", \"role\": \"Robotics Technician (L2)\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4530\", \"radio\": \"PLT-E0\", \"pager\": \"\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0431\", \"name\": \"Gregory James\", \"role\": \"Robotics Technician (L3)\", \"shift\": \"C\", \"mobile\": \"512-555-0184\", \"extension\": \"x4531\", \"radio\": \"PLT-46\", \"pager\": \"PG-1EC30\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0314\", \"name\": \"Grace Gomez\", \"role\": \"Maintenance Supervisor\", \"shift\": \"C\", \"mobile\": \"737-555-0117\", \"extension\": \"x4414\", \"radio\": \"PLT-47\", \"pager\": \"PG-3926A\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0039\", \"name\": \"Edward Kim\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"979-555-0155\", \"extension\": \"x4139\", \"radio\": \"PNT-E1\", \"pager\": \"PG-427BB\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0040\", \"name\": \"Ravi Brown\", \"role\": \"Controls Engineer\", \"shift\": \"D"
+   ]
+  },
+  {
+   "id": "Q34",
+   "category": "storyline",
+   "question": "What is wrong with BAT-BL-01 and what should we do?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "BAT-BL-01 status: degrading.\n- laser_power_pct: 95.5 % (nominal 100, warn 94)\n- Ongoing fault: LSR-PWR-LOW (drifting channel laser_power_pct, drift_down).\n- Fault mode LSR-PWR-LOW: Laser output power below tolerance (measured vs. commanded). Causes: Protective glass contaminated; Diode module degradation; Fiber connector contamination. Parts: LSR-PROT-GLASS.\n- Latest work order [WO-2026-007888] 2026-10-08: LSR-PWR-LOW, root cause: Diode module degradation.\n- Page L1 Patrick Barnes (x4543, radio PLT-40) [BAT-BL-01-C]; then L2 after 8 min.",
+   "citations": [
+    "WO-2026-007888",
+    "BAT-BL-01-C"
+   ],
+   "tools": [
+    "get_sensor_state",
+    "graph_lookup",
+    "graph_lookup",
+    "search_docs",
+    "escalation_chain"
+   ],
+   "highlight": [
+    "BAT-BL-01"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.09,
+   "contexts": [
+    "INC-0060",
+    "INC-0111",
+    "INC-0310"
+   ],
+   "contexts_text": [
+    "get_sensor_state({\"machine_id\": \"BAT-BL-01\"}) -> {\"machine_id\": \"BAT-BL-01\", \"status\": \"degrading\", \"source\": \"mock:contract+storyline\", \"storyline_fault\": \"LSR-PWR-LOW\", \"drifting_channel\": \"laser_power_pct\", \"shape\": \"drift_down\", \"readings\": {\"laser_power_pct\": {\"value\": 95.5, \"nominal\": 100, \"warn\": 94, \"alarm\": 90, \"unit\": \"%\"}, \"coolant_temp_c\": {\"value\": 22, \"nominal\": 22, \"warn\": 27, \"alarm\": 31, \"unit\": \"C\"}, \"vibration_mm_s\": {\"value\": 0.6, \"nominal\": 0.6, \"warn\": 2.0, \"alarm\": 3.5, \"unit\": \"mm/s\"}}}",
+    "graph_lookup({\"entity\": \"BAT-BL-01\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"BAT-BL-01\", \"fault_modes\": [{\"fault_id\": \"FAULT:BL:LSR-PWR-LOW\", \"code\": \"LSR-PWR-LOW\", \"description\": \"Laser output power below tolerance (measured vs. commanded)\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"LSR-PROT-GLASS\", \"description\": \"Protective cover glass (box 10)\", \"unit_cost\": 180.0, \"on_hand\": null}], \"causes\": [\"Protective glass contaminated\", \"Diode module degradation\", \"Fiber connector contamination\"], \"sensors\": [{\"channel\": \"laser_power_pct\", \"shape\": \"drift_down\"}], \"documents\": [\"MAN-BL\"]}, {\"fault_id\": \"FAULT:BL:LSR-CHL-TEMP\", \"code\": \"LSR-CHL-TEMP\", \"description\": \"Chiller outlet temperature out of range\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"CHL-FLT-5U\", \"description\": \"Chiller water filter\", \"unit_cost\": 95.0, \"on_hand\": null}], \"causes\": [\"Chiller refrigerant low\", \"Filter blocked\", \"Fouled condenser\"], \"sensors\": [{\"channel\": \"coolant_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-BL\"]}, {\"fault_id\": \"FAULT:BL:LSR-SHUTTER\", \"code\": \"LSR-SHUTTER\", \"description\": \"Safety shutter did not confirm open\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"LSR-SNSR-SHUT\", \"description\": \"Shutter proximity sensor\", \"unit_cost\": 130.0, \"on_hand\": null}], \"causes\": [\"Shutter sensor misaligned\", \"Cable fault\"], \"sensors\": [], \"documents\": [\"MAN-BL\"]}, {\"fault_id\": \"FAULT:BL:LSR-SEAM-VIS\", \"cod",
+    "graph_lookup({\"entity\": \"BAT-BL-01\", \"what\": \"work_orders\", \"n\": 3}) -> {\"machine_id\": \"BAT-BL-01\", \"work_orders\": [{\"wo_id\": \"WO-2026-007888\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"BAT-BL-01\", \"title\": \"LSR-PWR-LOW: Laser output power below tolerance (measured vs. commanded)\", \"opened_ts\": \"2026-10-08T02:23\", \"closed_ts\": \"2026-10-08T04:19\", \"status\": \"completed\", \"shift\": \"C\", \"fault_code\": \"LSR-PWR-LOW\", \"symptom\": \"Intermittent LSR-PWR-LOW over last hour, now hard-stopped. Operator noted a small puddle near the base.\", \"diagnosis\": \"Initial check 02:25, Busbar Laser Welder 1 fault LSR-PWR-LOW confirmed. Measured laser_power_pct = 94.15 % (nominal 100, warn 94, alarm 90). Probable cause diode module degradation.\", \"root_cause\": \"Diode module degradation\", \"action_taken\": \"Inspect/replace protective glass.\", \"parts_used\": [{\"part_no\": \"LSR-PROT-GLASS\", \"description\": \"Protective cover glass (box 10)\", \"qty\": 1, \"unit_cost\": 196.45}], \"downtime_min\": 115, \"assigned_tech\": \"BAP-E0443\", \"escalation_level_reached\": 5, \"sensor_snapshot\": {\"laser_power_pct\": 93.81, \"coolant_temp_c\": 22.05, \"vibration_mm_s\": 0.738}}, {\"wo_id\": \"WO-2026-007642\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"BAT-BL-01\", \"title\": \"LSR-PWR-LOW: Laser output power below tolerance (measured vs. commanded)\", \"opened_ts\": \"2026-09-28T21:27\", \"closed_ts\": \"2026-09-28T23:55\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": \"LSR-PWR-LOW\", \"symptom\": \"Alarm LSR-P",
+    "search_docs({\"query\": \"What is wrong with BAT-BL-01 and what should we do?\", \"machine_id\": \"BAT-BL-01\", \"k\": 3}) -> {\"results\": [{\"id\": \"INC-0060\", \"type\": \"incident\", \"machine\": \"BAT-BL-01\", \"text\": \"Incident INC-0060 (Process deviation, severity Low) on 2025-01-28 21:56 shift B in area BAT machine BAT-BL-01: Process parameter outside approved window during shift; corrected and reviewed. Immediate action: Area secured, supervisor and EHS informed; corrective steps started. Root cause: Housekeeping. Corrective action: Retrained operators and updated SOP. Owner Grace Gomez, status Closed.\"}, {\"id\": \"INC-0111\", \"type\": \"incident\", \"machine\": \"BAT-BL-01\", \"text\": \"Incident INC-0111 (Near miss, severity Low) on 2025-04-25 17:08 shift B in area BAT machine BAT-BL-01: Technician began work before confirming zero-energy verification; peer caught it, work paused. Immediate action: Area secured, supervisor and EHS informed; corrective steps started. Root cause: Wear / aging. Corrective action: Added inspection step to PM. Owner Jacob Ruiz, status Closed.\"}, {\"id\": \"INC-0310\", \"type\": \"incident\", \"machine\": \"BAT-BL-01\", \"text\": \"Incident INC-0310 (Near miss, severity Low) on 2026-07-29 12:53 shift A in area BAT machine BAT-BL-01: Hydraulic hose whipped after fitting failed under pressure; area was clear. Immediate action: Area secured, supervisor and EHS informed; corrective steps started. Root cause: Wear / aging. Corrective action: Adjusted parameters and added alert. Owner Dennis Lee, status Closed",
+    "escalation_chain({\"machine_id\": \"BAT-BL-01\"}) -> {\"id\": \"BAT-BL-01-C\", \"machine_id\": \"BAT-BL-01\", \"shift\": \"C\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0280\", \"name\": \"James Thompson\", \"role\": \"Line Lead\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4380\", \"radio\": \"BAT-6E\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0443\", \"name\": \"Patrick Barnes\", \"role\": \"Process / Quality Technician (L2)\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4543\", \"radio\": \"PLT-40\", \"pager\": \"\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0444\", \"name\": \"Benjamin Singh\", \"role\": \"Process / Quality Technician (L2)\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4544\", \"radio\": \"PLT-A9\", \"pager\": \"\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0315\", \"name\": \"Mina Duarte\", \"role\": \"Maintenance Supervisor\", \"shift\": \"C\", \"mobile\": \"737-555-0180\", \"extension\": \"x4415\", \"radio\": \"PLT-94\", \"pager\": \"PG-BAD50\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0047\", \"name\": \"Arthur Vasquez\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"512-555-0128\", \"extension\": \"x4147\", \"radio\": \"BAT-54\", \"pager\": \"PG-D1349\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0048\", \"name\": \"George Adams\", \"role\": \"Controls Engineer\", \""
+   ]
+  },
+  {
+   "id": "Q35",
+   "category": "storyline",
+   "question": "What is wrong with BIW-WK-03 and what should we do?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "BIW-WK-03 status: degrading.\n- gearbox_temp_c: 64.5 C (nominal 48.0, warn 70.0)\n- Ongoing fault: KSS-GEAR-LEAK (drifting channel gearbox_temp_c, drift_up).\n- Fault mode KSS-GEAR-LEAK: Oil leak detected at A1-A3 gearbox seal. Causes: Seal wear; Over-filled gearbox; Vent plug blocked. Parts: KUKA-SEAL-A2.\n- Latest work order [WO-2026-007942] 2026-10-09: WG-CABLE, root cause: Flex fatigue.\n- Procedure: [SOP-MNT-M05-01].\n- Page L1 Gregory James (x4531, 512-555-0184, radio PLT-46) [BIW-WK-03-C]; then L2 after 8 min.",
+   "citations": [
+    "WO-2026-007942",
+    "SOP-MNT-M05-01",
+    "BIW-WK-03-C"
+   ],
+   "tools": [
+    "get_sensor_state",
+    "graph_lookup",
+    "graph_lookup",
+    "search_docs",
+    "escalation_chain"
+   ],
+   "highlight": [
+    "BIW-WK-03"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.07,
+   "contexts": [
+    "WO-2025-005010",
+    "WO-2025-001691",
+    "SOP-MNT-M05-01"
+   ],
+   "contexts_text": [
+    "get_sensor_state({\"machine_id\": \"BIW-WK-03\"}) -> {\"machine_id\": \"BIW-WK-03\", \"status\": \"degrading\", \"source\": \"mock:contract+storyline\", \"storyline_fault\": \"KSS-GEAR-LEAK\", \"drifting_channel\": \"gearbox_temp_c\", \"shape\": \"drift_up\", \"readings\": {\"motor_current_a\": {\"value\": 18.0, \"nominal\": 18.0, \"warn\": 26.0, \"alarm\": 32.0, \"unit\": \"A\"}, \"motor_temp_c\": {\"value\": 52.0, \"nominal\": 52.0, \"warn\": 78.0, \"alarm\": 90.0, \"unit\": \"C\"}, \"gearbox_temp_c\": {\"value\": 64.5, \"nominal\": 48.0, \"warn\": 70.0, \"alarm\": 82.0, \"unit\": \"C\"}, \"vibration_mm_s\": {\"value\": 1.8, \"nominal\": 1.8, \"warn\": 4.5, \"alarm\": 7.1, \"unit\": \"mm/s\"}, \"battery_voltage_v\": {\"value\": 3.6, \"nominal\": 3.6, \"warn\": 3.1, \"alarm\": 2.6, \"unit\": \"V\"}, \"weld_current_ka\": {\"value\": 9.0, \"nominal\": 9.0, \"warn\": 7.8, \"alarm\": 7.0, \"unit\": \"kA\"}, \"coolant_temp_c\": {\"value\": 28, \"nominal\": 28, \"warn\": 38, \"alarm\": 45, \"unit\": \"C\"}}}",
+    "graph_lookup({\"entity\": \"BIW-WK-03\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"BIW-WK-03\", \"fault_modes\": [{\"fault_id\": \"FAULT:WK:KSS-MAINT-OIL\", \"code\": \"KSS-MAINT-OIL\", \"description\": \"Maintenance reminder: gear oil change due (A1-A3)\", \"severity\": 1, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"KUKA-OIL-S150-20L\", \"description\": \"Shell Tivela S150 gear oil 20 L\", \"unit_cost\": 310.0, \"on_hand\": null}], \"causes\": [\"Operating hours reached service interval (10,000-20,000 h or 3-4 years depending on model)\"], \"sensors\": [{\"channel\": \"gearbox_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-27008\", \"code\": \"KSS-27008\", \"description\": \"Brake test failed on axis\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"KUKA-MTR-A4\", \"description\": \"Axis 4 motor with brake\", \"unit_cost\": 4900.0, \"on_hand\": null}], \"causes\": [\"Brake wear (excess braking angle)\", \"Brake contamination with lubricant\", \"Brake release voltage low\"], \"sensors\": [{\"channel\": \"motor_current_a\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-SAFE-EMG\", \"code\": \"KSS-SAFE-EMG\", \"description\": \"Emergency stop active (external)\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [], \"causes\": [\"Fence door opened\", \"Light curtain interrupted\", \"E-stop pushed\"], \"sensors\": [], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-RDC-BAT\", \"code\": \"KSS-RDC-BAT\", \"description\": \"RDC (resolver digital converter",
+    "graph_lookup({\"entity\": \"BIW-WK-03\", \"what\": \"work_orders\", \"n\": 3}) -> {\"machine_id\": \"BIW-WK-03\", \"work_orders\": [{\"wo_id\": \"WO-2026-007942\", \"wo_type\": \"CM\", \"priority\": \"P3\", \"machine_id\": \"BIW-WK-03\", \"title\": \"WG-CABLE: Weld cable / shunt failure\", \"opened_ts\": \"2026-10-09T18:03\", \"closed_ts\": \"2026-10-09T19:09\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": \"WG-CABLE\", \"symptom\": \"Spot Weld Robot (KUKA) 3 faulted (WG-CABLE). Line lead called maintenance via radio at 18:03.\", \"diagnosis\": \"Initial check 18:14, Spot Weld Robot (KUKA) 3 fault WG-CABLE confirmed. Probable cause flex fatigue.\", \"root_cause\": \"Flex fatigue\", \"action_taken\": \"Replaced shunt/cable pack; torque terminals.\", \"parts_used\": [], \"downtime_min\": 48, \"assigned_tech\": \"BAP-E0385\", \"escalation_level_reached\": 4, \"sensor_snapshot\": {\"motor_current_a\": 18.27, \"motor_temp_c\": 52.23, \"gearbox_temp_c\": 45.07, \"vibration_mm_s\": 1.84, \"battery_voltage_v\": 3.61, \"weld_current_ka\": 8.9, \"coolant_temp_c\": 28.23}}, {\"wo_id\": \"WO-2026-007938\", \"wo_type\": \"CM\", \"priority\": \"P3\", \"machine_id\": \"BIW-WK-03\", \"title\": \"KSS-GEAR-LEAK: Oil leak detected at A1-A3 gearbox seal\", \"opened_ts\": \"2026-10-09T09:51\", \"closed_ts\": \"2026-10-09T12:58\", \"status\": \"completed\", \"shift\": \"A\", \"fault_code\": \"KSS-GEAR-LEAK\", \"symptom\": \"Alarm KSS-GEAR-LEAK - oil leak detected at A1-A3 gearbox seal. Downstream line is blocked.\", \"diagnosis\": \"On site 09:54. Followed troubleshooting steps in the KUKA KR 210",
+    "search_docs({\"query\": \"What is wrong with BIW-WK-03 and what should we do?\", \"machine_id\": \"BIW-WK-03\", \"k\": 3}) -> {\"results\": [{\"id\": \"WO-2025-005010\", \"type\": \"work_order\", \"machine\": \"BIW-WK-03\", \"text\": \"Work order WO-2025-005010 (CM, P3) on BIW-WK-03 opened 2025-07-18T20:40 shift B. Fault WG-CABLE: WG-CABLE: Weld cable / shunt failure. Symptom: Alarm WG-CABLE - weld cable / shunt failure. Downstream line is blocked. Diagnosis: Initial check 20:52, Spot Weld Robot (KUKA) 3 fault WG-CABLE confirmed. Probable cause corrosion. Action: Replaced shunt/cable pack; torque terminals. Root cause: Corrosion (Unknown / under investigation). Parts: 1x WLD-SHUNT. Downtime 59 min, escalation reached L4. Machine returned to production, monitor closely. Total downtime 59 min.\"}, {\"id\": \"WO-2025-001691\", \"type\": \"work_order\", \"machine\": \"BIW-WK-03\", \"text\": \"Work order WO-2025-001691 (PM PM-K-W) on BIW-WK-03 at 2025-03-11T16:37: Weekly visual check and leak scan. Status completed. Weekly visual check and leak scan completed. Findings: Minor weep at fitting noted; tightened to spec, monitor.\"}, {\"id\": \"SOP-MNT-M05-01\", \"type\": \"sop\", \"machine\": \"M05\", \"text\": \"[SOP-MNT-M05-01: Likely cause (failure mode: bearing_wear)]\\n## Likely cause (failure mode: bearing_wear)\\nLubricant breakdown or contamination at the axis 1 joint bearing (`m05_joint1_bearing`), often after a collision event or a missed regrease interval. Left running, wear accelerates and can seize the joint (long unplanned stop).\"}]}",
+    "escalation_chain({\"machine_id\": \"BIW-WK-03\"}) -> {\"id\": \"BIW-WK-03-C\", \"machine_id\": \"BIW-WK-03\", \"shift\": \"C\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0263\", \"name\": \"Steven Bhatt\", \"role\": \"Line Lead\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4363\", \"radio\": \"BIW-3F\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0431\", \"name\": \"Gregory James\", \"role\": \"Robotics Technician (L3)\", \"shift\": \"C\", \"mobile\": \"512-555-0184\", \"extension\": \"x4531\", \"radio\": \"PLT-46\", \"pager\": \"PG-1EC30\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0432\", \"name\": \"Anthony Gray\", \"role\": \"Robotics Technician (L1)\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4532\", \"radio\": \"PLT-90\", \"pager\": \"\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0314\", \"name\": \"Grace Gomez\", \"role\": \"Maintenance Supervisor\", \"shift\": \"C\", \"mobile\": \"737-555-0117\", \"extension\": \"x4414\", \"radio\": \"PLT-47\", \"pager\": \"PG-3926A\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0031\", \"name\": \"Stephen Williams\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"979-555-0124\", \"extension\": \"x4131\", \"radio\": \"BIW-73\", \"pager\": \"PG-A41BA\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0032\", \"name\": \"Ronald Schmidt\", \"role\": \"Controls Engineer\", "
+   ]
+  },
+  {
+   "id": "Q36",
+   "category": "storyline",
+   "question": "What is wrong with UTL-CP-02 and what should we do?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "UTL-CP-02 status: degrading.\n- discharge_temp_c: 96.25 C (nominal 85, warn 100)\n- Ongoing fault: CMP-DISCH-TEMP (drifting channel discharge_temp_c, drift_up).\n- Fault mode CMP-DISCH-TEMP: Discharge temperature high. Causes: Cooler fouled; Oil level low; Thermostatic valve fault. Parts: CMP-OIL-S.\n- Latest work order [WO-2026-007861] 2026-10-06: CMP-DISCH-TEMP, root cause: Cooler fouled.\n- Procedure: [SOP-MNT-M05-01].\n- Page L1 Mei Johnson (x4546, 979-555-0119, radio PLT-90) [UTL-CP-02-C]; then L2 after 8 min.",
+   "citations": [
+    "WO-2026-007861",
+    "SOP-MNT-M05-01",
+    "UTL-CP-02-C"
+   ],
+   "tools": [
+    "get_sensor_state",
+    "graph_lookup",
+    "graph_lookup",
+    "search_docs",
+    "escalation_chain"
+   ],
+   "highlight": [
+    "UTL-CP-02"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.06,
+   "contexts": [
+    "INC-0004",
+    "UTL-CP-02",
+    "SOP-MNT-M05-01"
+   ],
+   "contexts_text": [
+    "get_sensor_state({\"machine_id\": \"UTL-CP-02\"}) -> {\"machine_id\": \"UTL-CP-02\", \"status\": \"degrading\", \"source\": \"mock:contract+storyline\", \"storyline_fault\": \"CMP-DISCH-TEMP\", \"drifting_channel\": \"discharge_temp_c\", \"shape\": \"drift_up\", \"readings\": {\"discharge_temp_c\": {\"value\": 96.25, \"nominal\": 85, \"warn\": 100, \"alarm\": 108, \"unit\": \"C\"}, \"motor_current_a\": {\"value\": 280, \"nominal\": 280, \"warn\": 350, \"alarm\": 390, \"unit\": \"A\"}, \"hyd_filter_dp_bar\": {\"value\": 0.4, \"nominal\": 0.4, \"warn\": 0.9, \"alarm\": 1.2, \"unit\": \"bar\"}, \"vibration_mm_s\": {\"value\": 2.0, \"nominal\": 2.0, \"warn\": 5.0, \"alarm\": 8.0, \"unit\": \"mm/s\"}}}",
+    "graph_lookup({\"entity\": \"UTL-CP-02\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"UTL-CP-02\", \"fault_modes\": [{\"fault_id\": \"FAULT:CP:CMP-DISCH-TEMP\", \"code\": \"CMP-DISCH-TEMP\", \"description\": \"Discharge temperature high\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"CMP-OIL-S\", \"description\": \"Compressor oil 20 L\", \"unit_cost\": 260.0, \"on_hand\": null}], \"causes\": [\"Cooler fouled\", \"Oil level low\", \"Thermostatic valve fault\"], \"sensors\": [{\"channel\": \"discharge_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-CP\"]}, {\"fault_id\": \"FAULT:CP:CMP-OIL-SEP\", \"code\": \"CMP-OIL-SEP\", \"description\": \"Oil separator differential pressure high\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"CMP-SEP-ELEM\", \"description\": \"Oil separator element\", \"unit_cost\": 420.0, \"on_hand\": null}], \"causes\": [\"Separator element loaded\"], \"sensors\": [{\"channel\": \"hyd_filter_dp_bar\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-CP\"]}, {\"fault_id\": \"FAULT:CP:CMP-DRYER-DEW\", \"code\": \"CMP-DRYER-DEW\", \"description\": \"Dryer dew point alarm (> +10 C)\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"CMP-DRAIN\", \"description\": \"Zero-loss condensate drain\", \"unit_cost\": 190.0, \"on_hand\": null}], \"causes\": [\"Dryer refrigerant low\", \"Condensate drain blocked\"], \"sensors\": [], \"documents\": [\"MAN-CP\"]}, {\"fault_id\": \"FAULT:CP:CMP-MOTOR-OL\", \"code\": \"CMP-MOTOR-OL\", \"description\": \"Main motor overload trip\", \"severity\": 3, \"source\": \"synthetic\", ",
+    "graph_lookup({\"entity\": \"UTL-CP-02\", \"what\": \"work_orders\", \"n\": 3}) -> {\"machine_id\": \"UTL-CP-02\", \"work_orders\": [{\"wo_id\": \"WO-2026-007861\", \"wo_type\": \"CM\", \"priority\": \"P2\", \"machine_id\": \"UTL-CP-02\", \"title\": \"CMP-DISCH-TEMP: Discharge temperature high\", \"opened_ts\": \"2026-10-06T21:22\", \"closed_ts\": \"2026-10-06T22:52\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": \"CMP-DISCH-TEMP\", \"symptom\": \"Air Compressor 2 faulted (CMP-DISCH-TEMP). Line lead called maintenance via radio at 21:22.\", \"diagnosis\": \"Initial check 21:37, Air Compressor 2 fault CMP-DISCH-TEMP confirmed. Measured discharge_temp_c = 100.20 C (nominal 85, warn 100, alarm 108). Probable cause cooler fouled.\", \"root_cause\": \"Cooler fouled\", \"action_taken\": \"Cleaned cooler; check oil level. Replaced thermostatic valve.\", \"parts_used\": [], \"downtime_min\": 73, \"assigned_tech\": \"BAP-E0408\", \"escalation_level_reached\": 4, \"sensor_snapshot\": {\"discharge_temp_c\": 101.32, \"motor_current_a\": 283.01, \"hyd_filter_dp_bar\": 0.373, \"vibration_mm_s\": 1.76}}, {\"wo_id\": \"WO-2026-007785\", \"wo_type\": \"PM\", \"priority\": \"P3\", \"machine_id\": \"UTL-CP-02\", \"title\": \"Monthly drain, cooler clean, filter dP\", \"opened_ts\": \"2026-10-03T05:30\", \"closed_ts\": \"2026-10-03T08:06\", \"status\": \"completed\", \"shift\": \"A\", \"fault_code\": null, \"symptom\": null, \"diagnosis\": null, \"root_cause\": null, \"action_taken\": \"[x] Perform checklist per PM procedure\", \"parts_used\": [], \"downtime_min\": 0, \"assigned_tech\": \"BAP-E0357",
+    "search_docs({\"query\": \"What is wrong with UTL-CP-02 and what should we do?\", \"machine_id\": \"UTL-CP-02\", \"k\": 3}) -> {\"results\": [{\"id\": \"INC-0004\", \"type\": \"incident\", \"machine\": \"UTL-CP-02\", \"text\": \"Incident INC-0004 (Quality escape, severity Medium) on 2024-10-04 03:53 shift C in area UTL machine UTL-CP-02: Paint film thickness low on rear quarter; flow rate drift corrected. Immediate action: Area secured, supervisor and EHS informed; corrective steps started. Root cause: Design limitation. Corrective action: Replaced component and increased PM frequency. Owner Vikram Richardson, status Closed.\"}, {\"id\": \"UTL-CP-02\", \"type\": \"machine_profile\", \"machine\": \"UTL-CP-02\", \"text\": \"Machine UTL-CP-02 is Air Compressor 2 (Atlas Copco GA 250 VSD+) in Utilities & Facilities (Yard), line UTL-L1. Criticality A. Installed 2023-05-16, about 20,000 operating hours as of 2026-10-10. Serial ATL-2022-96200. Oil-injected screw compressor providing plant compressed air. Main trade needed for repairs: MECH. Location in plant model: x=242.0 m, y=0.0 m.\"}, {\"id\": \"SOP-MNT-M05-01\", \"type\": \"sop\", \"machine\": \"M05\", \"text\": \"[SOP-MNT-M05-01: Likely cause (failure mode: bearing_wear)]\\n## Likely cause (failure mode: bearing_wear)\\nLubricant breakdown or contamination at the axis 1 joint bearing (`m05_joint1_bearing`), often after a collision event or a missed regrease interval. Left running, wear accelerates and can seize the joint (long unplanned stop).\"}]}",
+    "escalation_chain({\"machine_id\": \"UTL-CP-02\"}) -> {\"id\": \"UTL-CP-02-C\", \"machine_id\": \"UTL-CP-02\", \"shift\": \"C\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0306\", \"name\": \"Anthony Moore\", \"role\": \"Line Lead\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4406\", \"radio\": \"UTL-82\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0446\", \"name\": \"Mei Johnson\", \"role\": \"Mechanical Technician (L3)\", \"shift\": \"C\", \"mobile\": \"979-555-0119\", \"extension\": \"x4546\", \"radio\": \"PLT-90\", \"pager\": \"PG-7DCAC\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0445\", \"name\": \"Harold Hughes\", \"role\": \"Mechanical Technician (L2)\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4545\", \"radio\": \"PLT-C4\", \"pager\": \"\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0316\", \"name\": \"Tanya Murphy\", \"role\": \"Maintenance Supervisor\", \"shift\": \"C\", \"mobile\": \"737-555-0112\", \"extension\": \"x4416\", \"radio\": \"PLT-D8\", \"pager\": \"PG-B4AFE\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0077\", \"name\": \"Patrick Perez\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"979-555-0179\", \"extension\": \"x4177\", \"radio\": \"UTL-4F\", \"pager\": \"PG-A708C\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0078\", \"name\": \"Eric Mukherjee\", \"role\": \"Controls Engineer\""
+   ]
+  },
+  {
+   "id": "Q37",
+   "category": "storyline",
+   "question": "What is wrong with GA-TQ-07 and what should we do?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "GA-TQ-07 status: degrading.\n- torque_nm: 51.25 Nm (nominal 55.0, warn 50.0)\n- Ongoing fault: TQ-NOK (drifting channel torque_nm, drift_down).\n- Fault mode TQ-NOK: Tightening result NOK: torque out of window. Causes: Cross-threaded fastener; Tool transducer drift; Socket wear; Joint friction variation (bolt batch). Parts: TQ-SOCKET-13.\n- Latest work order [WO-2026-007728] 2026-10-01: TQ-NOK, root cause: Tool transducer drift.\n- Page L1 Mei Ruiz (x4552, radio PLT-FA) [GA-TQ-07-C]; then L2 after 15 min.",
+   "citations": [
+    "WO-2026-007728",
+    "GA-TQ-07-C"
+   ],
+   "tools": [
+    "get_sensor_state",
+    "graph_lookup",
+    "graph_lookup",
+    "search_docs",
+    "escalation_chain"
+   ],
+   "highlight": [
+    "GA-TQ-07"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.06,
+   "contexts": [
+    "WO-2025-006564",
+    "WO-2025-004923",
+    "WO-2025-006878"
+   ],
+   "contexts_text": [
+    "get_sensor_state({\"machine_id\": \"GA-TQ-07\"}) -> {\"machine_id\": \"GA-TQ-07\", \"status\": \"degrading\", \"source\": \"mock:contract+storyline\", \"storyline_fault\": \"TQ-NOK\", \"drifting_channel\": \"torque_nm\", \"shape\": \"drift_down\", \"readings\": {\"torque_nm\": {\"value\": 51.25, \"nominal\": 55.0, \"warn\": 50.0, \"alarm\": 46.0, \"unit\": \"Nm\"}, \"motor_temp_c\": {\"value\": 38, \"nominal\": 38, \"warn\": 62, \"alarm\": 75, \"unit\": \"C\"}, \"motor_current_a\": {\"value\": 7.0, \"nominal\": 7.0, \"warn\": 11, \"alarm\": 14, \"unit\": \"A\"}}}",
+    "graph_lookup({\"entity\": \"GA-TQ-07\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"GA-TQ-07\", \"fault_modes\": [{\"fault_id\": \"FAULT:TQ:TQ-NOK\", \"code\": \"TQ-NOK\", \"description\": \"Tightening result NOK: torque out of window\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"TQ-SOCKET-13\", \"description\": \"13 mm impact-grade socket\", \"unit_cost\": 28.0, \"on_hand\": null}], \"causes\": [\"Cross-threaded fastener\", \"Tool transducer drift\", \"Socket wear\", \"Joint friction variation (bolt batch)\"], \"sensors\": [{\"channel\": \"torque_nm\", \"shape\": \"drift_down\"}], \"documents\": [\"MAN-TQ\"]}, {\"fault_id\": \"FAULT:TQ:TQ-CAL-DUE\", \"code\": \"TQ-CAL-DUE\", \"description\": \"Transducer calibration overdue\", \"severity\": 1, \"source\": \"synthetic\", \"parts\": [], \"causes\": [\"Calibration interval exceeded (12 months or 500k cycles)\"], \"sensors\": [], \"documents\": [\"MAN-TQ\"]}, {\"fault_id\": \"FAULT:TQ:TQ-CBL-FAULT\", \"code\": \"TQ-CBL-FAULT\", \"description\": \"Tool cable / communication fault\", \"severity\": 1, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"TQ-CBL-5M\", \"description\": \"Tool cable 5 m\", \"unit_cost\": 210.0, \"on_hand\": null}], \"causes\": [\"Flex fatigue in tool cable\"], \"sensors\": [], \"documents\": [\"MAN-TQ\"]}, {\"fault_id\": \"FAULT:TQ:TQ-MOTOR-TEMP\", \"code\": \"TQ-MOTOR-TEMP\", \"description\": \"Tool motor temperature high\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"TQ-GEARHEAD\", \"description\": \"Gear head assembly\", \"unit_cost\": 760.0, \"on_hand\": null}], \"cause",
+    "graph_lookup({\"entity\": \"GA-TQ-07\", \"what\": \"work_orders\", \"n\": 3}) -> {\"machine_id\": \"GA-TQ-07\", \"work_orders\": [{\"wo_id\": \"WO-2026-007728\", \"wo_type\": \"CM\", \"priority\": \"P3\", \"machine_id\": \"GA-TQ-07\", \"title\": \"TQ-NOK: Tightening result NOK: torque out of window\", \"opened_ts\": \"2026-10-01T09:54\", \"closed_ts\": \"2026-10-01T10:38\", \"status\": \"completed\", \"shift\": \"A\", \"fault_code\": \"TQ-NOK\", \"symptom\": \"Operator reports: tightening result NOK: torque out of window. Machine halted in cycle, alarm TQ-NOK.\", \"diagnosis\": \"Arrived 10:05. Inspected joint; do NOT re-tighten without quality approval. Measured torque_nm = 50.73 Nm (nominal 55.0, warn 50.0, alarm 46.0). Cause: tool transducer drift.\", \"root_cause\": \"Tool transducer drift\", \"action_taken\": \"Ran calibration check on the tool; Replaced socket if worn.\", \"parts_used\": [{\"part_no\": \"TQ-SOCKET-13\", \"description\": \"13 mm impact-grade socket\", \"qty\": 1, \"unit_cost\": 27.58}], \"downtime_min\": 26, \"assigned_tech\": \"BAP-E0367\", \"escalation_level_reached\": 2, \"sensor_snapshot\": {\"torque_nm\": 50.75, \"motor_temp_c\": 35.67, \"motor_current_a\": 7.51}}, {\"wo_id\": \"WO-2026-007599\", \"wo_type\": \"CM\", \"priority\": \"P3\", \"machine_id\": \"GA-TQ-07\", \"title\": \"TQ-NOK: Tightening result NOK: torque out of window\", \"opened_ts\": \"2026-09-26T05:55\", \"closed_ts\": \"2026-09-26T06:16\", \"status\": \"completed\", \"shift\": \"C\", \"fault_code\": \"TQ-NOK\", \"symptom\": \"TQ-NOK displayed on HMI; Torque Station 7 stopped at part pickup. Ando",
+    "search_docs({\"query\": \"What is wrong with GA-TQ-07 and what should we do?\", \"machine_id\": \"GA-TQ-07\", \"k\": 3}) -> {\"results\": [{\"id\": \"WO-2025-006564\", \"type\": \"work_order\", \"machine\": \"GA-TQ-07\", \"text\": \"Work order WO-2025-006564 (CM, P4) on GA-TQ-07 opened 2025-09-12T09:47 shift A. Fault TQ-CBL-FAULT: TQ-CBL-FAULT: Tool cable / communication fault. Symptom: Alarm TQ-CBL-FAULT - tool cable / communication fault. Downstream station is starved. Diagnosis: Arrived 09:56. Replaced tool cable; verify controller link. Cause: flex fatigue in tool cable. Action: Replaced tool cable; verify controller link. Root cause: Flex fatigue in tool cable (Wear / aging). Parts: none. Downtime 29 min, escalation reached L2. Machine returned to production, monitor closely. Total downtime 29 min.\"}, {\"id\": \"WO-2025-004923\", \"type\": \"work_order\", \"machine\": \"GA-TQ-07\", \"text\": \"Work order WO-2025-004923 (CM, P4) on GA-TQ-07 opened 2025-07-16T01:52 shift C. Fault TQ-CAL-DUE: TQ-CAL-DUE: Transducer calibration overdue. Symptom: Operator reports: transducer calibration overdue. Machine halted in cycle, alarm TQ-CAL-DUE. Diagnosis: Arrived 01:56. Pulled tool; send for calibration; swap with certified spare. Cause: calibration interval exceeded (12 months or 500k cycles). Action: Pulled tool; send for calibration; swap with certified spare. Root cause: Calibration interval exceeded (12 months or 500k cycles) (Software / configuration). Parts: none. Downtime 39 min, escala\"}, {\"id\": \"WO-2025-006878\", \"type\": \"work_o",
+    "escalation_chain({\"machine_id\": \"GA-TQ-07\"}) -> {\"id\": \"GA-TQ-07-C\", \"machine_id\": \"GA-TQ-07\", \"shift\": \"C\", \"criticality\": \"B\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0292\", \"name\": \"Justin Adams\", \"role\": \"Line Lead\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4392\", \"radio\": \"GA-41\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0452\", \"name\": \"Mei Ruiz\", \"role\": \"Process / Quality Technician (L2)\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4552\", \"radio\": \"PLT-FA\", \"pager\": \"\", \"page_after_min\": 5}, {\"level\": \"L2_backup_tech\", \"employee_id\": null, \"page_after_min\": 15}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0316\", \"name\": \"Tanya Murphy\", \"role\": \"Maintenance Supervisor\", \"shift\": \"C\", \"mobile\": \"737-555-0112\", \"extension\": \"x4416\", \"radio\": \"PLT-D8\", \"pager\": \"PG-B4AFE\", \"page_after_min\": 30}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0061\", \"name\": \"Rachel Davis\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"830-555-0110\", \"extension\": \"x4161\", \"radio\": \"GA-AF\", \"pager\": \"PG-E44AA\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0062\", \"name\": \"Tariq Chen\", \"role\": \"Controls Engineer\", \"shift\": \"D\", \"mobile\": \"830-555-0189\", \"extension\": \"x4162\", \"radio\": \"GA-F9\", \"pager\": \"PG-F0BA3\"}, {\"level\": \"L4_process\", \"employee_id\": \"BAP-E0063\", \"name\": \"Monica Richa"
+   ]
+  },
+  {
+   "id": "Q38",
+   "category": "hero",
+   "question": "Why is M05 red?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "M05 status: warning.\n- vibration_rms: 0.9 (nominal 0.42, 2.13x; alert at 2.0x)\n- temperature_c: 71.4  (nominal 61.5)\n- motor_current_a: 15.4  (nominal 14.2)\n- Alert score 0.93; top signals: vibration_rms 0.61, temperature_c 0.22, motor_current_a 0.1; component m05_joint1_bearing.\n- Fault mode bearing_wear: Joint bearing wear. Causes: Lubricant breakdown or missed regrease interval; Contamination at the axis 1 joint; Collision or overload event. Parts: bearing_6208 (2 on hand).\n- Latest work order [WO-2026-007948] 2026-10-10: PM.\n- Procedure: [SOP-MNT-M05-01].\n- Page L1 Paul Jimenez (x4530, radio PLT-E0) [M05-C]; then L2 after 8 min.",
+   "citations": [
+    "WO-2026-007948",
+    "SOP-MNT-M05-01",
+    "M05-C"
+   ],
+   "tools": [
+    "get_sensor_state",
+    "graph_lookup",
+    "graph_lookup",
+    "search_docs",
+    "escalation_chain"
+   ],
+   "highlight": [
+    "M05"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": true,
+   "latency_s": 0.0,
+   "contexts": [
+    "SOP-MNT-M05-01",
+    "M05",
+    "SOP-MNT-01"
+   ],
+   "contexts_text": [
+    "get_sensor_state({\"machine_id\": \"M05\"}) -> {\"machine_id\": \"M05\", \"status\": \"warning\", \"source\": \"mock:events.json\", \"readings\": {\"vibration_rms\": {\"value\": 0.9, \"nominal\": 0.42, \"ratio\": 2.13, \"alert_at_ratio\": 2.0}, \"temperature_c\": {\"value\": 71.4, \"nominal\": 61.5}, \"motor_current_a\": {\"value\": 15.4, \"nominal\": 14.2}}, \"alert\": {\"type\": \"alert\", \"machine_id\": \"M05\", \"severity\": \"warning\", \"score\": 0.93, \"contributors\": [{\"signal\": \"vibration_rms\", \"shap\": 0.61}, {\"signal\": \"temperature_c\", \"shap\": 0.22}, {\"signal\": \"motor_current_a\", \"shap\": 0.1}], \"component_id\": \"m05_joint1_bearing\"}, \"remaining_useful_life_min\": 52.7, \"note\": \"SHAP contributors are illustrative until anomaly detection exists (D-019, D-023).\"}",
+    "graph_lookup({\"entity\": \"M05\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"M05\", \"fault_modes\": [{\"fault_id\": \"FAULT:WK:KSS-MAINT-OIL\", \"code\": \"KSS-MAINT-OIL\", \"description\": \"Maintenance reminder: gear oil change due (A1-A3)\", \"severity\": 1, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"KUKA-OIL-S150-20L\", \"description\": \"Shell Tivela S150 gear oil 20 L\", \"unit_cost\": 310.0, \"on_hand\": null}], \"causes\": [\"Operating hours reached service interval (10,000-20,000 h or 3-4 years depending on model)\"], \"sensors\": [{\"channel\": \"gearbox_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-27008\", \"code\": \"KSS-27008\", \"description\": \"Brake test failed on axis\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"KUKA-MTR-A4\", \"description\": \"Axis 4 motor with brake\", \"unit_cost\": 4900.0, \"on_hand\": null}], \"causes\": [\"Brake wear (excess braking angle)\", \"Brake contamination with lubricant\", \"Brake release voltage low\"], \"sensors\": [{\"channel\": \"motor_current_a\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-SAFE-EMG\", \"code\": \"KSS-SAFE-EMG\", \"description\": \"Emergency stop active (external)\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [], \"causes\": [\"Fence door opened\", \"Light curtain interrupted\", \"E-stop pushed\"], \"sensors\": [], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-RDC-BAT\", \"code\": \"KSS-RDC-BAT\", \"description\": \"RDC (resolver digital converter) batt",
+    "graph_lookup({\"entity\": \"M05\", \"what\": \"work_orders\", \"n\": 3}) -> {\"machine_id\": \"M05\", \"work_orders\": [{\"wo_id\": \"WO-2026-007948\", \"wo_type\": \"PM\", \"priority\": \"P3\", \"machine_id\": \"M05\", \"title\": \"Tip dress / change per count, cooling flow check\", \"opened_ts\": \"2026-10-10T05:30\", \"closed_ts\": \"2026-10-10T09:08\", \"status\": \"completed\", \"shift\": \"A\", \"fault_code\": null, \"symptom\": null, \"diagnosis\": null, \"root_cause\": null, \"action_taken\": \"[x] Dress tips\\n[x] Check cooling flow >= 4 l/min\", \"parts_used\": [{\"part_no\": \"WLD-TIP-CAP-16\", \"description\": \"Copper cap tip 16 mm (box 50)\", \"qty\": 1, \"unit_cost\": 62.0}], \"downtime_min\": 0, \"assigned_tech\": \"A-TECH01\", \"escalation_level_reached\": 0, \"sensor_snapshot\": null}, {\"wo_id\": \"WO-2026-007895\", \"wo_type\": \"PM\", \"priority\": \"P3\", \"machine_id\": \"M05\", \"title\": \"Tip dress / change per count, cooling flow check\", \"opened_ts\": \"2026-10-08T05:30\", \"closed_ts\": \"2026-10-10T15:49\", \"status\": \"completed\", \"shift\": \"B\", \"fault_code\": null, \"symptom\": null, \"diagnosis\": null, \"root_cause\": null, \"action_taken\": \"[x] Dress tips\\n[x] Check cooling flow >= 4 l/min\", \"parts_used\": [{\"part_no\": \"WLD-TIP-CAP-16\", \"description\": \"Copper cap tip 16 mm (box 50)\", \"qty\": 1, \"unit_cost\": 62.0}], \"downtime_min\": 0, \"assigned_tech\": \"B-TECH01\", \"escalation_level_reached\": 0, \"sensor_snapshot\": null}, {\"wo_id\": \"WO-2026-007889\", \"wo_type\": \"CM\", \"priority\": \"P4\", \"machine_id\": \"M05\", \"title\": \"WG-TIP-WEAR: Electrode t",
+    "search_docs({\"query\": \"Why is M05 red?\", \"machine_id\": \"M05\", \"k\": 3}) -> {\"results\": [{\"id\": \"SOP-MNT-M05-01\", \"type\": \"sop\", \"machine\": \"M05\", \"text\": \"[SOP-MNT-M05-01: Likely cause (failure mode: bearing_wear)]\\n## Likely cause (failure mode: bearing_wear)\\nLubricant breakdown or contamination at the axis 1 joint bearing (`m05_joint1_bearing`), often after a collision event or a missed regrease interval. Left running, wear accelerates and can seize the joint (long unplanned stop).\"}, {\"id\": \"M05\", \"type\": \"machine_profile\", \"machine\": \"M05\", \"text\": \"M05 Weld robot 2 (station S06, KUKA KR 210 spot-weld robot, criticality A). Hero scenario: axis 1 joint bearing (m05_joint1_bearing) develops wear. Symptom path: vibration_high -> bearing_wear -> m05_joint1_bearing -> replace_bearing -> bearing_6208. Spare bearing_6208: 2 on hand in spare parts cage S12, lead time 9 days. Run-extension decisions follow SOP-OPS-02; repair follows SOP-MNT-M05-01.\"}, {\"id\": \"SOP-MNT-01\", \"type\": \"sop\", \"machine\": null, \"text\": \"[SOP-MNT-01: Fault Escalation and Paging Protocol]\\n## Safety overrides\\nInjury, fire/smoke, HV event, paint Ex-purge fault, molten metal or die water leak: **Level 6 immediately**, follow SOP-SAF-03 / SOP-CAS-02 / SOP-PNT-01.\"}]}",
+    "escalation_chain({\"machine_id\": \"M05\"}) -> {\"id\": \"M05-C\", \"machine_id\": \"M05\", \"shift\": \"C\", \"criticality\": \"A\", \"operator_action\": \"Press andon, tell Line Lead, note fault code/time\", \"chain\": [{\"level\": \"L0_line_lead\", \"employee_id\": \"BAP-E0263\", \"name\": \"Steven Bhatt\", \"role\": \"Line Lead\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4363\", \"radio\": \"BIW-3F\", \"pager\": \"\"}, {\"level\": \"L1_primary_tech\", \"employee_id\": \"BAP-E0430\", \"name\": \"Paul Jimenez\", \"role\": \"Robotics Technician (L2)\", \"shift\": \"C\", \"mobile\": \"\", \"extension\": \"x4530\", \"radio\": \"PLT-E0\", \"pager\": \"\", \"page_after_min\": 2}, {\"level\": \"L2_backup_tech\", \"employee_id\": \"BAP-E0431\", \"name\": \"Gregory James\", \"role\": \"Robotics Technician (L3)\", \"shift\": \"C\", \"mobile\": \"512-555-0184\", \"extension\": \"x4531\", \"radio\": \"PLT-46\", \"pager\": \"PG-1EC30\", \"page_after_min\": 8}, {\"level\": \"L3_maintenance_supervisor\", \"employee_id\": \"BAP-E0314\", \"name\": \"Grace Gomez\", \"role\": \"Maintenance Supervisor\", \"shift\": \"C\", \"mobile\": \"737-555-0117\", \"extension\": \"x4414\", \"radio\": \"PLT-47\", \"pager\": \"PG-3926A\", \"page_after_min\": 15}], \"engineers\": [{\"level\": \"L4_reliability\", \"employee_id\": \"BAP-E0031\", \"name\": \"Stephen Williams\", \"role\": \"Reliability Engineer\", \"shift\": \"D\", \"mobile\": \"979-555-0124\", \"extension\": \"x4131\", \"radio\": \"BIW-73\", \"pager\": \"PG-A41BA\"}, {\"level\": \"L4_controls\", \"employee_id\": \"BAP-E0032\", \"name\": \"Ronald Schmidt\", \"role\": \"Controls Engineer\", \"shift\": \"D\""
+   ]
+  },
+  {
+   "id": "Q39",
+   "category": "hero",
+   "question": "M05 has a bearing problem. Is the spare part in stock?",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "bearing_wear on M05: Joint bearing wear [SOP-MNT-M05-01].\n- Likely causes: Lubricant breakdown or missed regrease interval; Contamination at the axis 1 joint; Collision or overload event\n- Parts: bearing_6208 (Deep groove ball bearing 6208 (A1 joint), 2 on hand)\n- Shows in: vibration_rms (None)",
+   "citations": [
+    "SOP-MNT-M05-01"
+   ],
+   "tools": [
+    "graph_lookup"
+   ],
+   "highlight": [
+    "M05"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "graph_lookup({\"entity\": \"M05\", \"what\": \"fault_modes\"}) -> {\"machine_id\": \"M05\", \"fault_modes\": [{\"fault_id\": \"FAULT:WK:KSS-MAINT-OIL\", \"code\": \"KSS-MAINT-OIL\", \"description\": \"Maintenance reminder: gear oil change due (A1-A3)\", \"severity\": 1, \"source\": \"oem_public\", \"parts\": [{\"part_no\": \"KUKA-OIL-S150-20L\", \"description\": \"Shell Tivela S150 gear oil 20 L\", \"unit_cost\": 310.0, \"on_hand\": null}], \"causes\": [\"Operating hours reached service interval (10,000-20,000 h or 3-4 years depending on model)\"], \"sensors\": [{\"channel\": \"gearbox_temp_c\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-27008\", \"code\": \"KSS-27008\", \"description\": \"Brake test failed on axis\", \"severity\": 3, \"source\": \"synthetic\", \"parts\": [{\"part_no\": \"KUKA-MTR-A4\", \"description\": \"Axis 4 motor with brake\", \"unit_cost\": 4900.0, \"on_hand\": null}], \"causes\": [\"Brake wear (excess braking angle)\", \"Brake contamination with lubricant\", \"Brake release voltage low\"], \"sensors\": [{\"channel\": \"motor_current_a\", \"shape\": \"drift_up\"}], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-SAFE-EMG\", \"code\": \"KSS-SAFE-EMG\", \"description\": \"Emergency stop active (external)\", \"severity\": 2, \"source\": \"synthetic\", \"parts\": [], \"causes\": [\"Fence door opened\", \"Light curtain interrupted\", \"E-stop pushed\"], \"sensors\": [], \"documents\": [\"MAN-WK\"]}, {\"fault_id\": \"FAULT:WK:KSS-RDC-BAT\", \"code\": \"KSS-RDC-BAT\", \"description\": \"RDC (resolver digital converter) batt"
+   ]
+  },
+  {
+   "id": "Q40",
+   "category": "hero",
+   "question": "Create a work order for the M05 bearing replacement.",
+   "pass": true,
+   "fails": [],
+   "gold_source_seen": true,
+   "answer": "Work order WO-1044 created for M05: component m05_joint1_bearing, spare part bearing_6208, fault bearing_wear, priority P2. Downtime cost $38,000/min. Sent to the simulator (mock).",
+   "citations": [],
+   "tools": [
+    "create_work_order"
+   ],
+   "highlight": [
+    "M05"
+   ],
+   "llm_calls": 0,
+   "model": "ollama:qwen2.5:7b",
+   "cached": false,
+   "latency_s": 0.0,
+   "contexts": [],
+   "contexts_text": [
+    "create_work_order({\"machine_id\": \"M05\"}) -> {\"type\": \"work_order\", \"id\": \"WO-1044\", \"machine_id\": \"M05\", \"component_id\": \"m05_joint1_bearing\", \"spare_part\": \"bearing_6208\", \"fault_code\": \"bearing_wear\", \"priority\": \"P2\", \"note\": null, \"downtime_cost_per_min\": 38000, \"source\": \"mock\"}"
+   ]
+  }
+ ]
+}

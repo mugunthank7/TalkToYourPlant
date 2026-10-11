@@ -113,5 +113,7 @@ def call_with_retry(role, fn, *args, max_tries=6, base=2.0, cap=60.0, est_tokens
             if attempt == max_tries - 1 or not _retryable(e):
                 raise
             hint = _retry_after(e)
+            if hint is None and ("402" in str(e) or "prepayment" in str(e).lower()):
+                hint = 15.0 * (attempt + 1)       # credit/billing hiccups clear slowly; back off harder
             delay = hint if hint is not None else min(cap, base ** attempt)
             time.sleep(delay + random.uniform(0, 0.5))

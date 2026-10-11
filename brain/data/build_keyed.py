@@ -197,6 +197,11 @@ def add_hero_and_gaps(out):
         {"id": "SOP-MNT-M05-01", "label": "Document", "name": "Weld robot axis 1 joint bearing wear",
          "source": "synthetic"},
     ]
+    for i, cause in enumerate(["Lubricant breakdown or missed regrease interval", "Contamination at the axis 1 joint",
+                               "Collision or overload event"]):
+        cid_ = f"CAUSE:bearing-wear-{i+1}"
+        nodes.append({"id": cid_, "label": "Cause", "text": cause, "source": "synthetic"})
+        edges.append({"source": "bearing_wear", "rel": "CAUSED_BY", "target": cid_})
     for cid, name in HERO_COMPONENTS:
         nodes.append({"id": cid, "label": "Component", "kind": "component", "name": name, "machine_id": "M05"})
         edges.append({"source": cid, "rel": "PART_OF", "target": "MACHINE:M05"})

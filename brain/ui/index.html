@@ -40,7 +40,7 @@ document.getElementById('f').onsubmit=async e=>{e.preventDefault();const t=q.val
   chips(w,j.highlight.machine_ids,'mach');
   chips(w,(j.highlight.graph_path||[]).map(n=>n.id),'');
   chips(w,j.citations.map(c=>c.id),'');
-  chips(w,j.actions.map(a=>a.type+(a.id?' '+a.id:'')),'act');
+  chips(w,j.actions.map(a=>a.type+((a.work_order&&a.work_order.id)?' '+a.work_order.id:'')),'act');
   const m=document.createElement('div');m.className='meta';
   m.textContent=`${j.meta.model||'offline'} · ${j.meta.llm_calls} LLM calls · ${j.meta.latency_s}s`+(j.meta.cached?' · cached':'')+(j.meta.degraded?' · degraded: '+j.meta.error:'');
   w.appendChild(m)}
