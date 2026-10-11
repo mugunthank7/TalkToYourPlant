@@ -91,3 +91,23 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 ## D-019, M's scope is the blue boxes only | 2026-10-10 | accepted
 **Decision:** M owns Data 1 generation, simulation engine, live plant state, what-if scenarios, dashboard (KPIs, throughput forecast) and the live 3D window. Not M's: knowledge base, LLM, chat, voice/vision, anomaly detection (grey box, owner open; supersedes the anomaly-detection part of D-014). M only exposes the live plant state and what-if as an API so the LLM side can read them, and renders what it is sent (alerts, graph path).
 **Consequences:** Data 1 files include ground-truth fault labels so whoever builds anomaly detection can train on them.
+
+## D-020, Brain work lives in `brain/` on its own branch | 2026-10-11 | accepted
+**Context:** T side (knowledge base, RAG, LLM brain, chat) needs a place in the shared repo without touching twin/sim files owned by M.
+**Decision:** All T-side work goes in `brain/`, developed on branch `brain-kb`, merged via PR after review by M. Twin/sim files are not edited from this branch except additive docs (this log, CLAUDE.md pointers).
+**Consequences:** Few merge conflicts. Shared contract files (`docs/STATIONS.md`, interface contract in CLAUDE.md) change only through new D-entries.
+
+## D-021, Brain RAG design and stack are open | 2026-10-11 | open
+**Context:** An early domain brief (`brain/docs/talk-to-your-plant-domain-brief.pdf`) proposed graph-anchored multimodal RAG, Neo4j, hybrid synthetic plus public data. It predates the repo scope.
+**Decision:** None yet on stack. T owner brings a proposal. The brief is input only.
+**Consequences:** No stack choice is implied.
+
+## D-022, Twin IDs win; T's Voltara dataset is re-keyed to them | 2026-10-11 | accepted
+**Context:** M's generator (Voltline: 10 to 11 machines `M01..M11`, 12 stations, 24 employees) and T's generator (Voltara: 119 machines, 452 employees, ~20k work orders, 83 SOPs/manuals, ~11k RAG chunks, graph seed) used different plant names and ID schemes, breaking D-008.
+**Decision:** Voltline IDs (`M01..M11`, `S01..S12`, employee IDs) are final. T's data is re-keyed to them in `brain/data/` via `crosswalk_*.csv` and `build_keyed.py`. Nothing in `data/` or the twin changes. Mapped: M01 `CAS-GP-02`, M02 `STP-BLK-01`, M04 `BIW-WF-01`, M05 `BIW-WK-05`, M06 `GA-CV-01`, M07 `BIW-MET-01`, M08 `BAT-BS-01`, M09 `BAT-BT-01`, M11 `LOG-AM-01`. M03 framing fixture and M10 decoiler have no Voltara family and are added as synthetic stubs. The other ~108 Voltara machines are knowledge-base only (not rendered). Four twin staff (`A-TECH01`, `B-TECH01`, `A-SUP01`, `B-SUP01`) replace the matching people in M05's escalation chain.
+**Consequences:** One ID space across 3D, sensor stream and graph. KB answers can cite the real plant breadth. The Voltara README's "Voltara Motors" name survives only in document text; the demo plant name remains Voltline EV Works (D-002) unless M and T agree otherwise.
+
+## D-023, Hero M05 bearing wear is authored into the knowledge base | 2026-10-11 | accepted
+**Context:** Voltara's catalog has no joint-bearing-wear fault mode for weld robots (its KUKA faults are gearbox oil leak, brake, RDC battery, tips, etc.), but the twin's hero scenario and interface contract need `vibration_high -> bearing_wear -> m05_joint1_bearing -> replace_bearing -> bearing_6208`.
+**Decision:** Author the hero content as synthetic: fault mode `bearing_wear` on family WK, component nodes `m05_*` (10, from `docs/STATIONS.md`), repair `replace_bearing`, spare part `bearing_6208` (2 on hand, bin S12, lead time 9 days), SOP `SOP-MNT-M05-01`, a past-incident chunk on M04, sensor signal crosswalk (`vibration_rms` <-> `vibration_mm_s`, `temperature_c` <-> `motor_temp_c`, `motor_current_a`). Example `alert` and `graph_path` messages in `brain/data/hero_m05_messages.json` match the interface contract. Run-extension logic reuses existing `SOP-OPS-02`.
+**Consequences:** The hero demo path works end to end in the KB. SHAP values in the example alert are illustrative until anomaly detection exists (owner open, see D-019). `BIW-WK-03` (Voltara's gearbox oil leak storyline) stays as a contrast case.
