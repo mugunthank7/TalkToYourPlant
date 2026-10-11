@@ -8,6 +8,8 @@ interface TwinState {
   faults: Injected[];
   addFault: (f: Injected) => void;
   clearFaults: () => void;
+  sim: "off" | "connecting" | "on";
+  setSim: (s: "off" | "connecting" | "on") => void;
   view: "live" | "dash";
   setView: (v: "live" | "dash") => void;
   error: string | null;
@@ -21,6 +23,8 @@ export const useTwin = create<TwinState>((set) => ({
   faults: [],
   addFault: (f) => set((s) => ({ faults: [...s.faults, f] })),
   clearFaults: () => set({ faults: [] }),
+  sim: "off",
+  setSim: (sim) => set({ sim }),
   view: "live",
   setView: (view) => set({ view }),
   error: null,

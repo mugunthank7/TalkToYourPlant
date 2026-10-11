@@ -1,6 +1,7 @@
 import type { Hero, Layout, Person, Pt, Seg } from "./data";
 import { length, route } from "./pathfind";
 import { clock } from "./clock";
+import { simAnim, simLink } from "./simlink";
 import { useTwin } from "./state";
 
 // ---- which station is where in the process --------------------------------------------------------
@@ -10,7 +11,7 @@ const BUFFER_S = 600; // upstream/downstream buffers absorb this long
 const BELT_SPEED = 0.25;
 export const TAKT = 90;
 
-export type SState = "run" | "fault" | "repair" | "starved" | "blocked";
+export type SState = "run" | "fault" | "repair" | "starved" | "blocked" | "micro";
 export interface Interval { a: number; b: number; state: SState; reason: string; machine: string }
 
 export interface Injected {
@@ -67,9 +68,14 @@ export function idleIntervals(sid: string, shift: string, hero: Hero): Interval[
   return out;
 }
 
-const PRIORITY: Record<SState, number> = { run: 0, blocked: 1, starved: 1, repair: 2, fault: 3 };
+const PRIORITY: Record<SState, number> = { run: 0, micro: 1, blocked: 1, starved: 1, repair: 2, fault: 3 };
 
 export function stationState(sid: string, t: number, shift: string, hero: Hero): { state: SState; reason: string; machine: string } {
+  if (simLink.on) {
+    const s = simLink.snap!.stations[sid];
+    if (!s) return { state: "run", reason: "", machine: "" };
+    return { state: s.state as SState, reason: s.reason, machine: s.machine ?? "" };
+  }
   let best: { state: SState; reason: string; machine: string } = { state: "run", reason: "", machine: "" };
   for (const iv of idleIntervals(sid, shift, hero)) {
     if (t >= iv.a && t < iv.b && PRIORITY[iv.state] >= PRIORITY[best.state]) best = { state: iv.state, reason: iv.reason, machine: iv.machine };
@@ -79,6 +85,7 @@ export function stationState(sid: string, t: number, shift: string, hero: Hero):
 
 /** Time this station has actually been running up to t (animations use this so they freeze when the station is idle). */
 export function animT(sid: string, t: number, shift: string, hero: Hero): number {
+  if (simLink.on) return simAnim(sid);
   let lost = 0;
   const ivs = idleIntervals(sid, shift, hero).sort((x, y) => x.a - y.a);
   let cursor = 0;
@@ -92,6 +99,7 @@ export function animT(sid: string, t: number, shift: string, hero: Hero): number
 
 /** Belt time: the conveyor and the cars on it stand still while any belt-stopping fault is active. */
 export function beltTime(t: number, shift: string, hero: Hero): number {
+  if (simLink.on) return simLink.beltT + (simLink.snap!.belt.moving ? Math.min(2, Math.max(0, t - simLink.snap!.t)) : 0);
   const stops: [number, number][] = [];
   for (const w of windows(shift, hero)) {
     const iF = idx(w.station);
@@ -130,9 +138,10 @@ export function injectedStopSeconds(t: number, shift: string, hero: Hero): numbe
 
 export type Andon = "ok" | "warn" | "bad";
 export function andonOf(sid: string, t: number, shift: string, hero: Hero): Andon {
+  if (simLink.on && sid === "S06" && simLink.snap!.machines.M05?.alert === "critical" && simLink.snap!.stations.S06.state === "run") return "bad";
   const s = stationState(sid, t, shift, hero).state;
   if (s === "fault") return "bad";
-  if (s === "repair" || s === "starved" || s === "blocked") return "warn";
+  if (s === "repair" || s === "starved" || s === "blocked" || s === "micro") return "warn";
   if (sid === "S06" && shift === "A" && t >= hero.t_alert_s && t < hero.t_repair_start_s) return "bad";
   return "ok";
 }
@@ -143,6 +152,12 @@ export interface Forecast { level: "ok" | "watch" | "risk"; text: string; etaMin
 const PACE_UTIL: Record<string, number> = { S04: 85 / TAKT, S05: 70 / TAKT, S06: 70 / TAKT, S07: 55 / TAKT, S08: 80 / TAKT, S09: 75 / TAKT, S02: 70 / TAKT };
 
 export function forecastFor(sid: string, t: number, shift: string, hero: Hero): Forecast {
+  if (simLink.on && sid === "S06") {
+    const m = simLink.snap!.machines.M05;
+    if (m?.reset) return { level: "ok", text: "Bearing replaced, wear reset" };
+    if (m?.alert === "critical") return { level: "risk", etaMin: Math.round((m.rul_s ?? 0) / 60), text: `Bearing wear: failure in ~${Math.round((m.rul_s ?? 0) / 60)} min if left, line will slow first` };
+    if (m?.alert === "watch") return { level: "watch", text: "Vibration trending up, bottleneck risk soon" };
+  }
   const f = hero.fault;
   if (sid === "S06" && shift === "A" && f) {
     const progress = (tt: number) => Math.min(1, Math.max(0, (tt - f.onset_s) / f.ramp_s));
@@ -206,3 +221,28 @@ export const andonPlant = () => {
   }
   return worst;
 };
+
+/** A technician walking for an engine work order: desk -> spares -> machine -> repair -> desk. */
+export function responderFromWO(layout: Layout, wo: { id: string; machine: string; station: string; dispatch_at: number; arrived_at: number | null; closed_at: number | null; repair_s: number }): Person {
+  const speed = 1.3;
+  const toSpares = route(layout, "S10.in", "S12.in");
+  const toStation = route(layout, "S12.in", `${wo.station}.in`);
+  const back = route(layout, `${wo.station}.in`, "S10.in");
+  const home = layout.stations.find((s) => s.id === "S10")!;
+  const spares = layout.stations.find((s) => s.id === "S12")!;
+  const st = layout.stations.find((s) => s.id === wo.station)!;
+  const d0 = wo.dispatch_at;
+  const pick = d0 + length(toSpares) / speed;
+  const arrive = wo.arrived_at ?? pick + 90 + length(toStation) / speed;
+  const fix = wo.closed_at ?? arrive + wo.repair_s;
+  const mk = (kind: string, s: number, e: number, anim: Seg["anim"], extra: Partial<Seg> = {}): Seg => ({ k: kind, s, e, anim, ...extra });
+  const walk = (s: number, p: Pt[], to: string): Seg => mk("walk", s, s + length(p) / speed, "walk", { path: p, to });
+  const tl: Seg[] = [mk("desk", 0, d0, "idle", { station: "S10", at: home.access, face: [home.x, home.z] }), walk(d0, toSpares, "S12"),
+    mk("pickup", pick, pick + 90, "work", { station: "S12", at: spares.access, face: [spares.x, spares.z] }), walk(pick + 90, toStation, wo.station),
+    mk("repair", arrive, fix, "crouch", { station: wo.station, at: st.access, face: [st.x, st.z] }), walk(fix, back, "S10")];
+  tl.push(mk("desk", tl[tl.length - 1].e, 1e9, "idle", { station: "S10", at: home.access, face: [home.x, home.z] }));
+  // make the first segments contiguous even if the walk to spares ends before the pickup start
+  for (let i = 1; i < tl.length; i++) tl[i].s = tl[i - 1].e;
+  tl[tl.length - 1].e = 1e9;
+  return { employee_id: `ON-CALL-${wo.id}`, name: "On-call technician", role: "technician", shift: "A", home_station: "S10", timeline: tl };
+}

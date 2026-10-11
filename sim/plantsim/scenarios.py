@@ -1,0 +1,59 @@
+"""What-if runner: replay to now (deterministic), apply changes at now, run to the horizon, compare to the unchanged future."""
+from __future__ import annotations
+
+from . import config as C
+from .config import Params
+from .model import PlantSim
+
+
+def _curve(sim: PlantSim, every: int = 10) -> list[int]:
+    m = sim.minute_frame()
+    return [int(v) for v in m.cum_units.iloc[every - 1::every]]
+
+
+def run_branch(base: Params, changes: list[dict] | None = None, now_s: float | None = None) -> dict:
+    p = base.copy(changes=[dict(c) for c in (changes or [])])
+    for c in p.changes:
+        c.setdefault("at", now_s if now_s is not None else 0.0)
+    sim = PlantSim(p).run()
+    k = sim.kpis()
+    return {"kpis": k, "cum_units_10min": _curve(sim), "events": sim.events[-30:], "work_orders": [w.as_dict() for w in sim.work_orders]}
+
+
+def what_if(base: Params, changes: list[dict], now_s: float) -> dict:
+    """Baseline = nothing changes from now on. Scenario = the changes apply at `now_s`."""
+    baseline = run_branch(base, [], now_s)
+    scenario = run_branch(base, changes, now_s)
+    b, s = baseline["kpis"], scenario["kpis"]
+    keys = ("units", "good_units", "oee", "availability", "downtime_min", "downtime_cost_usd", "units_lost_vs_ideal")
+    delta = {k: round(s[k] - b[k], 3) for k in keys if k in s and k in b}
+    return {"now_s": now_s, "changes": changes, "baseline": baseline, "scenario": scenario, "delta": delta,
+            "summary": narrate(b, s, delta, changes)}
+
+
+def narrate(b: dict, s: dict, d: dict, changes: list[dict]) -> str:
+    what = ", ".join(_describe(c) for c in changes) or "no changes"
+    cars = int(d.get("units", 0))
+    cost = int(d.get("downtime_cost_usd", 0))
+    word = "more" if cars >= 0 else "fewer"
+    cw = "extra" if cost >= 0 else "saved"
+    return (f"With {what}: {s['units']} cars instead of {b['units']} ({abs(cars)} {word}), "
+            f"downtime {s['downtime_min']:.0f} min vs {b['downtime_min']:.0f} min, "
+            f"OEE {s['oee']*100:.0f}% vs {b['oee']*100:.0f}%, {abs(cost):,} dollars {cw} in downtime cost.")
+
+
+def _describe(c: dict) -> str:
+    op = c.get("op", "")
+    if op == "keep_running":
+        return f"the alert ignored for {c.get('hours', 2)} h"
+    if op == "dispatch_now":
+        return "the technician sent now"
+    if op in ("add_operator", "remove_operator"):
+        return f"{op.replace('_', ' ')} at {c.get('station')}"
+    if op == "inject_fault":
+        return f"a breakdown of {c.get('machine')}"
+    if op == "set_takt":
+        return f"takt {c.get('takt_s')} s"
+    if op == "schedule_pm":
+        return f"planned maintenance of {c.get('machine')} for {c.get('minutes', 30)} min"
+    return op or "a change"

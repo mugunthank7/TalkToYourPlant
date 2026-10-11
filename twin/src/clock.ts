@@ -1,5 +1,13 @@
 // Mutable simulation clock, read every frame by the scene (no React re-renders).
-export const clock = { t: 0, speed: 60, playing: true, max: 8 * 3600 };
+export const clock = { t: 0, speed: 60, playing: true, max: 8 * 3600, linked: false };
+
+// When the SimPy engine is connected, these controls go to the engine; otherwise they are local.
+export const ctl = {
+  send: null as null | ((msg: Record<string, unknown>) => void),
+  play(v: boolean) { clock.playing = v; this.send?.({ type: "control", action: v ? "play" : "pause" }); },
+  speed(v: number) { clock.speed = v; this.send?.({ type: "control", speed: v }); },
+  seek(t: number) { clock.t = Math.max(0, t); this.send?.({ type: "control", action: "seek", t: Math.max(0, t) }); },
+};
 
 let started = false;
 /** Advance the sim clock from a plain timer so the dashboard tab keeps time while the 3D canvas is paused. */
@@ -13,7 +21,7 @@ export function startClock() {
     last = now;
     if (clock.playing) {
       clock.t += dt * clock.speed;
-      if (clock.t >= clock.max) clock.t = 0;
+      if (clock.t >= clock.max) { if (clock.linked) clock.t = clock.max; else clock.t = 0; }
     }
   }, 33);
 }

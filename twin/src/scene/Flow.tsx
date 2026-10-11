@@ -6,6 +6,7 @@ import { BELT_SPEED, CAR_SLOTS, TAKT, carDistance, smooth } from "../flow";
 import { toScene } from "../data";
 import { useTwin } from "../state";
 import { beltTime } from "../plant";
+import { simLink } from "../simlink";
 
 const STEEL = new THREE.Color("#8b95a3");
 const PAINTS = ["#f8fafc", "#cbd5e1", "#1d4ed8", "#e2e8f0", "#b91c1c"].map((c) => new THREE.Color(c));
@@ -30,6 +31,22 @@ export function Conveyor() {
   const prog = useMemo(() => Array.from({ length: CAR_SLOTS }, () => ({ current: 0 })), []);
 
   useFrame(() => {
+    if (simLink.on) {
+      const by = new Map<number, { d_m: number }>();
+      for (const c of simLink.snap!.belt.cars) by.set(c.k % CAR_SLOTS, c);
+      for (let s = 0; s < CAR_SLOTS; s++) {
+        const g = groups.current[s];
+        const c = by.get(s);
+        if (!g) continue;
+        g.visible = !!c;
+        if (c) {
+          const tx = x0 + Math.min(c.d_m * (len / 59), len + 2);
+          g.position.x = Math.abs(tx - g.position.x) > 4 ? tx : g.position.x + (tx - g.position.x) * 0.25;
+          prog[s].current = Math.min(1, Math.max(0, c.d_m / 59));
+        }
+      }
+      return;
+    }
     for (let s = 0; s < CAR_SLOTS; s++) {
       const g = groups.current[s];
       if (!g) continue;

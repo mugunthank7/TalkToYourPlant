@@ -86,6 +86,15 @@ export const toScene = (x: number, z: number): [number, number] => [x - CENTER[0
 
 export type Status = "healthy" | "alert" | "repair" | "repaired";
 export function m05Status(t: number, shift: string, h: Hero): Status {
+  const sl = (globalThis as unknown as { __sim?: () => import("./simlink").SimSnap | null }).__sim?.();
+  if (sl) {
+    const m = sl.machines.M05;
+    const st = sl.stations.S06?.state;
+    if (st === "repair" || st === "fault") return "repair";
+    if (m?.reset) return "repaired";
+    if (m?.alert === "critical") return "alert";
+    return "healthy";
+  }
   if (shift !== "A") return "healthy";
   if (t < h.t_alert_s) return "healthy";
   if (t < h.t_repair_start_s) return "alert";

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { clock } from "../clock";
+import { clock, ctl } from "../clock";
 import type { KpiSeries, ScenarioSummary } from "../data";
 import { m05Status } from "../data";
 import { injectedStopSeconds, TAKT } from "../plant";
@@ -141,8 +141,8 @@ export function Dashboard() {
         <div className="dash-title">
           <h2>Plant KPIs <span>Shift {shift}, clock at {Math.floor(clock.t / 3600)}h {Math.floor((clock.t % 3600) / 60)}m of 8h</span></h2>
           <div className="scrub">
-            <input type="range" min={0} max={SHIFT_S} step={30} value={clock.t} onChange={(e) => { clock.t = Number(e.target.value); }} />
-            {shift === "A" && <button onClick={() => { clock.t = data.hero.t_alert_s + 60; }}>Jump to alert</button>}
+            <input type="range" min={0} max={SHIFT_S} step={30} value={clock.t} onChange={(e) => { ctl.seek(Number(e.target.value)); }} />
+            {shift === "A" && <button onClick={() => ctl.seek(data.hero.t_alert_s + 60)}>Jump to alert</button>}
           </div>
           <div className="chips2">
             {SCEN.map((c) => (
