@@ -68,15 +68,29 @@ def schedule(people: list[dict]) -> dict:
     return coverage
 
 
-def sensors(df: pd.DataFrame, expect_fault: bool) -> None:
-    assert not df.isna().any().any()
-    assert (df["vibration_rms_mm_s"] > -0.5).all()
-    m5 = df[df["machine_id"] == "M05"].set_index("t_s")
-    if expect_fault:
-        assert m5["fault_label"].sum() > 600, "fault label too short"
-        base = m5.loc[:3 * 3600 - 1, "vibration_rms_mm_s"].mean()
-        late = m5.loc[int(5.0 * 3600):int(5.1 * 3600), "vibration_rms_mm_s"].mean()
-        assert late > 1.6 * base, (base, late)
-        assert (m5.loc[m5.index > 7 * 3600, "degradation"] == 0).all()
-    else:
-        assert m5["fault_label"].sum() == 0
+def scenarios(summ: dict, sens: dict) -> None:
+    u = {k: v["units"] for k, v in summ.items()}
+    assert abs(summ["ideal"]["units"] - 320) <= 1, summ["ideal"]["units"]
+    assert summ["ideal"]["oee"] > 0.99
+    assert u["ideal"] > u["healthy_realistic"] > u["hero_timely_repair"] > u["hero_delayed_repair"] > u["hero_ignored"], u
+    assert summ["hero_ignored"]["downtime_min"] > 60 and summ["hero_timely_repair"]["downtime_min"] < summ["hero_ignored"]["downtime_min"]
+    for name, df in sens.items():
+        assert not df.isna().drop(columns=["rul_s"]).any().any(), name
+        m5 = df[df["machine_id"] == "M05"]
+        if name.startswith("hero"):
+            assert m5["fault_label"].sum() > 600, name
+            assert (m5["rul_s"].dropna() >= 0).all()
+        else:
+            assert m5["fault_label"].sum() == 0, name
+    base = sens["hero_timely_repair"].query("machine_id=='M05'").set_index("t_s")
+    assert base.loc[int(5.0 * 3600):int(5.1 * 3600), "vibration_rms_mm_s"].mean() > \
+        1.6 * base.loc[:3 * 3600 - 1, "vibration_rms_mm_s"].mean()
+
+
+def history(h: dict) -> None:
+    sh, inc, hr = h["history_shifts"], h["history_incidents"], h["history_hourly"]
+    assert len(sh) > 40 and len(inc) >= 1
+    assert (sh["units"] <= sh["demand_plan_units"] + 1).all()
+    assert sh.loc[sh["had_incident"], "oee"].mean() < sh.loc[~sh["had_incident"], "oee"].mean()
+    assert not hr.isna().any().any()
+    assert (h["history_sensors_1min"]["rul_s"].dropna() >= 0).all()

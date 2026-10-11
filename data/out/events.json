@@ -10,7 +10,9 @@
   "band_gain": 14.0,
   "temp_rise_c": 14.0,
   "current_gain": 0.12,
-  "alert_vib_multiple": 2.0
+  "alert_vib_multiple": 2.0,
+  "cycle_penalty": 0.3,
+  "quality_penalty": 0.05
  },
  "t_onset_s": 10800,
  "t_alert_s": 18436.1,

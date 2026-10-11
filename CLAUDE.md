@@ -113,12 +113,12 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 - [x] Repo skeleton, docs, decisions
 - [x] System flowchart in README (whiteboard v1 -> improved v2, D-011, D-012)
 - [x] Decisions D-013..D-017: SimPy engine, M owns Data 1 + anomaly detection, build order
-- [x] Synthetic data generator `data/plantdata/` (layout, 24 employees, tasks, transfer times, per-person schedules, sensors with hero fault); spec in `docs/DATA_SPEC.md`
+- [x] Synthetic data generator `data/plantdata/` (layout, 24 employees, tasks, transfer times, per-person schedules, 5 scenarios with sensors + production output, 30-day history with RUL labels); spec in `docs/DATA_SPEC.md`
 - [ ] NEXT (priority 2): scaffold `twin/` (Vite + R3F) that loads `layout.json` + `schedule.json`: floor, stations as boxes, people as capsules walking the schedule
 - [ ] Install Blender, confirm headless export works
 - [ ] P0 assets: weld robot (rigged), conveyor, press, BIW
 - [ ] P0 people: operator + maintenance tech with walk/idle/work
-- [ ] Replay `sensors_shiftA_fault.parquet` as the mock stream + fault glow on M05
+- [ ] Replay `scenarios/hero_timely_repair_sensors.parquet` as the mock stream + fault glow on M05
 - [ ] SimPy engine + what-if + FastAPI tool endpoints (D-016)
 - [ ] KPI dashboard
 - [ ] Wire to real WebSocket

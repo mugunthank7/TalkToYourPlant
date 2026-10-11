@@ -9,13 +9,15 @@ import numpy as np
 
 from . import events as ev
 from . import layout as L
-from . import people, schedule, sensors, transfers, validate
+from . import history, people, scenarios, schedule, transfers, validate
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--out", default="out")
+    ap.add_argument("--history-days", type=int, default=30)
+    ap.add_argument("--skip-history", action="store_true")
     ap.add_argument("--copy-to", default=None, help="also copy small JSON files here (e.g. ../twin/public/data)")
     args = ap.parse_args()
     out = Path(args.out)
@@ -47,12 +49,28 @@ def main() -> None:
                   "note": "t is seconds since shift start; coordinates are metres (x east, z south)"},
          "shifts": shifts}, separators=(",", ":")))
 
-    df = sensors.generate(schedule.SHIFT_S, np.random.default_rng(args.seed + 1), True, hero)
-    validate.sensors(df, True)
-    df.to_parquet(out / "sensors_shiftA_fault.parquet", compression="zstd", index=False)
-    healthy = sensors.generate(schedule.SHIFT_S, np.random.default_rng(args.seed + 2), False, None)
-    validate.sensors(healthy, False)
-    healthy.to_parquet(out / "sensors_healthy_train.parquet", compression="zstd", index=False)
+    sdir = out / "scenarios"
+    sdir.mkdir(exist_ok=True)
+    summaries, sens = {}, {}
+    for i, name in enumerate(scenarios.SCENARIOS):
+        df, minutes, hourly, summ = scenarios.run(name, args.seed + 10 + i, hero)
+        df.to_parquet(sdir / f"{name}_sensors.parquet", compression="zstd", index=False)
+        minutes.to_parquet(sdir / f"{name}_output_minute.parquet", compression="zstd", index=False)
+        hourly.to_csv(sdir / f"{name}_output_hourly.csv", index=False)
+        summaries[name], sens[name] = summ, df
+    validate.scenarios(summaries, sens)
+    (sdir / "summary.json").write_text(json.dumps(summaries, indent=1))
+
+    if not args.skip_history:
+        hdir = out / "history"
+        hdir.mkdir(exist_ok=True)
+        hist = history.build(args.history_days, args.seed + 100)
+        validate.history(hist)
+        for name, frame in hist.items():
+            if name in ("history_sensors_1min", "history_hourly"):
+                frame.to_parquet(hdir / f"{name}.parquet", compression="zstd", index=False)
+            else:
+                frame.to_csv(hdir / f"{name}.csv", index=False)
 
     if args.copy_to:
         dst = Path(args.copy_to)
@@ -63,8 +81,12 @@ def main() -> None:
     print(f"employees: {len(roster)}  tasks: {len(people.TASKS)}")
     print("hero:", {k: v for k, v in hero.items() if k.startswith("t_")})
     print("station coverage (shift A):", coverage["A"])
-    for f in sorted(out.iterdir()):
-        print(f"  {f.name:34s}{f.stat().st_size / 1024:9.0f} KB")
+    print(f"{'scenario':22s}{'units':>7s}{'lost':>7s}{'OEE':>7s}{'down_min':>10s}{'cost_usd':>12s}")
+    for n, v in summaries.items():
+        print(f"{n:22s}{v['units']:7d}{v['units_lost_vs_ideal']:7.0f}{v['oee']:7.3f}{v['downtime_min']:10.1f}{v['downtime_cost_usd']:12,d}")
+    for f in sorted(out.rglob("*")):
+        if f.is_file():
+            print(f"  {str(f.relative_to(out)):46s}{f.stat().st_size / 1024:9.0f} KB")
 
 
 if __name__ == "__main__":

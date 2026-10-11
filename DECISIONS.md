@@ -82,3 +82,8 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 
 ## D-017, Data package layout and reproducibility | 2026-10-10 | accepted
 **Decision:** The generator lives in `data/plantdata/`, deterministic by seed (`python -m plantdata --seed 42`). Small outputs (layout, employees, tasks, transfer times, events, schedule) are committed in `data/out/`; large sensor files are Parquet, committed only if small, otherwise regenerated. Specification in `docs/DATA_SPEC.md`.
+
+## D-018, Scenario library and output model for forecasting | 2026-10-10 | accepted
+**Context:** To forecast, the data needs ideal outputs, realistic outputs, faulted outputs and a longer history, not only sensor streams.
+**Decision:** Five scenarios (ideal, healthy_realistic, hero_timely_repair, hero_delayed_repair, hero_ignored) with sensors and per-minute production output, a serial-line output model (buffer upstream, derate and scrap when a weld robot degrades), and a 30-day history with incidents and remaining-useful-life labels. Downtime cost uses an assumed $20,000 per minute from the brief.
+**Consequences:** The simulation engine must reproduce the same quantities (units, OEE, downtime) and can be sanity-checked against these scenario summaries. The cost figure must be cited with a real source before the pitch.

@@ -17,8 +17,11 @@ Time is **seconds since shift start** (`t_s`). A shift is 8 h = 28,800 s. Shift 
 | `out/transfer_times.csv` | Item moves between stations and walking times between all station pairs | yes |
 | `out/events.json` | The scripted hero fault and response timeline | yes |
 | `out/schedule.json` | Per-person timelines for both shifts (drives the 3D playback) | yes |
-| `out/sensors_shiftA_fault.parquet` | 1 Hz sensors, 10 machines, 8 h, with the M05 bearing-wear fault | no, regenerate |
-| `out/sensors_healthy_train.parquet` | Same, no fault, different seed (train anomaly detection here) | no, regenerate |
+| `out/scenarios/<name>_sensors.parquet` | 1 Hz sensors, 10 machines, 8 h, per scenario | no, regenerate |
+| `out/scenarios/<name>_output_minute.parquet` | Production output per minute per scenario | no, regenerate |
+| `out/scenarios/<name>_output_hourly.csv`, `summary.json` | Hourly output and the scenario KPI comparison | yes |
+| `out/history/history_shifts.csv`, `history_incidents.csv` | ~30 days: shift KPIs and every degradation incident | yes |
+| `out/history/history_hourly.parquet`, `history_sensors_1min.parquet` | Hourly output and 1-minute sensors for forecasting | no, regenerate |
 
 ## layout.json
 `stations[]`: `id, name, x, z, w, d, access:[x,z], machines[]`. `access` is where people stand. `machines[]`: `id, name, type, station, x, z, rot_deg`. `walk_graph`: `nodes[{id,x,z}]` and `edges[[a,b]]`; people only walk along edges. `safety_zones[]`: rectangles around weld cells S05 and S06 (robot pauses visually if a person is inside). `item_flow[]`: `from, to, mode` (conveyor or agv).
@@ -47,7 +50,26 @@ Weld robot 2 (`M05`), component `m05_joint1_bearing`, shift A. Onset at t = 3.0 
 Everyone starts at the gate and walks to their station. Breaks are staggered and covered by the relief operator. Station coverage is above 90 percent for every operated station. The technician response to the hero fault and the supervisor's reaction are scripted into shift A.
 
 ## sensors (parquet)
-Columns: `t_s, machine_id, vibration_rms_mm_s, vib_bpfo_band, temperature_c, motor_current_a, load_pct, state, fault_label, fault_component, degradation`. `vib_bpfo_band` is energy at the bearing-defect frequency band and is the earliest indicator. `fault_label` is 1 once vibration would be at least 1.3x baseline; `degradation` is the 0 to 1 ground truth. States: running, idle, maintenance.
+Columns: `t_s, machine_id, vibration_rms_mm_s, vib_bpfo_band, temperature_c, motor_current_a, load_pct, state, fault_label, fault_component, degradation, rul_s`. `vib_bpfo_band` is energy at the bearing-defect band and is the earliest indicator. `fault_label` is 1 once vibration would be at least 1.3x baseline; `degradation` is the 0 to 1 ground truth; `rul_s` is the remaining useful life, meaning seconds until failure if nothing is done (empty when healthy). States: running, idle, stopped (micro-stop), maintenance, failed.
+
+## Scenarios (ideal, realistic, and what-if outcomes)
+One 8 h shift each, same sensors plus production output. Numbers from seed 42:
+
+| Scenario | Units | OEE | Downtime | Cost at $20k/min |
+|----------|------:|----:|---------:|-----------------:|
+| `ideal` (ceiling: no stops, no scrap, takt 90 s) | 320 | 1.00 | 0 min | $0 |
+| `healthy_realistic` (micro-stops, base scrap) | 287 | 0.88 | 49 min | $0.98M |
+| `hero_timely_repair` (fixed 5 min after alert) | 264 | 0.82 | 70 min | $1.40M |
+| `hero_delayed_repair` (fixed 40 min late) | 251 | 0.76 | 84 min | $1.69M |
+| `hero_ignored` (M05 seizes at 6.0 h) | 218 | 0.63 | 134 min | $2.67M |
+
+At the alert there are about 53 minutes of remaining useful life before M05 would fail. That window is what the LLM's "keep running 2 more hours?" what-if should expose. The $20,000 per minute figure is an assumption from the brief; find and cite a source before pitching.
+
+## Output model (outputs.py)
+Units flow through the line in series, so one stopped machine stops the line, except the press, transfer robot and decoiler, which sit upstream of a 15-minute buffer. A degrading weld robot slows itself (cycle up to +30 percent) and raises scrap (up to +5 points). Per-minute columns: `units_completed, good_units, scrap_units, cum_units, downtime_s, effective_cycle_s, availability, performance, quality, oee, bottleneck_machine, downtime_cost_usd`. OEE = availability x performance x quality.
+
+## History for forecasting (history/)
+52 shifts over 30 days (Sunday off, Saturday takt 120 s, per-day operator efficiency). 6 degradation incidents on random machines (M01, M03, M04, M05, M09, M10) with outcomes `timely`, `late` or `failure`. Targets you can train on: throughput per hour or shift (from `history_hourly`, `history_shifts`), and remaining useful life (`rul_s` in `history_sensors_1min`). Six incidents is thin for a real model; raise it with `--history-days 90`.
 
 ## Limits (be honest in the pitch)
 Everything is synthetic and tuned by hand. Cycle times, noise levels and fault growth are plausible, not measured. The schedule is a scripted stand-in until the SimPy engine produces the same shapes live.

@@ -17,6 +17,8 @@ FAULT = {
     "temp_rise_c": 14.0,
     "current_gain": 0.12,
     "alert_vib_multiple": 2.0,
+    "cycle_penalty": 0.30,    # robot slows itself by up to 30 percent as wear grows
+    "quality_penalty": 0.05,  # scrap rate rises by up to 5 points
 }
 
 DISPATCH_DELAY_S = 300   # alert to technician leaving the bay
