@@ -12,6 +12,16 @@ Blue is the twin and simulation side (this repo). Green is the knowledge and LLM
 
 What is new versus the first idea: the simulation engine sits at the center and produces everything the twin shows, and the LLM can both explain faults and run what-if scenarios. The work order loops back into the simulation, so a technician agent walks to the machine and the fault clears.
 
+## Live twin
+
+![Line overview with live plant state, KPIs and what-if](docs/img/twin-line-overview.png)
+
+| Weld cell B (hero cell) | Battery module line |
+|---|---|
+| ![Weld cell](docs/img/twin-weld-cell.png) | ![Battery line](docs/img/twin-battery-line.png) |
+
+Screenshots of the 3D twin connected to the SimPy engine ("SimPy live"): live plant state, KPIs, camera shots, fault simulator, forecast, timeline and what-if.
+
 ## Hero scenario (90 seconds)
 
 ```mermaid
