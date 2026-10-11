@@ -5,6 +5,9 @@ import * as THREE from "three";
 import { clock } from "../clock";
 import { Person, Seg, Pt, toScene } from "../data";
 import { useTwin } from "../state";
+import { simLink } from "../simlink";
+import { responderFromWO } from "../plant";
+import { useEffect, useState } from "react";
 
 const ROLE_COLOR: Record<string, string> = {
   operator: "#f97316",
@@ -38,9 +41,16 @@ function findSeg(tl: Seg[], t: number): number {
   return lo;
 }
 
-interface Pose { x: number; z: number; heading: number; anim: Seg["anim"]; label: string }
+export interface Pose { x: number; z: number; heading: number; anim: Seg["anim"]; label: string }
 
-function poseAt(p: Person, t: number): Pose {
+/** The conveyor strip (plant coordinates). Nobody is ever drawn standing on it. */
+const BELT = { x0: 62, x1: 123.5, z0: 32.2, z1: 35.8 };
+function offBelt(x: number, z: number): [number, number] {
+  if (x > BELT.x0 && x < BELT.x1 && z > BELT.z0 && z < BELT.z1) return [x, z < 34 ? BELT.z0 - 0.1 : BELT.z1 + 0.1];
+  return [x, z];
+}
+
+export function poseAt(p: Person, t: number): Pose {
   const seg = p.timeline[findSeg(p.timeline, t)];
   if (seg.k === "walk" && seg.path) {
     const { cum, len } = pathInfo(seg);
@@ -59,58 +69,125 @@ function poseAt(p: Person, t: number): Pose {
   return { x: at[0], z: at[1], heading, anim: seg.anim, label: `${seg.k} ${seg.station ?? ""}` };
 }
 
-function Worker({ person }: { person: Person }) {
+const PANTS = "#1f2a44";
+const SKIN = "#e0b896";
+
+function Limb({ r, len, color }: { r: number; len: number; color: string }) {
+  return (
+    <mesh position={[0, -len / 2, 0]} castShadow>
+      <capsuleGeometry args={[r, len - 2 * r, 4, 8]} />
+      <meshStandardMaterial color={color} roughness={0.8} />
+    </mesh>
+  );
+}
+
+export function Worker({ person, carry }: { person: Person; carry?: [number, number] }) {
   const group = useRef<THREE.Group>(null!);
   const body = useRef<THREE.Group>(null!);
+  const lLeg = useRef<THREE.Group>(null!);
+  const rLeg = useRef<THREE.Group>(null!);
+  const lArm = useRef<THREE.Group>(null!);
+  const rArm = useRef<THREE.Group>(null!);
+  const torso = useRef<THREE.Group>(null!);
   const text = useRef("");
+  const box = useRef<THREE.Mesh>(null!);
   const color = ROLE_COLOR[person.role] ?? "#ccc";
   const yaw = useRef(0);
+  const phase = useRef(Math.random() * 6);
 
-  useFrame(() => {
+  useFrame((_, dt) => {
     const pose = poseAt(person, clock.t);
-    const [sx, sz] = toScene(pose.x, pose.z);
+    const [ox, oz] = offBelt(pose.x, pose.z);
+    const [sx, sz] = toScene(ox, oz);
     group.current.position.set(sx, 0, sz);
-    // Turn smoothly toward the heading.
     let d = pose.heading - yaw.current;
     d = Math.atan2(Math.sin(d), Math.cos(d));
-    yaw.current += d * 0.25;
+    yaw.current += d * Math.min(1, dt * 10);
     group.current.rotation.y = yaw.current;
-    const t = performance.now() / 1000;
+
+    const walking = pose.anim === "walk";
+    phase.current += dt * (walking ? 7.5 : 3);
+    const sw = Math.sin(phase.current);
     const b = body.current;
     b.position.y = 0;
-    b.rotation.set(0, 0, 0);
-    b.scale.set(1, 1, 1);
-    if (pose.anim === "walk") {
-      b.position.y = Math.abs(Math.sin(t * 7 + person.timeline.length)) * 0.07;
-      b.rotation.z = Math.sin(t * 7) * 0.05;
+    torso.current.rotation.set(0, 0, 0);
+    let ll = 0, rl = 0, la = 0, ra = 0, lz = 0, rz = 0;
+    if (walking) {
+      ll = sw * 0.65; rl = -sw * 0.65; la = -sw * 0.55; ra = sw * 0.55;
+      b.position.y = Math.abs(Math.cos(phase.current)) * 0.05;
     } else if (pose.anim === "work") {
-      b.rotation.x = 0.25 + Math.sin(t * 3 + person.home_station.length) * 0.08;
+      torso.current.rotation.x = 0.22;
+      la = -1.0 + Math.sin(phase.current * 1.3) * 0.25;
+      ra = -1.15 + Math.cos(phase.current * 1.1) * 0.25;
+    } else if (pose.anim === "sit") {
+      b.position.y = -0.42;
+      ll = -1.5; rl = -1.5;
+      torso.current.rotation.x = 0.06;
+      la = -0.7 + Math.sin(phase.current * 0.7) * 0.05; ra = -0.7;
     } else if (pose.anim === "crouch") {
-      b.scale.y = 0.62;
-      b.rotation.x = 0.35;
+      b.position.y = -0.34;
+      ll = -1.15; rl = -1.15;
+      torso.current.rotation.x = 0.55;
+      la = -0.9 + Math.sin(phase.current * 1.5) * 0.2; ra = -0.7;
     } else {
-      b.position.y = Math.sin(t * 1.5) * 0.01;
+      torso.current.rotation.x = Math.sin(phase.current * 0.5) * 0.02;
+      lz = 0.05; rz = -0.05;
     }
+    lLeg.current.rotation.x = ll; rLeg.current.rotation.x = rl;
+    lArm.current.rotation.set(la, 0, lz); rArm.current.rotation.set(ra, 0, rz);
     text.current = `${person.employee_id}: ${pose.label}`;
+    if (box.current) {
+      const h = useTwin.getState().data!.hero;
+      const w = carry ?? (person.role === "technician" && person.shift === "A" ? [h.t_pickup_s, h.t_repair_end_s] : null);
+      box.current.visible = !!w && clock.t >= w[0] && clock.t < w[1];
+    }
   });
 
   return (
     <group ref={group}>
       <group ref={body}>
-        <mesh position={[0, 0.85, 0]} castShadow>
-          <capsuleGeometry args={[0.27, 0.85, 4, 12]} />
-          <meshStandardMaterial color={color} roughness={0.7} />
-        </mesh>
-        <mesh position={[0, 1.62, 0]} castShadow>
-          <sphereGeometry args={[0.2, 16, 12]} />
-          <meshStandardMaterial color="#f1d3b3" roughness={0.8} />
-        </mesh>
-        <mesh position={[0, 1.74, 0]} castShadow>
-          <sphereGeometry args={[0.215, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
-          <meshStandardMaterial color="#fde047" roughness={0.5} />
-        </mesh>
+        <group ref={lLeg} position={[-0.12, 0.92, 0]}>
+          <Limb r={0.09} len={0.92} color={PANTS} />
+          <mesh position={[0, -0.9, 0.06]} castShadow><boxGeometry args={[0.16, 0.1, 0.28]} /><meshStandardMaterial color="#111827" /></mesh>
+        </group>
+        <group ref={rLeg} position={[0.12, 0.92, 0]}>
+          <Limb r={0.09} len={0.92} color={PANTS} />
+          <mesh position={[0, -0.9, 0.06]} castShadow><boxGeometry args={[0.16, 0.1, 0.28]} /><meshStandardMaterial color="#111827" /></mesh>
+        </group>
+        <group ref={torso} position={[0, 0.92, 0]}>
+          <mesh position={[0, 0.3, 0]} castShadow>
+            <boxGeometry args={[0.44, 0.62, 0.26]} />
+            <meshStandardMaterial color={color} roughness={0.7} />
+          </mesh>
+          <mesh position={[0, 0.3, 0.001]}>
+            <boxGeometry args={[0.45, 0.08, 0.27]} />
+            <meshStandardMaterial color="#e2e8f0" emissive="#e2e8f0" emissiveIntensity={0.25} />
+          </mesh>
+          <mesh position={[0, 0.74, 0]} castShadow>
+            <sphereGeometry args={[0.15, 16, 12]} />
+            <meshStandardMaterial color={SKIN} roughness={0.8} />
+          </mesh>
+          <mesh position={[0, 0.8, 0]} castShadow>
+            <sphereGeometry args={[0.17, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2]} />
+            <meshStandardMaterial color="#fde047" roughness={0.4} />
+          </mesh>
+          <mesh position={[0, 0.79, 0.12]} castShadow>
+            <boxGeometry args={[0.3, 0.025, 0.16]} />
+            <meshStandardMaterial color="#fde047" roughness={0.4} />
+          </mesh>
+          <group ref={lArm} position={[-0.29, 0.56, 0]}>
+            <Limb r={0.07} len={0.62} color={color} />
+          </group>
+          <group ref={rArm} position={[0.29, 0.56, 0]}>
+            <Limb r={0.07} len={0.62} color={color} />
+            <mesh ref={box} position={[0, -0.62, 0.1]} castShadow>
+              <boxGeometry args={[0.28, 0.2, 0.22]} />
+              <meshStandardMaterial color="#f8fafc" roughness={0.6} />
+            </mesh>
+          </group>
+        </group>
       </group>
-      <LiveLabel getText={() => text.current} position={[0, 2.6, 0]} />
+      <LiveLabel getText={() => text.current} position={[0, 2.35, 0]} height={0.6} />
     </group>
   );
 }
@@ -119,10 +196,33 @@ export function People() {
   const data = useTwin((s) => s.data)!;
   const shift = useTwin((s) => s.shift);
   const people = useMemo(() => data.schedule.shifts[shift], [data, shift]);
+  const faults = useTwin((s) => s.faults);
+  const simOn = useTwin((s) => s.sim) === "on";
+  const [wos, setWos] = useState<string>("");
+  useEffect(() => {
+    if (!simOn) return;
+    const id = setInterval(() => {
+      const w = simLink.snap?.work_orders ?? [];
+      setWos(JSON.stringify(w.map((x) => [x.id, x.status, Math.round(x.dispatch_at), x.arrived_at && Math.round(x.arrived_at), x.closed_at && Math.round(x.closed_at)])));
+    }, 400);
+    return () => clearInterval(id);
+  }, [simOn]);
+  const responders = useMemo(() => {
+    if (!simOn || !simLink.snap) return [];
+    const cut = simLink.snap.t - 900;
+    return simLink.snap.work_orders.filter((w) => w.status !== "closed" || (w.closed_at ?? 0) > cut).map((w) => ({ w, person: responderFromWO(data.layout, w) }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [simOn, wos, data]);
   return (
     <>
-      {people.map((p) => (
+      {people.filter((p) => !(simOn && p.role === "technician")).map((p) => (
         <Worker key={p.employee_id} person={p} />
+      ))}
+      {responders.map(({ w, person }) => (
+        <Worker key={person.employee_id} person={person} carry={[person.timeline[3].s, person.timeline[4].e]} />
+      ))}
+      {faults.map((f) => (
+        <Worker key={f.id} person={f.person} carry={[f.pickupAt + 90, f.fixAt]} />
       ))}
     </>
   );

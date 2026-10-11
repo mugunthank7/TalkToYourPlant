@@ -1,11 +1,9 @@
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import { Label } from "./Label";
-import * as THREE from "three";
-import { clock } from "../clock";
 import { toScene } from "../data";
+import { ConcreteFloor } from "./Env";
 import { useTwin } from "../state";
+import { DETAILED_IDS } from "./stations";
 
 const PAD: Record<string, string> = {
   S01: "#cbd5e1", S02: "#cbd5e1", S03: "#e2e8f0", S04: "#bfdbfe", S05: "#bfdbfe", S06: "#bfdbfe",
@@ -14,22 +12,19 @@ const PAD: Record<string, string> = {
 
 export function Floor() {
   const { plant } = useTwin((s) => s.data)!.layout;
+  const hw = plant.width_m / 2 + 3.4;
+  const hd = plant.depth_m / 2 + 3.4;
   return (
     <>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[plant.width_m, plant.depth_m]} />
-        <meshStandardMaterial color="#9ca3af" roughness={0.95} />
-      </mesh>
-      {/* perimeter wall */}
+      <ConcreteFloor />
+      {/* painted safety border just inside the walls */}
       {[
-        { p: [0, 2, -plant.depth_m / 2], s: [plant.width_m, 4, 0.4] },
-        { p: [0, 2, plant.depth_m / 2], s: [plant.width_m, 4, 0.4] },
-        { p: [-plant.width_m / 2, 2, 0], s: [0.4, 4, plant.depth_m] },
-        { p: [plant.width_m / 2, 2, 0], s: [0.4, 4, plant.depth_m] },
-      ].map((w, i) => (
-        <mesh key={i} position={w.p as [number, number, number]} receiveShadow>
-          <boxGeometry args={w.s as [number, number, number]} />
-          <meshStandardMaterial color="#d1d5db" transparent opacity={0.28} />
+        [0, -hd, plant.width_m + 6.8, 0.3], [0, hd, plant.width_m + 6.8, 0.3],
+        [-hw, 0, 0.3, plant.depth_m + 6.8], [hw, 0, 0.3, plant.depth_m + 6.8],
+      ].map(([x, z, w, d], i) => (
+        <mesh key={i} position={[x, 0.02, z]} rotation={[-Math.PI / 2, 0, 0]}>
+          <planeGeometry args={[w, d]} />
+          <meshStandardMaterial color="#facc15" roughness={0.6} />
         </mesh>
       ))}
     </>
@@ -42,20 +37,17 @@ export function Stations() {
     <>
       {layout.stations.map((s) => {
         const [x, z] = toScene(s.x, s.z);
-        const withBuilding = ["S10", "S11", "S12"].includes(s.id);
+        const withBuilding = false;
+        const detailed = DETAILED_IDS.has(s.id);
         return (
           <group key={s.id} position={[x, 0, z]}>
-            <mesh position={[0, 0.06, 0]} receiveShadow>
-              <boxGeometry args={[s.w, 0.12, s.d]} />
-              <meshStandardMaterial color={PAD[s.id] ?? "#cbd5e1"} roughness={0.9} />
-            </mesh>
-            {withBuilding && (
-              <mesh position={[0, 1.4, 0]} castShadow>
-                <boxGeometry args={[s.w * 0.9, 2.8, s.d * 0.9]} />
-                <meshStandardMaterial color={PAD[s.id]} transparent opacity={0.55} />
+            {!detailed && (
+              <mesh position={[0, 0.06, 0]} receiveShadow>
+                <boxGeometry args={[s.w, 0.12, s.d]} />
+                <meshStandardMaterial color={PAD[s.id] ?? "#cbd5e1"} roughness={0.9} />
               </mesh>
             )}
-            <Label text={`${s.id}  ${s.name}`} position={[0, withBuilding ? 4.2 : 1.2, s.d / 2 + 0.5]} height={1.5} />
+            <Label text={`${s.id}  ${s.name}`} position={[0, detailed ? 4.4 : 1.2, s.d / 2 + 0.5]} height={1.5} />
           </group>
         );
       })}
@@ -72,11 +64,27 @@ export function Walkways() {
         const [ax, az] = pos.get(a)!;
         const [bx, bz] = pos.get(b)!;
         const len = Math.hypot(bx - ax, bz - az);
+        const rot: [number, number, number] = [-Math.PI / 2, 0, -Math.atan2(bz - az, bx - ax)];
+        const mid: [number, number, number] = [(ax + bx) / 2, 0.025, (az + bz) / 2];
+        const edge = (off: number) => {
+          const nx = -(bz - az) / len;
+          const nz = (bx - ax) / len;
+          return (
+            <mesh key={off} position={[mid[0] + nx * off, 0.03, mid[2] + nz * off]} rotation={rot}>
+              <planeGeometry args={[len, 0.12]} />
+              <meshStandardMaterial color="#facc15" roughness={0.5} />
+            </mesh>
+          );
+        };
         return (
-          <mesh key={a + b} position={[(ax + bx) / 2, 0.025, (az + bz) / 2]} rotation={[-Math.PI / 2, 0, -Math.atan2(bz - az, bx - ax)]}>
-            <planeGeometry args={[len, 1.2]} />
-            <meshStandardMaterial color="#facc15" roughness={0.9} transparent opacity={0.55} />
-          </mesh>
+          <group key={a + b}>
+            <mesh position={mid} rotation={rot}>
+              <planeGeometry args={[len, 1.5]} />
+              <meshStandardMaterial color="#22c55e" roughness={0.6} transparent opacity={0.38} />
+            </mesh>
+            {edge(0.75)}
+            {edge(-0.75)}
+          </group>
         );
       })}
     </>
@@ -97,50 +105,5 @@ export function SafetyZones() {
         return <Line key={z.station} points={pts} color="#ef4444" lineWidth={2} dashed dashSize={1} gapSize={0.6} />;
       })}
     </>
-  );
-}
-
-export function Conveyor() {
-  const { conveyor_path, } = useTwin((s) => s.data)!.layout;
-  const [x0, z0] = toScene(conveyor_path[0][0], conveyor_path[0][1]);
-  const [x1] = toScene(conveyor_path[1][0], conveyor_path[1][1]);
-  const len = x1 - x0;
-  const cars = useRef<THREE.Group[]>([]);
-  const SPEED = 0.25;
-  const SPACING = 22.5;
-  const N = Math.ceil(len / SPACING) + 1;
-
-  useFrame(() => {
-    cars.current.forEach((c, i) => {
-      if (!c) return;
-      const d = (clock.t * SPEED + i * SPACING) % (N * SPACING);
-      c.position.x = x0 + d;
-      c.visible = d < len;
-    });
-  });
-
-  return (
-    <group position={[0, 0, z0]}>
-      <mesh position={[x0 + len / 2, 0.35, 0]} receiveShadow castShadow>
-        <boxGeometry args={[len, 0.5, 2.6]} />
-        <meshStandardMaterial color="#475569" roughness={0.6} metalness={0.4} />
-      </mesh>
-      <mesh position={[x0 + len / 2, 0.62, 0]}>
-        <boxGeometry args={[len, 0.04, 2.0]} />
-        <meshStandardMaterial color="#0f172a" />
-      </mesh>
-      {Array.from({ length: N }).map((_, i) => (
-        <group key={i} ref={(g) => { if (g) cars.current[i] = g; }}>
-          <mesh position={[0, 1.15, 0]} castShadow>
-            <boxGeometry args={[4.6, 1.1, 1.9]} />
-            <meshStandardMaterial color="#9ca3af" metalness={0.5} roughness={0.45} />
-          </mesh>
-          <mesh position={[-0.2, 1.9, 0]} castShadow>
-            <boxGeometry args={[2.4, 0.6, 1.7]} />
-            <meshStandardMaterial color="#94a3b8" metalness={0.5} roughness={0.45} />
-          </mesh>
-        </group>
-      ))}
-    </group>
   );
 }

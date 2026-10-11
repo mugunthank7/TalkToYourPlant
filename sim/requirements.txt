@@ -1,0 +1,13 @@
+simpy
+fastapi
+uvicorn[standard]
+websockets
+numpy
+pandas
+scipy
+pyarrow
+pytest
+httpx
+scikit-learn
+joblib
+matplotlib
