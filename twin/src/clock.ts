@@ -1,6 +1,23 @@
 // Mutable simulation clock, read every frame by the scene (no React re-renders).
 export const clock = { t: 0, speed: 60, playing: true, max: 8 * 3600 };
 
+let started = false;
+/** Advance the sim clock from a plain timer so the dashboard tab keeps time while the 3D canvas is paused. */
+export function startClock() {
+  if (started) return;
+  started = true;
+  let last = performance.now();
+  setInterval(() => {
+    const now = performance.now();
+    const dt = Math.min((now - last) / 1000, 0.25);
+    last = now;
+    if (clock.playing) {
+      clock.t += dt * clock.speed;
+      if (clock.t >= clock.max) clock.t = 0;
+    }
+  }, 33);
+}
+
 export function fmt(t: number, shift: string): string {
   const start = shift === "A" ? 6 : 14;
   const s = Math.floor(t);

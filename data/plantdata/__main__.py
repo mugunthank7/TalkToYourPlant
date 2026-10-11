@@ -27,9 +27,33 @@ def kpi_json(mins: dict, summaries: dict) -> dict:
             "cum_units": units.tolist(), "cum_down_s": down.tolist(),
             "cum_cost": m["downtime_cost_usd"].cumsum().astype(int).tolist(),
             "oee": (avail * perf * qual).round(3).tolist(),
+            "avail": avail.round(3).tolist(), "perf": perf.round(3).tolist(), "qual": np.round(qual, 3).tolist(),
+            "cum_scrap": (m["scrap_units"].cumsum()).tolist(),
         }
     return {"minutes": len(next(iter(mins.values()))), "plan_units": 320,
             "cost_per_min": outputs.DOWNTIME_COST_PER_MIN_USD, "series": series, "summary": summaries}
+
+
+def dashboard_json(hist: dict, mnt: dict, summaries: dict) -> dict:
+    """Everything the in-depth KPI tab needs, in one small file."""
+    shifts = hist["history_shifts"][["shift_id", "date", "weekday", "shift", "units", "demand_plan_units", "oee",
+                                      "availability", "performance", "quality", "downtime_min", "downtime_cost_usd",
+                                      "scrap_units", "had_incident"]].round(3)
+    ev = mnt["downtime_events"]
+    unplanned = ev[~ev["planned"]]
+    by_machine = unplanned[unplanned["machine_id"] != ""].groupby("machine_id")["line_down_min"].sum().div(60).round(1)
+    by_cause = unplanned.groupby("cause")["line_down_min"].sum().div(60).round(1).sort_values(ascending=False).head(10)
+    monthly = ev.assign(month=ev["start_ts"].str[:7]).groupby("month")["line_down_min"].sum().div(60).round(1)
+    return {
+        "machines": [{"id": m[0], "name": m[1], "type": m[2], "station": m[3]} for m in L.MACHINES],
+        "scenario_summary": summaries,
+        "shifts": json.loads(shifts.to_json(orient="records")),
+        "incidents": json.loads(hist["history_incidents"].to_json(orient="records")),
+        "maintenance": mnt["stats"],
+        "downtime_h_by_machine": by_machine.to_dict(),
+        "downtime_h_by_cause": by_cause.to_dict(),
+        "downtime_h_by_month": monthly.to_dict(),
+    }
 
 
 def main() -> None:
@@ -97,12 +121,15 @@ def main() -> None:
         for name in ("maintenance_work_orders", "downtime_events", "failure_modes"):
             mnt[name].to_csv(hdir / f"{name}.csv", index=False)
         (hdir / "maintenance_stats.json").write_text(json.dumps(mnt["stats"], indent=1))
+        (out / "dashboard.json").write_text(json.dumps(dashboard_json(hist, mnt, summaries), separators=(",", ":")))
         print("maintenance:", {k: v for k, v in mnt["stats"].items() if k not in ("per_machine", "line_down_h_by_category")})
 
     if args.copy_to:
         dst = Path(args.copy_to)
         dst.mkdir(parents=True, exist_ok=True)
-        for f in ("layout.json", "schedule.json", "events.json", "kpi.json"):
+        for f in ("layout.json", "schedule.json", "events.json", "kpi.json", "dashboard.json"):
+            if not (out / f).exists():
+                continue
             (dst / f).write_bytes((out / f).read_bytes())
 
     print(f"employees: {len(roster)}  tasks: {len(people.TASKS)}")

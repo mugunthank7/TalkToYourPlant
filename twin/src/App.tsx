@@ -11,21 +11,13 @@ import { Conveyor, Logistics } from "./scene/Flow";
 import { Machines } from "./scene/Machines";
 import { People } from "./scene/People";
 import { Hud } from "./ui/Hud";
+import { TopBar } from "./ui/TopBar";
+import { Dashboard } from "./ui/Dashboard";
 import { Env } from "./scene/Env";
 import { Building } from "./scene/Building";
 import { Cells } from "./scene/Cells";
 import { Props } from "./scene/Props";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
-
-function Clock() {
-  useFrame((_, dt) => {
-    if (clock.playing) {
-      clock.t += Math.min(dt, 0.1) * clock.speed;
-      if (clock.t >= clock.max) clock.t = 0;
-    }
-  });
-  return null;
-}
 
 /** Shift the render so the plant sits in the free area between the HUD panels. */
 function ViewFit() {
@@ -103,7 +95,7 @@ function Scene({ low }: { low: boolean }) {
 }
 
 export default function App() {
-  const { data, error, setData, setError } = useTwin();
+  const { data, error, setData, setError, view } = useTwin();
   const [low, setLow] = useState(new URLSearchParams(location.search).get("q") === "low");
 
   useEffect(() => {
@@ -115,12 +107,15 @@ export default function App() {
 
   return (
     <>
-      <Canvas shadows camera={{ position: [0, 92, 104], fov: 45, near: 0.5, far: 600 }} dpr={low ? 1 : [1, 1.75]}>
+      <TopBar />
+      <div style={{ display: view === "live" ? "block" : "none" }}>
+      <Canvas frameloop={view === "live" ? "always" : "never"} shadows camera={{ position: [0, 92, 104], fov: 45, near: 0.5, far: 600 }} dpr={low ? 1 : [1, 1.75]}>
         <PerformanceMonitor onDecline={() => setLow(true)} flipflops={0} />
-        <Clock />
         <Scene low={low} />
       </Canvas>
       <Hud />
+      </div>
+      {view === "dash" && <Dashboard />}
     </>
   );
 }

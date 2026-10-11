@@ -58,3 +58,78 @@ export function ForecastChart({ actual, forecast, band, nowIdx, ymax }: Forecast
     </svg>
   );
 }
+
+export interface Series { name: string; color: string; values: number[]; dashed?: boolean }
+
+/** Multi-series line chart over a shift. x labels are hours; `cursor` is 0..1 (the sim clock). */
+export function LineChart({ series, yMax, yFmt = (v: number) => String(Math.round(v)), cursor, startHour = 6, hours = 8, height = 190 }:
+  { series: Series[]; yMax?: number; yFmt?: (v: number) => string; cursor?: number; startHour?: number; hours?: number; height?: number }) {
+  const W = 560;
+  const H = height;
+  const n = Math.max(...series.map((s) => s.values.length), 2);
+  const top = yMax ?? Math.max(...series.flatMap((s) => s.values), 1) * 1.05;
+  const x = (i: number) => 40 + (i / (n - 1)) * (W - 52);
+  const y = (v: number) => H - 22 - (Math.min(v, top) / top) * (H - 34);
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H}>
+      {[0, 0.25, 0.5, 0.75, 1].map((f) => (
+        <g key={f}>
+          <line x1="40" x2={W - 12} y1={y(top * f)} y2={y(top * f)} stroke="rgba(148,163,184,.18)" />
+          <text x="34" y={y(top * f) + 3} textAnchor="end" fill="#94a3b8" fontSize="9">{yFmt(top * f)}</text>
+        </g>
+      ))}
+      {Array.from({ length: hours + 1 }).map((_, h) => (
+        <text key={h} x={40 + (h / hours) * (W - 52)} y={H - 6} textAnchor="middle" fill="#94a3b8" fontSize="9">{`${(startHour + h) % 24}:00`}</text>
+      ))}
+      {series.map((s) => (
+        <polyline key={s.name} fill="none" stroke={s.color} strokeWidth={s.dashed ? 1.4 : 2} strokeDasharray={s.dashed ? "5 4" : undefined}
+          points={s.values.map((v, i) => `${x(i)},${y(v)}`).join(" ")} />
+      ))}
+      {cursor !== undefined && <line x1={40 + cursor * (W - 52)} x2={40 + cursor * (W - 52)} y1="6" y2={H - 22} stroke="rgba(255,255,255,.5)" strokeDasharray="3 3" />}
+    </svg>
+  );
+}
+
+export interface Bar { label: string; value: number; color?: string; sub?: string }
+
+/** Horizontal bar chart (Pareto style). */
+export function HBars({ items, fmt = (v: number) => String(v), color = "#3b82f6" }: { items: Bar[]; fmt?: (v: number) => string; color?: string }) {
+  const max = Math.max(...items.map((i) => i.value), 1);
+  return (
+    <div className="hbars">
+      {items.map((i) => (
+        <div key={i.label} className="hbar">
+          <span className="hl">{i.label}</span>
+          <div className="ht"><div style={{ width: `${(i.value / max) * 100}%`, background: i.color ?? color }} /></div>
+          <span className="hv">{fmt(i.value)}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Columns with an optional line overlay (e.g. units per shift and OEE). */
+export function Columns({ bars, colors, line, lineColor = "#fbbf24", plan, height = 190, yMax }:
+  { bars: number[]; colors: string[]; line?: number[]; lineColor?: string; plan?: number[]; height?: number; yMax?: number }) {
+  const W = 560;
+  const H = height;
+  const n = bars.length;
+  const top = yMax ?? Math.max(...bars, ...(plan ?? [0]), 1) * 1.1;
+  const bw = (W - 52) / n;
+  const y = (v: number) => H - 20 - (v / top) * (H - 32);
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={H}>
+      {[0, 0.5, 1].map((f) => (
+        <g key={f}>
+          <line x1="40" x2={W - 8} y1={y(top * f)} y2={y(top * f)} stroke="rgba(148,163,184,.18)" />
+          <text x="34" y={y(top * f) + 3} textAnchor="end" fill="#94a3b8" fontSize="9">{Math.round(top * f)}</text>
+        </g>
+      ))}
+      {bars.map((v, i) => (
+        <rect key={i} x={40 + i * bw + bw * 0.12} y={y(v)} width={bw * 0.76} height={H - 20 - y(v)} rx="2" fill={colors[i]} />
+      ))}
+      {plan && <polyline fill="none" stroke="rgba(255,255,255,.55)" strokeDasharray="4 3" points={plan.map((v, i) => `${40 + i * bw + bw / 2},${y(v)}`).join(" ")} />}
+      {line && <polyline fill="none" stroke={lineColor} strokeWidth="1.8" points={line.map((v, i) => `${40 + i * bw + bw / 2},${y(v * top)}`).join(" ")} />}
+    </svg>
+  );
+}

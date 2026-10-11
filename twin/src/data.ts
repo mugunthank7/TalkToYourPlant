@@ -44,7 +44,7 @@ export interface Hero {
   t_repair_start_s: number;
   t_repair_end_s: number;
 }
-export interface KpiSeries { cum_units: number[]; cum_down_s: number[]; cum_cost: number[]; oee: number[] }
+export interface KpiSeries { cum_units: number[]; cum_down_s: number[]; cum_cost: number[]; oee: number[]; avail: number[]; perf: number[]; qual: number[]; cum_scrap: number[] }
 export interface ScenarioSummary {
   units: number; units_lost_vs_ideal: number; downtime_min: number; downtime_cost_usd: number; oee: number;
   t_fail_if_ignored_s?: number; remaining_useful_life_at_alert_min?: number; about: string;
@@ -53,7 +53,20 @@ export interface Kpi {
   minutes: number; plan_units: number; cost_per_min: number;
   series: Record<string, KpiSeries>; summary: Record<string, ScenarioSummary>;
 }
-export interface TwinData { layout: Layout; schedule: Schedule; hero: Hero; kpi: Kpi }
+export interface ShiftRow { shift_id: string; date: string; weekday: number; shift: string; units: number; demand_plan_units: number; oee: number; availability: number; performance: number; quality: number; downtime_min: number; downtime_cost_usd: number; scrap_units: number; had_incident: boolean }
+export interface Incident { shift_id: string; date: string; shift: string; machine_id: string; component_id: string; onset_s: number; alert_s: number; failure_s_if_ignored: number; outcome: string; repair_start_s: number | null; repair_end_s: number }
+export interface MachineStat { failures: number; mtbf_h_observed: number; mttr_min: number | null; line_down_h: number }
+export interface DashboardData {
+  machines: { id: string; name: string; type: string; station: string }[];
+  scenario_summary: Record<string, ScenarioSummary>;
+  shifts: ShiftRow[];
+  incidents: Incident[];
+  maintenance: { unplanned_line_down_h: number; planned_line_down_h: number; maintenance_cost_usd: number; line_downtime_cost_usd: number; corrective_work_orders: number; emergency_share_of_corrective: number; per_machine: Record<string, MachineStat> };
+  downtime_h_by_machine: Record<string, number>;
+  downtime_h_by_cause: Record<string, number>;
+  downtime_h_by_month: Record<string, number>;
+}
+export interface TwinData { layout: Layout; schedule: Schedule; hero: Hero; kpi: Kpi; dash: DashboardData | null }
 
 export async function loadAll(): Promise<TwinData> {
   const get = async (f: string) => {
@@ -62,7 +75,8 @@ export async function loadAll(): Promise<TwinData> {
     return r.json();
   };
   const [layout, schedule, hero, kpi] = await Promise.all([get("layout.json"), get("schedule.json"), get("events.json"), get("kpi.json")]);
-  return { layout, schedule, hero, kpi };
+  const dash = await get("dashboard.json").catch(() => null);
+  return { layout, schedule, hero, kpi, dash };
 }
 
 // The plant origin is its NW corner; scene is centred on the plant middle.
