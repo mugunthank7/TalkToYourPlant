@@ -1,0 +1,453 @@
+employee_id,name,role_code,role,area,zone,shift,trade,skill_level,hire_date,certifications,extension,radio,email,mobile,pager_id
+BAP-E0001,Edward Miller,PLM,Plant Manager,,,D,,,2023-05-15,"[""FIRE""]",x4101,PLT-DF,edward.miller@voltara-motors.example,737-555-0194,PG-ED863
+BAP-E0002,Kwame Rossi,OPD,Operations Director,,,D,,,2023-05-22,[],x4102,PLT-F9,kwame.rossi@voltara-motors.example,737-555-0162,PG-17C10
+BAP-E0003,Ryan Ward,MTM,Maintenance Manager,,,D,,,2023-03-25,"[""HV"", ""LOTO""]",x4103,PLT-89,ryan.ward@voltara-motors.example,979-555-0120,PG-A30FD
+BAP-E0004,Ronald Allen,PLN,Maintenance Planner,,,D,,,2026-09-23,[],x4104,PLT-7B,ronald.allen@voltara-motors.example,979-555-0167,PG-2C1D0
+BAP-E0005,Gerald Jackson,PLN,Maintenance Planner,,,D,,,2025-10-14,[],x4105,PLT-CD,gerald.jackson@voltara-motors.example,,
+BAP-E0006,Benjamin Lewis,STK,Storekeeper,,,A,,,2026-01-11,[],x4106,PLT-5E,benjamin.lewis@voltara-motors.example,,
+BAP-E0007,Latoya Perez,STK,Storekeeper,,,B,,,2026-02-08,[],x4107,PLT-DC,latoya.perez@voltara-motors.example,,
+BAP-E0008,Matthew Okafor,STK,Storekeeper,,,A,,,2025-12-11,[],x4108,PLT-7A,matthew.okafor@voltara-motors.example,,
+BAP-E0009,Ingrid Jackson,STK,Storekeeper,,,B,,,2023-09-17,[],x4109,PLT-6B,ingrid.jackson@voltara-motors.example,,
+BAP-E0010,Jerry Torres,EHS,EHS Officer,,,D,,,2024-02-05,"[""CS"", ""FIRE"", ""HVB"", ""LOTO""]",x4110,PLT-86,jerry.torres@voltara-motors.example,979-555-0188,PG-5425F
+BAP-E0011,Santiago Mukherjee,EHS,EHS Officer,,,D,,,2025-11-11,"[""CS"", ""FIRE"", ""HVB"", ""LOTO""]",x4111,PLT-4E,santiago.mukherjee@voltara-motors.example,830-555-0149,PG-2FE98
+BAP-E0012,Thomas Alvarez,EHS,EHS Officer,,,D,,,2023-05-15,"[""CS"", ""FIRE"", ""HVB"", ""LOTO""]",x4112,PLT-E1,thomas.alvarez@voltara-motors.example,830-555-0177,PG-1B922
+BAP-E0013,Ravi Schmidt,HVE,HV Safety Engineer,,,D,,,2023-08-26,"[""HV"", ""HVB"", ""LOTO""]",x4113,PLT-6A,ravi.schmidt@voltara-motors.example,512-555-0118,PG-F41E3
+BAP-E0014,Dennis Lee,ARM,Area Manager,CAS,Z1,D,,,2024-01-08,"[""LOTO""]",x4114,CAS-EE,dennis.lee@voltara-motors.example,979-555-0116,PG-5BB9C
+BAP-E0015,Jin Mendoza,REL,Reliability Engineer,CAS,Z1,D,,,2023-11-21,"[""LOTO""]",x4115,CAS-A2,jin.mendoza@voltara-motors.example,512-555-0135,PG-A3C98
+BAP-E0016,Brian Gray,CTE,Controls Engineer,CAS,Z1,D,,,2023-10-22,"[""LOTO""]",x4116,CAS-4B,brian.gray@voltara-motors.example,737-555-0120,PG-9C429
+BAP-E0017,Nadia Bennett,PRE,Process Engineer,CAS,Z1,D,,,2024-11-23,"[""LOTO""]",x4117,CAS-2D,nadia.bennett@voltara-motors.example,979-555-0123,PG-B0B95
+BAP-E0018,Jacob Ruiz,QAE,Quality Engineer,CAS,Z1,D,,,2026-04-08,[],x4118,CAS-44,jacob.ruiz@voltara-motors.example,979-555-0150,PG-2931A
+BAP-E0019,Leila Powell,QAI,Quality Inspector,CAS,Z1,A,,,2024-03-06,[],x4119,CAS-5E,leila.powell@voltara-motors.example,,
+BAP-E0020,Sofia Ivanov,QAI,Quality Inspector,CAS,Z1,B,,,2025-11-24,[],x4120,CAS-7E,sofia.ivanov@voltara-motors.example,,
+BAP-E0021,Brandon Mukherjee,QAI,Quality Inspector,CAS,Z1,C,,,2024-09-08,[],x4121,CAS-9F,brandon.mukherjee@voltara-motors.example,,
+BAP-E0022,Hana Fischer,ARM,Area Manager,STP,Z1,D,,,2026-08-25,"[""LOTO""]",x4122,STP-9C,hana.fischer@voltara-motors.example,737-555-0147,PG-D5648
+BAP-E0023,Mei Dunn,REL,Reliability Engineer,STP,Z1,D,,,2025-09-04,"[""LOTO""]",x4123,STP-39,mei.dunn@voltara-motors.example,737-555-0116,PG-258E4
+BAP-E0024,Harold Thompson,CTE,Controls Engineer,STP,Z1,D,,,2024-08-12,"[""LOTO""]",x4124,STP-0D,harold.thompson@voltara-motors.example,979-555-0182,PG-1CB7C
+BAP-E0025,Matthew Jimenez,PRE,Process Engineer,STP,Z1,D,,,2024-01-11,"[""LOTO""]",x4125,STP-3A,matthew.jimenez@voltara-motors.example,512-555-0146,PG-4419F
+BAP-E0026,Yuki Boyd,QAE,Quality Engineer,STP,Z1,D,,,2026-10-01,[],x4126,STP-20,yuki.boyd@voltara-motors.example,830-555-0122,PG-864D3
+BAP-E0027,Alicia Stewart,QAI,Quality Inspector,STP,Z1,A,,,2025-02-02,[],x4127,STP-7D,alicia.stewart@voltara-motors.example,,
+BAP-E0028,Gerald Thomas,QAI,Quality Inspector,STP,Z1,B,,,2023-08-20,[],x4128,STP-07,gerald.thomas@voltara-motors.example,,
+BAP-E0029,Kevin Howard,QAI,Quality Inspector,STP,Z1,C,,,2026-01-20,[],x4129,STP-B7,kevin.howard@voltara-motors.example,,
+BAP-E0030,Monica Mitchell,ARM,Area Manager,BIW,Z2,D,,,2023-09-12,"[""LOTO""]",x4130,BIW-20,monica.mitchell@voltara-motors.example,512-555-0150,PG-CF1CB
+BAP-E0031,Stephen Williams,REL,Reliability Engineer,BIW,Z2,D,,,2025-02-12,"[""LOTO""]",x4131,BIW-73,stephen.williams@voltara-motors.example,979-555-0124,PG-A41BA
+BAP-E0032,Ronald Schmidt,CTE,Controls Engineer,BIW,Z2,D,,,2026-07-03,"[""LOTO""]",x4132,BIW-2E,ronald.schmidt@voltara-motors.example,979-555-0160,PG-19616
+BAP-E0033,Richard Brooks,PRE,Process Engineer,BIW,Z2,D,,,2025-09-13,"[""LOTO""]",x4133,BIW-F8,richard.brooks@voltara-motors.example,512-555-0151,PG-169B1
+BAP-E0034,Marcus Cooper,QAE,Quality Engineer,BIW,Z2,D,,,2023-06-14,[],x4134,BIW-CE,marcus.cooper@voltara-motors.example,830-555-0127,PG-CA5FF
+BAP-E0035,Jorge Shah,QAI,Quality Inspector,BIW,Z2,A,,,2025-02-24,[],x4135,BIW-D2,jorge.shah@voltara-motors.example,,
+BAP-E0036,Diego Campbell,QAI,Quality Inspector,BIW,Z2,B,,,2025-06-04,[],x4136,BIW-2A,diego.campbell@voltara-motors.example,,
+BAP-E0037,Deepak Richardson,QAI,Quality Inspector,BIW,Z2,C,,,2026-02-04,[],x4137,BIW-5E,deepak.richardson@voltara-motors.example,,
+BAP-E0038,Jerry Mukherjee,ARM,Area Manager,PNT,Z2,D,,,2023-12-28,"[""LOTO""]",x4138,PNT-BD,jerry.mukherjee@voltara-motors.example,512-555-0185,PG-812CB
+BAP-E0039,Edward Kim,REL,Reliability Engineer,PNT,Z2,D,,,2024-10-22,"[""LOTO""]",x4139,PNT-E1,edward.kim@voltara-motors.example,979-555-0155,PG-427BB
+BAP-E0040,Ravi Brown,CTE,Controls Engineer,PNT,Z2,D,,,2024-11-15,"[""LOTO""]",x4140,PNT-BB,ravi.brown@voltara-motors.example,737-555-0153,PG-E24BC
+BAP-E0041,Tanya Bailey,PRE,Process Engineer,PNT,Z2,D,,,2024-02-01,"[""LOTO""]",x4141,PNT-5F,tanya.bailey@voltara-motors.example,512-555-0114,PG-C388E
+BAP-E0042,Jacob Kelly,QAE,Quality Engineer,PNT,Z2,D,,,2026-04-04,[],x4142,PNT-42,jacob.kelly@voltara-motors.example,512-555-0123,PG-E5E2A
+BAP-E0043,Kwame Thomas,QAI,Quality Inspector,PNT,Z2,A,,,2025-05-28,[],x4143,PNT-55,kwame.thomas@voltara-motors.example,,
+BAP-E0044,Latoya Bhatt,QAI,Quality Inspector,PNT,Z2,B,,,2024-02-07,[],x4144,PNT-47,latoya.bhatt@voltara-motors.example,,
+BAP-E0045,Dwayne Smith,QAI,Quality Inspector,PNT,Z2,C,,,2025-09-19,[],x4145,PNT-BE,dwayne.smith@voltara-motors.example,,
+BAP-E0046,Leila Perez,ARM,Area Manager,BAT,Z3,D,,,2023-05-13,"[""LOTO""]",x4146,BAT-FD,leila.perez@voltara-motors.example,737-555-0166,PG-D24A2
+BAP-E0047,Arthur Vasquez,REL,Reliability Engineer,BAT,Z3,D,,,2025-03-27,"[""LOTO""]",x4147,BAT-54,arthur.vasquez@voltara-motors.example,512-555-0128,PG-D1349
+BAP-E0048,George Adams,CTE,Controls Engineer,BAT,Z3,D,,,2025-12-08,"[""LOTO""]",x4148,BAT-B9,george.adams@voltara-motors.example,737-555-0150,PG-28684
+BAP-E0049,Frank Thompson,PRE,Process Engineer,BAT,Z3,D,,,2024-10-19,"[""LOTO""]",x4149,BAT-45,frank.thompson@voltara-motors.example,737-555-0183,PG-A1021
+BAP-E0050,Omar Turner,QAE,Quality Engineer,BAT,Z3,D,,,2026-08-26,[],x4150,BAT-F9,omar.turner@voltara-motors.example,737-555-0191,PG-9F7C9
+BAP-E0051,Lena Moore,QAI,Quality Inspector,BAT,Z3,A,,,2023-03-15,[],x4151,BAT-DF,lena.moore@voltara-motors.example,,
+BAP-E0052,Santiago Evans,QAI,Quality Inspector,BAT,Z3,B,,,2025-10-05,[],x4152,BAT-AA,santiago.evans@voltara-motors.example,,
+BAP-E0053,Kwame Haddad,QAI,Quality Inspector,BAT,Z3,C,,,2024-06-17,[],x4153,BAT-3A,kwame.haddad@voltara-motors.example,,
+BAP-E0054,Imani Vasquez,ARM,Area Manager,DRV,Z3,D,,,2023-05-15,"[""LOTO""]",x4154,DRV-74,imani.vasquez@voltara-motors.example,830-555-0120,PG-319CD
+BAP-E0055,Raj Green,REL,Reliability Engineer,DRV,Z3,D,,,2025-10-24,"[""LOTO""]",x4155,DRV-A6,raj.green@voltara-motors.example,512-555-0174,PG-5FEF9
+BAP-E0056,Sean Martinez,QAE,Quality Engineer,DRV,Z3,D,,,2023-07-17,[],x4156,DRV-E7,sean.martinez@voltara-motors.example,737-555-0125,PG-6B119
+BAP-E0057,Dwayne Boyd,QAI,Quality Inspector,DRV,Z3,A,,,2025-09-01,[],x4157,DRV-3D,dwayne.boyd@voltara-motors.example,,
+BAP-E0058,Kenneth Ortiz,QAI,Quality Inspector,DRV,Z3,B,,,2025-07-12,[],x4158,DRV-1C,kenneth.ortiz@voltara-motors.example,,
+BAP-E0059,Mei Roberts,QAI,Quality Inspector,DRV,Z3,C,,,2025-09-10,[],x4159,DRV-2C,mei.roberts@voltara-motors.example,,
+BAP-E0060,Arthur Bailey,ARM,Area Manager,GA,Z4,D,,,2023-03-04,"[""LOTO""]",x4160,GA-CB,arthur.bailey@voltara-motors.example,830-555-0171,PG-AB46C
+BAP-E0061,Rachel Davis,REL,Reliability Engineer,GA,Z4,D,,,2023-01-05,"[""LOTO""]",x4161,GA-AF,rachel.davis@voltara-motors.example,830-555-0110,PG-E44AA
+BAP-E0062,Tariq Chen,CTE,Controls Engineer,GA,Z4,D,,,2025-10-11,"[""LOTO""]",x4162,GA-F9,tariq.chen@voltara-motors.example,830-555-0189,PG-F0BA3
+BAP-E0063,Monica Richardson,PRE,Process Engineer,GA,Z4,D,,,2023-10-16,"[""LOTO""]",x4163,GA-87,monica.richardson@voltara-motors.example,979-555-0149,PG-1F5C4
+BAP-E0064,Jonathan Brown,QAE,Quality Engineer,GA,Z4,D,,,2023-04-01,[],x4164,GA-EA,jonathan.brown@voltara-motors.example,512-555-0192,PG-D4D6D
+BAP-E0065,Rachel Boyd,QAI,Quality Inspector,GA,Z4,A,,,2023-12-05,[],x4165,GA-6A,rachel.boyd@voltara-motors.example,,
+BAP-E0066,Hector Powell,QAI,Quality Inspector,GA,Z4,B,,,2025-03-15,[],x4166,GA-AB,hector.powell@voltara-motors.example,,
+BAP-E0067,Omar Dunn,QAI,Quality Inspector,GA,Z4,C,,,2024-04-09,[],x4167,GA-97,omar.dunn@voltara-motors.example,,
+BAP-E0068,Samantha Kelly,ARM,Area Manager,EOL,Z4,D,,,2024-12-23,"[""LOTO""]",x4168,EOL-FA,samantha.kelly@voltara-motors.example,512-555-0187,PG-FB893
+BAP-E0069,Douglas Okafor,REL,Reliability Engineer,EOL,Z4,D,,,2025-03-10,"[""LOTO""]",x4169,EOL-19,douglas.okafor@voltara-motors.example,512-555-0189,PG-2BE8F
+BAP-E0070,Jacob Phillips,CTE,Controls Engineer,EOL,Z4,D,,,2025-09-23,"[""LOTO""]",x4170,EOL-84,jacob.phillips@voltara-motors.example,512-555-0140,PG-37717
+BAP-E0071,Chloe Gonzalez,PRE,Process Engineer,EOL,Z4,D,,,2023-07-11,"[""LOTO""]",x4171,EOL-F3,chloe.gonzalez@voltara-motors.example,979-555-0112,PG-405DF
+BAP-E0072,Hector Phillips,QAE,Quality Engineer,EOL,Z4,D,,,2025-06-10,[],x4172,EOL-12,hector.phillips@voltara-motors.example,737-555-0195,PG-715D5
+BAP-E0073,Elena Okafor,QAI,Quality Inspector,EOL,Z4,A,,,2026-03-24,[],x4173,EOL-91,elena.okafor@voltara-motors.example,,
+BAP-E0074,Robert Cox,QAI,Quality Inspector,EOL,Z4,B,,,2023-06-10,[],x4174,EOL-EF,robert.cox@voltara-motors.example,,
+BAP-E0075,Kenneth Reddy,QAI,Quality Inspector,EOL,Z4,C,,,2026-05-07,[],x4175,EOL-3A,kenneth.reddy@voltara-motors.example,,
+BAP-E0076,Tariq Holm,ARM,Area Manager,UTL,Z4,D,,,2025-12-06,"[""LOTO""]",x4176,UTL-0A,tariq.holm@voltara-motors.example,979-555-0117,PG-965CD
+BAP-E0077,Patrick Perez,REL,Reliability Engineer,UTL,Z4,D,,,2026-06-08,"[""LOTO""]",x4177,UTL-4F,patrick.perez@voltara-motors.example,979-555-0179,PG-A708C
+BAP-E0078,Eric Mukherjee,CTE,Controls Engineer,UTL,Z4,D,,,2025-06-10,"[""LOTO""]",x4178,UTL-08,eric.mukherjee@voltara-motors.example,737-555-0123,PG-B713E
+BAP-E0079,Luis Green,PRE,Process Engineer,UTL,Z4,D,,,2025-09-15,"[""LOTO""]",x4179,UTL-93,luis.green@voltara-motors.example,830-555-0154,PG-9B774
+BAP-E0080,Hector Flores,ARM,Area Manager,LOG,Z4,D,,,2026-03-03,"[""LOTO""]",x4180,LOG-DF,hector.flores@voltara-motors.example,830-555-0198,PG-672EB
+BAP-E0081,Ananya Ramirez,REL,Reliability Engineer,LOG,Z4,D,,,2023-09-17,"[""LOTO""]",x4181,LOG-64,ananya.ramirez@voltara-motors.example,512-555-0173,PG-5AE36
+BAP-E0082,Lawrence Thompson,CTE,Controls Engineer,LOG,Z4,D,,,2026-01-15,"[""LOTO""]",x4182,LOG-4D,lawrence.thompson@voltara-motors.example,737-555-0118,PG-E1E90
+BAP-E0083,Peter Rogers,PRE,Process Engineer,LOG,Z4,D,,,2023-12-07,"[""LOTO""]",x4183,LOG-21,peter.rogers@voltara-motors.example,830-555-0136,PG-DB212
+BAP-E0084,Priyanka Brown,PSV,Production Supervisor,CAS,Z1,A,,,2025-07-06,"[""LOTO""]",x4184,CAS-4D,priyanka.brown@voltara-motors.example,979-555-0126,PG-BCECC
+BAP-E0085,Matthew King,LDH,Line Lead,CAS,Z1,A,,,2025-02-06,"[""LOTO""]",x4185,CAS-C4,matthew.king@voltara-motors.example,,
+BAP-E0086,Vikram Johnson,OPR,Machine Operator,CAS,Z1,A,,,2023-05-15,[],x4186,CAS-DC,vikram.johnson@voltara-motors.example,,
+BAP-E0087,Raj Holm,OPR,Machine Operator,CAS,Z1,A,,,2025-03-09,[],x4187,CAS-63,raj.holm@voltara-motors.example,,
+BAP-E0088,Walter Williams,OPR,Machine Operator,CAS,Z1,A,,,2024-04-03,"[""LOTO""]",x4188,CAS-31,walter.williams@voltara-motors.example,,
+BAP-E0089,Joseph Morales,OPR,Machine Operator,CAS,Z1,A,,,2023-07-15,[],x4189,CAS-76,joseph.morales@voltara-motors.example,,
+BAP-E0090,Thomas Wright,OPR,Machine Operator,CAS,Z1,A,,,2025-04-27,[],x4190,CAS-AA,thomas.wright@voltara-motors.example,,
+BAP-E0091,Kevin Das,OPR,Machine Operator,CAS,Z1,A,,,2024-07-10,"[""LOTO""]",x4191,CAS-81,kevin.das@voltara-motors.example,,
+BAP-E0092,Ronald Lindqvist,OPR,Machine Operator,CAS,Z1,A,,,2026-01-12,[],x4192,CAS-CA,ronald.lindqvist@voltara-motors.example,,
+BAP-E0093,Monica Nakamura,PSV,Production Supervisor,STP,Z1,A,,,2024-05-13,"[""LOTO""]",x4193,STP-5F,monica.nakamura@voltara-motors.example,737-555-0130,PG-7794E
+BAP-E0094,Thomas Ivanov,LDH,Line Lead,STP,Z1,A,,,2026-09-17,"[""LOTO""]",x4194,STP-4C,thomas.ivanov@voltara-motors.example,,
+BAP-E0095,Matthew Duarte,OPR,Machine Operator,STP,Z1,A,,,2025-02-18,"[""FORK"", ""LOTO""]",x4195,STP-61,matthew.duarte@voltara-motors.example,,
+BAP-E0096,Richard Moore,OPR,Machine Operator,STP,Z1,A,,,2024-10-24,"[""FORK""]",x4196,STP-6F,richard.moore@voltara-motors.example,,
+BAP-E0097,Frank Nguyen,OPR,Machine Operator,STP,Z1,A,,,2024-04-24,"[""FORK""]",x4197,STP-3F,frank.nguyen@voltara-motors.example,,
+A-SUP01,Mei Garcia,PSV,Production Supervisor,BIW,Z2,A,,,2026-04-18,"[""LOTO""]",x4198,BIW-A9,mei.garcia@voltara-motors.example,830-555-0135,PG-CEB98
+BAP-E0099,Latoya Joshi,LDH,Line Lead,BIW,Z2,A,,,2026-08-04,"[""LOTO""]",x4199,BIW-FA,latoya.joshi@voltara-motors.example,,
+BAP-E0100,Jorge Brooks,OPR,Machine Operator,BIW,Z2,A,,,2026-01-19,[],x4200,BIW-74,jorge.brooks@voltara-motors.example,,
+BAP-E0101,Monica Ramos,OPR,Machine Operator,BIW,Z2,A,,,2024-04-11,"[""LOTO""]",x4201,BIW-7C,monica.ramos@voltara-motors.example,,
+BAP-E0102,Jonathan Silva,OPR,Machine Operator,BIW,Z2,A,,,2025-05-25,[],x4202,BIW-FF,jonathan.silva@voltara-motors.example,,
+BAP-E0103,Sara Baker,OPR,Machine Operator,BIW,Z2,A,,,2024-12-18,[],x4203,BIW-F5,sara.baker@voltara-motors.example,,
+BAP-E0104,Carlos Brown,OPR,Machine Operator,BIW,Z2,A,,,2023-11-02,[],x4204,BIW-0D,carlos.brown@voltara-motors.example,,
+BAP-E0105,Chloe Taylor,OPR,Machine Operator,BIW,Z2,A,,,2024-01-07,"[""LOTO""]",x4205,BIW-EB,chloe.taylor@voltara-motors.example,,
+BAP-E0106,Jeremy Ford,OPR,Machine Operator,BIW,Z2,A,,,2023-01-18,"[""LOTO""]",x4206,BIW-D0,jeremy.ford@voltara-motors.example,,
+BAP-E0107,Scott Kelly,OPR,Machine Operator,BIW,Z2,A,,,2023-09-27,"[""LOTO""]",x4207,BIW-D5,scott.kelly@voltara-motors.example,,
+BAP-E0108,Mark Hill,OPR,Machine Operator,BIW,Z2,A,,,2024-04-20,"[""LOTO""]",x4208,BIW-8B,mark.hill@voltara-motors.example,,
+BAP-E0109,Peter Martin,OPR,Machine Operator,BIW,Z2,A,,,2025-07-15,"[""LOTO""]",x4209,BIW-77,peter.martin@voltara-motors.example,,
+BAP-E0110,Matthew Brown,OPR,Machine Operator,BIW,Z2,A,,,2023-07-13,"[""LOTO""]",x4210,BIW-CF,matthew.brown@voltara-motors.example,,
+BAP-E0111,Robert Baker,OPR,Machine Operator,BIW,Z2,A,,,2023-08-28,"[""LOTO""]",x4211,BIW-DA,robert.baker@voltara-motors.example,,
+BAP-E0112,Mark Davis,OPR,Machine Operator,BIW,Z2,A,,,2024-04-28,[],x4212,BIW-F8,mark.davis@voltara-motors.example,,
+BAP-E0113,Sofia Jackson,PSV,Production Supervisor,PNT,Z2,A,,,2025-09-19,"[""LOTO""]",x4213,PNT-15,sofia.jackson@voltara-motors.example,979-555-0144,PG-A064C
+BAP-E0114,Ananya Cox,LDH,Line Lead,PNT,Z2,A,,,2024-10-08,"[""LOTO""]",x4214,PNT-CA,ananya.cox@voltara-motors.example,,
+BAP-E0115,Yuki Martin,OPR,Machine Operator,PNT,Z2,A,,,2025-01-04,"[""LOTO""]",x4215,PNT-D7,yuki.martin@voltara-motors.example,,
+BAP-E0116,Dennis Okafor,OPR,Machine Operator,PNT,Z2,A,,,2025-01-21,[],x4216,PNT-8E,dennis.okafor@voltara-motors.example,,
+BAP-E0117,Tyler Powell,OPR,Machine Operator,PNT,Z2,A,,,2026-03-22,[],x4217,PNT-C2,tyler.powell@voltara-motors.example,,
+BAP-E0118,Deepak Murphy,OPR,Machine Operator,PNT,Z2,A,,,2023-02-09,[],x4218,PNT-4C,deepak.murphy@voltara-motors.example,,
+BAP-E0119,Camila Singh,OPR,Machine Operator,PNT,Z2,A,,,2025-06-04,[],x4219,PNT-20,camila.singh@voltara-motors.example,,
+BAP-E0120,Carl Sanders,OPR,Machine Operator,PNT,Z2,A,,,2025-02-05,[],x4220,PNT-25,carl.sanders@voltara-motors.example,,
+BAP-E0121,Jin Sanchez,OPR,Machine Operator,PNT,Z2,A,,,2023-02-12,[],x4221,PNT-2A,jin.sanchez@voltara-motors.example,,
+BAP-E0122,Ravi Nguyen,PSV,Production Supervisor,BAT,Z3,A,,,2025-07-13,"[""LOTO""]",x4222,BAT-27,ravi.nguyen@voltara-motors.example,979-555-0141,PG-5C548
+BAP-E0123,Frank Morgan,LDH,Line Lead,BAT,Z3,A,,,2026-03-03,"[""LOTO""]",x4223,BAT-5D,frank.morgan@voltara-motors.example,,
+BAP-E0124,Samantha Dunn,OPR,Machine Operator,BAT,Z3,A,,,2023-06-09,"[""LOTO""]",x4224,BAT-7F,samantha.dunn@voltara-motors.example,,
+BAP-E0125,Jeffrey Holm,OPR,Machine Operator,BAT,Z3,A,,,2023-03-10,[],x4225,BAT-0C,jeffrey.holm@voltara-motors.example,,
+BAP-E0126,Douglas Bennett,OPR,Machine Operator,BAT,Z3,A,,,2026-06-14,"[""LOTO""]",x4226,BAT-49,douglas.bennett@voltara-motors.example,,
+BAP-E0127,Zoe Fuller,OPR,Machine Operator,BAT,Z3,A,,,2025-03-13,"[""LOTO""]",x4227,BAT-A9,zoe.fuller@voltara-motors.example,,
+BAP-E0128,Lawrence Morales,OPR,Machine Operator,BAT,Z3,A,,,2025-07-09,[],x4228,BAT-CB,lawrence.morales@voltara-motors.example,,
+BAP-E0129,Zoe Campbell,OPR,Machine Operator,BAT,Z3,A,,,2023-12-15,"[""LOTO""]",x4229,BAT-6E,zoe.campbell@voltara-motors.example,,
+BAP-E0130,Fatima Nakamura,OPR,Machine Operator,BAT,Z3,A,,,2026-03-21,[],x4230,BAT-97,fatima.nakamura@voltara-motors.example,,
+BAP-E0131,Camila Mensah,OPR,Machine Operator,BAT,Z3,A,,,2026-02-15,"[""LOTO""]",x4231,BAT-FC,camila.mensah@voltara-motors.example,,
+BAP-E0132,Walter Hernandez,OPR,Machine Operator,BAT,Z3,A,,,2025-12-26,[],x4232,BAT-23,walter.hernandez@voltara-motors.example,,
+BAP-E0133,Raj Alvarez,PSV,Production Supervisor,DRV,Z3,A,,,2024-11-20,"[""LOTO""]",x4233,DRV-1C,raj.alvarez@voltara-motors.example,512-555-0104,PG-AD303
+BAP-E0134,Larry Cruz,LDH,Line Lead,DRV,Z3,A,,,2024-08-12,"[""LOTO""]",x4234,DRV-CE,larry.cruz@voltara-motors.example,,
+BAP-E0135,Rachel Hill,OPR,Machine Operator,DRV,Z3,A,,,2025-01-16,[],x4235,DRV-39,rachel.hill@voltara-motors.example,,
+BAP-E0136,Olivia Lewis,OPR,Machine Operator,DRV,Z3,A,,,2024-06-10,[],x4236,DRV-AE,olivia.lewis@voltara-motors.example,,
+BAP-E0137,Ryan Das,PSV,Production Supervisor,GA,Z4,A,,,2026-06-16,"[""LOTO""]",x4237,GA-3E,ryan.das@voltara-motors.example,830-555-0138,PG-EA291
+BAP-E0138,Rosa Martinez,LDH,Line Lead,GA,Z4,A,,,2025-11-04,"[""LOTO""]",x4238,GA-57,rosa.martinez@voltara-motors.example,,
+BAP-E0139,Marcus Lindqvist,OPR,Machine Operator,GA,Z4,A,,,2026-04-26,[],x4239,GA-C5,marcus.lindqvist@voltara-motors.example,,
+BAP-E0140,Peter Kim,OPR,Machine Operator,GA,Z4,A,,,2024-08-19,"[""FORK""]",x4240,GA-DC,peter.kim@voltara-motors.example,,
+BAP-E0141,Naomi Thomas,OPR,Machine Operator,GA,Z4,A,,,2023-09-06,"[""FORK"", ""LOTO""]",x4241,GA-BA,naomi.thomas@voltara-motors.example,,
+BAP-E0142,Lawrence Brooks,OPR,Machine Operator,GA,Z4,A,,,2025-11-14,"[""FORK"", ""LOTO""]",x4242,GA-3B,lawrence.brooks@voltara-motors.example,,
+BAP-E0143,Ronald Cox,OPR,Machine Operator,GA,Z4,A,,,2023-11-05,"[""FORK""]",x4243,GA-A3,ronald.cox@voltara-motors.example,,
+BAP-E0144,Henry Scott,OPR,Machine Operator,GA,Z4,A,,,2026-07-20,"[""FORK"", ""LOTO""]",x4244,GA-4C,henry.scott@voltara-motors.example,,
+BAP-E0145,Ronald Nelson,OPR,Machine Operator,GA,Z4,A,,,2026-05-05,"[""FORK""]",x4245,GA-5A,ronald.nelson@voltara-motors.example,,
+BAP-E0146,Tyler Patel,OPR,Machine Operator,GA,Z4,A,,,2026-03-07,[],x4246,GA-CF,tyler.patel@voltara-motors.example,,
+BAP-E0147,Carl Hicks,OPR,Machine Operator,GA,Z4,A,,,2024-02-19,"[""FORK""]",x4247,GA-07,carl.hicks@voltara-motors.example,,
+BAP-E0148,Alicia Baker,OPR,Machine Operator,GA,Z4,A,,,2025-12-31,"[""FORK"", ""LOTO""]",x4248,GA-33,alicia.baker@voltara-motors.example,,
+BAP-E0149,Aaron Davis,OPR,Machine Operator,GA,Z4,A,,,2026-09-07,"[""FORK""]",x4249,GA-D3,aaron.davis@voltara-motors.example,,
+BAP-E0150,Raj Cox,OPR,Machine Operator,GA,Z4,A,,,2023-08-09,[],x4250,GA-B2,raj.cox@voltara-motors.example,,
+BAP-E0151,Anita Robinson,PSV,Production Supervisor,EOL,Z4,A,,,2024-04-26,"[""LOTO""]",x4251,EOL-BD,anita.robinson@voltara-motors.example,979-555-0186,PG-54661
+BAP-E0152,Jerry Bailey,LDH,Line Lead,EOL,Z4,A,,,2024-06-23,"[""LOTO""]",x4252,EOL-99,jerry.bailey@voltara-motors.example,,
+BAP-E0153,Mark King,OPR,Machine Operator,EOL,Z4,A,,,2026-01-09,[],x4253,EOL-44,mark.king@voltara-motors.example,,
+BAP-E0154,Wei Murphy,OPR,Machine Operator,EOL,Z4,A,,,2026-08-05,"[""LOTO""]",x4254,EOL-8D,wei.murphy@voltara-motors.example,,
+BAP-E0155,Ananya Thompson,OPR,Machine Operator,EOL,Z4,A,,,2026-09-24,"[""LOTO""]",x4255,EOL-8B,ananya.thompson@voltara-motors.example,,
+BAP-E0156,Lena Ford,PSV,Production Supervisor,UTL,Z4,A,,,2025-10-01,"[""LOTO""]",x4256,UTL-2E,lena.ford@voltara-motors.example,830-555-0179,PG-B2C6D
+BAP-E0157,Jacob Barnes,LDH,Line Lead,UTL,Z4,A,,,2025-06-27,"[""LOTO""]",x4257,UTL-9A,jacob.barnes@voltara-motors.example,,
+BAP-E0158,Leila Ford,OPR,Machine Operator,UTL,Z4,A,,,2025-11-25,[],x4258,UTL-11,leila.ford@voltara-motors.example,,
+BAP-E0159,Gerald Williams,OPR,Machine Operator,UTL,Z4,A,,,2023-03-15,"[""LOTO""]",x4259,UTL-E0,gerald.williams@voltara-motors.example,,
+BAP-E0160,Kyle Phillips,PSV,Production Supervisor,LOG,Z4,A,,,2024-11-10,"[""LOTO""]",x4260,LOG-58,kyle.phillips@voltara-motors.example,512-555-0180,PG-2B82B
+BAP-E0161,George Gonzalez,LDH,Line Lead,LOG,Z4,A,,,2025-09-17,"[""LOTO""]",x4261,LOG-7D,george.gonzalez@voltara-motors.example,,
+BAP-E0162,James Diaz,OPR,Machine Operator,LOG,Z4,A,,,2026-02-05,[],x4262,LOG-7E,james.diaz@voltara-motors.example,,
+BAP-E0163,Andrew Mensah,OPR,Machine Operator,LOG,Z4,A,,,2024-08-03,"[""FORK""]",x4263,LOG-7C,andrew.mensah@voltara-motors.example,,
+BAP-E0164,Anthony Sanchez,MSV,Maintenance Supervisor,,Z1,A,,,2023-06-12,"[""FIRE"", ""HV"", ""LOTO""]",x4264,PLT-94,anthony.sanchez@voltara-motors.example,512-555-0137,PG-C4420
+BAP-E0165,George Sato,MSV,Maintenance Supervisor,,Z2,A,,,2025-12-07,"[""FIRE"", ""HV"", ""LOTO""]",x4265,PLT-4D,george.sato@voltara-motors.example,830-555-0126,PG-E6234
+BAP-E0166,Dmitri Foster,MSV,Maintenance Supervisor,,Z3,A,,,2025-07-11,"[""FIRE"", ""HV"", ""LOTO""]",x4266,PLT-47,dmitri.foster@voltara-motors.example,737-555-0176,PG-82790
+BAP-E0167,Frank Evans,MSV,Maintenance Supervisor,,Z4,A,,,2024-12-13,"[""FIRE"", ""HV"", ""LOTO""]",x4267,PLT-91,frank.evans@voltara-motors.example,979-555-0100,PG-7FC37
+BAP-E0168,Sean Moore,PSV,Production Supervisor,CAS,Z1,B,,,2023-06-11,"[""LOTO""]",x4268,CAS-4C,sean.moore@voltara-motors.example,979-555-0174,PG-DB5F2
+BAP-E0169,Michael Taylor,LDH,Line Lead,CAS,Z1,B,,,2023-05-07,"[""LOTO""]",x4269,CAS-11,michael.taylor@voltara-motors.example,,
+BAP-E0170,Peter Reddy,OPR,Machine Operator,CAS,Z1,B,,,2025-11-23,[],x4270,CAS-DD,peter.reddy@voltara-motors.example,,
+BAP-E0171,Olivia Flores,OPR,Machine Operator,CAS,Z1,B,,,2025-02-10,[],x4271,CAS-26,olivia.flores@voltara-motors.example,,
+BAP-E0172,Camila James,OPR,Machine Operator,CAS,Z1,B,,,2025-10-13,[],x4272,CAS-29,camila.james@voltara-motors.example,,
+BAP-E0173,Imani Wilson,OPR,Machine Operator,CAS,Z1,B,,,2024-02-14,[],x4273,CAS-3E,imani.wilson@voltara-motors.example,,
+BAP-E0174,Thomas Watson,OPR,Machine Operator,CAS,Z1,B,,,2024-02-01,[],x4274,CAS-40,thomas.watson@voltara-motors.example,,
+BAP-E0175,Kwame Das,OPR,Machine Operator,CAS,Z1,B,,,2025-03-12,"[""LOTO""]",x4275,CAS-48,kwame.das@voltara-motors.example,,
+BAP-E0176,Andrew Kim,OPR,Machine Operator,CAS,Z1,B,,,2025-07-09,[],x4276,CAS-28,andrew.kim@voltara-motors.example,,
+BAP-E0177,Ananya Silva,PSV,Production Supervisor,STP,Z1,B,,,2026-09-12,"[""LOTO""]",x4277,STP-1F,ananya.silva@voltara-motors.example,979-555-0127,PG-5B583
+BAP-E0178,Rosa Collins,LDH,Line Lead,STP,Z1,B,,,2023-01-28,"[""LOTO""]",x4278,STP-07,rosa.collins@voltara-motors.example,,
+BAP-E0179,Brian Rivera,OPR,Machine Operator,STP,Z1,B,,,2023-09-26,"[""FORK"", ""LOTO""]",x4279,STP-D7,brian.rivera@voltara-motors.example,,
+BAP-E0180,Raymond Cooper,OPR,Machine Operator,STP,Z1,B,,,2023-10-12,"[""FORK""]",x4280,STP-31,raymond.cooper@voltara-motors.example,,
+BAP-E0181,Sofia Haddad,OPR,Machine Operator,STP,Z1,B,,,2023-08-28,"[""FORK""]",x4281,STP-99,sofia.haddad@voltara-motors.example,,
+B-SUP01,Mateo Singh,PSV,Production Supervisor,BIW,Z2,B,,,2025-04-10,"[""LOTO""]",x4282,BIW-97,mateo.singh@voltara-motors.example,830-555-0117,PG-EBF67
+BAP-E0183,Brian Garcia,LDH,Line Lead,BIW,Z2,B,,,2026-01-08,"[""LOTO""]",x4283,BIW-B0,brian.garcia@voltara-motors.example,,
+BAP-E0184,James Powell,OPR,Machine Operator,BIW,Z2,B,,,2025-02-07,[],x4284,BIW-7D,james.powell@voltara-motors.example,,
+BAP-E0185,Carlos Scott,OPR,Machine Operator,BIW,Z2,B,,,2025-02-02,[],x4285,BIW-7D,carlos.scott@voltara-motors.example,,
+BAP-E0186,Henry Holm,OPR,Machine Operator,BIW,Z2,B,,,2023-10-04,[],x4286,BIW-4C,henry.holm@voltara-motors.example,,
+BAP-E0187,Carlos Kaur,OPR,Machine Operator,BIW,Z2,B,,,2024-04-10,"[""LOTO""]",x4287,BIW-8A,carlos.kaur@voltara-motors.example,,
+BAP-E0188,Beatriz James,OPR,Machine Operator,BIW,Z2,B,,,2025-08-09,[],x4288,BIW-72,beatriz.james@voltara-motors.example,,
+BAP-E0189,Kenneth Clark,OPR,Machine Operator,BIW,Z2,B,,,2024-02-06,[],x4289,BIW-EE,kenneth.clark@voltara-motors.example,,
+BAP-E0190,Andrew Castillo,OPR,Machine Operator,BIW,Z2,B,,,2024-08-10,"[""LOTO""]",x4290,BIW-E8,andrew.castillo@voltara-motors.example,,
+BAP-E0191,Hiroshi Green,OPR,Machine Operator,BIW,Z2,B,,,2025-12-23,[],x4291,BIW-16,hiroshi.green@voltara-motors.example,,
+BAP-E0192,Patrick Torres,OPR,Machine Operator,BIW,Z2,B,,,2023-12-08,[],x4292,BIW-BC,patrick.torres@voltara-motors.example,,
+BAP-E0193,Samantha Gutierrez,OPR,Machine Operator,BIW,Z2,B,,,2024-01-13,[],x4293,BIW-E7,samantha.gutierrez@voltara-motors.example,,
+BAP-E0194,Steven Wright,OPR,Machine Operator,BIW,Z2,B,,,2023-01-02,"[""LOTO""]",x4294,BIW-74,steven.wright@voltara-motors.example,,
+BAP-E0195,Ahmed Jimenez,OPR,Machine Operator,BIW,Z2,B,,,2023-10-19,"[""LOTO""]",x4295,BIW-82,ahmed.jimenez@voltara-motors.example,,
+BAP-E0196,Christopher Gomez,OPR,Machine Operator,BIW,Z2,B,,,2026-03-03,"[""LOTO""]",x4296,BIW-A3,christopher.gomez@voltara-motors.example,,
+BAP-E0197,Richard Schmidt,PSV,Production Supervisor,PNT,Z2,B,,,2023-03-19,"[""LOTO""]",x4297,PNT-DC,richard.schmidt@voltara-motors.example,737-555-0128,PG-F0CD5
+BAP-E0198,Sara Diaz,LDH,Line Lead,PNT,Z2,B,,,2024-05-09,"[""LOTO""]",x4298,PNT-E4,sara.diaz@voltara-motors.example,,
+BAP-E0199,Jonathan Ramos,OPR,Machine Operator,PNT,Z2,B,,,2026-07-18,"[""LOTO""]",x4299,PNT-F1,jonathan.ramos@voltara-motors.example,,
+BAP-E0200,Ravi Wright,OPR,Machine Operator,PNT,Z2,B,,,2026-04-21,"[""LOTO""]",x4300,PNT-70,ravi.wright@voltara-motors.example,,
+BAP-E0201,Tyler Fuller,OPR,Machine Operator,PNT,Z2,B,,,2026-06-19,[],x4301,PNT-AC,tyler.fuller@voltara-motors.example,,
+BAP-E0202,David Chavez,OPR,Machine Operator,PNT,Z2,B,,,2024-01-26,"[""LOTO""]",x4302,PNT-81,david.chavez@voltara-motors.example,,
+BAP-E0203,Priyanka Castillo,OPR,Machine Operator,PNT,Z2,B,,,2024-03-04,[],x4303,PNT-77,priyanka.castillo@voltara-motors.example,,
+BAP-E0204,Thomas Cruz,OPR,Machine Operator,PNT,Z2,B,,,2026-06-27,"[""LOTO""]",x4304,PNT-55,thomas.cruz@voltara-motors.example,,
+BAP-E0205,Raymond Castillo,OPR,Machine Operator,PNT,Z2,B,,,2023-12-23,"[""LOTO""]",x4305,PNT-B4,raymond.castillo@voltara-motors.example,,
+BAP-E0206,Jason Barnes,PSV,Production Supervisor,BAT,Z3,B,,,2025-03-16,"[""LOTO""]",x4306,BAT-12,jason.barnes@voltara-motors.example,830-555-0133,PG-1770F
+BAP-E0207,James Bennett,LDH,Line Lead,BAT,Z3,B,,,2024-03-11,"[""LOTO""]",x4307,BAT-5A,james.bennett@voltara-motors.example,,
+BAP-E0208,Amara Scott,OPR,Machine Operator,BAT,Z3,B,,,2023-09-28,"[""LOTO""]",x4308,BAT-B2,amara.scott@voltara-motors.example,,
+BAP-E0209,Peter Harris,OPR,Machine Operator,BAT,Z3,B,,,2025-05-11,"[""LOTO""]",x4309,BAT-45,peter.harris@voltara-motors.example,,
+BAP-E0210,Harold Ford,OPR,Machine Operator,BAT,Z3,B,,,2025-03-23,[],x4310,BAT-B7,harold.ford@voltara-motors.example,,
+BAP-E0211,Ronald Powell,OPR,Machine Operator,BAT,Z3,B,,,2025-12-23,[],x4311,BAT-94,ronald.powell@voltara-motors.example,,
+BAP-E0212,James Chen,OPR,Machine Operator,BAT,Z3,B,,,2023-03-20,"[""LOTO""]",x4312,BAT-A7,james.chen@voltara-motors.example,,
+BAP-E0213,Steven Silva,OPR,Machine Operator,BAT,Z3,B,,,2024-06-24,[],x4313,BAT-27,steven.silva@voltara-motors.example,,
+BAP-E0214,Raymond Nelson,OPR,Machine Operator,BAT,Z3,B,,,2023-12-22,"[""LOTO""]",x4314,BAT-AE,raymond.nelson@voltara-motors.example,,
+BAP-E0215,Samuel Murphy,OPR,Machine Operator,BAT,Z3,B,,,2023-06-09,"[""LOTO""]",x4315,BAT-30,samuel.murphy@voltara-motors.example,,
+BAP-E0216,Anita Banerjee,OPR,Machine Operator,BAT,Z3,B,,,2024-07-16,"[""LOTO""]",x4316,BAT-CB,anita.banerjee@voltara-motors.example,,
+BAP-E0217,Nadia Harris,PSV,Production Supervisor,DRV,Z3,B,,,2025-09-24,"[""LOTO""]",x4317,DRV-75,nadia.harris@voltara-motors.example,737-555-0154,PG-E2190
+BAP-E0218,Raymond Gutierrez,LDH,Line Lead,DRV,Z3,B,,,2023-02-11,"[""LOTO""]",x4318,DRV-5C,raymond.gutierrez@voltara-motors.example,,
+BAP-E0219,Esperanza Dunn,OPR,Machine Operator,DRV,Z3,B,,,2023-07-21,"[""LOTO""]",x4319,DRV-5D,esperanza.dunn@voltara-motors.example,,
+BAP-E0220,Grace Bennett,OPR,Machine Operator,DRV,Z3,B,,,2024-04-14,"[""LOTO""]",x4320,DRV-89,grace.bennett@voltara-motors.example,,
+BAP-E0221,Samantha Stewart,PSV,Production Supervisor,GA,Z4,B,,,2023-01-13,"[""LOTO""]",x4321,GA-F4,samantha.stewart@voltara-motors.example,737-555-0101,PG-1B0D2
+BAP-E0222,Deepak Fuller,LDH,Line Lead,GA,Z4,B,,,2024-02-01,"[""LOTO""]",x4322,GA-65,deepak.fuller@voltara-motors.example,,
+BAP-E0223,Keith Lewis,OPR,Machine Operator,GA,Z4,B,,,2025-07-16,[],x4323,GA-F8,keith.lewis@voltara-motors.example,,
+BAP-E0224,Mateo Fischer,OPR,Machine Operator,GA,Z4,B,,,2026-06-06,"[""FORK""]",x4324,GA-E1,mateo.fischer@voltara-motors.example,,
+BAP-E0225,Vikram Morgan,OPR,Machine Operator,GA,Z4,B,,,2023-03-25,"[""FORK""]",x4325,GA-32,vikram.morgan@voltara-motors.example,,
+BAP-E0226,Zachary Collins,OPR,Machine Operator,GA,Z4,B,,,2023-07-27,[],x4326,GA-DF,zachary.collins@voltara-motors.example,,
+BAP-E0227,Samantha Martin,OPR,Machine Operator,GA,Z4,B,,,2025-12-27,"[""LOTO""]",x4327,GA-43,samantha.martin@voltara-motors.example,,
+BAP-E0228,George Diaz,OPR,Machine Operator,GA,Z4,B,,,2024-03-02,[],x4328,GA-D2,george.diaz@voltara-motors.example,,
+BAP-E0229,Amara Gutierrez,OPR,Machine Operator,GA,Z4,B,,,2025-12-26,[],x4329,GA-22,amara.gutierrez@voltara-motors.example,,
+BAP-E0230,Patrick Peterson,OPR,Machine Operator,GA,Z4,B,,,2026-01-26,"[""FORK"", ""LOTO""]",x4330,GA-D3,patrick.peterson@voltara-motors.example,,
+BAP-E0231,Grace Clark,OPR,Machine Operator,GA,Z4,B,,,2023-05-28,"[""FORK"", ""LOTO""]",x4331,GA-BD,grace.clark@voltara-motors.example,,
+BAP-E0232,Keith Hernandez,OPR,Machine Operator,GA,Z4,B,,,2024-05-13,"[""FORK""]",x4332,GA-4C,keith.hernandez@voltara-motors.example,,
+BAP-E0233,Marcus Stewart,OPR,Machine Operator,GA,Z4,B,,,2023-12-16,"[""FORK""]",x4333,GA-8B,marcus.stewart@voltara-motors.example,,
+BAP-E0234,Frank Watson,OPR,Machine Operator,GA,Z4,B,,,2025-08-28,"[""FORK""]",x4334,GA-37,frank.watson@voltara-motors.example,,
+BAP-E0235,Kenneth Cox,PSV,Production Supervisor,EOL,Z4,B,,,2026-06-09,"[""LOTO""]",x4335,EOL-D2,kenneth.cox@voltara-motors.example,737-555-0196,PG-6E6DF
+BAP-E0236,Henry Wilson,LDH,Line Lead,EOL,Z4,B,,,2024-02-10,"[""LOTO""]",x4336,EOL-C4,henry.wilson@voltara-motors.example,,
+BAP-E0237,Aisha Hall,OPR,Machine Operator,EOL,Z4,B,,,2024-04-27,[],x4337,EOL-17,aisha.hall@voltara-motors.example,,
+BAP-E0238,Joseph Sanders,OPR,Machine Operator,EOL,Z4,B,,,2024-05-12,"[""LOTO""]",x4338,EOL-EC,joseph.sanders@voltara-motors.example,,
+BAP-E0239,Dmitri Kim,OPR,Machine Operator,EOL,Z4,B,,,2024-06-16,[],x4339,EOL-E5,dmitri.kim@voltara-motors.example,,
+BAP-E0240,Keith Price,PSV,Production Supervisor,UTL,Z4,B,,,2025-03-27,"[""LOTO""]",x4340,UTL-82,keith.price@voltara-motors.example,830-555-0147,PG-90C15
+BAP-E0241,Jacob Cruz,LDH,Line Lead,UTL,Z4,B,,,2024-11-07,"[""LOTO""]",x4341,UTL-8D,jacob.cruz@voltara-motors.example,,
+BAP-E0242,Robert Warren,OPR,Machine Operator,UTL,Z4,B,,,2024-11-06,[],x4342,UTL-07,robert.warren@voltara-motors.example,,
+BAP-E0243,Luis Peterson,OPR,Machine Operator,UTL,Z4,B,,,2026-07-28,"[""LOTO""]",x4343,UTL-BE,luis.peterson@voltara-motors.example,,
+BAP-E0244,Stephen Parker,PSV,Production Supervisor,LOG,Z4,B,,,2026-05-22,"[""LOTO""]",x4344,LOG-C3,stephen.parker@voltara-motors.example,512-555-0154,PG-0B993
+BAP-E0245,Jeremy Thomas,LDH,Line Lead,LOG,Z4,B,,,2025-05-21,"[""LOTO""]",x4345,LOG-A8,jeremy.thomas@voltara-motors.example,,
+BAP-E0246,Samantha Carter,OPR,Machine Operator,LOG,Z4,B,,,2024-09-25,"[""FORK""]",x4346,LOG-71,samantha.carter@voltara-motors.example,,
+BAP-E0247,Nathan Chavez,OPR,Machine Operator,LOG,Z4,B,,,2024-12-01,[],x4347,LOG-F9,nathan.chavez@voltara-motors.example,,
+BAP-E0248,Larry Banerjee,MSV,Maintenance Supervisor,,Z1,B,,,2026-07-24,"[""FIRE"", ""HV"", ""LOTO""]",x4348,PLT-16,larry.banerjee@voltara-motors.example,737-555-0121,PG-A7FB9
+BAP-E0249,Ingrid Campbell,MSV,Maintenance Supervisor,,Z2,B,,,2025-02-16,"[""FIRE"", ""HV"", ""LOTO""]",x4349,PLT-48,ingrid.campbell@voltara-motors.example,979-555-0154,PG-5A27B
+BAP-E0250,Vikram Richardson,MSV,Maintenance Supervisor,,Z3,B,,,2026-06-12,"[""FIRE"", ""HV"", ""LOTO""]",x4350,PLT-89,vikram.richardson@voltara-motors.example,830-555-0192,PG-E3F12
+BAP-E0251,Priyanka Roberts,MSV,Maintenance Supervisor,,Z4,B,,,2023-11-13,"[""FIRE"", ""HV"", ""LOTO""]",x4351,PLT-9D,priyanka.roberts@voltara-motors.example,979-555-0168,PG-1446A
+BAP-E0252,Jin Holm,PSV,Production Supervisor,CAS,Z1,C,,,2024-06-28,"[""LOTO""]",x4352,CAS-52,jin.holm@voltara-motors.example,830-555-0194,PG-FA5A1
+BAP-E0253,Maria Duarte,LDH,Line Lead,CAS,Z1,C,,,2025-04-25,"[""LOTO""]",x4353,CAS-55,maria.duarte@voltara-motors.example,,
+BAP-E0254,Anthony Allen,OPR,Machine Operator,CAS,Z1,C,,,2026-02-16,[],x4354,CAS-DF,anthony.allen@voltara-motors.example,,
+BAP-E0255,Elena Phillips,OPR,Machine Operator,CAS,Z1,C,,,2025-01-11,"[""LOTO""]",x4355,CAS-60,elena.phillips@voltara-motors.example,,
+BAP-E0256,Raj Edwards,OPR,Machine Operator,CAS,Z1,C,,,2025-05-05,[],x4356,CAS-3C,raj.edwards@voltara-motors.example,,
+BAP-E0257,Luis Nelson,OPR,Machine Operator,CAS,Z1,C,,,2023-01-10,[],x4357,CAS-9E,luis.nelson@voltara-motors.example,,
+BAP-E0258,Esperanza Kaur,PSV,Production Supervisor,STP,Z1,C,,,2024-06-16,"[""LOTO""]",x4358,STP-B6,esperanza.kaur@voltara-motors.example,737-555-0151,PG-5C077
+BAP-E0259,Leila Diaz,LDH,Line Lead,STP,Z1,C,,,2023-10-17,"[""LOTO""]",x4359,STP-53,leila.diaz@voltara-motors.example,,
+BAP-E0260,Elena Powell,OPR,Machine Operator,STP,Z1,C,,,2025-09-20,"[""FORK""]",x4360,STP-11,elena.powell@voltara-motors.example,,
+BAP-E0261,Linda Miller,OPR,Machine Operator,STP,Z1,C,,,2023-07-15,[],x4361,STP-C3,linda.miller@voltara-motors.example,,
+BAP-E0262,Stephen Warren,PSV,Production Supervisor,BIW,Z2,C,,,2024-04-23,"[""LOTO""]",x4362,BIW-09,stephen.warren@voltara-motors.example,979-555-0191,PG-D384D
+BAP-E0263,Steven Bhatt,LDH,Line Lead,BIW,Z2,C,,,2023-05-04,"[""LOTO""]",x4363,BIW-3F,steven.bhatt@voltara-motors.example,,
+BAP-E0264,Zoe Ortiz,OPR,Machine Operator,BIW,Z2,C,,,2024-06-23,"[""LOTO""]",x4364,BIW-D9,zoe.ortiz@voltara-motors.example,,
+BAP-E0265,Sean Turner,OPR,Machine Operator,BIW,Z2,C,,,2026-06-08,"[""LOTO""]",x4365,BIW-00,sean.turner@voltara-motors.example,,
+BAP-E0266,Paul Barnes,OPR,Machine Operator,BIW,Z2,C,,,2024-02-25,[],x4366,BIW-23,paul.barnes@voltara-motors.example,,
+BAP-E0267,Chloe Novak,OPR,Machine Operator,BIW,Z2,C,,,2025-05-15,[],x4367,BIW-13,chloe.novak@voltara-motors.example,,
+BAP-E0268,Richard Howard,OPR,Machine Operator,BIW,Z2,C,,,2025-11-11,[],x4368,BIW-D3,richard.howard@voltara-motors.example,,
+BAP-E0269,Sofia Patel,OPR,Machine Operator,BIW,Z2,C,,,2024-11-21,"[""LOTO""]",x4369,BIW-5A,sofia.patel@voltara-motors.example,,
+BAP-E0270,Anita Morgan,OPR,Machine Operator,BIW,Z2,C,,,2023-06-27,"[""LOTO""]",x4370,BIW-A5,anita.morgan@voltara-motors.example,,
+BAP-E0271,Ahmed Novak,OPR,Machine Operator,BIW,Z2,C,,,2025-07-23,"[""LOTO""]",x4371,BIW-FD,ahmed.novak@voltara-motors.example,,
+BAP-E0272,George Ramirez,OPR,Machine Operator,BIW,Z2,C,,,2024-12-24,[],x4372,BIW-15,george.ramirez@voltara-motors.example,,
+BAP-E0273,Steven Tran,PSV,Production Supervisor,PNT,Z2,C,,,2026-01-29,"[""LOTO""]",x4373,PNT-5C,steven.tran@voltara-motors.example,512-555-0111,PG-B04FF
+BAP-E0274,Paul Ivanov,LDH,Line Lead,PNT,Z2,C,,,2026-01-03,"[""LOTO""]",x4374,PNT-8A,paul.ivanov@voltara-motors.example,,
+BAP-E0275,Vikram Mendoza,OPR,Machine Operator,PNT,Z2,C,,,2023-07-22,"[""LOTO""]",x4375,PNT-7F,vikram.mendoza@voltara-motors.example,,
+BAP-E0276,Ravi Hill,OPR,Machine Operator,PNT,Z2,C,,,2023-01-21,"[""LOTO""]",x4376,PNT-5F,ravi.hill@voltara-motors.example,,
+BAP-E0277,George Jackson,OPR,Machine Operator,PNT,Z2,C,,,2026-06-08,[],x4377,PNT-A8,george.jackson@voltara-motors.example,,
+BAP-E0278,Vikram Powell,OPR,Machine Operator,PNT,Z2,C,,,2026-04-03,"[""LOTO""]",x4378,PNT-EE,vikram.powell@voltara-motors.example,,
+BAP-E0279,Terrence Perez,PSV,Production Supervisor,BAT,Z3,C,,,2026-08-11,"[""LOTO""]",x4379,BAT-3F,terrence.perez@voltara-motors.example,830-555-0102,PG-03CD1
+BAP-E0280,James Thompson,LDH,Line Lead,BAT,Z3,C,,,2025-09-18,"[""LOTO""]",x4380,BAT-6E,james.thompson@voltara-motors.example,,
+BAP-E0281,Aaron Gonzalez,OPR,Machine Operator,BAT,Z3,C,,,2024-08-11,[],x4381,BAT-FB,aaron.gonzalez@voltara-motors.example,,
+BAP-E0282,Rosa White,OPR,Machine Operator,BAT,Z3,C,,,2024-01-11,[],x4382,BAT-B9,rosa.white@voltara-motors.example,,
+BAP-E0283,Henry Clark,OPR,Machine Operator,BAT,Z3,C,,,2023-03-16,[],x4383,BAT-4D,henry.clark@voltara-motors.example,,
+BAP-E0284,Jeffrey Carter,OPR,Machine Operator,BAT,Z3,C,,,2023-07-07,"[""LOTO""]",x4384,BAT-E6,jeffrey.carter@voltara-motors.example,,
+BAP-E0285,Jamal Tran,OPR,Machine Operator,BAT,Z3,C,,,2023-11-27,[],x4385,BAT-3E,jamal.tran@voltara-motors.example,,
+BAP-E0286,Kenneth Silva,OPR,Machine Operator,BAT,Z3,C,,,2023-09-24,[],x4386,BAT-1D,kenneth.silva@voltara-motors.example,,
+BAP-E0287,Jeremy Bhatt,PSV,Production Supervisor,DRV,Z3,C,,,2024-12-19,"[""LOTO""]",x4387,DRV-54,jeremy.bhatt@voltara-motors.example,737-555-0140,PG-3CACD
+BAP-E0288,Raj Peterson,LDH,Line Lead,DRV,Z3,C,,,2026-06-10,"[""LOTO""]",x4388,DRV-E4,raj.peterson@voltara-motors.example,,
+BAP-E0289,Samantha Brooks,OPR,Machine Operator,DRV,Z3,C,,,2024-04-07,"[""LOTO""]",x4389,DRV-9B,samantha.brooks@voltara-motors.example,,
+BAP-E0290,Leila Rivera,OPR,Machine Operator,DRV,Z3,C,,,2025-12-04,[],x4390,DRV-BF,leila.rivera@voltara-motors.example,,
+BAP-E0291,Monica Kelly,PSV,Production Supervisor,GA,Z4,C,,,2026-01-17,"[""LOTO""]",x4391,GA-30,monica.kelly@voltara-motors.example,979-555-0140,PG-C4116
+BAP-E0292,Justin Adams,LDH,Line Lead,GA,Z4,C,,,2025-11-09,"[""LOTO""]",x4392,GA-41,justin.adams@voltara-motors.example,,
+BAP-E0293,William Castillo,OPR,Machine Operator,GA,Z4,C,,,2026-02-20,"[""LOTO""]",x4393,GA-7C,william.castillo@voltara-motors.example,,
+BAP-E0294,Alicia Miller,OPR,Machine Operator,GA,Z4,C,,,2026-07-14,"[""FORK""]",x4394,GA-A1,alicia.miller@voltara-motors.example,,
+BAP-E0295,Carl Edwards,OPR,Machine Operator,GA,Z4,C,,,2025-10-18,"[""FORK"", ""LOTO""]",x4395,GA-66,carl.edwards@voltara-motors.example,,
+BAP-E0296,Ananya Mitchell,OPR,Machine Operator,GA,Z4,C,,,2024-12-17,"[""FORK"", ""LOTO""]",x4396,GA-3C,ananya.mitchell@voltara-motors.example,,
+BAP-E0297,Omar Allen,OPR,Machine Operator,GA,Z4,C,,,2024-10-28,"[""FORK"", ""LOTO""]",x4397,GA-80,omar.allen@voltara-motors.example,,
+BAP-E0298,Camila Davis,OPR,Machine Operator,GA,Z4,C,,,2024-06-20,"[""FORK""]",x4398,GA-19,camila.davis@voltara-motors.example,,
+BAP-E0299,Tyler Moore,OPR,Machine Operator,GA,Z4,C,,,2025-09-08,"[""FORK""]",x4399,GA-52,tyler.moore@voltara-motors.example,,
+BAP-E0300,Nathan Thompson,OPR,Machine Operator,GA,Z4,C,,,2025-04-07,"[""LOTO""]",x4400,GA-AA,nathan.thompson@voltara-motors.example,,
+BAP-E0301,Latoya Ramos,PSV,Production Supervisor,EOL,Z4,C,,,2024-10-17,"[""LOTO""]",x4401,EOL-F0,latoya.ramos@voltara-motors.example,979-555-0161,PG-3BE77
+BAP-E0302,Richard Wood,LDH,Line Lead,EOL,Z4,C,,,2026-02-13,"[""LOTO""]",x4402,EOL-89,richard.wood@voltara-motors.example,,
+BAP-E0303,Henry Joshi,OPR,Machine Operator,EOL,Z4,C,,,2026-08-02,"[""LOTO""]",x4403,EOL-96,henry.joshi@voltara-motors.example,,
+BAP-E0304,Olivia White,OPR,Machine Operator,EOL,Z4,C,,,2024-09-18,"[""LOTO""]",x4404,EOL-02,olivia.white@voltara-motors.example,,
+BAP-E0305,Samuel Diaz,PSV,Production Supervisor,UTL,Z4,C,,,2026-02-07,"[""LOTO""]",x4405,UTL-D2,samuel.diaz@voltara-motors.example,512-555-0125,PG-40EA1
+BAP-E0306,Anthony Moore,LDH,Line Lead,UTL,Z4,C,,,2023-03-26,"[""LOTO""]",x4406,UTL-82,anthony.moore@voltara-motors.example,,
+BAP-E0307,Nicholas Gutierrez,OPR,Machine Operator,UTL,Z4,C,,,2026-07-15,[],x4407,UTL-CD,nicholas.gutierrez@voltara-motors.example,,
+BAP-E0308,Adam Robinson,OPR,Machine Operator,UTL,Z4,C,,,2023-11-24,"[""LOTO""]",x4408,UTL-21,adam.robinson@voltara-motors.example,,
+BAP-E0309,Daniel Castillo,PSV,Production Supervisor,LOG,Z4,C,,,2023-05-26,"[""LOTO""]",x4409,LOG-92,daniel.castillo@voltara-motors.example,979-555-0187,PG-9ECC0
+BAP-E0310,Keith Green,LDH,Line Lead,LOG,Z4,C,,,2024-03-24,"[""LOTO""]",x4410,LOG-C9,keith.green@voltara-motors.example,,
+BAP-E0311,Henry Patel,OPR,Machine Operator,LOG,Z4,C,,,2024-02-02,"[""LOTO""]",x4411,LOG-0C,henry.patel@voltara-motors.example,,
+BAP-E0312,Luis Turner,OPR,Machine Operator,LOG,Z4,C,,,2025-04-14,[],x4412,LOG-45,luis.turner@voltara-motors.example,,
+BAP-E0313,Mateo Cruz,MSV,Maintenance Supervisor,,Z1,C,,,2025-04-04,"[""FIRE"", ""HV"", ""LOTO""]",x4413,PLT-51,mateo.cruz@voltara-motors.example,737-555-0146,PG-E2928
+BAP-E0314,Grace Gomez,MSV,Maintenance Supervisor,,Z2,C,,,2026-06-12,"[""FIRE"", ""HV"", ""LOTO""]",x4414,PLT-47,grace.gomez@voltara-motors.example,737-555-0117,PG-3926A
+BAP-E0315,Mina Duarte,MSV,Maintenance Supervisor,,Z3,C,,,2025-10-22,"[""FIRE"", ""HV"", ""LOTO""]",x4415,PLT-94,mina.duarte@voltara-motors.example,737-555-0180,PG-BAD50
+BAP-E0316,Tanya Murphy,MSV,Maintenance Supervisor,,Z4,C,,,2024-12-24,"[""FIRE"", ""HV"", ""LOTO""]",x4416,PLT-D8,tanya.murphy@voltara-motors.example,737-555-0112,PG-B4AFE
+BAP-E0317,Matthew Bailey,TEC,Mechanical Technician (L2),,Z1,A,MECH,L2,2024-09-07,"[""CRANE"", ""FIRE"", ""LOTO""]",x4417,PLT-82,matthew.bailey@voltara-motors.example,,
+BAP-E0318,Nathan Diaz,TEC,Mechanical Technician (L2),,Z1,A,MECH,L2,2023-09-09,"[""LOTO""]",x4418,PLT-F4,nathan.diaz@voltara-motors.example,,
+BAP-E0319,Benjamin King,TEC,Mechanical Technician (L2),,Z1,A,MECH,L2,2026-09-17,"[""HV"", ""LOTO""]",x4419,PLT-2C,benjamin.king@voltara-motors.example,,
+BAP-E0320,George Joshi,TEC,Electrical Technician (L2),,Z1,A,ELEC,L2,2024-08-06,"[""CRANE"", ""HV"", ""LOTO""]",x4420,PLT-54,george.joshi@voltara-motors.example,,
+BAP-E0321,Mina Reyes,TEC,Electrical Technician (L2),,Z1,A,ELEC,L2,2023-05-12,"[""CRANE"", ""HV"", ""LOTO""]",x4421,PLT-71,mina.reyes@voltara-motors.example,,
+BAP-E0322,Lena Lopez,TEC,Hydraulics / Pneumatics Technician (L2),,Z1,A,HYD,L2,2023-11-11,"[""HV"", ""HYD"", ""LOTO""]",x4422,PLT-38,lena.lopez@voltara-motors.example,,
+BAP-E0323,Nadia Patterson,TEC,Hydraulics / Pneumatics Technician (L3),,Z1,A,HYD,L3,2023-09-09,"[""FIRE"", ""HV"", ""HYD"", ""LOTO""]",x4423,PLT-C7,nadia.patterson@voltara-motors.example,512-555-0197,PG-CBBFF
+BAP-E0324,Nicholas Jackson,TEC,Hydraulics / Pneumatics Technician (L3),,Z1,A,HYD,L3,2025-04-05,"[""HV"", ""HYD"", ""LOTO""]",x4424,PLT-55,nicholas.jackson@voltara-motors.example,979-555-0128,PG-B37DA
+BAP-E0325,Zachary Martinez,TEC,Robotics Technician (L2),,Z1,A,ROBO,L2,2024-01-05,"[""CRANE"", ""FANUC"", ""HV"", ""LOTO""]",x4425,PLT-54,zachary.martinez@voltara-motors.example,,
+BAP-E0326,Timothy Shah,TEC,Robotics Technician (L2),,Z1,A,ROBO,L2,2025-10-19,"[""CRANE"", ""HV"", ""KUKA"", ""LOTO""]",x4426,PLT-09,timothy.shah@voltara-motors.example,,
+BAP-E0327,Jeremy Baker,TEC,Controls / PLC Technician (L3),,Z1,A,CTRL,L3,2024-07-20,"[""HV"", ""LOTO""]",x4427,PLT-45,jeremy.baker@voltara-motors.example,512-555-0170,PG-85AE2
+BAP-E0328,Zoe Das,TEC,Process / Quality Technician (L1),,Z1,A,PROC,L1,2026-03-20,"[""CRANE"", ""FIRE"", ""LOTO"", ""TORQ""]",x4428,PLT-35,zoe.das@voltara-motors.example,,
+BAP-E0329,Rachel Robinson,TEC,Mechanical Technician (L2),,Z2,A,MECH,L2,2023-08-22,"[""ATEX"", ""LOTO""]",x4429,PLT-40,rachel.robinson@voltara-motors.example,,
+BAP-E0330,Jorge Lopez,TEC,Mechanical Technician (L3),,Z2,A,MECH,L3,2026-04-26,"[""LOTO""]",x4430,PLT-FC,jorge.lopez@voltara-motors.example,512-555-0149,PG-B3D48
+BAP-E0331,Jin Rogers,TEC,Electrical Technician (L2),,Z2,A,ELEC,L2,2024-01-23,"[""HV"", ""LOTO""]",x4431,PLT-03,jin.rogers@voltara-motors.example,,
+BAP-E0332,Jin Sanders,TEC,Electrical Technician (L2),,Z2,A,ELEC,L2,2023-03-14,"[""ATEX"", ""HV"", ""LOTO""]",x4432,PLT-88,jin.sanders@voltara-motors.example,,
+BAP-E0333,Peter Evans,TEC,Hydraulics / Pneumatics Technician (L3),,Z2,A,HYD,L3,2026-09-26,"[""ATEX"", ""HV"", ""HYD"", ""LOTO""]",x4433,PLT-F5,peter.evans@voltara-motors.example,512-555-0120,PG-BF89B
+BAP-E0334,Nicholas Mukherjee,TEC,Robotics Technician (L2),,Z2,A,ROBO,L2,2024-02-07,"[""HV"", ""KUKA"", ""LOTO""]",x4434,PLT-CA,nicholas.mukherjee@voltara-motors.example,,
+BAP-E0335,Maria Thompson,TEC,Robotics Technician (L3),,Z2,A,ROBO,L3,2024-08-20,"[""ABB"", ""FANUC"", ""FIRE"", ""KUKA"", ""LOTO""]",x4435,PLT-D2,maria.thompson@voltara-motors.example,737-555-0158,PG-287B2
+BAP-E0336,Thomas Hall,TEC,Robotics Technician (L2),,Z2,A,ROBO,L2,2026-08-01,"[""FANUC"", ""LOTO""]",x4436,PLT-69,thomas.hall@voltara-motors.example,,
+BAP-E0337,Ingrid Hernandez,TEC,Robotics Technician (L1),,Z2,A,ROBO,L1,2025-04-21,"[""ABB"", ""LOTO""]",x4437,PLT-05,ingrid.hernandez@voltara-motors.example,,
+A-TECH01,Yuki Alvarez,TEC,Robotics Technician (L1),,Z2,A,ROBO,L1,2024-09-01,"[""FANUC"", ""LOTO""]",x4438,PLT-22,yuki.alvarez@voltara-motors.example,,
+BAP-E0339,Kwame Peterson,TEC,Controls / PLC Technician (L2),,Z2,A,CTRL,L2,2024-10-07,"[""LOTO""]",x4439,PLT-EC,kwame.peterson@voltara-motors.example,,
+BAP-E0340,Deepak Ruiz,TEC,Process / Quality Technician (L2),,Z2,A,PROC,L2,2023-09-09,"[""ATEX"", ""FIRE"", ""HV"", ""LOTO"", ""TORQ""]",x4440,PLT-8E,deepak.ruiz@voltara-motors.example,,
+BAP-E0341,Gerald Holm,TEC,Process / Quality Technician (L3),,Z2,A,PROC,L3,2023-08-04,"[""HV"", ""LOTO"", ""TORQ""]",x4441,PLT-82,gerald.holm@voltara-motors.example,830-555-0125,PG-C77AD
+BAP-E0342,Omar Murphy,TEC,Mechanical Technician (L3),,Z3,A,MECH,L3,2025-02-13,"[""FIRE"", ""HV"", ""HVB"", ""LOTO""]",x4442,PLT-A2,omar.murphy@voltara-motors.example,512-555-0117,PG-5FAB6
+BAP-E0343,Jason Silva,TEC,Mechanical Technician (L3),,Z3,A,MECH,L3,2024-04-24,"[""HV"", ""HVB"", ""LOTO""]",x4443,PLT-78,jason.silva@voltara-motors.example,737-555-0186,PG-6767B
+BAP-E0344,Dwayne Garcia,TEC,Electrical Technician (L1),,Z3,A,ELEC,L1,2023-08-12,"[""HV"", ""HVB"", ""LOTO""]",x4444,PLT-AF,dwayne.garcia@voltara-motors.example,,
+BAP-E0345,Scott Hicks,TEC,Electrical Technician (L3),,Z3,A,ELEC,L3,2024-09-09,"[""HVB"", ""LOTO""]",x4445,PLT-C7,scott.hicks@voltara-motors.example,512-555-0167,PG-41DF1
+BAP-E0346,Ronald Holm,TEC,Electrical Technician (L2),,Z3,A,ELEC,L2,2023-12-17,"[""HV"", ""HVB"", ""LOTO""]",x4446,PLT-EA,ronald.holm@voltara-motors.example,,
+BAP-E0347,Grace James,TEC,Hydraulics / Pneumatics Technician (L2),,Z3,A,HYD,L2,2025-10-28,"[""HV"", ""HVB"", ""HYD"", ""LOTO""]",x4447,PLT-85,grace.james@voltara-motors.example,,
+BAP-E0348,Dennis Patterson,TEC,Robotics Technician (L2),,Z3,A,ROBO,L2,2024-08-14,"[""FANUC"", ""HV"", ""HVB"", ""LOTO""]",x4448,PLT-6D,dennis.patterson@voltara-motors.example,,
+BAP-E0349,Timothy Allen,TEC,Robotics Technician (L2),,Z3,A,ROBO,L2,2024-02-24,"[""FANUC"", ""HV"", ""HVB"", ""LOTO""]",x4449,PLT-87,timothy.allen@voltara-motors.example,,
+BAP-E0350,Brian Warren,TEC,Robotics Technician (L2),,Z3,A,ROBO,L2,2023-03-14,"[""FANUC"", ""FIRE"", ""HVB"", ""LOTO""]",x4450,PLT-F4,brian.warren@voltara-motors.example,,
+BAP-E0351,Tanya Ford,TEC,Controls / PLC Technician (L3),,Z3,A,CTRL,L3,2025-05-18,"[""HVB"", ""LOTO""]",x4451,PLT-1C,tanya.ford@voltara-motors.example,979-555-0183,PG-35168
+BAP-E0352,Jack Gutierrez,TEC,Process / Quality Technician (L2),,Z3,A,PROC,L2,2025-06-18,"[""HVB"", ""LOTO"", ""TORQ""]",x4452,PLT-8B,jack.gutierrez@voltara-motors.example,,
+BAP-E0353,Jeffrey Hall,TEC,Process / Quality Technician (L1),,Z3,A,PROC,L1,2025-06-11,"[""FIRE"", ""HVB"", ""LOTO"", ""TORQ""]",x4453,PLT-FE,jeffrey.hall@voltara-motors.example,,
+BAP-E0354,Amara Nelson,TEC,Process / Quality Technician (L3),,Z3,A,PROC,L3,2025-07-21,"[""HV"", ""HVB"", ""LOTO"", ""TORQ""]",x4454,PLT-C2,amara.nelson@voltara-motors.example,979-555-0115,PG-25A7A
+BAP-E0355,Justin Okafor,TEC,Mechanical Technician (L1),,Z4,A,MECH,L1,2025-08-25,"[""LOTO""]",x4455,PLT-BE,justin.okafor@voltara-motors.example,,
+BAP-E0356,Eric Cook,TEC,Mechanical Technician (L2),,Z4,A,MECH,L2,2023-04-06,"[""FIRE"", ""HV"", ""LOTO""]",x4456,PLT-C3,eric.cook@voltara-motors.example,,
+BAP-E0357,Keith Gonzalez,TEC,Mechanical Technician (L1),,Z4,A,MECH,L1,2023-07-17,"[""LOTO""]",x4457,PLT-23,keith.gonzalez@voltara-motors.example,,
+BAP-E0358,Adam Watson,TEC,Electrical Technician (L1),,Z4,A,ELEC,L1,2024-04-24,"[""HV"", ""LOTO""]",x4458,PLT-9E,adam.watson@voltara-motors.example,,
+BAP-E0359,Aisha Brown,TEC,Electrical Technician (L2),,Z4,A,ELEC,L2,2025-06-28,"[""HV"", ""LOTO""]",x4459,PLT-FE,aisha.brown@voltara-motors.example,,
+BAP-E0360,Carl King,TEC,Electrical Technician (L3),,Z4,A,ELEC,L3,2024-10-20,"[""HV"", ""LOTO""]",x4460,PLT-ED,carl.king@voltara-motors.example,737-555-0167,PG-9BF72
+BAP-E0361,Frank Patel,TEC,Hydraulics / Pneumatics Technician (L2),,Z4,A,HYD,L2,2023-09-27,"[""HV"", ""HYD"", ""LOTO""]",x4461,PLT-4B,frank.patel@voltara-motors.example,,
+BAP-E0362,Lawrence Fuller,TEC,Robotics Technician (L1),,Z4,A,ROBO,L1,2025-01-25,"[""KUKA"", ""LOTO""]",x4462,PLT-D9,lawrence.fuller@voltara-motors.example,,
+BAP-E0363,Harold Okafor,TEC,Robotics Technician (L2),,Z4,A,ROBO,L2,2024-03-23,"[""FIRE"", ""KUKA"", ""LOTO""]",x4463,PLT-CC,harold.okafor@voltara-motors.example,,
+BAP-E0364,Keiko Reed,TEC,Controls / PLC Technician (L1),,Z4,A,CTRL,L1,2025-07-07,"[""HV"", ""LOTO""]",x4464,PLT-25,keiko.reed@voltara-motors.example,,
+BAP-E0365,Arthur Cooper,TEC,Controls / PLC Technician (L1),,Z4,A,CTRL,L1,2026-04-11,"[""HV"", ""LOTO""]",x4465,PLT-04,arthur.cooper@voltara-motors.example,,
+BAP-E0366,Mateo Sanchez,TEC,Process / Quality Technician (L1),,Z4,A,PROC,L1,2025-05-05,"[""LOTO"", ""TORQ""]",x4466,PLT-E0,mateo.sanchez@voltara-motors.example,,
+BAP-E0367,Dwayne Parker,TEC,Process / Quality Technician (L1),,Z4,A,PROC,L1,2025-07-10,"[""FIRE"", ""LOTO"", ""TORQ""]",x4467,PLT-FB,dwayne.parker@voltara-motors.example,,
+BAP-E0368,Amara Wilson,TEC,Mechanical Technician (L2),,Z1,B,MECH,L2,2025-07-03,"[""CRANE"", ""LOTO""]",x4468,PLT-F5,amara.wilson@voltara-motors.example,,
+BAP-E0369,Priya Walker,TEC,Mechanical Technician (L1),,Z1,B,MECH,L1,2024-07-25,"[""LOTO""]",x4469,PLT-E7,priya.walker@voltara-motors.example,,
+BAP-E0370,Samuel Warren,TEC,Mechanical Technician (L2),,Z1,B,MECH,L2,2026-03-29,"[""CRANE"", ""HV"", ""LOTO""]",x4470,PLT-51,samuel.warren@voltara-motors.example,,
+BAP-E0371,Samantha Gomez,TEC,Electrical Technician (L2),,Z1,B,ELEC,L2,2025-01-28,"[""CRANE"", ""HV"", ""LOTO""]",x4471,PLT-63,samantha.gomez@voltara-motors.example,,
+BAP-E0372,Andrew Okafor,TEC,Electrical Technician (L1),,Z1,B,ELEC,L1,2024-01-02,"[""CRANE"", ""HV"", ""LOTO""]",x4472,PLT-F4,andrew.okafor@voltara-motors.example,,
+BAP-E0373,Esperanza Anderson,TEC,Hydraulics / Pneumatics Technician (L2),,Z1,B,HYD,L2,2023-06-21,"[""CRANE"", ""FIRE"", ""HV"", ""HYD"", ""LOTO""]",x4473,PLT-43,esperanza.anderson@voltara-motors.example,,
+BAP-E0374,Kwame Sato,TEC,Hydraulics / Pneumatics Technician (L1),,Z1,B,HYD,L1,2024-01-23,"[""CRANE"", ""HYD"", ""LOTO""]",x4474,PLT-CB,kwame.sato@voltara-motors.example,,
+BAP-E0375,Deepak Hicks,TEC,Hydraulics / Pneumatics Technician (L2),,Z1,B,HYD,L2,2024-10-06,"[""CRANE"", ""HV"", ""HYD"", ""LOTO""]",x4475,PLT-BA,deepak.hicks@voltara-motors.example,,
+BAP-E0376,Deepak Ortiz,TEC,Robotics Technician (L2),,Z1,B,ROBO,L2,2025-08-01,"[""CRANE"", ""FIRE"", ""HV"", ""KUKA"", ""LOTO""]",x4476,PLT-C5,deepak.ortiz@voltara-motors.example,,
+BAP-E0377,Christopher Singh,TEC,Robotics Technician (L3),,Z1,B,ROBO,L3,2024-09-22,"[""FANUC"", ""KUKA"", ""LOTO""]",x4477,PLT-F4,christopher.singh@voltara-motors.example,830-555-0112,PG-9ADA3
+BAP-E0378,Nia Brown,TEC,Controls / PLC Technician (L1),,Z1,B,CTRL,L1,2024-02-16,"[""CRANE"", ""LOTO""]",x4478,PLT-63,nia.brown@voltara-motors.example,,
+BAP-E0379,Lawrence Rogers,TEC,Process / Quality Technician (L1),,Z1,B,PROC,L1,2023-06-08,"[""LOTO"", ""TORQ""]",x4479,PLT-20,lawrence.rogers@voltara-motors.example,,
+BAP-E0380,Matthew Vasquez,TEC,Mechanical Technician (L3),,Z2,B,MECH,L3,2023-06-18,"[""HV"", ""LOTO""]",x4480,PLT-DB,matthew.vasquez@voltara-motors.example,979-555-0157,PG-18129
+BAP-E0381,Grace Reyes,TEC,Mechanical Technician (L1),,Z2,B,MECH,L1,2026-04-07,"[""ATEX"", ""LOTO""]",x4481,PLT-75,grace.reyes@voltara-motors.example,,
+BAP-E0382,Tyler Holm,TEC,Electrical Technician (L2),,Z2,B,ELEC,L2,2026-02-06,"[""HV"", ""LOTO""]",x4482,PLT-5C,tyler.holm@voltara-motors.example,,
+BAP-E0383,Sara Brooks,TEC,Electrical Technician (L2),,Z2,B,ELEC,L2,2025-06-14,"[""LOTO""]",x4483,PLT-DA,sara.brooks@voltara-motors.example,,
+BAP-E0384,Bianca Sanders,TEC,Hydraulics / Pneumatics Technician (L2),,Z2,B,HYD,L2,2026-08-13,"[""ATEX"", ""HV"", ""HYD"", ""LOTO""]",x4484,PLT-01,bianca.sanders@voltara-motors.example,,
+BAP-E0385,Maria Cox,TEC,Robotics Technician (L3),,Z2,B,ROBO,L3,2024-04-28,"[""ABB"", ""ATEX"", ""FANUC"", ""HV"", ""KUKA"", ""LOTO""]",x4485,PLT-A0,maria.cox@voltara-motors.example,737-555-0102,PG-8431E
+BAP-E0386,Bianca Cox,TEC,Robotics Technician (L2),,Z2,B,ROBO,L2,2023-10-13,"[""FANUC"", ""HV"", ""LOTO""]",x4486,PLT-62,bianca.cox@voltara-motors.example,,
+BAP-E0387,Mark Cox,TEC,Robotics Technician (L2),,Z2,B,ROBO,L2,2023-12-26,"[""KUKA"", ""LOTO""]",x4487,PLT-C2,mark.cox@voltara-motors.example,,
+BAP-E0388,Monica Robinson,TEC,Robotics Technician (L3),,Z2,B,ROBO,L3,2024-12-21,"[""ABB"", ""ATEX"", ""FANUC"", ""KUKA"", ""LOTO""]",x4488,PLT-0C,monica.robinson@voltara-motors.example,979-555-0153,PG-191A4
+B-TECH01,Fatima Singh,TEC,Robotics Technician (L1),,Z2,B,ROBO,L1,2023-04-14,"[""ABB"", ""ATEX"", ""FIRE"", ""LOTO""]",x4489,PLT-9C,fatima.singh@voltara-motors.example,,
+BAP-E0390,Ahmed Ortiz,TEC,Controls / PLC Technician (L1),,Z2,B,CTRL,L1,2023-07-17,"[""HV"", ""LOTO""]",x4490,PLT-D4,ahmed.ortiz@voltara-motors.example,,
+BAP-E0391,Raj Morales,TEC,Process / Quality Technician (L2),,Z2,B,PROC,L2,2023-05-25,"[""ATEX"", ""HV"", ""LASER"", ""LOTO"", ""TORQ""]",x4491,PLT-DA,raj.morales@voltara-motors.example,,
+BAP-E0392,Jason Wood,TEC,Process / Quality Technician (L2),,Z2,B,PROC,L2,2025-10-21,"[""HV"", ""LASER"", ""LOTO"", ""TORQ""]",x4492,PLT-09,jason.wood@voltara-motors.example,,
+BAP-E0393,Carl Torres,TEC,Mechanical Technician (L1),,Z3,B,MECH,L1,2026-01-27,"[""HVB"", ""LOTO""]",x4493,PLT-76,carl.torres@voltara-motors.example,,
+BAP-E0394,Olivia Ramirez,TEC,Mechanical Technician (L2),,Z3,B,MECH,L2,2023-04-20,"[""HV"", ""HVB"", ""LOTO""]",x4494,PLT-49,olivia.ramirez@voltara-motors.example,,
+BAP-E0395,Arthur Boyd,TEC,Electrical Technician (L1),,Z3,B,ELEC,L1,2023-06-07,"[""FIRE"", ""HVB"", ""LOTO""]",x4495,PLT-66,arthur.boyd@voltara-motors.example,,
+BAP-E0396,Kevin Williams,TEC,Electrical Technician (L2),,Z3,B,ELEC,L2,2025-12-15,"[""HVB"", ""LOTO""]",x4496,PLT-18,kevin.williams@voltara-motors.example,,
+BAP-E0397,Keiko Gonzalez,TEC,Electrical Technician (L1),,Z3,B,ELEC,L1,2026-08-07,"[""HV"", ""HVB"", ""LOTO""]",x4497,PLT-C8,keiko.gonzalez@voltara-motors.example,,
+BAP-E0398,Jamal Williams,TEC,Hydraulics / Pneumatics Technician (L2),,Z3,B,HYD,L2,2025-11-13,"[""HVB"", ""HYD"", ""LOTO""]",x4498,PLT-7C,jamal.williams@voltara-motors.example,,
+BAP-E0399,Anthony Mitchell,TEC,Robotics Technician (L2),,Z3,B,ROBO,L2,2024-09-15,"[""FANUC"", ""HVB"", ""LOTO""]",x4499,PLT-01,anthony.mitchell@voltara-motors.example,,
+BAP-E0400,Beatriz Green,TEC,Robotics Technician (L1),,Z3,B,ROBO,L1,2023-06-22,"[""FANUC"", ""HVB"", ""LOTO""]",x4500,PLT-BB,beatriz.green@voltara-motors.example,,
+BAP-E0401,Bianca Singh,TEC,Robotics Technician (L2),,Z3,B,ROBO,L2,2023-09-09,"[""FANUC"", ""HV"", ""HVB"", ""LOTO""]",x4501,PLT-74,bianca.singh@voltara-motors.example,,
+BAP-E0402,Douglas Das,TEC,Controls / PLC Technician (L2),,Z3,B,CTRL,L2,2024-07-08,"[""FIRE"", ""HV"", ""HVB"", ""LOTO""]",x4502,PLT-4D,douglas.das@voltara-motors.example,,
+BAP-E0403,Leila Evans,TEC,Process / Quality Technician (L3),,Z3,B,PROC,L3,2024-10-18,"[""HVB"", ""LOTO"", ""TORQ""]",x4503,PLT-64,leila.evans@voltara-motors.example,830-555-0176,PG-94D45
+BAP-E0404,Andrew Mitchell,TEC,Process / Quality Technician (L1),,Z3,B,PROC,L1,2025-03-24,"[""HVB"", ""LOTO"", ""TORQ""]",x4504,PLT-0A,andrew.mitchell@voltara-motors.example,,
+BAP-E0405,Carl Peterson,TEC,Process / Quality Technician (L3),,Z3,B,PROC,L3,2024-04-04,"[""HV"", ""HVB"", ""LOTO"", ""TORQ""]",x4505,PLT-45,carl.peterson@voltara-motors.example,737-555-0187,PG-08777
+BAP-E0406,Hector King,TEC,Mechanical Technician (L2),,Z4,B,MECH,L2,2026-03-03,"[""HV"", ""LOTO""]",x4506,PLT-5C,hector.king@voltara-motors.example,,
+BAP-E0407,William Nakamura,TEC,Mechanical Technician (L2),,Z4,B,MECH,L2,2023-05-14,"[""FIRE"", ""HV"", ""LOTO""]",x4507,PLT-76,william.nakamura@voltara-motors.example,,
+BAP-E0408,Anita Hicks,TEC,Mechanical Technician (L2),,Z4,B,MECH,L2,2025-08-08,"[""HV"", ""LOTO""]",x4508,PLT-DC,anita.hicks@voltara-motors.example,,
+BAP-E0409,Tanya Chen,TEC,Electrical Technician (L2),,Z4,B,ELEC,L2,2023-09-04,"[""LOTO""]",x4509,PLT-EE,tanya.chen@voltara-motors.example,,
+BAP-E0410,Peter Davis,TEC,Electrical Technician (L3),,Z4,B,ELEC,L3,2026-09-25,"[""HV"", ""LOTO""]",x4510,PLT-16,peter.davis@voltara-motors.example,979-555-0163,PG-9EC99
+BAP-E0411,Mei Shah,TEC,Electrical Technician (L2),,Z4,B,ELEC,L2,2024-08-27,"[""HV"", ""LOTO""]",x4511,PLT-E2,mei.shah@voltara-motors.example,,
+BAP-E0412,Kenneth Chen,TEC,Hydraulics / Pneumatics Technician (L2),,Z4,B,HYD,L2,2026-06-15,"[""HV"", ""HYD"", ""LOTO""]",x4512,PLT-05,kenneth.chen@voltara-motors.example,,
+BAP-E0413,Hiroshi Cook,TEC,Robotics Technician (L2),,Z4,B,ROBO,L2,2025-12-21,"[""KUKA"", ""LOTO""]",x4513,PLT-53,hiroshi.cook@voltara-motors.example,,
+BAP-E0414,Olivia Foster,TEC,Robotics Technician (L1),,Z4,B,ROBO,L1,2024-07-18,"[""KUKA"", ""LOTO""]",x4514,PLT-C1,olivia.foster@voltara-motors.example,,
+BAP-E0415,Brian Adams,TEC,Controls / PLC Technician (L2),,Z4,B,CTRL,L2,2024-03-25,"[""LOTO""]",x4515,PLT-1D,brian.adams@voltara-motors.example,,
+BAP-E0416,Alicia Campbell,TEC,Controls / PLC Technician (L1),,Z4,B,CTRL,L1,2023-03-07,"[""LOTO""]",x4516,PLT-08,alicia.campbell@voltara-motors.example,,
+BAP-E0417,Sean Garcia,TEC,Process / Quality Technician (L1),,Z4,B,PROC,L1,2026-04-07,"[""LOTO"", ""TORQ""]",x4517,PLT-FE,sean.garcia@voltara-motors.example,,
+BAP-E0418,Jonathan Bailey,TEC,Process / Quality Technician (L2),,Z4,B,PROC,L2,2024-01-06,"[""HV"", ""LOTO"", ""TORQ""]",x4518,PLT-41,jonathan.bailey@voltara-motors.example,,
+BAP-E0419,Samantha Bennett,TEC,Mechanical Technician (L2),,Z1,C,MECH,L2,2023-01-04,"[""HV"", ""LOTO""]",x4519,PLT-D5,samantha.bennett@voltara-motors.example,,
+BAP-E0420,Nia Novak,TEC,Mechanical Technician (L1),,Z1,C,MECH,L1,2025-01-03,"[""CRANE"", ""LOTO""]",x4520,PLT-9A,nia.novak@voltara-motors.example,,
+BAP-E0421,Christopher Howard,TEC,Electrical Technician (L2),,Z1,C,ELEC,L2,2026-03-04,"[""CRANE"", ""HV"", ""LOTO""]",x4521,PLT-8A,christopher.howard@voltara-motors.example,,
+BAP-E0422,Jamal Perez,TEC,Hydraulics / Pneumatics Technician (L2),,Z1,C,HYD,L2,2025-11-05,"[""HV"", ""HYD"", ""LOTO""]",x4522,PLT-9D,jamal.perez@voltara-motors.example,,
+BAP-E0423,Sara Allen,TEC,Hydraulics / Pneumatics Technician (L2),,Z1,C,HYD,L2,2026-09-24,"[""HV"", ""HYD"", ""LOTO""]",x4523,PLT-FF,sara.allen@voltara-motors.example,,
+BAP-E0424,James Robinson,TEC,Robotics Technician (L3),,Z1,C,ROBO,L3,2023-08-21,"[""FANUC"", ""KUKA"", ""LOTO""]",x4524,PLT-36,james.robinson@voltara-motors.example,830-555-0156,PG-DD1AB
+BAP-E0425,Brandon Rogers,TEC,Controls / PLC Technician (L2),,Z1,C,CTRL,L2,2023-05-10,"[""CRANE"", ""LOTO""]",x4525,PLT-A0,brandon.rogers@voltara-motors.example,,
+BAP-E0426,Hana Bennett,TEC,Process / Quality Technician (L1),,Z1,C,PROC,L1,2025-11-16,"[""CRANE"", ""LOTO"", ""TORQ""]",x4526,PLT-F1,hana.bennett@voltara-motors.example,,
+BAP-E0427,Jack Schmidt,TEC,Mechanical Technician (L2),,Z2,C,MECH,L2,2025-12-18,"[""HV"", ""LOTO""]",x4527,PLT-9A,jack.schmidt@voltara-motors.example,,
+BAP-E0428,Sara Thomas,TEC,Electrical Technician (L2),,Z2,C,ELEC,L2,2024-05-27,"[""HV"", ""LOTO""]",x4528,PLT-0A,sara.thomas@voltara-motors.example,,
+BAP-E0429,Adam Mitchell,TEC,Hydraulics / Pneumatics Technician (L3),,Z2,C,HYD,L3,2023-05-23,"[""HYD"", ""LOTO""]",x4529,PLT-A1,adam.mitchell@voltara-motors.example,737-555-0139,PG-8D2F7
+BAP-E0430,Paul Jimenez,TEC,Robotics Technician (L2),,Z2,C,ROBO,L2,2023-04-03,"[""ATEX"", ""FANUC"", ""LOTO""]",x4530,PLT-E0,paul.jimenez@voltara-motors.example,,
+BAP-E0431,Gregory James,TEC,Robotics Technician (L3),,Z2,C,ROBO,L3,2024-02-27,"[""ABB"", ""ATEX"", ""FANUC"", ""KUKA"", ""LOTO""]",x4531,PLT-46,gregory.james@voltara-motors.example,512-555-0184,PG-1EC30
+BAP-E0432,Anthony Gray,TEC,Robotics Technician (L1),,Z2,C,ROBO,L1,2026-01-04,"[""KUKA"", ""LOTO""]",x4532,PLT-90,anthony.gray@voltara-motors.example,,
+BAP-E0433,Scott Chavez,TEC,Robotics Technician (L2),,Z2,C,ROBO,L2,2026-04-24,"[""ATEX"", ""FIRE"", ""HV"", ""KUKA"", ""LOTO""]",x4533,PLT-45,scott.chavez@voltara-motors.example,,
+BAP-E0434,Ryan Price,TEC,Controls / PLC Technician (L1),,Z2,C,CTRL,L1,2025-05-05,"[""HV"", ""LOTO""]",x4534,PLT-97,ryan.price@voltara-motors.example,,
+BAP-E0435,Joseph Allen,TEC,Process / Quality Technician (L1),,Z2,C,PROC,L1,2023-08-22,"[""LOTO"", ""TORQ""]",x4535,PLT-13,joseph.allen@voltara-motors.example,,
+BAP-E0436,Terrence Castillo,TEC,Mechanical Technician (L2),,Z3,C,MECH,L2,2025-06-27,"[""HV"", ""HVB"", ""LOTO""]",x4536,PLT-62,terrence.castillo@voltara-motors.example,,
+BAP-E0437,Leila Thompson,TEC,Electrical Technician (L3),,Z3,C,ELEC,L3,2026-02-15,"[""HVB"", ""LOTO""]",x4537,PLT-9E,leila.thompson@voltara-motors.example,737-555-0131,PG-F7748
+BAP-E0438,Marcus James,TEC,Electrical Technician (L3),,Z3,C,ELEC,L3,2026-08-01,"[""HV"", ""HVB"", ""LOTO""]",x4538,PLT-2F,marcus.james@voltara-motors.example,830-555-0146,PG-3BFE5
+BAP-E0439,Joshua Bhatt,TEC,Hydraulics / Pneumatics Technician (L1),,Z3,C,HYD,L1,2023-07-27,"[""HVB"", ""HYD"", ""LOTO""]",x4539,PLT-3A,joshua.bhatt@voltara-motors.example,,
+BAP-E0440,Ahmed Ivanov,TEC,Robotics Technician (L2),,Z3,C,ROBO,L2,2024-10-08,"[""FANUC"", ""HV"", ""HVB"", ""LOTO""]",x4540,PLT-5F,ahmed.ivanov@voltara-motors.example,,
+BAP-E0441,Harold Ruiz,TEC,Robotics Technician (L2),,Z3,C,ROBO,L2,2024-03-22,"[""FANUC"", ""HV"", ""HVB"", ""LOTO""]",x4541,PLT-2F,harold.ruiz@voltara-motors.example,,
+BAP-E0442,Mark Alvarado,TEC,Controls / PLC Technician (L1),,Z3,C,CTRL,L1,2024-05-13,"[""HV"", ""HVB"", ""LOTO""]",x4542,PLT-23,mark.alvarado@voltara-motors.example,,
+BAP-E0443,Patrick Barnes,TEC,Process / Quality Technician (L2),,Z3,C,PROC,L2,2023-02-07,"[""HV"", ""HVB"", ""LOTO"", ""TORQ""]",x4543,PLT-40,patrick.barnes@voltara-motors.example,,
+BAP-E0444,Benjamin Singh,TEC,Process / Quality Technician (L2),,Z3,C,PROC,L2,2026-04-07,"[""HVB"", ""LOTO"", ""TORQ""]",x4544,PLT-A9,benjamin.singh@voltara-motors.example,,
+BAP-E0445,Harold Hughes,TEC,Mechanical Technician (L2),,Z4,C,MECH,L2,2023-10-01,"[""LOTO""]",x4545,PLT-C4,harold.hughes@voltara-motors.example,,
+BAP-E0446,Mei Johnson,TEC,Mechanical Technician (L3),,Z4,C,MECH,L3,2025-02-28,"[""HV"", ""LOTO""]",x4546,PLT-90,mei.johnson@voltara-motors.example,979-555-0119,PG-7DCAC
+BAP-E0447,Ronald Warren,TEC,Electrical Technician (L2),,Z4,C,ELEC,L2,2024-04-18,"[""HV"", ""LOTO""]",x4547,PLT-CB,ronald.warren@voltara-motors.example,,
+BAP-E0448,Joshua King,TEC,Electrical Technician (L3),,Z4,C,ELEC,L3,2023-02-21,"[""HV"", ""LOTO""]",x4548,PLT-04,joshua.king@voltara-motors.example,737-555-0173,PG-FD424
+BAP-E0449,Abena Campbell,TEC,Hydraulics / Pneumatics Technician (L2),,Z4,C,HYD,L2,2026-09-14,"[""HV"", ""HYD"", ""LOTO""]",x4549,PLT-EC,abena.campbell@voltara-motors.example,,
+BAP-E0450,Eric Ibrahim,TEC,Robotics Technician (L2),,Z4,C,ROBO,L2,2025-07-18,"[""HV"", ""KUKA"", ""LOTO""]",x4550,PLT-B1,eric.ibrahim@voltara-motors.example,,
+BAP-E0451,Paul Dunn,TEC,Controls / PLC Technician (L3),,Z4,C,CTRL,L3,2023-03-24,"[""HV"", ""LOTO""]",x4551,PLT-8E,paul.dunn@voltara-motors.example,512-555-0158,PG-227F2
+BAP-E0452,Mei Ruiz,TEC,Process / Quality Technician (L2),,Z4,C,PROC,L2,2023-08-15,"[""HV"", ""LOTO"", ""TORQ""]",x4552,PLT-FA,mei.ruiz@voltara-motors.example,,

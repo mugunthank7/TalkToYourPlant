@@ -1,0 +1,25 @@
+vendor,field_service_contact,email,hotline,response_h,onsite_h,contract
+IDRA,Samantha Lewis,service.us@idra.example,+1-800-555-0111,2,24,Premium 24/7
+KUKA,Vikram Murphy,service.us@kuka.example,+1-800-555-0112,2,24,Gold 24/7
+FANUC,Andrew Rivera,service.us@fanuc.example,+1-800-555-0113,1,12,Premier 24/7
+ABB,Lena Kaur,service.us@abb.example,+1-800-555-0114,2,24,Standard 8x5 + emergency
+Schuler,Sofia Barnes,service.us@schuler.example,+1-800-555-0115,4,36,Standard
+Striko Westofen,Eric Gomez,service.us@strikowestofen.example,+1-800-555-0116,4,48,Standard
+Yxlon,Jerry Kelly,service.us@yxlon.example,+1-800-555-0117,8,48,Standard
+DMG MORI,Nia Young,service.us@dmgmori.example,+1-800-555-0118,4,24,Gold
+TRUMPF,Bianca Sanders,service.us@trumpf.example,+1-800-555-0119,2,24,Gold 24/7
+Duerr,Joshua Kelly,service.us@duerr.example,+1-800-555-0120,2,24,Premium 24/7
+ZEISS,Andrew Singh,service.us@zeiss.example,+1-800-555-0121,8,48,Standard
+Desoutter,Priya Carter,service.us@desoutter.example,+1-800-555-0122,8,48,Standard
+Atlas Copco,Aaron Murphy,service.us@atlascopco.example,+1-800-555-0123,4,24,Gold
+Nordson,Gregory Clark,service.us@nordson.example,+1-800-555-0124,8,48,Standard
+INFICON,Mina Mensah,service.us@inficon.example,+1-800-555-0125,8,48,Standard
+Chroma,Sara Watson,service.us@chroma.example,+1-800-555-0126,8,72,Standard
+Aumann,Jin Clark,service.us@aumann.example,+1-800-555-0127,4,48,Gold
+AVL,Omar Harris,service.us@avl.example,+1-800-555-0128,4,48,Gold
+MAHA,Steven Clark,service.us@maha.example,+1-800-555-0129,8,48,Standard
+Hunter,William Harris,service.us@hunter.example,+1-800-555-0130,8,72,Standard
+Carrier,Benjamin Schmidt,service.us@carrier.example,+1-800-555-0131,4,24,Gold
+Siemens,Gary Martin,service.us@siemens.example,+1-800-555-0132,2,12,Premium 24/7
+MiR,Ingrid Reddy,service.us@mir.example,+1-800-555-0133,8,48,Standard
+Konecranes,Eric Brooks,service.us@konecranes.example,+1-800-555-0134,4,24,Gold
