@@ -91,9 +91,11 @@ def cars(sim: PlantSim) -> list[dict]:
         d = D_BELT[sid]
         if rec.get("loc") == "transit" and "t_move" in rec:
             nxt = {"S04": "S05", "S05": "S06", "S06": "S07", "S07": None}[sid]
+            frac = min(1.0, max(0.0, (sim.now - rec["t_move"]) / max(rec.get("transit_s", 1.0), 1.0)))
             if nxt:
-                frac = min(1.0, max(0.0, (sim.now - rec["t_move"]) / max(rec.get("transit_s", 1.0), 1.0)))
                 d = D_BELT[sid] + (D_BELT[nxt] - D_BELT[sid]) * frac
+            else:                                    # leaving the inspection gate: roll off the end of the belt
+                d = D_BELT[sid] + (BELT_LEN + 2 - D_BELT[sid]) * frac
         out.append({"k": k, "stage": sid, "d_m": d, "raw": d, "loc": rec.get("loc")})
     # Cars waiting at a station all have the station's position. Cars never overtake: the oldest car (lowest id) is in front, and
     # every younger car stands at least CAR_GAP behind the one ahead of it. Cars that would stand before the start of the belt

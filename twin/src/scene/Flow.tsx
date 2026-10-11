@@ -264,6 +264,7 @@ function Shuttle({ l, index, beltLen }: { l: Logi; index: number; beltLen: numbe
   }, [route, l, index, beltLen]);
 
   useFrame(() => {
+    if (l.id === "L4") { g.current.visible = !simLink.on; if (simLink.on) return; }    // with the engine, finished cars leave on the belt itself
     const { travel, dwell, period, start } = timing;
     const st = useTwin.getState();
     const tt = l.id === "L3" || l.id === "L4" ? beltTime(clock.t, st.shift, st.data!.hero) : clock.t;
@@ -301,7 +302,7 @@ function FinishedCar() {
 
 function ProgressCarFixed() {
   const p = useRef(1);
-  return <LiveCar progressRef={p} paint={PAINTS[0]} />;
+  return <LiveCar progressRef={p} paint={PAINTS[1]} />;
 }
 
 export function Logistics() {
