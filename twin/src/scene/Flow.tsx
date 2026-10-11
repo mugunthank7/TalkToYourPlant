@@ -293,3 +293,9 @@ export function Logistics() {
     </>
   );
 }
+
+/** A finished body, for station models (marriage station etc.). */
+export function StaticCar({ color = "#f8fafc" }: { color?: string }) {
+  const p = { current: 1 };
+  return <LiveCar progressRef={p} paint={new THREE.Color(color)} />;
+}

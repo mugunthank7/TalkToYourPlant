@@ -4,7 +4,7 @@ import { OrbitControls, PerformanceMonitor } from "@react-three/drei";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { camera as camGoal, clock } from "./clock";
-import { loadAll } from "./data";
+import { loadAll, toScene } from "./data";
 import { useTwin } from "./state";
 import { Floor, SafetyZones, Stations, Walkways } from "./scene/Plant";
 import { Conveyor, Logistics } from "./scene/Flow";
@@ -17,6 +17,7 @@ import { Env } from "./scene/Env";
 import { Building } from "./scene/Building";
 import { Cells } from "./scene/Cells";
 import { Props } from "./scene/Props";
+import { StationModels } from "./scene/stations";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 
 /** Shift the render so the plant sits in the free area between the HUD panels. */
@@ -30,6 +31,26 @@ function ViewFit() {
     cam.setViewOffset(size.width, size.height, size.width / 2 - cx, size.height / 2 - cy, size.width, size.height);
     return () => cam.clearViewOffset();
   }, [camera, size]);
+  return null;
+}
+
+/** ?station=S11 starts zoomed on that station; &clean=1 hides the HUD for clean screenshots. */
+function UrlView() {
+  const { camera, controls } = useThree();
+  const data = useTwin((s) => s.data)!;
+  useEffect(() => {
+    const q = new URLSearchParams(location.search);
+    if (q.get("clean")) document.body.classList.add("clean");
+    const id = q.get("station");
+    const st = data.layout.stations.find((s) => s.id === id);
+    if (!st || !controls) return;
+    const [x, z] = toScene(st.x, st.z);
+    const k = Math.max(st.w, st.d) * 0.95;
+    camera.position.set(x + (Number(q.get("dx")) || 0), k * 0.85, z + k * 0.95);
+    (controls as unknown as OrbitControlsImpl).target.set(x, 0.5, z);
+    (controls as unknown as OrbitControlsImpl).update();
+    camera.clearViewOffset();
+  }, [camera, controls, data]);
   return null;
 }
 
@@ -72,6 +93,7 @@ function Scene({ low }: { low: boolean }) {
         <Env />
         <Floor />
         <Props />
+        <StationModels />
         <Building />
       </Suspense>
       <Walkways />
@@ -87,7 +109,7 @@ function Scene({ low }: { low: boolean }) {
           <Bloom intensity={0.9} luminanceThreshold={0.9} luminanceSmoothing={0.2} mipmapBlur />
         </EffectComposer>
       )}
-      <ViewFit />
+      {new URLSearchParams(location.search).get("station") ? <UrlView /> : <ViewFit />}
       <CameraRig />
       <OrbitControls makeDefault target={[0, 0, 4]} maxPolarAngle={Math.PI / 2.1} minDistance={15} maxDistance={220} />
     </>
@@ -108,7 +130,7 @@ export default function App() {
   return (
     <>
       <TopBar />
-      <div style={{ display: view === "live" ? "block" : "none" }}>
+      <div style={{ position: "fixed", inset: 0, display: view === "live" ? "block" : "none" }}>
       <Canvas frameloop={view === "live" ? "always" : "never"} shadows camera={{ position: [0, 92, 104], fov: 45, near: 0.5, far: 600 }} dpr={low ? 1 : [1, 1.75]}>
         <PerformanceMonitor onDecline={() => setLow(true)} flipflops={0} />
         <Scene low={low} />

@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { clock } from "../clock";
 import { useTwin } from "../state";
@@ -121,6 +121,14 @@ function Fixtures({ w, d }: { w: number; d: number }) {
   );
 }
 
+/** Overhead items only show in wide views; close-ups would be blocked by them. */
+function Overhead({ children }: { children: React.ReactNode }) {
+  const g = useRef<THREE.Group>(null!);
+  const { camera } = useThree();
+  useFrame(() => { g.current.visible = camera.position.y > 45; });
+  return <group ref={g}>{children}</group>;
+}
+
 export function Building() {
   const { plant } = useTwin((s) => s.data)!.layout;
   const w = plant.width_m + 8;
@@ -132,8 +140,10 @@ export function Building() {
       <Wall length={d} position={[w / 2, 0, 0]} rotY={Math.PI / 2} />
       <Wall length={w} position={[0, 0, d / 2]} lowOnly />
       <Columns w={w} d={d} />
-      <Crane w={w} d={d} />
-      <Fixtures w={w} d={d} />
+      <Overhead>
+        <Crane w={w} d={d} />
+        <Fixtures w={w} d={d} />
+      </Overhead>
     </>
   );
 }

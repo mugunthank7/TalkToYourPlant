@@ -60,8 +60,8 @@ LOGISTICS = [
     ("L1", "Coil AGV", "S01.in", "S02.in", "agv", "coil", 300, 1.2, None),
     ("L2", "Stamped-parts AGV", "S02.in", "S03.in", "agv", "rack", 180, 1.2, None),
     ("L3", "Underbody AGV", "S03.in", "C61", "agv", "pan", 90, 1.2, (63, 34)),
-    ("L4", "Body AGV", "E124", "S09.in", "agv", "car", 90, 1.2, None),
-    ("L5", "Battery pack AGV", "S08.in", "S09.in", "agv", "pack", 90, 1.2, None),
+    ("L4", "Body AGV", "E124", "S09.in", "agv", "car", 90, 1.2, (115.6, 61.2)),
+    ("L5", "Battery pack AGV", "S08.in", "S09.in", "agv", "pack", 90, 1.2, (106.6, 62.1)),
     ("L6", "Pallet forklift", "S03.in", "S12.in", "forklift", "pallet", 900, 1.6, None),
     ("L7", "Spares cart", "S12.in", "S10.in", "cart", "boxes", 600, 1.0, None),
 ]
