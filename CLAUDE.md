@@ -102,7 +102,7 @@ Twin behaviour per message: `sensor` updates HUD and gauges; `alert` turns the m
 
 ## Simulation engine (sim/)
 
-SimPy model + FastAPI + WebSocket + LLM tool endpoints. See `sim/README.md`. The twin connects with `?sim=ws://localhost:8000/ws` or the top-bar button; when connected, station states, belt cars, KPIs, work orders, technician walks, fault injection, what-if and forecast all come from the engine, otherwise the client-side approximation in `twin/src/plant.ts` is used (D-029, D-030).
+SimPy model + FastAPI + WebSocket + LLM tool endpoints. See `sim/README.md`. The twin connects to the engine automatically on load (retrying every 3 s; `?sim=ws://...` overrides the URL); when connected, station states, belt cars, KPIs, work orders, technician walks, fault injection, what-if and forecast all come from the engine, otherwise the client-side approximation in `twin/src/plant.ts` is used (D-029, D-030).
 
 ## Commands (fill in as the app is scaffolded)
 
@@ -136,5 +136,5 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 - [ ] Replay `scenarios/hero_timely_repair_sensors.parquet` as the mock stream + fault glow on M05
 - [x] SimPy engine + what-if + FastAPI tool endpoints + WebSocket stream (D-016, D-030); twin connected to it. Calibrated to the scenario data within 8 percent (tests).
 - [x] Real anomaly detector (Isolation Forest + exact Shapley + conformal RUL) in the engine; 40/40 faults caught, 0 false alerts on held-out data (docs/ANOMALY.md, D-031). Retrain: `cd sim && .venv/bin/python -m plantsim.anomaly.train`
-- [x] Dashboard tab driven by the engine when connected (KPI tiles, anomaly scores per machine, score history, Shapley 'why flagged', station load, work orders; `twin/src/ui/EngineCards.tsx`); precomputed series still feed the historical charts offline
+- [x] Dashboard tab driven by the engine when connected (KPI tiles, anomaly scores per machine, score history, Shapley 'why flagged', station load, work orders; `twin/src/ui/EngineCards.tsx`); `kpi.json` and the 30-day shift history are exported from the engine (`cd sim && .venv/bin/python -m plantsim.export`, D-032); the 12-month maintenance stats are still generator estimates
 - [ ] Wire to real WebSocket

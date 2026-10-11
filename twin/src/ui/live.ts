@@ -19,13 +19,20 @@ export function seriesName(shift: string) {
   return shift === "A" ? "hero_timely_repair" : "healthy_realistic";
 }
 
+/** Hero timings: the engine's (detector alert, technician arrival, repair end) when connected, else the scripted ones. */
+export function heroTimes(kpi: Kpi, hero: Hero): Hero {
+  const e = simLink.on ? (kpi.summary?.hero_timely_repair as unknown as Partial<Hero> | undefined) : undefined;
+  if (!e?.t_alert_s || e.t_repair_start_s == null || e.t_repair_end_s == null) return hero;
+  return { ...hero, t_onset_s: e.t_onset_s ?? hero.t_onset_s, t_alert_s: e.t_alert_s, t_dispatch_s: e.t_alert_s + 300, t_repair_start_s: e.t_repair_start_s, t_repair_end_s: e.t_repair_end_s };
+}
+
 export function liveAt(t: number, shift: string, kpi: Kpi, hero: Hero): Live {
   if (simLink.on) {
     const sn = simLink.snap!;
     const k = sn.kpis;
     const m5 = sn.machines.M05;
     return { units: k.units, planUnits: k.plan_units, downMin: k.downtime_min, cost: k.downtime_cost_usd, oee: k.oee, ratePerHr: k.throughput_per_hour,
-      status: m05Status(t, shift, hero), rulMin: m5?.alert === "critical" && m5.rul_s !== undefined ? m5.rul_s / 60 : null };
+      status: m05Status(t, shift, heroTimes(kpi, hero)), rulMin: m5?.alert === "critical" && m5.rul_s !== undefined ? m5.rul_s / 60 : null };
   }
   const s = kpi.series[seriesName(shift)];
   const i = Math.min(Math.max(Math.floor(t / 60), 0), kpi.minutes - 1);

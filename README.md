@@ -22,6 +22,12 @@ What is new versus the first idea: the simulation engine sits at the center and 
 
 Screenshots of the 3D twin connected to the SimPy engine ("SimPy live"): live plant state, KPIs, camera shots, fault simulator, forecast, timeline and what-if.
 
+## Dashboard
+
+![KPI dashboard](docs/img/dashboard.png)
+
+Plant KPIs, OEE loss waterfall, throughput forecast, what-if comparison, 30-day and 12-month history. With the SimPy engine connected the tiles switch to live engine values and the dashboard adds the anomaly detector, "why it was flagged", station load and work orders cards.
+
 ## Hero scenario (90 seconds)
 
 ```mermaid
