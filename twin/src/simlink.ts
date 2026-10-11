@@ -35,11 +35,14 @@ export function connectSim(url = "ws://localhost:8000/ws") {
   ws.onopen = () => {
     clock.linked = true;
     ctl.send = (m) => ws.readyState === 1 && ws.send(JSON.stringify(m));
+    ctl.send({ type: "control", action: clock.playing ? "play" : "pause", speed: clock.speed });   // the engine starts paused: adopt what the UI shows
     set("on");
   };
   ws.onmessage = (e) => {
     const m = JSON.parse(e.data);
     if (m.type === "state") {
+      if (typeof m.playing === "boolean") clock.playing = m.playing;     // the engine is the source of truth for play and speed
+      if (typeof m.speed === "number") clock.speed = m.speed;
       const prev = simLink.snap;
       const dt = prev ? m.t - prev.t : 0;
       if (prev && dt > 0 && dt < 300) {

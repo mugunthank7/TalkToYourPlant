@@ -110,7 +110,7 @@ async def _loop() -> None:
         # playing: 5 state messages a second; paused: one a second (the clock does not move, so nothing changes)
         if live.clients and (tick % (2 if live.playing else 10) == 0):
             snap = snapshot(live.sim)
-            await live.broadcast({"type": "state", **snap})
+            await live.broadcast({"type": "state", "playing": live.playing, "speed": live.speed, **snap})
         if live.clients:
             new = live.sim.events[live.sent:]
             live.sent = len(live.sim.events)

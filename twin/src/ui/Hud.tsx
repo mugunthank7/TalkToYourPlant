@@ -309,8 +309,8 @@ function PlanDrawer({ onClose }: { onClose: () => void }) {
 function TimeDock() {
   const { data, shift, faults } = useTwin();
   useTick();
-  const [speed, setSpeed] = useState(clock.speed);
-  const [playing, setPlaying] = useState(clock.playing);
+  const [, bump] = useState(0);
+  const speed = clock.speed, playing = clock.playing;         // read live: the engine can change them
   if (!data) return null;
   const h = heroTimes(data.kpi, data.hero);
   type Band = { a: number; b: number; color: string; label: string };
@@ -329,7 +329,7 @@ function TimeDock() {
     : [["Start", 0]];
   faults.forEach((f) => jumps.push([`${f.machine} fault`, f.t0 - 30, true], [`${f.machine} fixed`, f.fixAt + 30]));
   const pct = (t: number) => `${(Math.max(0, Math.min(t, SHIFT_S)) / SHIFT_S) * 100}%`;
-  const toggle = () => { ctl.play(!clock.playing); setPlaying(clock.playing); };
+  const toggle = () => { ctl.play(!clock.playing); bump((n) => n + 1); };
   return (
     <div className="time gl">
       <div className="top">
@@ -341,7 +341,7 @@ function TimeDock() {
           <input type="range" min={0} max={SHIFT_S} step={10} value={clock.t} aria-label="Shift time" onChange={(e) => ctl.seek(Number(e.target.value))} />
         </div>
         <div className="clk num">{fmt(clock.t, shift)}</div>
-        <div className="seg">{SPEEDS.map((v) => <button key={v} className={v === speed ? "on" : ""} onClick={() => { ctl.speed(v); setSpeed(v); }}>{v}×</button>)}</div>
+        <div className="seg">{SPEEDS.map((v) => <button key={v} className={v === speed ? "on" : ""} onClick={() => { ctl.speed(v); bump((n) => n + 1); }}>{v}×</button>)}</div>
       </div>
       <div className="bot">
         <div className="jumps3">{jumps.map(([n, t, hot]) => <button key={n + t} className={hot ? "hot" : ""} onClick={() => ctl.seek(t)}>{n}</button>)}</div>
