@@ -12,6 +12,12 @@ import { buildShots, goTo } from "./shots";
 import { SidePanel } from "./StationPanel";
 
 const SPEEDS = [1, 10, 60, 300, 1200];
+
+/** Remove every injected fault (the engine rebuilds the shift from now without them; offline it clears the client-side list). */
+function clearAllFaults() {
+  if (simLink.on) ctl.send?.({ type: "control", action: "clear_faults" });
+  else useTwin.getState().clearFaults();
+}
 const hhmm = (t: number, shift: string) => fmt(t, shift).slice(0, 5);
 
 function useTick(ms = 200) {
@@ -111,10 +117,13 @@ function Banner() {
     else if (f6.level !== "ok" && f6.etaMin !== undefined) { tone = "warn"; text = `Watch: M05 wear will slow the line, failure in about ${f6.etaMin} min`; go = "S06"; }
     else if (risk) { tone = "warn"; text = `Watch: ${risk.id} ${risk.sub || risk.label}`; go = risk.id; }
   }
+  const breakdown = simLink.on && (simLink.snap?.work_orders ?? []).some((w) => w.kind !== "predictive" && w.status !== "closed");
+  const canClear = !!active || faults.length > 0 || breakdown;
   return (
     <div className={`banner gl ${tone}`}>
       <i /><span>{text}</span>
       {go && <button onClick={() => setSelectedStation(go)}>Open {go}</button>}
+      {canClear && <button className="clr" onClick={clearAllFaults}>Clear faults</button>}
     </div>
   );
 }
@@ -204,13 +213,13 @@ function CamerasDrawer({ onClose }: { onClose: () => void }) {
 }
 
 function FaultsDrawer({ onClose }: { onClose: () => void }) {
-  const { data, shift, faults, addFault, clearFaults } = useTwin();
+  const { data, shift, faults, addFault } = useTwin();
   const [machine, setMachine] = useState("M03");
   useTick(500);
   if (!data) return null;
   const choices = data.layout.machines.filter((m) => m.type !== "agv");
   const inject = () => { if (simLink.on) void simPost("/fault", { machine }); else addFault(makeInjected(data.layout, machine, clock.t)); };
-  const clear = () => { if (simLink.on) ctl.send?.({ type: "control", action: "clear_faults" }); else clearFaults(); };
+  const clear = clearAllFaults;
   return (
     <Drawer title="Simulate a fault" onClose={onClose} help={{ title: "Fault simulator", what: "Break any machine right now and watch the plant react.", read: "The machine blinks red, the line stops, downstream stations starve and upstream ones block. A technician walks from the maintenance bay via the spares cage.", why: "Shows the cost of a surprise breakdown, which is what the copilot is built to prevent." }}>
       <h5>Break a machine</h5>
