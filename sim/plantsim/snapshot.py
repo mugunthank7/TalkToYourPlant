@@ -82,21 +82,34 @@ def machine_info(sim: PlantSim, mid: str) -> dict:
     return out
 
 
+NEXT = {"S04": "S05", "S05": "S06", "S06": "S07", "S07": "S09"}
+
+
 def cars(sim: PlantSim) -> list[dict]:
-    out = []
+    """Cars on the belt (d_m metres along it, `build` 0..1) and cars on their way to or at the pack station S09 (`exit` 0..1 along
+    the body AGV route; 1 = at the marriage station). A car that has finished its transfer but still waits for the next station is
+    shown at that station, not back at the one it left."""
+    out, leaving = [], []
     for k, rec in sim.cars.items():
         sid = rec.get("stage")
-        if sid not in D_BELT:
+        if sid not in D_BELT and sid != "S09":
+            continue
+        loc = rec.get("loc")
+        moved = rec.get("t_move", -1.0) >= rec.get("t_stage", 0.0)       # has left `sid` in this stage cycle
+        if sid == "S09" or (sid == "S07" and (loc == "transit" or (moved and loc == "wait"))):
+            frac = 1.0
+            if sid == "S07" and loc == "transit":
+                frac = min(1.0, max(0.0, (sim.now - rec["t_move"]) / max(rec.get("transit_s", 1.0), 1.0)))
+            leaving.append({"k": k, "stage": sid, "exit": round(frac, 3), "build": 1.0, "loc": loc})
             continue
         d = D_BELT[sid]
-        if rec.get("loc") == "transit" and "t_move" in rec:
-            nxt = {"S04": "S05", "S05": "S06", "S06": "S07", "S07": None}[sid]
-            frac = min(1.0, max(0.0, (sim.now - rec["t_move"]) / max(rec.get("transit_s", 1.0), 1.0)))
-            if nxt:
-                d = D_BELT[sid] + (D_BELT[nxt] - D_BELT[sid]) * frac
-            else:                                    # leaving the inspection gate: roll off the end of the belt
-                d = D_BELT[sid] + (BELT_LEN + 2 - D_BELT[sid]) * frac
-        out.append({"k": k, "stage": sid, "d_m": d, "raw": d, "loc": rec.get("loc")})
+        if sid in NEXT and sid != "S07":
+            if loc == "transit" and "t_move" in rec:
+                frac = min(1.0, max(0.0, (sim.now - rec["t_move"]) / max(rec.get("transit_s", 1.0), 1.0)))
+                d = D_BELT[sid] + (D_BELT[NEXT[sid]] - D_BELT[sid]) * frac
+            elif moved and loc == "wait":
+                d = D_BELT[NEXT[sid]]
+        out.append({"k": k, "stage": sid, "d_m": d, "raw": d, "loc": loc})
     # Cars waiting at a station all have the station's position. Cars never overtake: the oldest car (lowest id) is in front, and
     # every younger car stands at least CAR_GAP behind the one ahead of it. Cars that would stand before the start of the belt
     # are not drawn yet. `build` is how far the car is built and painted (0 to 1), from where it would be without queueing.
@@ -108,7 +121,7 @@ def cars(sim: PlantSim) -> list[dict]:
         c["build"] = round(min(1.0, max(0.0, c.pop("raw") / D_BELT["S07"])), 3)
         c["d_m"] = round(c["d_m"], 2)
         c["progress"] = round(max(0.0, c["d_m"]) / BELT_LEN, 3)
-    return out
+    return out + leaving
 
 
 def kpi_live(sim: PlantSim) -> dict:

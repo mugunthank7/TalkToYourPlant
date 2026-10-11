@@ -35,7 +35,7 @@ export function Conveyor() {
   useFrame(() => {
     if (simLink.on) {
       const by = new Map<number, { d_m: number; build?: number }>();
-      for (const c of simLink.snap!.belt.cars) by.set(c.k % LIVE_SLOTS, c);
+      for (const c of simLink.snap!.belt.cars) if (c.d_m !== undefined && c.exit === undefined) by.set(c.k % LIVE_SLOTS, { d_m: c.d_m, build: c.build });
       for (let s = 0; s < LIVE_SLOTS; s++) {
         const g = groups.current[s];
         const c = by.get(s);
@@ -305,6 +305,45 @@ function ProgressCarFixed() {
   return <LiveCar progressRef={p} paint={PAINTS[1]} />;
 }
 
+/** Finished bodies leaving the inspection gate: they ride the body AGV route to the marriage station at S09 and stay on the lift
+ *  until the engine says the pack is closed. Only used with the engine (offline, the shuttle in `Logistics` does this). */
+function ExitCars() {
+  const layout = useTwin((s) => s.data)!.layout;
+  const l4 = (layout as unknown as { logistics?: Logi[] }).logistics?.find((l) => l.id === "L4");
+  const route = useMemo(() => (l4 ? makeRoute(l4.route) : null), [l4]);
+  const groups = useRef<THREE.Group[]>([]);
+  const prog = useMemo(() => Array.from({ length: LIVE_SLOTS }, () => ({ current: 1 })), []);
+  const out = useMemo(() => ({ x: 0, z: 0, h: 0 }), []);
+  useFrame(() => {
+    const by = new Map<number, number>();
+    if (simLink.on && route) for (const c of simLink.snap!.belt.cars) if (c.exit !== undefined) by.set(c.k % LIVE_SLOTS, c.exit);
+    for (let s = 0; s < LIVE_SLOTS; s++) {
+      const g = groups.current[s];
+      if (!g) continue;
+      const e = by.get(s);
+      g.visible = e !== undefined;
+      if (e === undefined || !route) continue;
+      along(route, e * route.len, out);
+      const lift = THREE.MathUtils.smoothstep(e, 0.9, 1);               // the marriage lift raises the body over the pack
+      const tx = out.x, tz = out.z, ty = 0.3 + 2.0 * lift;
+      const moved = Math.hypot(tx - g.position.x, tz - g.position.z);
+      if (moved > 6) g.position.set(tx, ty, tz); else g.position.set(g.position.x + (tx - g.position.x) * 0.3, g.position.y + (ty - g.position.y) * 0.3, g.position.z + (tz - g.position.z) * 0.3);
+      const rot = out.h - Math.PI / 2;                                       // car bodies are modelled along x; heading 0 is along z
+      const toLift = ((((0 - rot + Math.PI) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)) - Math.PI;
+      g.rotation.y = rot + toLift * lift;                                   // on the lift the body lines up with the marriage station
+    }
+  });
+  return (
+    <>
+      {Array.from({ length: LIVE_SLOTS }).map((_, s) => (
+        <group key={s} ref={(g) => { if (g) groups.current[s] = g; }} visible={false}>
+          <LiveCar progressRef={prog[s]} paint={PAINTS[s % PAINTS.length]} />
+        </group>
+      ))}
+    </>
+  );
+}
+
 export function Logistics() {
   const layout = useTwin((s) => s.data)!.layout;
   const logi = (layout as unknown as { logistics?: Logi[] }).logistics;
@@ -315,12 +354,15 @@ export function Logistics() {
       {logi.map((l, i) => (
         <Shuttle key={l.id} l={l} index={i} beltLen={beltLen} />
       ))}
+      <ExitCars />
     </>
   );
 }
 
 /** A finished body, for station models (marriage station etc.). */
-export function StaticCar({ color = "#f8fafc" }: { color?: string }) {
+export function StaticCar({ color = "#f8fafc", hideWhenLive = false }: { color?: string; hideWhenLive?: boolean }) {
   const p = { current: 1 };
-  return <LiveCar progressRef={p} paint={new THREE.Color(color)} />;
+  const g = useRef<THREE.Group>(null!);
+  useFrame(() => { if (hideWhenLive) g.current.visible = !simLink.on; });      // with the engine the real car rides the lift instead
+  return <group ref={g}><LiveCar progressRef={p} paint={new THREE.Color(color)} /></group>;
 }

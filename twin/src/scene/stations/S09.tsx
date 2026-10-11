@@ -100,7 +100,7 @@ export function S09() {
             ))}
             <B p={[0, 1.45, 0]} s={[4.4, 0.16, 2.8]} c="#475569" />
             <PackModule p={[0, 1.55, 0]} />
-            <group position={[0, 2.3, 0]}><StaticCar color="#f8fafc" /></group>
+            <group position={[0, 2.3, 0]}><StaticCar color="#f8fafc" hideWhenLive /></group>
           </group>
           <Hazard p={[3.6, 0, 1.2]} s={[5.4, 0.4]} />
           <Npc p={[1.0, 0, 2.7]} rotY={0.5} color="#f97316" pose="stand" seed={9} />
