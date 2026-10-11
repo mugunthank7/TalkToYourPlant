@@ -4,7 +4,7 @@ import { forecastFor, makeInjected, stationState } from "../plant";
 import { useTwin } from "../state";
 import { ForecastChart2, Gauge, Spark } from "./charts";
 import { Help } from "./Help";
-import { liveAt, money, rateSeries, ratesFromCum, SHIFT_S } from "./live";
+import { heroTimes, liveAt, money, rateSeries, ratesFromCum, SHIFT_S } from "./live";
 import { simLink, simPost } from "../simlink";
 import { buildShots, goTo } from "./shots";
 
@@ -186,7 +186,7 @@ function FaultCard() {
         <button className="danger" onClick={inject}>Break it</button>
       </div>
       <div className="frow">
-        <button onClick={() => ctl.seek(data.hero.t_alert_s - 120)} disabled={shift !== "A"}>Replay hero alert</button>
+        <button onClick={() => ctl.seek(heroTimes(data.kpi, data.hero).t_alert_s - 120)} disabled={shift !== "A"}>Replay hero alert</button>
         <button onClick={clear} disabled={!faults.length && !simLink.on}>Clear faults</button>
       </div>
       {simLink.on && simLink.snap!.work_orders.filter((w) => w.status !== "closed").map((w) => (
@@ -274,7 +274,7 @@ function TimelinePanel() {
   const [playing, setPlaying] = useState(clock.playing);
   const [speed, setSpeed] = useState(clock.speed);
   if (!data) return null;
-  const h = data.hero;
+  const h = heroTimes(data.kpi, data.hero);
   type Band = { a: number; b: number; color: string; label: string };
   const bands: Band[] = [];
   if (shift === "A") {
