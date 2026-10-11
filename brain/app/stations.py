@@ -109,13 +109,10 @@ class StationService:
         facts = json.dumps({"station": b["station"]["name"], "state": b["engine_state"], "reason": b["reason"],
                             "machines": b["machines"], "escalation": b.get("escalation"), "steps": b.get("steps"),
                             "failure_catalog": b["failure_catalog"][:4]}, default=str)[:3500]
-        system = ("You are the plant brain. Using ONLY the FACTS, reply in exactly this format and nothing else:\n"
-                  "WHAT HAPPENED\n- one or two short lines\n"
-                  "DO NOW\n1. verb-first step\n2. ...(at most 4 steps)\n"
-                  "WHO TO PAGE\n- one line with name and extension\n"
-                  "Plain words, short sentences. Never invent names, numbers or parts.")
+        from . import prompts
+        system = prompts.PLAN_SYSTEM
         try:
-            text = self.b._ollama_chat(system, "FACTS:\n" + facts)
+            text = self.b._ollama_chat(system, "FACTS:\n" + facts, num_predict=300)
         except Exception as e:  # noqa: BLE001
             return {"error": f"local LLM unavailable: {type(e).__name__}", "steps": b.get("steps")}
-        return {"plan": text, "model": config.OLLAMA_MODEL}
+        return {"plan": text, "model": config.pick_model()}

@@ -28,7 +28,7 @@ details{margin-top:6px;font-size:12px;color:var(--mut)}
 const log=document.getElementById('log'),q=document.getElementById('q'),b=document.getElementById('b');
 const sid=Math.random().toString(36).slice(2);
 fetch('/health').then(r=>r.json()).then(h=>{document.getElementById('st').textContent=
- `graph ${h.graph} nodes · local LLM ${h.ollama_model} · embedder ${h.embedder.split('/').pop()} · sim:${h.sim_mode}`}).catch(()=>{document.getElementById('st').textContent='backend not reachable'});
+ `graph ${h.graph} nodes · LLM ${h.llm_mode}${h.ollama_model ? " " + h.ollama_model : ""} · embedder ${h.embedder.split('/').pop()} · sim:${h.sim_mode}`}).catch(()=>{document.getElementById('st').textContent='backend not reachable'});
 function add(cls,text){const d=document.createElement('div');d.className='m '+cls;d.textContent=text;log.appendChild(d);log.scrollTop=1e9;return d}
 function chips(el,items,cls){if(!items.length)return;const c=document.createElement('div');c.className='chips';
  items.forEach(t=>{const s=document.createElement('span');s.className='chip '+cls;s.textContent=t;c.appendChild(s)});el.appendChild(c)}
