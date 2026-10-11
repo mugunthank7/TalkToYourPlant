@@ -1,3 +1,4 @@
+import { andonFor, andonPlant } from "../../plant";
 import { AtStation, Andon, B, CellFence, Cyl, Hazard, Npc, Pad, RB, Screen } from "../kit";
 import { Robot } from "./common";
 
@@ -16,9 +17,9 @@ export function S05() {
           <CellFence w={12} d={11} gate={[0.6, 1.8]} />
 
           {/* two robots south, one north, all welding the body */}
-          <Robot p={[-2.6, 0, 2.9]} id="M04" absX={84} />
-          <Robot p={[2.6, 0, 2.9]} id="M04b" absX={84} />
-          <Robot p={[0.2, 0, -3.0]} rotY={Math.PI} id="M04c" absX={84} />
+          <Robot p={[-2.6, 0, 2.9]} id="M04" absX={84}  station="S05" />
+          <Robot p={[2.6, 0, 2.9]} id="M04b" absX={84}  station="S05" />
+          <Robot p={[0.2, 0, -3.0]} rotY={Math.PI} id="M04c" absX={84}  station="S05" />
 
           {/* electrode tip dresser */}
           <group position={[-4.6, 0, 2.0]}>
@@ -46,7 +47,7 @@ export function S05() {
             }} />
           </group>
 
-          <Andon p={[5.2, 0, -4.8]} state={() => "ok"} />
+          <Andon p={[5.2, 0, -4.8]} state={andonFor("S05")} />
           <Cyl p={[-5.4, 0.5, 5.2]} r={0.1} h={1.0} c="#facc15" metal={0.2} />
           <Cyl p={[5.4, 0.5, 5.2]} r={0.1} h={1.0} c="#facc15" metal={0.2} />
         </group>

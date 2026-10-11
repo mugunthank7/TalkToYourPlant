@@ -1,3 +1,4 @@
+import { andonFor, andonPlant } from "../../plant";
 import { Billboard } from "@react-three/drei";
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
@@ -47,9 +48,9 @@ export function S06() {
           <CellFence w={12} d={11} gate={[1.2, 1.8]} />
 
           {/* hero: white M05 on the south side, two orange robots north */}
-          <Robot p={[0.4, 0, 2.9]} id="M05" absX={100} color="#f1f5f9" hero />
-          <Robot p={[-2.8, 0, -3.0]} rotY={Math.PI} id="M05b" absX={100} />
-          <Robot p={[2.8, 0, -3.0]} rotY={Math.PI} id="M05c" absX={100} />
+          <Robot p={[0.4, 0, 2.9]} id="M05" absX={100} color="#f1f5f9" hero  station="S06" />
+          <Robot p={[-2.8, 0, -3.0]} rotY={Math.PI} id="M05b" absX={100}  station="S06" />
+          <Robot p={[2.8, 0, -3.0]} rotY={Math.PI} id="M05c" absX={100}  station="S06" />
 
           {/* labels that follow the camera */}
           <Billboard position={[0.4, 3.7, 2.9]}>
@@ -92,8 +93,8 @@ export function S06() {
           </group>
           <Npc p={[2.2, 0, 4.7]} rotY={Math.PI} color="#f97316" pose="stand" seed={4} />
 
-          <Andon p={[5.2, 0, -4.8]} state={() => { const s = status(); return s === "alert" ? "bad" : s === "repair" ? "warn" : "ok"; }} />
-          <Andon p={[-5.2, 0, 4.8]} state={() => { const s = status(); return s === "alert" ? "bad" : s === "repair" ? "warn" : "ok"; }} />
+          <Andon p={[5.2, 0, -4.8]} state={andonFor("S06")} />
+          <Andon p={[-5.2, 0, 4.8]} state={andonFor("S06")} />
           <Cyl p={[-5.4, 0.5, -5.2]} r={0.1} h={1.0} c="#facc15" metal={0.2} />
         </group>
       )}

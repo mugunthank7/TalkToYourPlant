@@ -69,6 +69,24 @@ LOGISTICS = [
 # People leave the robots alone: weld cells get a light-curtain zone (rect around station).
 SAFETY_ZONES = [("S05", 2.0), ("S06", 2.0)]
 
+# Spots inside the detailed station models, relative to the station centre: (x, z, face_x, face_z).
+# Mirrors twin/src/scene/stations/*.tsx. DOORS are the waypoints (relative) a person walks through to get in or out.
+_TABLES = [(3.6, -1.0), (5.8, 0.4), (4.2, 2.4)]
+_SEATS = [(tx + dx, tz + dz, tx, tz) for tx, tz in _TABLES for dx, dz in ((0.967, 0.409), (-0.967, -0.409))]
+STATION_SPOTS = {
+    ("S11", "desk"): [(-4.5, 3.95, -4.5, 3.0)],
+    ("S11", "break"): _SEATS,
+    ("S11", "lunch"): _SEATS,
+    ("S11", "standby"): [(2.4, -3.6, 0.0, 0.0)],
+    ("S10", "desk"): [(5.0, -3.3, 5.0, -4.7)],
+    ("S12", "pickup"): [(2.2, -0.4, 4.6, -0.4)],
+}
+DOORS = {
+    "S11": [(0.9, -6.0), (0.9, -4.0)],
+    "S10": [(-2.2, -6.6), (-2.2, -4.6)],
+    "S12": [(-0.2, -4.7), (-0.2, -3.0)],
+}
+
 GATE = (3, 46)
 AISLE_Z = 46
 ROW_Z = 24

@@ -1,4 +1,5 @@
 import { Hero, Kpi, Status, m05Status } from "../data";
+import { injectedStopSeconds, TAKT } from "../plant";
 
 export const SHIFT_S = 8 * 3600;
 
@@ -23,12 +24,14 @@ export function liveAt(t: number, shift: string, kpi: Kpi, hero: Hero): Live {
   const j = Math.max(i - 60, 0);
   const status = m05Status(t, shift, hero);
   const failAt = kpi.summary.hero_timely_repair.t_fail_if_ignored_s ?? 0;
+  const extra = injectedStopSeconds(t, shift, hero);
+  const frac = extra / Math.max(t, 60);
   return {
-    units: s.cum_units[i],
+    units: Math.max(0, Math.round(s.cum_units[i] - extra / TAKT)),
     planUnits: kpi.plan_units,
-    downMin: s.cum_down_s[i] / 60,
-    cost: s.cum_cost[i],
-    oee: s.oee[i],
+    downMin: s.cum_down_s[i] / 60 + extra / 60,
+    cost: s.cum_cost[i] + (extra / 60) * kpi.cost_per_min,
+    oee: s.oee[i] * Math.max(0, 1 - frac),
     ratePerHr: i - j > 0 ? ((s.cum_units[i] - s.cum_units[j]) / (i - j)) * 60 : 40,
     status,
     rulMin: shift === "A" && status === "alert" ? Math.max(0, (failAt - t) / 60) : null,

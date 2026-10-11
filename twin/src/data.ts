@@ -4,7 +4,7 @@ export interface Seg {
   k: string;
   s: number;
   e: number;
-  anim: "walk" | "work" | "crouch" | "idle";
+  anim: "walk" | "work" | "crouch" | "idle" | "sit";
   path?: Pt[];
   at?: Pt;
   face?: Pt;

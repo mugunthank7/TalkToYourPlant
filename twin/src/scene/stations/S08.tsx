@@ -1,7 +1,10 @@
+import { andonFor, andonPlant } from "../../plant";
 import { useLayoutEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { clock } from "../../clock";
+import { animT } from "../../plant";
+import { useTwin } from "../../state";
 import { Andon, AtStation, B, Cyl, GlassWall, Npc, Pad, RB, Screen, TextBoard } from "../kit";
 import { WeldRobot } from "../Machines";
 import type { Machine } from "../../data";
@@ -77,7 +80,8 @@ function Gantry() {
   const trolley = useRef<THREE.Group>(null!);
   const head = useRef<THREE.Group>(null!);
   useFrame(() => {
-    const t = clock.t;
+    const st = useTwin.getState();
+    const t = animT("S08", clock.t, st.shift, st.data!.hero);
     trolley.current.position.z = Math.sin(t / 5) * 2.3 - 0.4;
     head.current.position.y = -1.2 - Math.max(0, Math.sin(t / 2.5)) * 0.9;
   });
@@ -199,8 +203,8 @@ export function S08() {
           </group>
 
           {/* safety kit */}
-          <Andon p={[7.3, 0, -4.7]} state={() => "ok"} />
-          <Andon p={[-7.3, 0, 5.4]} state={() => "ok"} />
+          <Andon p={[7.3, 0, -4.7]} state={andonFor("S08")} />
+          <Andon p={[-7.3, 0, 5.4]} state={andonFor("S08")} />
           <TextBoard p={[-7.55, 1.7, 3.2]} s={[1.5, 0.8]} rot={[0, Math.PI / 2, 0]} text="HIGH VOLTAGE" sub="BATTERY AREA" bg="#facc15" fg="#111827" />
           <TextBoard p={[7.55, 1.7, -2.0]} s={[1.5, 0.8]} rot={[0, -Math.PI / 2, 0]} text="HIGH VOLTAGE" sub="BATTERY AREA" bg="#facc15" fg="#111827" />
           <Model name="korean_fire_extinguisher_01" position={[7.2, 0, 4.3]} rotY={2.5} />

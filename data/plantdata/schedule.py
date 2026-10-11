@@ -7,6 +7,7 @@ inspect, audit, observe, maintain, repair, pickup, standby, desk. `anim` is the 
 from __future__ import annotations
 
 import math
+import zlib
 
 import numpy as np
 import pandas as pd
@@ -35,6 +36,10 @@ class Timeline:
         self.t = 0.0
         self.at = "GATE"
         self.dx = 0.0
+        self.pos = self.g.xy("GATE")
+        self.face_pt: list[float] | None = None
+        self.inside: str | None = None
+        self.seat = zlib.crc32(emp["employee_id"].encode())
 
     # positions -------------------------------------------------------------
     def _xy(self, place: str, dx: float) -> tuple[float, float]:
@@ -42,20 +47,43 @@ class Timeline:
         return (x + dx, z)
 
     def _face(self, place: str) -> list[float]:
+        if self.face_pt is not None:
+            return self.face_pt
         if place == "GATE":
-            return [self.g.xy("A10")[0], 40.0]
+            return [self.g.xy("A14")[0], 40.0]
         s = L.station(place)
         return [s["x"], s["z"]]
+
+    def _spot(self, place: str, kind: str | None):
+        spots = L.STATION_SPOTS.get((place, kind)) if kind else None
+        if not spots:
+            return None
+        sx, sz, fx, fz = spots[self.seat % len(spots)]
+        s = L.station(place)
+        return (s["x"] + sx, s["z"] + sz, s["x"] + fx, s["z"] + fz)
+
+    def _doors(self, place: str) -> list[tuple[float, float]]:
+        s = L.station(place)
+        return [(s["x"] + dx, s["z"] + dz) for dx, dz in L.DOORS.get(place, [])]
 
     # actions ---------------------------------------------------------------
     def walk_time(self, dest: str) -> float:
         pts = self.g.polyline(self.at, dest)
         return sum(math.dist(pts[i], pts[i + 1]) for i in range(len(pts) - 1)) / self.speed
 
-    def walk_to(self, dest: str, dx: float = 0.0) -> None:
-        if dest == self.at and abs(dx - self.dx) < 1e-9:
+    def walk_to(self, dest: str, dx: float = 0.0, kind: str | None = None) -> None:
+        spot = self._spot(dest, kind)
+        target = (spot[0], spot[1]) if spot else self._xy(dest, dx)
+        same = dest == self.at and math.dist(self.pos, target) < 1e-6
+        if same:
             return
-        pts = [self._xy(self.at, self.dx)] + self.g.polyline(self.at, dest) + [self._xy(dest, dx)]
+        pts: list[tuple[float, float]] = [self.pos]
+        if self.inside:
+            pts += list(reversed(self._doors(self.inside)))
+        pts += self.g.polyline(self.at if not self.inside else self.inside, dest)
+        if spot:
+            pts += self._doors(dest)
+        pts.append(target)
         clean = [pts[0]]
         for p in pts[1:]:
             if math.dist(p, clean[-1]) > 1e-6:
@@ -65,12 +93,16 @@ class Timeline:
         self.segs.append({"k": "walk", "s": self.t, "e": self.t + dur, "anim": "walk",
                           "path": [[round(a, 2), round(b, 2)] for a, b in clean], "to": dest})
         self.t += dur
-        self.at, self.dx = dest, dx
+        self.at, self.dx, self.pos = dest, dx, target
+        self.inside = dest if spot else None
+        self.face_pt = [spot[2], spot[3]] if spot else None
 
     def do(self, kind: str, dur: float, task: str | None = None, anim: str = "idle") -> None:
         if dur <= 0:
             return
-        x, z = self._xy(self.at, self.dx)
+        if self.face_pt is not None and anim in ("idle", "work") and self.at == "S11" and kind in ("break", "lunch", "desk"):
+            anim = "sit"
+        x, z = self.pos
         self.segs.append({"k": kind, "s": self.t, "e": self.t + dur, "anim": anim, "station": self.at,
                           "task": task, "at": [round(x, 2), round(z, 2)], "face": self._face(self.at)})
         self.t += dur
@@ -143,7 +175,7 @@ def build_shift(roster: pd.DataFrame, shift: str, g: L.Graph, rng: np.random.Gen
         mine = [p for p in bp["plan"] if p["emp"] == e["employee_id"]]
         for p in mine:
             work_cycles(tl, e["home_station"], p["leave"], dx, counter)
-            tl.walk_to("S11")
+            tl.walk_to("S11", kind=p["kind"])
             tl.do(p["kind"], p["dur"], "T-BREAK" if p["kind"] == "break" else "T-LUNCH", "idle")
         work_cycles(tl, e["home_station"], SHIFT_S, dx, counter)
         out.append(finish(tl))
@@ -152,7 +184,7 @@ def build_shift(roster: pd.DataFrame, shift: str, g: L.Graph, rng: np.random.Gen
     rel = emp_rows("relief_operator")[0]
     tl = Timeline(rel, g, rng)
     counter = {}
-    tl.walk_to("S11")
+    tl.walk_to("S11", kind="standby")
     for i, p in enumerate(bp["plan"]):
         tw = g.distance(tl.at, p["station"]) / tl.speed
         if tl.t < p["leave"] - tw:
@@ -160,29 +192,29 @@ def build_shift(roster: pd.DataFrame, shift: str, g: L.Graph, rng: np.random.Gen
         work_cycles(tl, p["station"], p["back"], dx_for(roster, p["emp"]), counter)
         nxt = bp["plan"][i + 1]["leave"] if i + 1 < len(bp["plan"]) else SHIFT_S
         if nxt - tl.t > 150:
-            tl.walk_to("S11")
+            tl.walk_to("S11", kind="standby")
     tl.hold_until(SHIFT_S, "standby")
     out.append(finish(tl))
 
     # Event-driven roles -----------------------------------------------------
     def breaks(offset: float) -> list[tuple[float, callable]]:
         def brk(tl: Timeline) -> None:
-            tl.walk_to("S11"); tl.do("break", BREAK_S, "T-BREAK")
+            tl.walk_to("S11", kind="break"); tl.do("break", BREAK_S, "T-BREAK")
 
         def lunch(tl: Timeline) -> None:
-            tl.walk_to("S11"); tl.do("lunch", LUNCH_S + 300, "T-LUNCH")
+            tl.walk_to("S11", kind="lunch"); tl.do("lunch", LUNCH_S + 300, "T-LUNCH")
         return [(2.0 * 3600 + offset, brk), (3.6 * 3600 + offset, lunch)]
 
     def run(e: dict, evts: list[tuple[float, callable]], home: str, idle_kind: str) -> dict:
         tl = Timeline(e, g, rng)
-        tl.walk_to(home)
+        tl.walk_to(home, kind=idle_kind)
         for t, fn in sorted(evts, key=lambda x: x[0]):
             if t >= SHIFT_S:
                 continue
-            tl.walk_to(home)
+            tl.walk_to(home, kind=idle_kind)
             tl.hold_until(t, idle_kind)
             fn(tl)
-        tl.walk_to(home)
+        tl.walk_to(home, kind=idle_kind)
         tl.hold_until(SHIFT_S, idle_kind)
         return finish(tl)
 
@@ -215,7 +247,7 @@ def build_shift(roster: pd.DataFrame, shift: str, g: L.Graph, rng: np.random.Gen
         return fn
 
     def repair(tl: Timeline) -> None:
-        tl.walk_to("S12"); tl.do("pickup", ev.PICKUP_S, None, "work")
+        tl.walk_to("S12", kind="pickup"); tl.do("pickup", ev.PICKUP_S, None, "work")
         tl.walk_to("S06"); tl.do("repair", ev.REPAIR_S, "T-REPAIR-BEARING", "crouch")
     tech_events = [(p["t_s"], pm(p["station"])) for p in (hero or ev.hero_timeline(g, 1.3))["preventive_maintenance"]]
     tech_events += breaks(600)

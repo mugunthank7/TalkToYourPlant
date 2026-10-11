@@ -133,3 +133,7 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 **Context:** The user supplies ChatGPT reference images per station (prompts in docs/STATION_PROMPTS.md, images in docs/reference/) and wants a wow-factor look.
 **Decision:** Build each station as an R3F component in twin/src/scene/stations/ from a shared kit (rounded boxes, glass, wire mesh, canvas screens, signs, static people). Screens show live data (video wall, andon board, EOL test, CMMS). Blender stays reserved for hero assets that need exact part names (weld robot) if the procedural look is not enough.
 **Consequences:** Fast iteration and live-data screens, no GLB pipeline. Models stay low-to-medium poly; adaptive quality drops bloom and shadows on slow GPUs.
+
+## D-029, Client-side plant state engine until SimPy exists | 2026-10-11 | accepted
+**Decision:** Fault behaviour (stops, starving, blocking, repair, KPI impact) lives in twin/src/plant.ts as pure functions of the sim clock plus a list of injected faults. Scripted hero repair and injected faults share one interval model. The SimPy engine (D-016) replaces this later and must emit the same per-station states (run, fault, repair, starved, blocked).
+**Consequences:** The demo can inject any fault on demand without a backend. KPI changes from injected faults are approximations (extra downtime added to the precomputed scenario series).

@@ -27,12 +27,12 @@ export function fmt(t: number, shift: string): string {
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
 }
 
-// Camera shortcuts: scene coordinates (plant coords minus plant centre).
+// Camera: shots are scene coordinates (plant coordinates minus the plant centre).
+export type Shot = { name: string; pos: [number, number, number]; target: [number, number, number]; note: string };
 export const camera = {
   goal: null as null | { pos: [number, number, number]; target: [number, number, number] },
+  mode: "free" as "free" | "tour" | "orbit" | "follow-car" | "follow-tech",
+  tourIdx: -1,
 };
-export const VIEWS = {
-  Overview: { pos: [0, 92, 104], target: [0, 0, 4] },
-  "Weld cells": { pos: [30, 20, 26], target: [30, 0, -4] },
-  "Maintenance bay": { pos: [-44, 18, 44], target: [-42, 0, 22] },
-} as const;
+export const stationShot = (cx: number, cz: number, size: number, k = 0.95): { pos: [number, number, number]; target: [number, number, number] } =>
+  ({ pos: [cx, size * k * 0.85, cz + size * k], target: [cx, 0.5, cz] });

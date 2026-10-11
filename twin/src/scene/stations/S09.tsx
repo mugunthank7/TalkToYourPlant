@@ -1,3 +1,4 @@
+import { andonFor, andonPlant } from "../../plant";
 import { clock } from "../../clock";
 import { Andon, AtStation, B, Cyl, Hazard, Npc, Pad, RB, Screen, TextBoard } from "../kit";
 import { StaticCar } from "../Flow";
@@ -118,7 +119,7 @@ export function S09() {
           {/* guard rails, green go tower */}
           <Rail x0={-7.6} z0={4.9} x1={-3.0} z1={4.9} />
           <Rail x0={7.4} z0={-5.0} x1={7.4} z1={1.0} />
-          <Andon p={[2.9, 0, -4.8]} state={() => "ok"} />
+          <Andon p={[2.9, 0, -4.8]} state={andonFor("S09")} />
         </group>
       )}
     </AtStation>

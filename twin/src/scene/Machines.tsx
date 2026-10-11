@@ -3,6 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { clock } from "../clock";
 import { carNear } from "../flow";
+import { animT, beltTime, stationState } from "../plant";
 import { Machine, Status, m05Status, toScene } from "../data";
 import { useTwin } from "../state";
 import { MACHINES_IN_MODELS } from "./stations";
@@ -47,7 +48,7 @@ const COLORS = {
   repair: new THREE.Color("#f59e0b"), repaired: new THREE.Color("#22c55e"),
 } as const;
 
-export function WeldRobot({ m, hero, color }: { m: Machine; hero: boolean; color?: string }) {
+export function WeldRobot({ m, hero, color, stationId }: { m: Machine; hero: boolean; color?: string; stationId?: string }) {
   const a1 = useRef<THREE.Group>(null!);
   const a2 = useRef<THREE.Group>(null!);
   const a3 = useRef<THREE.Group>(null!);
@@ -58,10 +59,12 @@ export function WeldRobot({ m, hero, color }: { m: Machine; hero: boolean; color
   const status = useRef<Status>("healthy");
   const base = color ?? (hero ? "#f1f5f9" : "#f97316");
   useFrame(() => {
-    const t = clock.t;
-    const st = hero ? m05Status(t, shift, data.hero) : "healthy";
+    const real = clock.t;
+    const t = stationId ? animT(stationId, real, shift, data.hero) : real;
+    const st = hero ? m05Status(real, shift, data.hero) : "healthy";
     status.current = st;
-    const k = st === "repair" ? 0 : 1;
+    const idle = stationId ? stationState(stationId, real, shift, data.hero).state !== "run" : false;
+    const k = st === "repair" || idle ? 0 : 1;
     const sp = (st === "alert" ? 1.5 : 1) * 0.9;
     const phase = t * sp + (m.id ? m.id.charCodeAt(2) : 0);
     a1.current.rotation.y = Math.sin(phase * 0.7) * 0.65 * k;
@@ -124,7 +127,7 @@ export function WeldRobot({ m, hero, color }: { m: Machine; hero: boolean; color
               <mesh position={[0.3, -0.45, 0.1]} castShadow><boxGeometry args={[0.1, 0.7, 0.08]} /><meshStandardMaterial color="#94a3b8" metalness={0.9} roughness={0.25} /></mesh>
               <mesh position={[0.3, -0.45, -0.1]} castShadow><boxGeometry args={[0.1, 0.7, 0.08]} /><meshStandardMaterial color="#94a3b8" metalness={0.9} roughness={0.25} /></mesh>
               <group position={[0.3, -0.85, 0]}>
-                <Spark on={() => status.current !== "repair" && carNear(m.x - 63, clock.t, 5)} />
+                <Spark on={() => status.current !== "repair" && !(stationId && stationState(stationId, clock.t, shift, data.hero).state !== "run") && carNear(m.x - 63, beltTime(clock.t, shift, data.hero), 5)} />
               </group>
             </group>
           </group>

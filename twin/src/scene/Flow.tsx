@@ -5,6 +5,7 @@ import { clock } from "../clock";
 import { BELT_SPEED, CAR_SLOTS, TAKT, carDistance, smooth } from "../flow";
 import { toScene } from "../data";
 import { useTwin } from "../state";
+import { beltTime } from "../plant";
 
 const STEEL = new THREE.Color("#8b95a3");
 const PAINTS = ["#f8fafc", "#cbd5e1", "#1d4ed8", "#e2e8f0", "#b91c1c"].map((c) => new THREE.Color(c));
@@ -32,7 +33,8 @@ export function Conveyor() {
     for (let s = 0; s < CAR_SLOTS; s++) {
       const g = groups.current[s];
       if (!g) continue;
-      const { k, d } = carDistance(s, clock.t);
+      const st = useTwin.getState();
+      const { k, d } = carDistance(s, beltTime(clock.t, st.shift, st.data!.hero));
       const onBelt = d >= 0 && d <= len + 2;
       g.visible = onBelt;
       g.position.x = x0 + Math.min(d, len + 2);
@@ -243,7 +245,9 @@ function Shuttle({ l, index, beltLen }: { l: Logi; index: number; beltLen: numbe
 
   useFrame(() => {
     const { travel, dwell, period, start } = timing;
-    const u = ((((clock.t - start) % period) + period) % period);
+    const st = useTwin.getState();
+    const tt = l.id === "L3" || l.id === "L4" ? beltTime(clock.t, st.shift, st.data!.hero) : clock.t;
+    const u = ((((tt - start) % period) + period) % period);
     let d = 0;
     let carrying = true;
     if (u < travel) d = (u / travel) * route.len;
