@@ -1,0 +1,630 @@
+{
+ "units": "metres; x east, z south, y up; origin NW corner",
+ "plant": {
+  "width_m": 160,
+  "depth_m": 90
+ },
+ "stations": [
+  {
+   "id": "S01",
+   "name": "Coil yard",
+   "x": 14,
+   "z": 18,
+   "w": 22,
+   "d": 16,
+   "access": [
+    14,
+    27
+   ],
+   "machines": [
+    "M10"
+   ]
+  },
+  {
+   "id": "S02",
+   "name": "Casting and press",
+   "x": 42,
+   "z": 18,
+   "w": 26,
+   "d": 18,
+   "access": [
+    42,
+    28
+   ],
+   "machines": [
+    "M01",
+    "M02"
+   ]
+  },
+  {
+   "id": "S03",
+   "name": "Parts buffer",
+   "x": 68,
+   "z": 18,
+   "w": 16,
+   "d": 14,
+   "access": [
+    68,
+    26
+   ],
+   "machines": [
+    "M11"
+   ]
+  },
+  {
+   "id": "S04",
+   "name": "Framing",
+   "x": 92,
+   "z": 44,
+   "w": 14,
+   "d": 12,
+   "access": [
+    92,
+    52
+   ],
+   "machines": [
+    "M03",
+    "M06"
+   ]
+  },
+  {
+   "id": "S05",
+   "name": "Weld cell A",
+   "x": 112,
+   "z": 44,
+   "w": 14,
+   "d": 12,
+   "access": [
+    112,
+    52
+   ],
+   "machines": [
+    "M04"
+   ]
+  },
+  {
+   "id": "S06",
+   "name": "Weld cell B",
+   "x": 132,
+   "z": 44,
+   "w": 14,
+   "d": 12,
+   "access": [
+    132,
+    52
+   ],
+   "machines": [
+    "M05"
+   ]
+  },
+  {
+   "id": "S07",
+   "name": "Inspection gate",
+   "x": 150,
+   "z": 44,
+   "w": 10,
+   "d": 12,
+   "access": [
+    150,
+    52
+   ],
+   "machines": [
+    "M07"
+   ]
+  },
+  {
+   "id": "S08",
+   "name": "Battery module line",
+   "x": 118,
+   "z": 76,
+   "w": 18,
+   "d": 12,
+   "access": [
+    118,
+    68
+   ],
+   "machines": [
+    "M08"
+   ]
+  },
+  {
+   "id": "S09",
+   "name": "Pack closing and EOL test",
+   "x": 146,
+   "z": 76,
+   "w": 18,
+   "d": 12,
+   "access": [
+    146,
+    68
+   ],
+   "machines": [
+    "M09"
+   ]
+  },
+  {
+   "id": "S10",
+   "name": "Maintenance bay",
+   "x": 20,
+   "z": 72,
+   "w": 18,
+   "d": 12,
+   "access": [
+    20,
+    64
+   ],
+   "machines": []
+  },
+  {
+   "id": "S11",
+   "name": "Control room and break room",
+   "x": 50,
+   "z": 76,
+   "w": 16,
+   "d": 10,
+   "access": [
+    50,
+    69
+   ],
+   "machines": []
+  },
+  {
+   "id": "S12",
+   "name": "Spare parts cage",
+   "x": 72,
+   "z": 66,
+   "w": 12,
+   "d": 8,
+   "access": [
+    72,
+    60
+   ],
+   "machines": []
+  }
+ ],
+ "machines": [
+  {
+   "id": "M01",
+   "name": "Casting press",
+   "type": "press",
+   "station": "S02",
+   "x": 36,
+   "z": 18,
+   "rot_deg": 0
+  },
+  {
+   "id": "M02",
+   "name": "Press transfer robot",
+   "type": "robot",
+   "station": "S02",
+   "x": 50,
+   "z": 18,
+   "rot_deg": 0
+  },
+  {
+   "id": "M03",
+   "name": "Framing fixture",
+   "type": "fixture",
+   "station": "S04",
+   "x": 92,
+   "z": 44,
+   "rot_deg": 0
+  },
+  {
+   "id": "M04",
+   "name": "Weld robot 1",
+   "type": "weld_robot",
+   "station": "S05",
+   "x": 112,
+   "z": 46,
+   "rot_deg": 0
+  },
+  {
+   "id": "M05",
+   "name": "Weld robot 2",
+   "type": "weld_robot",
+   "station": "S06",
+   "x": 132,
+   "z": 46,
+   "rot_deg": 0
+  },
+  {
+   "id": "M06",
+   "name": "Main conveyor",
+   "type": "conveyor",
+   "station": "S04",
+   "x": 119,
+   "z": 44,
+   "rot_deg": 0
+  },
+  {
+   "id": "M07",
+   "name": "Vision inspection gate",
+   "type": "vision_gate",
+   "station": "S07",
+   "x": 150,
+   "z": 44,
+   "rot_deg": 0
+  },
+  {
+   "id": "M08",
+   "name": "Battery module stacker",
+   "type": "gantry",
+   "station": "S08",
+   "x": 118,
+   "z": 76,
+   "rot_deg": 0
+  },
+  {
+   "id": "M09",
+   "name": "Pack sealer",
+   "type": "sealer",
+   "station": "S09",
+   "x": 146,
+   "z": 76,
+   "rot_deg": 0
+  },
+  {
+   "id": "M10",
+   "name": "Decoiler",
+   "type": "decoiler",
+   "station": "S01",
+   "x": 10,
+   "z": 18,
+   "rot_deg": 0
+  },
+  {
+   "id": "M11",
+   "name": "Rack AGV",
+   "type": "agv",
+   "station": "S03",
+   "x": 68,
+   "z": 26,
+   "rot_deg": 0
+  }
+ ],
+ "conveyor_path": [
+  [
+   80,
+   44
+  ],
+  [
+   158,
+   44
+  ]
+ ],
+ "item_flow": [
+  {
+   "from": "S01",
+   "to": "S02",
+   "mode": "agv"
+  },
+  {
+   "from": "S02",
+   "to": "S03",
+   "mode": "agv"
+  },
+  {
+   "from": "S03",
+   "to": "S04",
+   "mode": "agv"
+  },
+  {
+   "from": "S04",
+   "to": "S05",
+   "mode": "conveyor"
+  },
+  {
+   "from": "S05",
+   "to": "S06",
+   "mode": "conveyor"
+  },
+  {
+   "from": "S06",
+   "to": "S07",
+   "mode": "conveyor"
+  },
+  {
+   "from": "S07",
+   "to": "S09",
+   "mode": "agv"
+  },
+  {
+   "from": "S08",
+   "to": "S09",
+   "mode": "agv"
+  }
+ ],
+ "safety_zones": [
+  {
+   "station": "S05",
+   "x": 112,
+   "z": 44,
+   "w": 18.0,
+   "d": 16.0
+  },
+  {
+   "station": "S06",
+   "x": 132,
+   "z": 44,
+   "w": 18.0,
+   "d": 16.0
+  }
+ ],
+ "gate": [
+  6,
+  56
+ ],
+ "walk_graph": {
+  "nodes": [
+   {
+    "id": "GATE",
+    "x": 6.0,
+    "z": 56.0
+   },
+   {
+    "id": "A10",
+    "x": 10.0,
+    "z": 56.0
+   },
+   {
+    "id": "A20",
+    "x": 20.0,
+    "z": 56.0
+   },
+   {
+    "id": "A50",
+    "x": 50.0,
+    "z": 56.0
+   },
+   {
+    "id": "A72",
+    "x": 72.0,
+    "z": 56.0
+   },
+   {
+    "id": "A76",
+    "x": 76.0,
+    "z": 56.0
+   },
+   {
+    "id": "A92",
+    "x": 92.0,
+    "z": 56.0
+   },
+   {
+    "id": "A112",
+    "x": 112.0,
+    "z": 56.0
+   },
+   {
+    "id": "A118",
+    "x": 118.0,
+    "z": 56.0
+   },
+   {
+    "id": "A132",
+    "x": 132.0,
+    "z": 56.0
+   },
+   {
+    "id": "A146",
+    "x": 146.0,
+    "z": 56.0
+   },
+   {
+    "id": "A150",
+    "x": 150.0,
+    "z": 56.0
+   },
+   {
+    "id": "A155",
+    "x": 155.0,
+    "z": 56.0
+   },
+   {
+    "id": "N14",
+    "x": 14.0,
+    "z": 30.0
+   },
+   {
+    "id": "N42",
+    "x": 42.0,
+    "z": 30.0
+   },
+   {
+    "id": "N68",
+    "x": 68.0,
+    "z": 30.0
+   },
+   {
+    "id": "N76",
+    "x": 76.0,
+    "z": 30.0
+   },
+   {
+    "id": "C76",
+    "x": 76.0,
+    "z": 43.0
+   },
+   {
+    "id": "S01.in",
+    "x": 14.0,
+    "z": 27.0
+   },
+   {
+    "id": "S02.in",
+    "x": 42.0,
+    "z": 28.0
+   },
+   {
+    "id": "S03.in",
+    "x": 68.0,
+    "z": 26.0
+   },
+   {
+    "id": "S04.in",
+    "x": 92.0,
+    "z": 52.0
+   },
+   {
+    "id": "S05.in",
+    "x": 112.0,
+    "z": 52.0
+   },
+   {
+    "id": "S06.in",
+    "x": 132.0,
+    "z": 52.0
+   },
+   {
+    "id": "S07.in",
+    "x": 150.0,
+    "z": 52.0
+   },
+   {
+    "id": "S08.in",
+    "x": 118.0,
+    "z": 68.0
+   },
+   {
+    "id": "S09.in",
+    "x": 146.0,
+    "z": 68.0
+   },
+   {
+    "id": "S10.in",
+    "x": 20.0,
+    "z": 64.0
+   },
+   {
+    "id": "S11.in",
+    "x": 50.0,
+    "z": 69.0
+   },
+   {
+    "id": "S12.in",
+    "x": 72.0,
+    "z": 60.0
+   }
+  ],
+  "edges": [
+   [
+    "A10",
+    "A20"
+   ],
+   [
+    "A10",
+    "GATE"
+   ],
+   [
+    "A112",
+    "A118"
+   ],
+   [
+    "A112",
+    "A92"
+   ],
+   [
+    "A112",
+    "S05.in"
+   ],
+   [
+    "A118",
+    "A132"
+   ],
+   [
+    "A118",
+    "S08.in"
+   ],
+   [
+    "A132",
+    "A146"
+   ],
+   [
+    "A132",
+    "S06.in"
+   ],
+   [
+    "A146",
+    "A150"
+   ],
+   [
+    "A146",
+    "S09.in"
+   ],
+   [
+    "A150",
+    "A155"
+   ],
+   [
+    "A150",
+    "S07.in"
+   ],
+   [
+    "A20",
+    "A50"
+   ],
+   [
+    "A20",
+    "S10.in"
+   ],
+   [
+    "A50",
+    "A72"
+   ],
+   [
+    "A50",
+    "S11.in"
+   ],
+   [
+    "A72",
+    "A76"
+   ],
+   [
+    "A72",
+    "S12.in"
+   ],
+   [
+    "A76",
+    "A92"
+   ],
+   [
+    "A76",
+    "C76"
+   ],
+   [
+    "A92",
+    "S04.in"
+   ],
+   [
+    "C76",
+    "N76"
+   ],
+   [
+    "N14",
+    "N42"
+   ],
+   [
+    "N14",
+    "S01.in"
+   ],
+   [
+    "N42",
+    "N68"
+   ],
+   [
+    "N42",
+    "S02.in"
+   ],
+   [
+    "N68",
+    "N76"
+   ],
+   [
+    "N68",
+    "S03.in"
+   ]
+  ]
+ }
+}
