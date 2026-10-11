@@ -11,6 +11,7 @@ from .model import HERO, PlantSim, sensors_mod, ev
 
 D_BELT = {"S04": 5.0, "S05": 21.0, "S06": 37.0, "S07": 53.0}   # metres along the conveyor at each station
 BELT_LEN = 59.0
+CAR_GAP = 5.2          # metres between car centres: the body is 4.6 m long
 
 
 def _noise(sim: PlantSim, mid: str, t: float, k: int) -> float:
@@ -93,7 +94,16 @@ def cars(sim: PlantSim) -> list[dict]:
             if nxt:
                 frac = min(1.0, max(0.0, (sim.now - rec["t_move"]) / max(rec.get("transit_s", 1.0), 1.0)))
                 d = D_BELT[sid] + (D_BELT[nxt] - D_BELT[sid]) * frac
-        out.append({"k": k, "stage": sid, "d_m": round(d, 2), "progress": round(d / BELT_LEN, 3), "loc": rec.get("loc")})
+        out.append({"k": k, "stage": sid, "d_m": d, "loc": rec.get("loc")})
+    # Cars waiting at a station all have the station's position; queue them back to back behind the one in front
+    # (older car first) so bodies never overlap. Cars that would stand before the start of the belt are not drawn yet.
+    out.sort(key=lambda c: (-c["d_m"], c["k"]))
+    for i in range(1, len(out)):
+        out[i]["d_m"] = min(out[i]["d_m"], out[i - 1]["d_m"] - CAR_GAP)
+    out = [c for c in out if c["d_m"] >= -2.5]
+    for c in out:
+        c["d_m"] = round(c["d_m"], 2)
+        c["progress"] = round(max(0.0, c["d_m"]) / BELT_LEN, 3)
     return out
 
 

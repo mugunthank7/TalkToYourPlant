@@ -21,6 +21,8 @@ const profile = (() => {
 const shellGeo = new THREE.ExtrudeGeometry(profile, { depth: 1.7, bevelEnabled: true, bevelSize: 0.07, bevelThickness: 0.07, bevelSegments: 2 });
 shellGeo.translate(0, 0, -0.85);
 
+const LIVE_SLOTS = 12;      // engine cars are mapped to slots by id; a full line with queues holds up to 8 bodies
+
 // ---- conveyor with cars that are built as they travel ------------------------------------------------
 export function Conveyor() {
   const { conveyor_path } = useTwin((s) => s.data)!.layout;
@@ -28,13 +30,13 @@ export function Conveyor() {
   const [x1] = toScene(conveyor_path[1][0], conveyor_path[1][1]);
   const len = x1 - x0;
   const groups = useRef<THREE.Group[]>([]);
-  const prog = useMemo(() => Array.from({ length: CAR_SLOTS }, () => ({ current: 0 })), []);
+  const prog = useMemo(() => Array.from({ length: LIVE_SLOTS }, () => ({ current: 0 })), []);
 
   useFrame(() => {
     if (simLink.on) {
       const by = new Map<number, { d_m: number }>();
-      for (const c of simLink.snap!.belt.cars) by.set(c.k % CAR_SLOTS, c);
-      for (let s = 0; s < CAR_SLOTS; s++) {
+      for (const c of simLink.snap!.belt.cars) by.set(c.k % LIVE_SLOTS, c);
+      for (let s = 0; s < LIVE_SLOTS; s++) {
         const g = groups.current[s];
         const c = by.get(s);
         if (!g) continue;
@@ -47,9 +49,10 @@ export function Conveyor() {
       }
       return;
     }
-    for (let s = 0; s < CAR_SLOTS; s++) {
+    for (let s = 0; s < LIVE_SLOTS; s++) {
       const g = groups.current[s];
       if (!g) continue;
+      if (s >= CAR_SLOTS) { g.visible = false; continue; }      // offline model only uses the first slots
       const st = useTwin.getState();
       const { k, d } = carDistance(s, beltTime(clock.t, st.shift, st.data!.hero));
       const onBelt = d >= 0 && d <= len + 2;
@@ -76,7 +79,7 @@ export function Conveyor() {
           <meshStandardMaterial color="#facc15" />
         </mesh>
       ))}
-      {Array.from({ length: CAR_SLOTS }).map((_, s) => (
+      {Array.from({ length: LIVE_SLOTS }).map((_, s) => (
         <group key={s} ref={(g) => { if (g) groups.current[s] = g; }}>
           <group position={[0, 0.6, 0]}>
             <LiveCar progressRef={prog[s]} paint={PAINTS[s % PAINTS.length]} />

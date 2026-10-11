@@ -96,3 +96,14 @@ def test_exported_dashboard_matches_live_engine():
     assert ex["units"] == kp["units"] and abs(ex["downtime_min"] - kp["downtime_min"]) < 0.1
     assert k["series"]["hero_timely_repair"]["cum_units"][-1] == kp["units"]
     assert k["summary"]["ideal"]["units"] == 320 and k["summary"]["hero_ignored"]["units"] < ex["units"]
+
+
+def test_cars_on_the_belt_never_overlap():
+    """Cars queued at a station used to share its position; bodies are 4.6 m long, so centres must be at least 5 m apart."""
+    from plantsim.snapshot import cars
+    s = PlantSim(Params(detector=False))
+    for t in range(1200, 28800, 1500):
+        s.run_until(t)
+        d = sorted(c["d_m"] for c in cars(s))
+        assert all(b - a >= 5.0 for a, b in zip(d, d[1:])), (t, d)
+        assert len({c["k"] % 12 for c in cars(s)}) == len(cars(s))        # unique render slots in the twin
