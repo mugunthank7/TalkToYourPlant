@@ -136,7 +136,7 @@ function AskView() {
       const first = r.highlight?.machine_ids?.[0];
       const st = data?.layout.machines.find((m) => m.id === first)?.station;
       if (st) selectQuiet(st);
-    } catch { setLog((l) => l.map((m, i) => (i === l.length - 1 ? { q: text, a: "The brain is not running on :8100." } : m))); }
+    } catch { setLog((l) => l.map((m, i) => (i === l.length - 1 ? { q: text, a: "The brain is not running on :8100. Start it with brain/scripts/start_all.sh" } : m))); }
     setBusy(false);
   };
   return (
