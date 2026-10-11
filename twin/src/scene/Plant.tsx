@@ -3,6 +3,7 @@ import { Label } from "./Label";
 import { toScene } from "../data";
 import { ConcreteFloor } from "./Env";
 import { useTwin } from "../state";
+import { DETAILED_IDS } from "./stations";
 
 const PAD: Record<string, string> = {
   S01: "#cbd5e1", S02: "#cbd5e1", S03: "#e2e8f0", S04: "#bfdbfe", S05: "#bfdbfe", S06: "#bfdbfe",
@@ -36,20 +37,17 @@ export function Stations() {
     <>
       {layout.stations.map((s) => {
         const [x, z] = toScene(s.x, s.z);
-        const withBuilding = ["S10", "S11", "S12"].includes(s.id);
+        const withBuilding = false;
+        const detailed = DETAILED_IDS.has(s.id);
         return (
           <group key={s.id} position={[x, 0, z]}>
-            <mesh position={[0, 0.06, 0]} receiveShadow>
-              <boxGeometry args={[s.w, 0.12, s.d]} />
-              <meshStandardMaterial color={PAD[s.id] ?? "#cbd5e1"} roughness={0.9} />
-            </mesh>
-            {withBuilding && (
-              <mesh position={[0, 1.4, 0]} castShadow>
-                <boxGeometry args={[s.w * 0.9, 2.8, s.d * 0.9]} />
-                <meshStandardMaterial color={PAD[s.id]} transparent opacity={0.55} />
+            {!detailed && (
+              <mesh position={[0, 0.06, 0]} receiveShadow>
+                <boxGeometry args={[s.w, 0.12, s.d]} />
+                <meshStandardMaterial color={PAD[s.id] ?? "#cbd5e1"} roughness={0.9} />
               </mesh>
             )}
-            <Label text={`${s.id}  ${s.name}`} position={[0, withBuilding ? 4.2 : 1.2, s.d / 2 + 0.5]} height={1.5} />
+            <Label text={`${s.id}  ${s.name}`} position={[0, detailed ? 4.4 : 1.2, s.d / 2 + 0.5]} height={1.5} />
           </group>
         );
       })}

@@ -5,6 +5,7 @@ import { clock } from "../clock";
 import { carNear } from "../flow";
 import { Machine, Status, m05Status, toScene } from "../data";
 import { useTwin } from "../state";
+import { MACHINES_IN_MODELS } from "./stations";
 
 const GREY = "#8b95a1";
 const DARK = "#374151";
@@ -46,7 +47,7 @@ const COLORS = {
   repair: new THREE.Color("#f59e0b"), repaired: new THREE.Color("#22c55e"),
 } as const;
 
-function WeldRobot({ m, hero, color }: { m: Machine; hero: boolean; color?: string }) {
+export function WeldRobot({ m, hero, color }: { m: Machine; hero: boolean; color?: string }) {
   const a1 = useRef<THREE.Group>(null!);
   const a2 = useRef<THREE.Group>(null!);
   const a3 = useRef<THREE.Group>(null!);
@@ -223,7 +224,7 @@ export function Machines() {
   return (
     <>
       {data.layout.machines
-        .filter((m) => m.type !== "conveyor")
+        .filter((m) => m.type !== "conveyor" && !MACHINES_IN_MODELS.has(m.id))
         .map((m) => {
           const [x, z] = toScene(m.x, m.z);
           return (
