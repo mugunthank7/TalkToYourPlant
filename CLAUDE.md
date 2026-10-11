@@ -4,9 +4,16 @@ Guidance for Claude Code working in this repo. Keep this file current; it is rea
 
 ## What this is
 
-The **live 3D digital twin** for "Talk to Your Plant", a hackathon project: an AI copilot for a (fictional) EV car assembly plant. Read `Talk_to_Your_Plant_Project_Brief.pdf` (user's Downloads) for the full pitch. A teammate owns RAG, GraphRAG, multimodal (voice/vision) and anomaly detection. **This repo owns only the twin**: realistic 3D plant, moving people, sensor visualisation, fault glow/heatmap, graph-path animation, work-order beat.
+The **simulation engine + live 3D digital twin + dashboard** for "Talk to Your Plant", a hackathon project: an AI copilot for a (fictional) EV car assembly plant. Read `Talk_to_Your_Plant_Project_Brief.pdf` (user's Downloads) for the original pitch, and the system flowchart in `README.md` for the current scope (it superseded the brief's twin-only scope, see D-011).
 
-Hero scenario: Weld robot 2 (`M05`) develops joint bearing wear; the twin shows the fault, then the maintenance tech walks to fix it.
+Ownership (from the team whiteboard, marked M and T):
+- **M (this repo, Mugu):** Data 1 (layout, employees, sensor time series, timing), simulation engine, what-if scenarios, KPI dashboard (throughput, forecast), live 3D window with moving people, fault glow/heatmap, graph-path animation, work-order beat.
+- **T (teammate):** Data 2 (maintenance logs, service logs, procedures/protocols), knowledge base (graph + vector RAG), LLM brain (Gemini Flash), chat interface, diagnosing bot, voice/vision input.
+- **Shared:** synthetic data generator, anomaly detection (SHAP). Owner not decided, see D-013.
+
+Hero scenario: Weld robot 2 (`M05`) develops joint bearing wear; the twin shows the fault, the LLM explains it and can run a what-if ("keep running 2 more hours?"), then the maintenance tech walks to fix it.
+
+The flow in one line: Data 1 -> simulation engine -> (dashboard, 3D twin, what-if) <-> LLM <- knowledge base <- Data 2; chat talks to the LLM; a work order loops back into the simulation.
 
 ## Source-of-truth docs
 
@@ -29,8 +36,10 @@ Hero scenario: Weld robot 2 (`M05`) develops joint bearing wear; the twin shows 
 ```
 twin/                 Vite + React + TS app (react-three-fiber)
   src/scene/          Plant, stations, machines, people
+  src/dashboard/      KPI dashboard (throughput, forecast, scenario compare)
   src/state/          zustand stores (alerts, sensors, people scripts)
   src/data/           waypoints.json, station layout, mock sensor stream
+sim/                  Simulation engine (location and language per D-013)
 assets/
   models/             exported .glb (committed)
   textures/           PBR textures / HDRI
@@ -68,6 +77,22 @@ Inbound (backend -> twin):
 
 Outbound (twin -> backend): `{"type":"ui_event","event":"inject_fault","machine_id":"M05"}` (demo trigger for judges).
 
+What-if scenarios (LLM calls these as a tool; the simulation engine answers):
+
+```jsonc
+// LLM -> simulation engine
+{"type":"run_scenario","id":"SC-7","base":"live",
+ "changes":[{"op":"keep_running","machine_id":"M05","hours":2},
+            {"op":"add_operator","station_id":"S06","count":1}]}
+// simulation engine -> LLM and dashboard
+{"type":"scenario_result","id":"SC-7",
+ "kpis":{"throughput_per_hr":{"baseline":48,"scenario":31},
+         "downtime_min":{"baseline":0,"scenario":74},
+         "failure_probability":0.62,"cost_usd":1480000}}
+```
+
+If the simulation engine ends up in the same process as the twin (see D-013), these become function calls with the same shapes.
+
 Twin behaviour per message: `sensor` updates HUD and gauges; `alert` turns the machine/component red with a SHAP-weighted heatmap and sets the andon light; `graph_path` highlights the 3D parts and animates a line through them; `work_order` starts the technician walk S10 -> S12 -> S06.
 
 ## Commands (fill in as the app is scaffolded)
@@ -80,6 +105,8 @@ blender --background --python assets/source/blender/<asset>.py   # regenerate a 
 ## Current status
 
 - [x] Repo skeleton, docs, decisions
+- [x] System flowchart in README (whiteboard v1 -> improved v2, D-011, D-012)
+- [ ] Decide simulation engine home and who owns anomaly detection / synthetic data (D-013, D-014)
 - [ ] Install Blender, confirm headless export works
 - [ ] Scaffold `twin/` (Vite + R3F), empty plant with floor and lighting
 - [ ] P0 assets: weld robot (rigged), conveyor, press, BIW

@@ -50,3 +50,21 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 ## D-010, Repo hosting | 2026-10-10 | open
 **Context:** `gh` is not logged in on this machine yet.
 **Decision needed:** repo name and visibility (private while building, public for LinkedIn/resume at submission). Proposed: `talk-to-your-plant-twin`, private first.
+
+## D-011, Scope grows from "twin" to "simulation engine + twin + dashboard" | 2026-10-10 | accepted
+**Context:** The team whiteboard shows a simulation engine as the center, fed by Data 1 (layout, employees, sensor time series, timing) and producing what-if scenarios, a KPI dashboard (KPIs, throughput, forecast) and the live 3D window. The original brief only had a fault demo. Whiteboard owner marks: M = this repo, T = teammate (knowledge base, LLM, chat).
+**Decision:** This repo owns Data 1, the simulation engine, what-if scenarios, the dashboard and the 3D twin. Teammate owns Data 2, the knowledge base, LLM and chat. Supersedes the narrow scope in D-001; the interface contract in CLAUDE.md remains.
+**Consequences:** More work for M. Simulation engine becomes P0 because the twin, dashboard and scenarios all read from it. Dashboard and what-if are P1 behind the hero fault scenario (D-007 still applies).
+
+## D-012, Flow v2 improvements over the whiteboard | 2026-10-10 | accepted
+**Decision:** The README flowchart keeps the whiteboard structure and adds: (1) anomaly detection with SHAP between the sensor stream and the LLM, so alerts are explainable; (2) the LLM drives what-ifs through a `run_scenario` tool and gets `scenario_result` back; (3) a closed loop: work order -> simulation -> technician agent walks to the machine -> fault clears; (4) a synthetic data generator feeding both Data 1 and Data 2; (5) chat accepts voice and photo as well as text.
+**Consequences:** One simulated state drives dashboard, 3D and LLM, so numbers always agree across all three views.
+
+## D-013, Where the simulation engine lives | 2026-10-10 | open
+**Options:** (a) Python + SimPy as a FastAPI service next to anomaly detection and the LLM backend, twin renders streamed state; (b) TypeScript in the browser (Web Worker), no backend needed for the visuals.
+**Leaning:** (a) for batch what-if runs (compare baseline vs scenario) and one language with the ML code; keep a thin TS fallback that replays recorded state if the backend is down during the demo.
+**Needs:** agreement with the teammate and the decision on who hosts the FastAPI app.
+
+## D-014, Ownership of anomaly detection and synthetic data | 2026-10-10 | open
+**Context:** The whiteboard does not show anomaly detection; the brief has it (Isolation Forest + SHAP). Both sides need synthetic data.
+**Proposal:** M generates Data 1 (sensor streams with injected bearing-wear signatures, shifts, timings) and runs anomaly detection on the simulated stream; T generates Data 2 (manuals, logs, graph). Confirm with teammate.
