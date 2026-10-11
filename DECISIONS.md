@@ -60,21 +60,45 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 **Decision:** The README flowchart keeps the whiteboard structure and adds: (1) anomaly detection with SHAP between the sensor stream and the LLM, so alerts are explainable; (2) the LLM drives what-ifs through a `run_scenario` tool and gets `scenario_result` back; (3) a closed loop: work order -> simulation -> technician agent walks to the machine -> fault clears; (4) a synthetic data generator feeding both Data 1 and Data 2; (5) chat accepts voice and photo as well as text.
 **Consequences:** One simulated state drives dashboard, 3D and LLM, so numbers always agree across all three views.
 
-## D-013, Where the simulation engine lives | 2026-10-10 | open
+## D-013, Where the simulation engine lives | 2026-10-10 | accepted (SimPy, Python; see D-016)
 **Options:** (a) Python + SimPy as a FastAPI service next to anomaly detection and the LLM backend, twin renders streamed state; (b) TypeScript in the browser (Web Worker), no backend needed for the visuals.
 **Leaning:** (a) for batch what-if runs (compare baseline vs scenario) and one language with the ML code; keep a thin TS fallback that replays recorded state if the backend is down during the demo.
 **Needs:** agreement with the teammate and the decision on who hosts the FastAPI app.
 
-## D-014, Ownership of anomaly detection and synthetic data | 2026-10-10 | open
+## D-014, Ownership of anomaly detection and synthetic data | 2026-10-10 | accepted (M owns Data 1 and anomaly detection; see D-015)
 **Context:** The whiteboard does not show anomaly detection; the brief has it (Isolation Forest + SHAP). Both sides need synthetic data.
 **Proposal:** M generates Data 1 (sensor streams with injected bearing-wear signatures, shifts, timings) and runs anomaly detection on the simulated stream; T generates Data 2 (manuals, logs, graph). Confirm with teammate.
 
-## D-015, Brain work lives in `brain/` on its own branch | 2026-10-11 | accepted
-**Context:** T side (knowledge base, RAG, LLM brain, chat) needs a place in the shared repo without touching twin/sim files owned by M.
-**Decision:** All T-side work goes in `brain/`, developed on branch `brain-kb`, merged via PR after review by M. Twin/sim files are not edited from this branch except additive docs (this log, CLAUDE.md pointers).
-**Consequences:** Few merge conflicts. Shared contract files (`docs/STATIONS.md`, interface contract in CLAUDE.md) still change only through new D-entries.
+## D-015, Build order and M's deliverables | 2026-10-10 | accepted
+**Context:** M's own list: (1) synthetic data for layout, employees, sensor time series, per-person task timings, task assignment, and item transfer times between stations; (2) simulation engine plus what-if; (3) data pipeline so the LLM can pull state from the simulation and diagnose; (4) KPI/throughput-forecast dashboard; (5) a good-looking 3D live window with everyone moving. Stated priority: synthetic data first, 3D second.
+**Decision:** Order is (1) synthetic data, (2) 3D live window, (3) simulation engine, (4) LLM data pipeline, (5) dashboard. The generator also emits a scripted per-person schedule so the 3D window can play back full motion before the simulation engine exists. The engine then replaces the playback with the same message shape.
+**Consequences:** 3D is never blocked on the engine. The schedule JSON is the temporary stand-in for engine output.
 
-## D-016, Brain data, RAG design and stack are open | 2026-10-11 | open
-**Context:** An early domain brief (`brain/docs/talk-to-your-plant-domain-brief.pdf`) proposed graph-anchored multimodal RAG, Neo4j, hybrid synthetic plus public data. It predates knowing the repo scope (fictional Voltline plant, `S01..S12`, `M01..M10`, hero `M05` bearing wear, graph path `symptom -> failure_mode -> component -> repair -> spare_part`).
-**Decision:** None yet. Owner of T side is working out data, RAG and stack and will bring a proposal. The brief is input only; its ontology must be realigned to the repo IDs before use.
-**Consequences:** No stack choice is implied. Unchecked items in the brief (Bosch line data, SECOM, NHTSA, CWRU/Paderborn official links, MVTec license) stay unverified.
+## D-016, Simulation engine: SimPy (Python) behind FastAPI | 2026-10-10 | accepted (revisit if SimPy blocks us)
+**Context:** Needs what-if runs faster than real time, sensor/anomaly code in Python anyway, and a clean way for the LLM to query state.
+**Options:** SimPy (process-based discrete-event, pure Python, tiny API, great for stations/queues/operators as resources); Salabim (adds built-in animation we do not need); Ciw (queueing networks only, too limited); custom TypeScript engine in the browser (no backend needed but no shared code with ML/LLM side); AnyLogic (proprietary).
+**Decision:** SimPy. Machines are processes, operators are `Resource`s, vehicles are items flowing through stations with the generated cycle and transfer times. Real-time mode streams state over a WebSocket; what-if runs clone the config and run to completion headless. FastAPI exposes `GET /state`, `GET /station/{id}`, `GET /kpis`, `POST /scenario` which are also the LLM tools.
+**Consequences:** One Python codebase for generator, engine, anomaly detection and LLM tool endpoints. The browser is a pure renderer.
+
+## D-017, Data package layout and reproducibility | 2026-10-10 | accepted
+**Decision:** The generator lives in `data/plantdata/`, deterministic by seed (`python -m plantdata --seed 42`). Small outputs (layout, employees, tasks, transfer times, events, schedule) are committed in `data/out/`; large sensor files are Parquet, committed only if small, otherwise regenerated. Specification in `docs/DATA_SPEC.md`.
+
+## D-018, Scenario library and output model for forecasting | 2026-10-10 | accepted
+**Context:** To forecast, the data needs ideal outputs, realistic outputs, faulted outputs and a longer history, not only sensor streams.
+**Decision:** Five scenarios (ideal, healthy_realistic, hero_timely_repair, hero_delayed_repair, hero_ignored) with sensors and per-minute production output, a serial-line output model (buffer upstream, derate and scrap when a weld robot degrades), and a 30-day history with incidents and remaining-useful-life labels. Downtime cost uses an assumed $20,000 per minute from the brief.
+**Consequences:** The simulation engine must reproduce the same quantities (units, OEE, downtime) and can be sanity-checked against these scenario summaries. The cost figure must be cited with a real source before the pitch.
+
+## D-019, Brain work lives in `brain/` on its own branch | 2026-10-11 | accepted
+**Context:** T side (knowledge base, RAG, LLM brain, chat) needs a place in the shared repo without touching twin/sim files owned by M. (Renumbered from D-015 after merging main.)
+**Decision:** All T-side work goes in `brain/`, developed on branch `brain-kb`, merged via PR after review by M. Twin/sim files are not edited from this branch except additive docs (this log, CLAUDE.md pointers).
+**Consequences:** Few merge conflicts. Shared contract files (`docs/STATIONS.md`, interface contract in CLAUDE.md) change only through new D-entries.
+
+## D-020, Brain data, RAG design and stack are open | 2026-10-11 | open
+**Context:** An early domain brief (`brain/docs/talk-to-your-plant-domain-brief.pdf`) proposed graph-anchored multimodal RAG, Neo4j, hybrid synthetic plus public data. It predates the repo scope. (Renumbered from D-016.)
+**Decision:** None yet. T owner is working out data, RAG and stack and will bring a proposal. The brief is input only; its ontology must be realigned to the agreed IDs before use.
+**Consequences:** No stack choice is implied.
+
+## D-021, Two synthetic datasets clash: Voltline (M) vs Voltara (T) | 2026-10-11 | open
+**Context:** M's generator (`data/plantdata/`, D-017) models "Voltline EV Works": 12 stations, 10 machines `M01..M10`, ~24 employees, hero `M05` bearing wear. T's generator (`voltara_plant_dataset.zip`) models "Voltara Motors, Bastrop Assembly Plant": 119 machines in 10 areas with IDs like `CAS-GP-01`, 452 employees, 90 days of roster, ~20k work orders, 83 SOPs/manuals, ~11k RAG chunks, graph seed (5.7k nodes, 18k edges), different storylines (e.g. `BIW-WK-03` gearbox oil leak). Plant name, machine IDs and scale differ, so D-008 (shared IDs) cannot hold for both.
+**Options:** (a) Voltline stays the demo plant; T regenerates Data 2 to Voltline IDs (`M01..M10`, `S01..S12`). (b) Voltara becomes the plant; M's generator and 3D scene move to Voltara IDs and layout. (c) Subset: take Voltara's 10 machine families that map to Voltline stations, keep Voltline names and IDs, rename on import.
+**Decision needed:** M and T agree one plant, one ID scheme. Until then Voltara data lives only in `brain/` and nothing consumes it across the boundary.

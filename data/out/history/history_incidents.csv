@@ -1,0 +1,7 @@
+shift_id,date,shift,machine_id,component_id,onset_s,alert_s,failure_s_if_ignored,outcome,repair_start_s,repair_end_s
+2026-09-01-A,2026-09-01,A,M04,m04_main_bearing,13876,21654,25236,timely,22317.0,23817
+2026-09-04-A,2026-09-04,A,M05,m05_main_bearing,4202,10555,13679,late,12117.0,13617
+2026-09-07-B,2026-09-07,B,M01,m01_main_bearing,2258,10581,14055,timely,11624.0,13124
+2026-09-19-B,2026-09-19,B,M01,m01_main_bearing,6336,12125,15307,timely,12874.0,14374
+2026-09-24-B,2026-09-24,B,M01,m01_main_bearing,7283,13615,16478,late,15047.0,16547
+2026-09-30-B,2026-09-30,B,M03,m03_main_bearing,4548,9798,12381,failure,,17781
