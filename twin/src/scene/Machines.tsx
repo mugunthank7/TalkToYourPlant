@@ -20,42 +20,112 @@ function Box({ p, s, c = GREY, ...rest }: { p: [number, number, number]; s: [num
 
 const STATUS_COLOR: Record<Status, string> = { healthy: "#22c55e", alert: "#ef4444", repair: "#f59e0b", repaired: "#22c55e" };
 
-function WeldRobot({ m, hero }: { m: Machine; hero: boolean }) {
+function Spark({ on }: { on: () => boolean }) {
+  const m = useRef<THREE.Mesh>(null!);
+  const l = useRef<THREE.PointLight>(null!);
+  useFrame(() => {
+    const live = on() && Math.sin(performance.now() / 90) > 0.2;
+    m.current.visible = live;
+    l.current.intensity = live ? 3 + Math.random() * 3 : 0;
+    m.current.scale.setScalar(0.6 + Math.random() * 0.8);
+  });
+  return (
+    <group>
+      <mesh ref={m}>
+        <icosahedronGeometry args={[0.12, 0]} />
+        <meshBasicMaterial color="#fff7c2" toneMapped={false} />
+      </mesh>
+      <pointLight ref={l} color="#ffd9a0" distance={5} intensity={0} />
+    </group>
+  );
+}
+
+const COLORS = {
+  healthy: new THREE.Color("#22c55e"), alert: new THREE.Color("#ef4444"),
+  repair: new THREE.Color("#f59e0b"), repaired: new THREE.Color("#22c55e"),
+} as const;
+
+function WeldRobot({ m, hero, color }: { m: Machine; hero: boolean; color?: string }) {
   const a1 = useRef<THREE.Group>(null!);
   const a2 = useRef<THREE.Group>(null!);
-  const glow = useRef<THREE.MeshStandardMaterial>(null!);
+  const a3 = useRef<THREE.Group>(null!);
+  const bodyMats = useRef<THREE.MeshStandardMaterial[]>([]);
+  const bearing = useRef<THREE.MeshStandardMaterial>(null!);
   const data = useTwin((s) => s.data)!;
   const shift = useTwin((s) => s.shift);
+  const status = useRef<Status>("healthy");
+  const base = color ?? (hero ? "#f1f5f9" : "#f97316");
   useFrame(() => {
     const t = clock.t;
     const st = hero ? m05Status(t, shift, data.hero) : "healthy";
-    const working = st !== "repair";
-    const k = working ? 1 : 0;
-    const speed = st === "alert" ? 3.2 : 2;
-    a1.current.rotation.y = Math.sin(t * 0.8 * speed) * 0.9 * k;
-    a2.current.rotation.z = -0.5 + Math.sin(t * 1.3 * speed) * 0.5 * k;
-    if (hero && glow.current) {
-      const base = new THREE.Color(STATUS_COLOR[st]);
-      glow.current.emissive.copy(base);
-      const pulse = st === "alert" ? 0.6 + 0.4 * Math.sin(performance.now() / 150) : st === "repair" ? 0.5 : 0.05;
-      glow.current.emissiveIntensity = pulse;
+    status.current = st;
+    const k = st === "repair" ? 0 : 1;
+    const sp = (st === "alert" ? 1.5 : 1) * 0.9;
+    const phase = t * sp + (m.id ? m.id.charCodeAt(2) : 0);
+    a1.current.rotation.y = Math.sin(phase * 0.7) * 0.65 * k;
+    a2.current.rotation.z = 0.7 + Math.sin(phase * 1.1) * 0.3 * k;
+    a3.current.rotation.z = -1.25 + Math.sin(phase * 1.7) * 0.35 * k;
+    if (hero) {
+      const col = COLORS[st];
+      const pulse = st === "alert" ? 0.7 + 0.5 * Math.sin(performance.now() / 150) : st === "repair" ? 0.5 : 0;
+      bodyMats.current.forEach((mt) => {
+        if (!mt) return;
+        mt.emissive.copy(col);
+        mt.emissiveIntensity = pulse * 0.45;
+      });
+      if (bearing.current) {
+        bearing.current.emissive.copy(col);
+        bearing.current.emissiveIntensity = st === "healthy" || st === "repaired" ? 0.0 : pulse * 3;
+      }
     }
   });
+  const body = (i: number) => (
+    <meshStandardMaterial ref={(mt) => { if (mt) bodyMats.current[i] = mt; }} color={base} roughness={0.35} metalness={0.45} />
+  );
   return (
-    <group position={[0, 0, 0]}>
-      <Box p={[0, 0.25, 0]} s={[1.6, 0.5, 1.6]} c={DARK} />
-      <group ref={a1} position={[0, 0.5, 0]}>
-        <mesh position={[0, 0.9, 0]} castShadow>
-          <cylinderGeometry args={[0.35, 0.4, 1.8, 20]} />
-          <meshStandardMaterial ref={glow} color={hero ? "#f3f4f6" : ORANGE} roughness={0.4} metalness={0.4} emissive="#000000" />
+    <group rotation={[0, Math.PI / 2, 0]}>
+      <Box p={[0, 0.2, 0]} s={[1.9, 0.4, 1.9]} c={DARK} />
+      <mesh position={[0, 0.55, 0]} castShadow>
+        <cylinderGeometry args={[0.6, 0.65, 0.3, 28]} />
+        <meshStandardMaterial color="#cbd5e1" roughness={0.3} metalness={0.7} />
+      </mesh>
+      {/* joint 1 bearing ring: m05_joint1_bearing, the hero component */}
+      <mesh position={[0, 0.72, 0]} rotation={[Math.PI / 2, 0, 0]} name={hero ? "m05_joint1_bearing" : undefined}>
+        <torusGeometry args={[0.52, 0.07, 12, 32]} />
+        <meshStandardMaterial ref={bearing} color="#475569" metalness={0.8} roughness={0.3} emissive="#000000" />
+      </mesh>
+      <group ref={a1} position={[0, 0.7, 0]}>
+        <mesh position={[0, 0.7, 0]} castShadow>
+          <boxGeometry args={[0.7, 1.4, 0.7]} />
+          {body(0)}
         </mesh>
-        <group ref={a2} position={[0, 1.8, 0]}>
-          <Box p={[0, 0.9, 0]} s={[0.35, 1.8, 0.35]} c={hero ? "#e5e7eb" : ORANGE} />
-          <Box p={[0.55, 1.85, 0]} s={[1.2, 0.3, 0.3]} c={hero ? "#e5e7eb" : ORANGE} />
-          <mesh position={[1.2, 1.5, 0]} castShadow>
-            <cylinderGeometry args={[0.08, 0.14, 0.7, 12]} />
-            <meshStandardMaterial color="#9ca3af" metalness={0.8} roughness={0.3} />
+        <mesh position={[0, 1.45, 0]} castShadow>
+          <sphereGeometry args={[0.42, 20, 16]} />
+          {body(1)}
+        </mesh>
+        <group ref={a2} position={[0, 1.45, 0]}>
+          <mesh position={[0.9, 0, 0]} castShadow>
+            <boxGeometry args={[1.8, 0.42, 0.5]} />
+            {body(2)}
           </mesh>
+          <group ref={a3} position={[1.8, 0, 0]}>
+            <mesh castShadow><sphereGeometry args={[0.3, 16, 12]} />{body(3)}</mesh>
+            <mesh position={[0.7, 0, 0]} castShadow>
+              <boxGeometry args={[1.4, 0.3, 0.36]} />
+              {body(4)}
+            </mesh>
+            <group position={[1.4, 0, 0]}>
+              <mesh position={[0.15, -0.1, 0]} castShadow>
+                <cylinderGeometry args={[0.14, 0.14, 0.3, 12]} />
+                <meshStandardMaterial color="#334155" metalness={0.7} roughness={0.35} />
+              </mesh>
+              <mesh position={[0.3, -0.45, 0.1]} castShadow><boxGeometry args={[0.1, 0.7, 0.08]} /><meshStandardMaterial color="#94a3b8" metalness={0.9} roughness={0.25} /></mesh>
+              <mesh position={[0.3, -0.45, -0.1]} castShadow><boxGeometry args={[0.1, 0.7, 0.08]} /><meshStandardMaterial color="#94a3b8" metalness={0.9} roughness={0.25} /></mesh>
+              <group position={[0.3, -0.85, 0]}>
+                <Spark on={() => status.current !== "repair"} />
+              </group>
+            </group>
+          </group>
         </group>
       </group>
     </group>
@@ -104,7 +174,7 @@ function Generic({ type }: { type: string }) {
     case "decoiler":
       return <Decoiler />;
     case "robot":
-      return <WeldRobot m={{} as Machine} hero={false} />;
+      return <WeldRobot m={{ id: "M02" } as Machine} hero={false} color="#fbbf24" />;
     case "fixture":
       return (
         <group>

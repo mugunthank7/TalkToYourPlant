@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, PerformanceMonitor } from "@react-three/drei";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { camera as camGoal, clock } from "./clock";
@@ -10,6 +10,10 @@ import { Conveyor, Floor, SafetyZones, Stations, Walkways } from "./scene/Plant"
 import { Machines } from "./scene/Machines";
 import { People } from "./scene/People";
 import { Hud } from "./ui/Hud";
+import { Env } from "./scene/Env";
+import { Cells } from "./scene/Cells";
+import { Props } from "./scene/Props";
+import { Bloom, EffectComposer } from "@react-three/postprocessing";
 
 function Clock() {
   useFrame((_, dt) => {
@@ -40,7 +44,7 @@ function CameraRig() {
   return null;
 }
 
-function Scene() {
+function Scene({ low }: { low: boolean }) {
   return (
     <>
       <color attach="background" args={["#cfd8e3"]} />
@@ -50,28 +54,39 @@ function Scene() {
         position={[60, 90, 40]}
         intensity={1.6}
         castShadow
-        shadow-mapSize={[2048, 2048]}
+        shadow-mapSize={low ? [1024, 1024] : [2048, 2048]}
         shadow-camera-left={-100}
         shadow-camera-right={100}
         shadow-camera-top={70}
         shadow-camera-bottom={-70}
         shadow-camera-far={300}
       />
-      <Floor />
+      <Suspense fallback={null}>
+        <Env />
+        <Floor />
+        <Props />
+      </Suspense>
       <Walkways />
       <SafetyZones />
+      <Cells />
       <Stations />
       <Conveyor />
       <Machines />
       <People />
+      {!low && (
+        <EffectComposer multisampling={0}>
+          <Bloom intensity={0.9} luminanceThreshold={0.9} luminanceSmoothing={0.2} mipmapBlur />
+        </EffectComposer>
+      )}
       <CameraRig />
-      <OrbitControls makeDefault target={[0, 0, 4]} maxPolarAngle={Math.PI / 2.1} minDistance={15} maxDistance={220} />
+      <OrbitControls makeDefault target={[0, 0, 8]} maxPolarAngle={Math.PI / 2.1} minDistance={15} maxDistance={220} />
     </>
   );
 }
 
 export default function App() {
   const { data, error, setData, setError } = useTwin();
+  const [low, setLow] = useState(new URLSearchParams(location.search).get("q") === "low");
 
   useEffect(() => {
     loadAll().then(setData).catch((e) => setError(String(e.message ?? e)));
@@ -82,9 +97,10 @@ export default function App() {
 
   return (
     <>
-      <Canvas shadows camera={{ position: [0, 62, 74], fov: 45, near: 0.5, far: 600 }} dpr={[1, 2]}>
+      <Canvas shadows camera={{ position: [0, 76, 92], fov: 45, near: 0.5, far: 600 }} dpr={low ? 1 : [1, 1.75]}>
+        <PerformanceMonitor onDecline={() => setLow(true)} flipflops={0} />
         <Clock />
-        <Scene />
+        <Scene low={low} />
       </Canvas>
       <Hud />
     </>
