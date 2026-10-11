@@ -11,7 +11,7 @@ import re
 import time
 from collections import OrderedDict
 
-from . import config
+from . import config, prompts
 from .graph import get_graph, current_shift
 from .index import get_index
 from .sim_adapter import get_sim
@@ -32,7 +32,7 @@ _CODE_RX = re.compile(r"\b[A-Z]{2,5}(?:-[A-Z0-9]{2,12}){1,3}\b")
 _HOURS_RX = re.compile(r"(\d+(?:\.\d+)?)\s*(?:more\s+)?(hours?|hrs?|h\b|minutes?|mins?)", re.I)
 
 
-PROMPT_VERSION = hashlib.sha1(LOCAL_SYSTEM.encode()).hexdigest()[:10]
+PROMPT_VERSION = hashlib.sha1((LOCAL_SYSTEM + prompts.NARRATE_SYSTEM + prompts.ANSWER_SYSTEM).encode()).hexdigest()[:10]
 
 
 class _AnswerCache:
@@ -851,15 +851,62 @@ class Brain:
             return "\n".join(L) if len(L) > 1 else None
         return None
 
-    def _ollama_chat(self, system, user):
+    def _ollama_chat(self, system, user, json_mode=False, num_predict=600):
         import urllib.request
-        body = {"model": config.OLLAMA_MODEL, "stream": False, "keep_alive": "30m",
-                "options": {"temperature": 0.1, "num_ctx": config.OLLAMA_NUM_CTX, "num_predict": 600},
+        body = {"model": config.pick_model(), "stream": False, "keep_alive": "30m",
+                "options": {"temperature": 0.1, "num_ctx": config.OLLAMA_NUM_CTX, "num_predict": num_predict},
                 "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}]}
+        if json_mode:
+            body["format"] = "json"
         r = urllib.request.Request(config.OLLAMA_URL.rstrip("/") + "/api/chat", data=json.dumps(body).encode(),
                                    headers={"Content-Type": "application/json"})
-        with urllib.request.urlopen(r, timeout=300) as resp:
+        with urllib.request.urlopen(r, timeout=config.LLM_TIMEOUT) as resp:
             return json.loads(resp.read().decode())["message"]["content"].strip()
+
+    _NO_LLM_REASONS = ("greeting", "thanks", "capabilities", "off topic", "unknown machine id", "glossary", "area not in this plant",
+                       "action outside scope")
+
+    def _assist(self, question, ctx, history):
+        """Optional LLM phrasing of the deterministic result, behind the grounding guard. Returns (reply, info)."""
+        if config.LLM_MODE != "assist":
+            return None, None
+        rep = ctx.get("report")
+        info = {"mode": "assist", "model": config.pick_model(), "used": False}
+        if time.time() < getattr(self, "_llm_pause_until", 0):          # circuit breaker after repeated timeouts/errors
+            info["guard"] = "paused after repeated failures"
+            return None, info
+        try:
+            if rep and rep.get("intent") not in (None, "fallback"):
+                keep = {k: rep.get(k) for k in ("title", "severity", "headline", "what_happened", "impact", "do_now",
+                                                  "contacts", "parts", "procedure") if rep.get(k)}
+                facts = "CARD:\n" + json.dumps(keep, ensure_ascii=False) + "\n\nTOOL RESULTS:\n" + "\n".join(ctx["tool_outputs"])[:3500]
+                system = prompts.NARRATE_SYSTEM
+                allowed = set(ctx["cite"]) | set(rep.get("sources") or [])
+            elif rep and rep.get("intent") == "fallback" and \
+                    (rep.get("confidence") or {}).get("reason") not in self._NO_LLM_REASONS:
+                hits = [h for h in (ctx.get("search") or []) if h["bm25"] > 0][:4]
+                if not hits:
+                    return None, info
+                facts = "PASSAGES:\n" + "\n".join(f"[{h['source_id']}] {self._clean_text(h['text'])[:700]}" for h in hits)
+                system = prompts.ANSWER_SYSTEM
+                allowed = {h["source_id"] for h in hits}
+            else:
+                return None, info
+            raw = self._ollama_chat(system, prompts.build_user(question, facts, allowed, history), json_mode=True, num_predict=350)
+            reply, _src, _clar = prompts.parse_reply(raw)
+            ok, why = prompts.validate_reply(reply, facts + " " + question, allowed)
+            info.update(used=ok, guard=why)
+            self._llm_fails = 0
+            if ok:
+                ctx["cite"].update(c for c in re.findall(r"\[([A-Za-z0-9_.:\-]+)\]", reply) if c in allowed)
+                return reply, info
+        except Exception as e:  # noqa: BLE001
+            info.update(guard=f"error: {type(e).__name__}")
+            self._llm_fails = getattr(self, "_llm_fails", 0) + 1
+            if self._llm_fails >= 2:                                      # stop paying the timeout on every question
+                self._llm_pause_until = time.time() + 300
+                self._llm_fails = 0
+        return None, info
 
     def _local(self, question, history, ctx, focus, shift):
         self._route(question, ctx, focus, shift)
@@ -925,7 +972,7 @@ class Brain:
         t0 = time.time()
         sess = self.sessions.setdefault(session_id, {"history": []})
         focus = self.g.find_machines(question) or list(focus_hint or [])
-        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v17", config.get("SIM_MODE", "mock"), config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
+        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.LLM_MODE, config.pick_model() if config.LLM_MODE == "assist" else "", "render-v17", config.get("SIM_MODE", "mock"), config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
                                        sess["history"][-2:] if sess["history"] else []]).encode()).hexdigest()
         live = config.get("SIM_MODE", "mock").lower() == "live"     # live plant state changes: never serve cached answers
         hit = None if live else self.cache.get(key)
@@ -940,9 +987,15 @@ class Brain:
                 r"\b(it|its|this|that|there|here|them)\b|^(and|so|what should|how long|why|who do|who should)\b", question.lower())
             answer = self._local(question if not shift else q, sess["history"], ctx,
                                  focus or (sess.get("focus", []) if follow else []), shift)
-            used = "ollama:" + config.OLLAMA_MODEL if ctx["llm_calls"] else "local-pipeline"
+            used = "ollama:" + config.pick_model() if ctx["llm_calls"] else "local-pipeline"
         except Exception as e:  # noqa: BLE001
             err = f"ollama: {type(e).__name__}: {str(e)[:160]}"
+        llm_info = None
+        if answer is not None:
+            reply, llm_info = self._assist(question, ctx, sess["history"])
+            if reply:
+                ctx["card_text"] = answer
+                answer = reply
         degraded = answer is None
         if degraded:
             answer = self._degraded(question, ctx, err or "model unavailable")
@@ -955,6 +1008,7 @@ class Brain:
         mids = [m for m in mids if m in self.g.machines] or mids
         result = {
             "answer": answer,
+            "card": ctx.get("card_text"),
             "report": ctx.get("report"),
             "confidence": (ctx.get("report") or {}).get("confidence") or {"level": "high", "score": 0.9, "reason": "matched a known question type"},
             "highlight": {"machine_ids": mids[:8], "graph_path": self.graph_path_for(ctx)},
@@ -963,7 +1017,7 @@ class Brain:
             "meta": {"model": used, "degraded": degraded, "error": err if degraded else None,
                      "llm_calls": ctx["llm_calls"], "contexts": ctx["tool_outputs"][:10], "sources_consulted": list(dict.fromkeys(r["source_id"] for r in ctx["retrieved"]))[:12], "tools": [t["tool"] for t in ctx["trace"]],
                      "shift": shift or current_shift(), "sim_mode": self.sim.mode,
-                     "latency_s": round(time.time() - t0, 2), "cached": False},
+                     "latency_s": round(time.time() - t0, 2), "cached": False, "llm": llm_info},
         }
         if not degraded and not live:
             self.cache.put(key, result)
