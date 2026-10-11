@@ -99,9 +99,6 @@ export function Props() {
   };
   return (
     <>
-      {/* S08 / S09 */}
-      <Pallet position={at(82.5, 64)} stack={3} />
-      <Pallet position={at(85, 64)} stack={2} />
       {/* safety: extinguishers at the weld-cell fences and the control room */}
       {[[77, 44.5], [93, 44.5], [109, 44.5], [46.5, 56]].filter((_, i) => i < 3).map(([x, z], i) => (
         <Model key={i} name="korean_fire_extinguisher_01" position={at(x, z)} rotY={i} />
