@@ -8,7 +8,7 @@ import { Bar, ColMeta, Columns, ForecastChart2, HBars, LineChart, Series, WithTi
 import { Help, type HelpText } from "./Help";
 import { AnomalyScores, ScoreHistory, StationLoad, WhyFlagged, WorkOrders, useAnomaly } from "./EngineCards";
 import { simLink } from "../simlink";
-import { money, rateSeries, seriesName, SHIFT_S } from "./live";
+import { heroTimes, money, rateSeries, seriesName, SHIFT_S } from "./live";
 
 const SCEN: { key: string; label: string; color: string }[] = [
   { key: "ideal", label: "Ideal", color: "#94a3b8" },
@@ -152,7 +152,7 @@ export function Dashboard() {
           <h2>Plant KPIs <span>Shift {shift}, clock at {Math.floor(clock.t / 3600)}h {Math.floor((clock.t % 3600) / 60)}m of 8h</span></h2>
           <div className="scrub">
             <input type="range" min={0} max={SHIFT_S} step={30} value={clock.t} onChange={(e) => { ctl.seek(Number(e.target.value)); }} />
-            {shift === "A" && <button onClick={() => ctl.seek(data.hero.t_alert_s + 60)}>Jump to alert</button>}
+            {shift === "A" && <button onClick={() => ctl.seek(heroTimes(kpi, data.hero).t_alert_s + 60)}>Jump to alert</button>}
           </div>
           <div className="chips2">
             {SCEN.map((c) => (
@@ -295,7 +295,7 @@ export function Dashboard() {
                     <td>{x.date.slice(5)} {x.shift}</td>
                     <td>{x.machine_id}</td>
                     <td><span className={`badge ${x.outcome === "failure" ? "bad" : x.outcome === "late" ? "warn" : "ok"}`} title={x.outcome === "failure" ? "It broke before anyone acted" : x.outcome === "late" ? "Fixed just in time" : "Fixed with time to spare"}>{x.outcome}</span></td>
-                    <td>{Math.round((x.failure_s_if_ignored - x.alert_s) / 60)} min</td>
+                    <td>{x.alert_s == null ? "no alert" : `${Math.round((x.failure_s_if_ignored - x.alert_s) / 60)} min`}</td>
                   </tr>
                 ))}
               </tbody>

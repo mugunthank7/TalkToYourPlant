@@ -49,6 +49,7 @@ export interface KpiSeries { cum_units: number[]; cum_down_s: number[]; cum_cost
 export interface ScenarioSummary {
   units: number; units_lost_vs_ideal: number; downtime_min: number; downtime_cost_usd: number; oee: number;
   t_fail_if_ignored_s?: number; remaining_useful_life_at_alert_min?: number; about: string;
+  t_alert_s?: number; t_onset_s?: number; t_repair_start_s?: number | null; t_repair_end_s?: number | null;
 }
 export interface Kpi {
   minutes: number; plan_units: number; cost_per_min: number;

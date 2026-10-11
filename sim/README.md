@@ -9,7 +9,7 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/uvicorn plantsim.api:app --port 8000        # API + WebSocket
 .venv/bin/python -m pytest tests -q                    # 7 tests, about 1 minute
 ```
-Open the twin with `http://localhost:5180/?sim=ws://localhost:8000/ws` (or press the "SimPy off" button in the top bar).
+Start the engine, then open the twin at `http://localhost:5180`; it connects to `ws://localhost:8000/ws` by itself (add `?sim=ws://host:port/ws` to use another engine).
 
 ## What is modelled
 - Car bodies flow S04 -> S05 -> S06 -> S07 -> S09 on a paced line (takt 90 s). Each station is a SimPy `Resource`
@@ -56,3 +56,11 @@ curl -s -X POST localhost:8000/control -H 'content-type: application/json' -d '{
 curl -s -X POST localhost:8000/tools/run_what_if -H 'content-type: application/json' \
   -d '{"changes":[{"op":"keep_running","hours":2}]}' | python3 -m json.tool | head -30
 ```
+
+## Dashboard export
+
+```bash
+.venv/bin/python -m plantsim.export   # about 30 s; writes data/out/{kpi,dashboard}.json and copies them to twin/public/data/
+```
+
+Five scenarios (same seed as the live engine) and 30 days of shifts with M05 wear incidents. The 12-month maintenance statistics are kept from the data generator.
