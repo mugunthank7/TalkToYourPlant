@@ -38,7 +38,7 @@ class ChatIn(BaseModel):
 @app.get("/health")
 def health():
     g = get_graph()
-    return {"status": "ok", "graph": g.stats()["nodes"], "llm": "local", "ollama_model": config.OLLAMA_MODEL,
+    return {"status": "ok", "graph": g.stats()["nodes"], "llm": "local", "llm_mode": config.LLM_MODE, "ollama_model": config.pick_model() if config.LLM_MODE == "assist" else None,
             "embedder": config.LOCAL_EMBED_MODEL, "sim_mode": config.get("SIM_MODE", "mock")}
 
 
