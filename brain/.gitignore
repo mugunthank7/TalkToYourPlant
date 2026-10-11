@@ -3,3 +3,4 @@
 .venv-ragas/
 __pycache__/
 *.pyc
+brain/eval/status/

@@ -1,0 +1,40 @@
+01:05:45 PASS Q01 Who do I page for M05 on shift A?
+01:05:45 PASS Q02 Who do I page for M01 on shift B?
+01:05:45 PASS Q03 Who do I page for CAS-GP-01 on shift A?
+01:05:45 PASS Q04 Who do I page for PNT-PR-04 on shift C?
+01:05:45 PASS Q05 Who do I page for BAT-BL-01 on shift B?
+01:05:45 PASS Q06 Who do I page for BIW-WK-03 on shift A?
+01:05:45 PASS Q07 Who do I page for UTL-CP-02 on shift C?
+01:05:45 PASS Q08 Who do I page for GA-TQ-07 on shift B?
+01:05:45 PASS Q09 What does fault code SRVO-062 mean on M04?
+01:05:45 PASS Q10 What does fault code KSS-GEAR-LEAK mean on BIW-WK-03?
+01:05:45 PASS Q11 What does fault code GP-SHOT-SLOW mean on CAS-GP-01?
+01:05:45 PASS Q12 What does fault code TQ-NOK mean on GA-TQ-07?
+01:05:45 PASS Q13 What does fault code LSR-PWR-LOW mean on BAT-BL-01?
+01:05:45 PASS Q14 What does fault code CMP-DISCH-TEMP mean on UTL-CP-02?
+01:05:45 PASS Q15 Which SOP covers lockout tagout?
+01:05:45 PASS Q16 What is the fault escalation and paging protocol SOP?
+01:05:45 PASS Q17 Which procedure covers FANUC backup battery alarms SRVO-062 
+01:05:45 PASS Q18 Which SOP handles torque NOK and tool calibration in general
+01:05:45 PASS Q19 Which SOP covers safe work on the high-voltage EV battery?
+01:05:45 PASS Q20 What spare part is needed to fix KSS-GEAR-LEAK on BIW-WK-03?
+01:05:45 PASS Q21 Which part does SRVO-065 on M04 need?
+01:05:45 PASS Q22 What part do we replace for LSR-PWR-LOW on BAT-BL-01?
+01:05:45 PASS Q23 Which part is needed for GP-SHOT-SLOW on CAS-GP-01?
+01:05:45 PASS Q24 What spare part do we need for the M05 bearing wear and how 
+01:05:45 PASS Q25 How many times has CAS-GP-01 had GP-SHOT-SLOW in the last 90
+01:05:45 PASS Q26 How many times has PNT-PR-04 had PR-BELL-SPEED in the last 9
+01:05:45 PASS Q27 How many times has BAT-BL-01 had LSR-PWR-LOW in the last 90 
+01:05:45 PASS Q28 How many times has UTL-CP-02 had CMP-DISCH-TEMP in the last 
+01:05:45 PASS Q29 M05 is vibrating high. Can we keep running 2 more hours?
+01:05:45 PASS Q30 M05 is vibrating high. Can we keep running 0.5 more hours?
+01:05:45 PASS Q31 M05 is vibrating high. Can we keep running 4 more hours?
+01:05:45 PASS Q32 What is wrong with CAS-GP-01 and what should we do?
+01:05:45 PASS Q33 What is wrong with PNT-PR-04 and what should we do?
+01:05:45 PASS Q34 What is wrong with BAT-BL-01 and what should we do?
+01:05:45 PASS Q35 What is wrong with BIW-WK-03 and what should we do?
+01:05:45 PASS Q36 What is wrong with UTL-CP-02 and what should we do?
+01:05:45 PASS Q37 What is wrong with GA-TQ-07 and what should we do?
+01:05:45 PASS Q38 Why is M05 red?
+01:05:45 PASS Q39 M05 has a bearing problem. Is the spare part in stock?
+01:05:45 PASS Q40 Create a work order for the M05 bearing replacement.

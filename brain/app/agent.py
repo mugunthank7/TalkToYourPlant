@@ -1,9 +1,9 @@
-"""Gemini function-calling agent ("the brain").
+"""The brain: local-only (no hosted LLM, no API key).
 
-Plain tool loop on google-genai. Tools: graph_lookup, escalation_chain, search_docs,
-get_sensor_state, run_scenario, create_work_order, highlight.
+intent router -> tools (graph_lookup, escalation_chain, search_docs, get_sensor_state,
+run_scenario, create_work_order, highlight) -> deterministic renderer. A local Ollama model
+is used only for questions the router cannot classify.
 Returns {answer, highlight:{machine_ids, graph_path}, citations, actions, meta}.
-Degrades gracefully: model fallback, then a deterministic no-LLM answer.
 """
 import hashlib
 import json
@@ -11,76 +11,13 @@ import re
 import time
 from collections import OrderedDict
 
-from . import config, ratelimit
+from . import config
 from .graph import get_graph, current_shift
 from .index import get_index
 from .sim_adapter import get_sim
 
-MAX_STEPS = 6
 CTX_CHARS_PER_CHUNK = 600
 CTX_CHARS_TOTAL = 5000
-
-SYSTEM = """You are the plant brain of Voltline/Voltara EV Works, a fictional EV assembly plant digital twin.
-Users are plant managers, maintenance technicians and operators.
-
-RULES
-- Answer ONLY from tool results. If data is missing, say what is missing; never guess or invent IDs, names, numbers or phone numbers.
-- Always call tools before answering a plant question. Use the machine ID the user gave (twin ids M01..M11 like M05, or ids like CAS-GP-01).
-- "Who do I page / who is on call": call escalation_chain for the CURRENT shift (pass no shift unless the user names one) and list L1, L2, L3 with names, extensions/mobile, and the page-after minutes. Mention the vendor hotline if the problem is beyond L3.
-- "Can we keep running N more hours": call get_sensor_state, search_docs for SOP-OPS-02, and run_scenario (keep_running). State the rule that applies, the numbers, and a clear recommendation.
-- Why is a machine red/alarming: call get_sensor_state, graph_lookup (fault_modes, work_orders), search_docs (scoped to the machine) and escalation_chain; explain symptom with the numbers, likely cause, parts and stock, the SOP to follow, and who to page. Then call highlight with the machine ids.
-- Only call create_work_order when the user explicitly asks to create/raise one.
-- Cite sources inline in square brackets using exact document ids from tool results (the "id" field of search_docs results, work-order ids, escalation ids like M05-A): e.g. [SOP-MNT-M05-01], [SOP-OPS-02], [WO-2026-007763], [M05-A], [RCA-049]. NEVER cite tool names. Do not cite ids you did not receive.
-- Be concise: a short direct answer first, then bullets for details. No markdown tables.
-- Refer to machines only by the id the user used or the machine_id in tool results. Never state any other id, name or number that is not in a tool result."""
-
-TOOLS = [
-    {"name": "graph_lookup",
-     "description": "Query the plant knowledge graph. what: machine (details), neighbors, fault_modes (family fault list with parts/causes/signals), staff (assigned people), work_orders (recent history), repeats (repeat-failure count for a fault code), path (shortest path to target).",
-     "parameters": {"type": "object", "properties": {
-         "entity": {"type": "string", "description": "Machine id or name, e.g. M05, CAS-GP-01, 'Giga Press 1'"},
-         "what": {"type": "string", "enum": ["machine", "neighbors", "fault_modes", "staff", "work_orders", "repeats", "path"]},
-         "shift": {"type": "string", "description": "A, B or C (for staff)"},
-         "fault_code": {"type": "string", "description": "Fault code filter for work_orders/repeats, e.g. GP-SHOT-SLOW"},
-         "target": {"type": "string", "description": "Target node id for path"},
-         "n": {"type": "integer", "description": "Number of work orders (default 5)"}},
-         "required": ["entity", "what"]}},
-    {"name": "escalation_chain",
-     "description": "Who to page for a machine on a shift: operator action, L0 line lead, L1/L2 technicians, L3 maintenance supervisor, L4 engineers, L5 vendor hotline, timers and safety triggers. Omit shift for the current shift.",
-     "parameters": {"type": "object", "properties": {
-         "machine_id": {"type": "string"}, "shift": {"type": "string", "description": "A, B or C; omit for current shift"}},
-         "required": ["machine_id"]}},
-    {"name": "search_docs",
-     "description": "Search SOPs, manuals, work orders, RCA/incident reports, service logs, handover notes. Use machine_id to scope to one machine (also returns its family manual). doc_type one of: sop, manual, work_order, rca, incident, service_log, shift_handover, escalation, machine_profile.",
-     "parameters": {"type": "object", "properties": {
-         "query": {"type": "string"}, "machine_id": {"type": "string"}, "doc_type": {"type": "string"},
-         "fault_code": {"type": "string"}, "k": {"type": "integer", "description": "1-8, default 5"}},
-         "required": ["query"]}},
-    {"name": "get_sensor_state",
-     "description": "Latest sensor readings, status and any active alert (with SHAP contributors) for a machine from the simulator.",
-     "parameters": {"type": "object", "properties": {"machine_id": {"type": "string"}}, "required": ["machine_id"]}},
-    {"name": "run_scenario",
-     "description": "What-if via the simulator: keep a machine running N more hours with its current fault. Returns baseline vs scenario throughput, downtime, OEE, failure probability and cost.",
-     "parameters": {"type": "object", "properties": {
-         "machine_id": {"type": "string"}, "hours": {"type": "number"}, "op": {"type": "string", "enum": ["keep_running"]}},
-         "required": ["machine_id", "hours"]}},
-    {"name": "create_work_order",
-     "description": "Create a corrective work order in the simulator. Only when the user asks.",
-     "parameters": {"type": "object", "properties": {
-         "machine_id": {"type": "string"}, "component_id": {"type": "string"}, "spare_part": {"type": "string"},
-         "fault_code": {"type": "string"}, "priority": {"type": "string", "enum": ["P1", "P2", "P3"]}, "note": {"type": "string"}},
-         "required": ["machine_id"]}},
-    {"name": "highlight",
-     "description": "Tell the 3D twin which machines to highlight and optionally animate a knowledge-graph path.",
-     "parameters": {"type": "object", "properties": {
-         "machine_ids": {"type": "array", "items": {"type": "string"}},
-         "graph_path": {"type": "array", "items": {"type": "string"}, "description": "Ordered node ids"}},
-         "required": ["machine_ids"]}},
-]
-
-
-PROMPT_VERSION = hashlib.sha1((SYSTEM + json.dumps(TOOLS)).encode()).hexdigest()[:10]
-
 
 LOCAL_SYSTEM = """You are the plant brain of an EV assembly plant digital twin. Users: managers, technicians, operators.
 Answer ONLY from the TOOL RESULTS below. Never invent ids, names, numbers, phone numbers or procedures. If something is not in the results, say it is not available.
@@ -93,6 +30,9 @@ Citations: put source ids in square brackets, using ONLY ids from the ALLOWED CI
 
 _CODE_RX = re.compile(r"\b[A-Z]{2,5}(?:-[A-Z0-9]{2,12}){1,3}\b")
 _HOURS_RX = re.compile(r"(\d+(?:\.\d+)?)\s*(?:more\s+)?(hours?|hrs?|h\b|minutes?|mins?)", re.I)
+
+
+PROMPT_VERSION = hashlib.sha1(LOCAL_SYSTEM.encode()).hexdigest()[:10]
 
 
 class _AnswerCache:
@@ -217,52 +157,6 @@ class Brain:
                 ctx["graph_path_ids"] = a["graph_path"]
             return {"ok": True, "machine_ids": ids}
         return {"error": f"unknown tool {name}"}
-
-    # ------------------------------------------------------------ model
-    def _gem(self):
-        if self._client is None:
-            from google import genai
-            self._client = genai.Client(api_key=config.API_KEY)
-        return self._client
-
-    def _generate(self, role, model, contents):
-        from google.genai import types
-        cfg = types.GenerateContentConfig(
-            system_instruction=SYSTEM, temperature=0.1,
-            tools=[types.Tool(function_declarations=[types.FunctionDeclaration(**t) for t in TOOLS])],
-            automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True))
-        est = sum(len(str(c)) for c in contents) // 3
-        return ratelimit.call_with_retry(
-            role, lambda: self._gem().models.generate_content(model=model, contents=contents, config=cfg),
-            est_tokens=est, max_tries=5)
-
-    def _loop(self, question, history, role, model, ctx):
-        from google.genai import types
-        contents = []
-        for h in history[-6:]:
-            contents.append(types.Content(role=h["role"], parts=[types.Part.from_text(text=h["text"])]))
-        contents.append(types.Content(role="user", parts=[types.Part.from_text(text=question)]))
-        for step in range(MAX_STEPS):
-            resp = self._generate(role, model, contents)
-            calls = resp.function_calls or []
-            ctx["llm_calls"] += 1
-            if not calls:
-                return (resp.text or "").strip()
-            contents.append(resp.candidates[0].content)
-            parts = []
-            for fc in calls:
-                args = dict(fc.args or {})
-                try:
-                    out = self._tool(fc.name, args, ctx)
-                except Exception as e:  # noqa: BLE001
-                    out = {"error": f"{type(e).__name__}: {e}"}
-                ctx["trace"].append({"tool": fc.name, "args": args})
-                if fc.name not in ("highlight",):
-                    ctx["tool_outputs"].append(f"{fc.name}({json.dumps(args, default=str)[:160]}) -> "
-                                               f"{json.dumps(out, default=str, ensure_ascii=False)[:1400]}")
-                parts.append(types.Part.from_function_response(name=fc.name, response={"result": out}))
-            contents.append(types.Content(role="user", parts=parts))
-        return "I could not finish within the tool-call limit; see the highlighted machines and sources."
 
     # ------------------------------------------------------------ local (Ollama) pipeline
     def _run(self, name, args, ctx):
@@ -550,11 +444,11 @@ class Brain:
             return hp["nodes"] if hp else []
         return []
 
-    def ask(self, question, session_id="default", premium=False, shift=None):
+    def ask(self, question, session_id="default", shift=None, premium=False):
         t0 = time.time()
         sess = self.sessions.setdefault(session_id, {"history": []})
         focus = self.g.find_machines(question)
-        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.LLM_BACKEND, config.OLLAMA_MODEL, "render-v2", config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(), premium,
+        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v2", config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
                                        sess["history"][-2:] if sess["history"] else []]).encode()).hexdigest()
         hit = self.cache.get(key)
         if hit:
@@ -562,27 +456,12 @@ class Brain:
         ctx = {"machines": [], "cite": set(), "retrieved": [], "alerts": [], "actions": [], "trace": [], "tool_outputs": [],
                "llm_calls": 0, "highlight_ids": None}
         q = question if not shift else f"{question} (shift {shift})"
-        models = [("premium", config.MODELS["premium"])] if premium else []
-        models += [("agent", config.MODELS["agent"]), ("lite", config.MODELS["fallback"])]
         answer, used, err = None, None, None
-        if config.LLM_BACKEND == "ollama":
-            try:
-                answer = self._local(question if not shift else q, sess["history"], ctx, focus or sess.get("focus", []), shift)
-                used = "ollama:" + config.OLLAMA_MODEL
-            except Exception as e:  # noqa: BLE001
-                err = f"ollama: {type(e).__name__}: {str(e)[:160]}"
-        elif not config.API_KEY:
-            err = "GEMINI_API_KEY not set"
-        else:
-            for role, model in models:
-                try:
-                    answer = self._loop(q, sess["history"], role, model, ctx)
-                    used = model
-                    break
-                except ratelimit.DailyBudgetExceeded as e:
-                    err = str(e)
-                except Exception as e:  # noqa: BLE001
-                    err = f"{type(e).__name__}: {str(e)[:160]}"
+        try:
+            answer = self._local(question if not shift else q, sess["history"], ctx, focus or sess.get("focus", []), shift)
+            used = "ollama:" + config.OLLAMA_MODEL if ctx["llm_calls"] else "local-pipeline"
+        except Exception as e:  # noqa: BLE001
+            err = f"ollama: {type(e).__name__}: {str(e)[:160]}"
         degraded = answer is None
         if degraded:
             answer = self._degraded(question, ctx, err or "model unavailable")

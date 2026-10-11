@@ -1,0 +1,10 @@
+00:23:02 start sentence-transformers/all-MiniLM-L6-v2
+00:23:19 done sentence-transformers/all-MiniLM-L6-v2: {"dim": 384, "build_s": 0.5, "error": null}
+00:23:19 start BAAI/bge-small-en-v1.5
+00:25:58 done BAAI/bge-small-en-v1.5: {"dim": 384, "build_s": 151.2, "error": null}
+00:25:58 start intfloat/e5-small-v2
+00:29:04 done intfloat/e5-small-v2: {"dim": 384, "build_s": 177.3, "error": null}
+00:29:04 start sentence-transformers/all-mpnet-base-v2
+00:37:51 done sentence-transformers/all-mpnet-base-v2: {"dim": 768, "build_s": 509.2, "error": null}
+00:37:51 start nomic-embed-text
+00:44:12 done nomic-embed-text: {"dim": 768, "build_s": 356.8, "error": null}

@@ -3,8 +3,8 @@
 Exact flat search over ~11k normalised vectors is a single matmul (sub-millisecond), so FAISS
 is not needed; importing faiss together with torch also segfaulted on this macOS setup.
 
-- Embeddings: local sentence-transformers by default (no quota); Gemini optional via
-  EMBED_BACKEND=gemini (rate limited, batched). Cached on disk by chunk-text hash, so
+- Embeddings: local only (sentence-transformers or an Ollama embedding model). Cached on
+  disk by chunk-text hash, so
   reruns never re-embed.
 - Metadata filters: machine_id (twin or voltara id, plus that machine's family manuals),
   doc_type (source_type), family, area, fault_code, shift.
@@ -19,7 +19,7 @@ from functools import lru_cache
 
 import numpy as np
 
-from . import config, ratelimit
+from . import config
 from .graph import get_graph
 
 CHUNKS = config.BRAIN_DIR / "data" / "out" / "rag" / "rag_chunks.jsonl"
@@ -62,40 +62,49 @@ def _h(text):
 
 
 class Embedder:
-    def __init__(self):
-        self.backend = config.EMBED_BACKEND
-        self._model = None
-        self._client = None
-        self.name = config.LOCAL_EMBED_MODEL if self.backend == "local" else config.MODELS["embed"]
+    """Local embeddings. kind: 'st' (sentence-transformers) or 'ollama' (/api/embed)."""
 
-    def _local(self):
+    PREFIX = {"intfloat/e5-small-v2": ("query: ", "passage: "), "intfloat/e5-base-v2": ("query: ", "passage: "),
+              "nomic-embed-text": ("search_query: ", "search_document: ")}
+
+    def __init__(self, name=None, kind=None):
+        self.name = name or config.LOCAL_EMBED_MODEL
+        self.kind = kind or ("ollama" if self.name in ("nomic-embed-text", "mxbai-embed-large", "all-minilm") else "st")
+        self.backend = self.kind
+        self._model = None
+        self.qp, self.dp = self.PREFIX.get(self.name, ("", ""))
+
+    def _st(self):
         if self._model is None:
             from sentence_transformers import SentenceTransformer
             self._model = SentenceTransformer(self.name, device="cpu")
         return self._model
 
-    def embed(self, texts, batch=64):
-        if self.backend == "local":
-            v = self._local().encode(texts, batch_size=batch, normalize_embeddings=True, show_progress_bar=False)
+    def _embed(self, texts, batch=64):
+        if self.kind == "st":
+            v = self._st().encode(texts, batch_size=batch, normalize_embeddings=True, show_progress_bar=False)
             return np.asarray(v, dtype="float32")
-        from google import genai
-        self._client = self._client or genai.Client(api_key=config.API_KEY)
+        import urllib.request
         out = []
-        for i in range(0, len(texts), 50):
-            part = texts[i:i + 50]
-            est = sum(len(t) for t in part) // 3
-            r = ratelimit.call_with_retry(
-                "embed", lambda: self._client.models.embed_content(model=self.name, contents=part), est_tokens=est)
-            out.extend(e.values for e in r.embeddings)
+        for i in range(0, len(texts), 32):
+            body = json.dumps({"model": self.name, "input": texts[i:i + 32], "keep_alive": "10m"}).encode()
+            r = urllib.request.Request(config.OLLAMA_URL.rstrip("/") + "/api/embed", data=body,
+                                       headers={"Content-Type": "application/json"})
+            with urllib.request.urlopen(r, timeout=600) as resp:
+                out.extend(json.loads(resp.read().decode())["embeddings"])
         v = np.asarray(out, dtype="float32")
         v /= np.linalg.norm(v, axis=1, keepdims=True) + 1e-9
         return v
 
+    def embed(self, texts, batch=64, kind="doc"):
+        pre = self.dp if kind == "doc" else self.qp
+        return self._embed([pre + t for t in texts] if pre else texts, batch)
+
 
 class DocIndex:
-    def __init__(self, chunks_path=CHUNKS, build=True):
+    def __init__(self, chunks_path=CHUNKS, build=True, embedder=None):
         self.chunks = [json.loads(l) for l in open(chunks_path) if l.strip()]
-        self.emb = Embedder()
+        self.emb = embedder or Embedder()
         self.ids = {c["chunk_id"]: i for i, c in enumerate(self.chunks)}
         self._fam_by_machine = {}
         self.vecs = None
@@ -169,7 +178,7 @@ class DocIndex:
 
     # ---------------------------------------------------------------- search
     def search(self, query, k=6, machine_id=None, doc_type=None, family=None, area=None,
-               fault_code=None, shift=None, include_family_docs=True, pool=60, rrf_k=60):
+               fault_code=None, shift=None, include_family_docs=True, pool=60, rrf_k=60, mode="hybrid", w_dense=1.0, w_bm25=1.0):
         if shift is None:
             m = _SHIFT.search(query)
             shift = m.group(1).upper() if m else None
@@ -180,7 +189,7 @@ class DocIndex:
             mask = self._mask(machine_id, doc_type, family, area, fault_code, shift, include_family_docs)
             if not mask.any():
                 return []
-        qv = self.emb.embed([query])
+        qv = self.emb.embed([query], kind="query")
         scores = (self.vecs @ qv[0])
         bm = np.asarray(self.bm25.get_scores(tokenize(query)))
         if mask is not None:
@@ -189,12 +198,12 @@ class DocIndex:
         dense_top = np.argsort(-scores)[:pool]
         bm_top = np.argsort(-bm)[:pool]
         fused = {}
-        for rank, i in enumerate(dense_top):
+        for rank, i in enumerate(dense_top if mode != "bm25" else []):
             if scores[i] > -1e8:
-                fused[i] = fused.get(i, 0) + 1.0 / (rrf_k + rank + 1)
-        for rank, i in enumerate(bm_top):
+                fused[i] = fused.get(i, 0) + w_dense / (rrf_k + rank + 1)
+        for rank, i in enumerate(bm_top if mode != "dense" else []):
             if bm[i] > 0 and (mask is None or mask[i]):
-                fused[i] = fused.get(i, 0) + 1.0 / (rrf_k + rank + 1)
+                fused[i] = fused.get(i, 0) + w_bm25 / (rrf_k + rank + 1)
         if prefer:
             for i in list(fused):
                 if self.chunks[i]["source_type"] in prefer:

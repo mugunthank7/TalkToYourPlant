@@ -11,7 +11,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from app import config, ratelimit  # noqa: E402
+from app import config  # noqa: E402
 from app.agent import Brain  # noqa: E402
 from app.graph import get_graph  # noqa: E402
 
@@ -30,22 +30,19 @@ def brain():
 class ChatIn(BaseModel):
     message: str
     session_id: str = "default"
-    premium: bool = False
     shift: str | None = None
 
 
 @app.get("/health")
 def health():
     g = get_graph()
-    usage = {r: {"used": ratelimit.limiter(r).used_today(), "budget": config.RPD[r]} for r in ("agent", "lite", "premium", "embed")}
-    return {"status": "ok", "graph": g.stats()["nodes"], "key_set": bool(config.API_KEY),
-            "models": config.MODELS, "sim_mode": config.get("SIM_MODE", "mock"),
-            "embed_backend": config.EMBED_BACKEND, "usage_today": usage}
+    return {"status": "ok", "graph": g.stats()["nodes"], "llm": "local", "ollama_model": config.OLLAMA_MODEL,
+            "embedder": config.LOCAL_EMBED_MODEL, "sim_mode": config.get("SIM_MODE", "mock")}
 
 
 @app.post("/chat")
 def chat(body: ChatIn):
-    return brain().ask(body.message, session_id=body.session_id, premium=body.premium, shift=body.shift)
+    return brain().ask(body.message, session_id=body.session_id, shift=body.shift)
 
 
 @app.get("/")
