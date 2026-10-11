@@ -21,9 +21,10 @@ class DailyBudgetExceeded(RuntimeError):
 
 
 class RateLimiter:
-    def __init__(self, rpm, rpd, role, usage_path=None):
-        self.rpm, self.rpd, self.role = max(1, rpm), rpd, role
+    def __init__(self, rpm, rpd, role, usage_path=None, tpm=0):
+        self.rpm, self.rpd, self.role, self.tpm = max(1, rpm), rpd, role, tpm
         self.window = deque()
+        self.tok = deque()  # (t, tokens)
         self.lock = threading.Lock()
         self.path = usage_path or (config.CACHE_DIR / "usage.json")
 
@@ -51,18 +52,30 @@ class RateLimiter:
         return d.get(self.role, 0) if d.get("date") == date.today().isoformat() else 0
 
     # --- per-minute window
-    def acquire(self):
-        """Block until a request slot is free, then count it."""
+    def acquire(self, tokens=0):
+        """Block until a request slot (and token budget) is free, then count it."""
         while True:
             with self.lock:
                 now = time.monotonic()
                 while self.window and now - self.window[0] >= 60:
                     self.window.popleft()
-                if len(self.window) < self.rpm:
+                while self.tok and now - self.tok[0][0] >= 60:
+                    self.tok.popleft()
+                used = sum(n for _, n in self.tok)
+                rpm_ok = len(self.window) < self.rpm
+                tpm_ok = not self.tpm or not tokens or used + tokens <= self.tpm or not self.tok
+                if rpm_ok and tpm_ok:
                     self._bump_daily()
                     self.window.append(now)
+                    if tokens:
+                        self.tok.append((now, tokens))
                     return
-                wait = 60 - (now - self.window[0]) + 0.05
+                waits = []
+                if not rpm_ok:
+                    waits.append(60 - (now - self.window[0]))
+                if not tpm_ok:
+                    waits.append(60 - (now - self.tok[0][0]))
+                wait = max(waits) + 0.05
             time.sleep(max(wait, 0.05))
 
 
@@ -71,7 +84,7 @@ _limiters = {}
 
 def limiter(role):
     if role not in _limiters:
-        _limiters[role] = RateLimiter(config.RPM[role], config.RPD[role], role)
+        _limiters[role] = RateLimiter(config.RPM[role], config.RPD[role], role, tpm=config.TPM[role])
     return _limiters[role]
 
 
@@ -87,11 +100,11 @@ def _retryable(exc):
         t in s for t in ("429", "RESOURCE_EXHAUSTED", "UNAVAILABLE", "503", "overloaded"))
 
 
-def call_with_retry(role, fn, *args, max_tries=6, base=2.0, cap=60.0, **kwargs):
+def call_with_retry(role, fn, *args, max_tries=6, base=2.0, cap=60.0, est_tokens=0, **kwargs):
     """Run fn under the role's limiter; back off on rate-limit/transient errors."""
     lim = limiter(role)
     for attempt in range(max_tries):
-        lim.acquire()
+        lim.acquire(est_tokens)
         try:
             return fn(*args, **kwargs)
         except DailyBudgetExceeded:
