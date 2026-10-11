@@ -123,3 +123,8 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 **Context:** M and T both need to inspect the same generated data on GitHub. D-017 commits small outputs and regenerates large ones.
 **Decision:** `brain/data/out/` (about 46 MB, 169 files, largest 20 MB) is committed on request of T so the whole team sees both datasets: M's in `data/out/`, T's in `brain/data/out/`. Source of truth stays the generators; outputs are deterministic (seed 42). (Renumbered from D-024 after M's D-024 and D-025.)
 **Consequences:** Repo grows by about 10 MB compressed. If the data is regenerated with a new seed or schema, the diff will be large; prefer rebuilding only on schema changes.
+
+## D-027, Gemini access via google-genai with client-side rate limiting | 2026-10-11 | accepted
+**Context:** Free-tier Gemini quotas are low and change; sources disagree on exact numbers (RPM, RPD per model, and embeddings unconfirmed).
+**Decision:** Brain uses `google-genai`. Key in `brain/.env` (gitignored), never committed. Model names in env vars (`MODEL_AGENT`, `MODEL_LITE`, `MODEL_FALLBACK`, `MODEL_EMBED`); verified against the key's model list by `brain/scripts/check_key.py`. `brain/app/ratelimit.py`: sliding-window RPM and persisted daily budget per role (agent/lite/embed), set below real quotas by default, plus exponential backoff with jitter on 429/5xx honouring server retry hints. Embeddings are cached to disk by chunk hash so reruns cost nothing.
+**Consequences:** Quota errors degrade to waiting or the fallback model, not crashes. Limits must be re-checked on the AI Studio rate-limit page before demo day and set in `.env`.
