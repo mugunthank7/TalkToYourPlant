@@ -8,3 +8,6 @@ scipy
 pyarrow
 pytest
 httpx
+scikit-learn
+joblib
+matplotlib

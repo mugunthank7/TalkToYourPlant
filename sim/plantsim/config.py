@@ -43,6 +43,7 @@ class Params:
     hero_repair_s: float = 1500.0       # planned bearing replacement
     warm_s: float = 1500.0              # pre-roll before t=0 so the line starts full, like a running plant
     cost_per_min: float = COST_PER_MIN
+    detector: object = False            # False | "hero" | "all": real anomaly detection instead of the scripted alert time
     station_speed: dict = field(default_factory=dict)   # station id -> service time multiplier (0.8 = 20 percent faster)
     injected: list = field(default_factory=list)        # [{"machine","t0","repair_s"?}]
     changes: list = field(default_factory=list)         # what-if operations applied at their own time

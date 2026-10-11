@@ -68,10 +68,13 @@ def test_api_endpoints():
     c = TestClient(app)
     live.control({"action": "reset"})
     assert c.get("/health").json()["ok"]
-    c.post("/control", json={"action": "seek", "t": 18700})
+    c.post("/control", json={"action": "seek", "t": 12400})
     s = c.get("/state").json()
-    assert s["t"] == 18700 and "S06" in s["stations"] and s["alerts"]
+    assert s["t"] == 12400 and "S06" in s["stations"] and s["alerts"]
     assert c.get("/machine/M05").json()["rul_s"] > 0
+    an = c.get("/anomaly/M05").json()
+    assert an["alert"] and an["contributors"] and an["thresholds"]["critical"] > an["thresholds"]["watch"]
+    assert "M05" in c.get("/anomaly").json()["machines"]
     r = c.post("/scenario", json={"changes": [{"op": "keep_running", "hours": 2}]}).json()
     assert r["delta"]["units"] <= 0 and "summary" in r
     tools = {t["name"] for t in c.get("/tools").json()}
