@@ -1,0 +1,13 @@
+twin_station,twin_name,voltara_area,note
+S01,Coil yard,STP,
+S02,Casting & press,CAS,
+S03,Parts buffer,LOG,
+S04,Framing,BIW,
+S05,Weld cell A,BIW,
+S06,Weld cell B (HERO),BIW,
+S07,Inspection gate,BIW,
+S08,Battery module line,BAT,
+S09,Pack closing & EOL test,BAT,
+S10,Maintenance bay,,support; no Voltara area
+S11,Control room / andon,,support; no Voltara area
+S12,Spare parts cage,,support; holds spare parts (bearing_6208)

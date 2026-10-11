@@ -1,0 +1,4 @@
+twin_signal,voltara_channel,note
+vibration_rms,vibration_mm_s,
+temperature_c,motor_temp_c,gearbox_temp_c is the alternative
+motor_current_a,motor_current_a,
