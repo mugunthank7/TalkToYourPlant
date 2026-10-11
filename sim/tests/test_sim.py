@@ -107,3 +107,18 @@ def test_cars_on_the_belt_never_overlap():
         d = sorted(c["d_m"] for c in cars(s))
         assert all(b - a >= 6.5 for a, b in zip(d, d[1:])), (t, d)
         assert len({c["k"] % 12 for c in cars(s)}) == len(cars(s))        # unique render slots in the twin
+
+
+def test_cars_never_overtake():
+    from plantsim.snapshot import cars
+    s = PlantSim(Params(detector=False))
+    prev = {}
+    for t in range(1000, 14000, 20):
+        s.run_until(t)
+        pos = {c["k"]: c["d_m"] for c in cars(s)}
+        for a in pos:
+            for b in pos:
+                if a < b and a in prev and b in prev:
+                    assert not (prev[a] > prev[b] and pos[a] < pos[b]), (t, a, b)   # the older car stays ahead
+        assert all(0 <= c["build"] <= 1 for c in cars(s))
+        prev = pos

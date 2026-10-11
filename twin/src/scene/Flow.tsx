@@ -9,7 +9,7 @@ import { beltTime } from "../plant";
 import { simLink } from "../simlink";
 
 const STEEL = new THREE.Color("#8b95a3");
-const PAINTS = ["#f8fafc", "#cbd5e1", "#1d4ed8", "#e2e8f0", "#b91c1c"].map((c) => new THREE.Color(c));
+const PAINTS = ["#2563eb", "#dc2626", "#16a34a", "#f59e0b", "#7c3aed", "#e5e7eb", "#0ea5e9", "#be185d", "#111827", "#ea580c", "#14b8a6", "#9ca3af"].map((c) => new THREE.Color(c));   // one colour per car (slot = car id mod 12)
 
 // ---- car body: floor pan -> underbody frame -> shell rises -> paint -> wheels --------------------------
 const profile = (() => {
@@ -34,7 +34,7 @@ export function Conveyor() {
 
   useFrame(() => {
     if (simLink.on) {
-      const by = new Map<number, { d_m: number }>();
+      const by = new Map<number, { d_m: number; build?: number }>();
       for (const c of simLink.snap!.belt.cars) by.set(c.k % LIVE_SLOTS, c);
       for (let s = 0; s < LIVE_SLOTS; s++) {
         const g = groups.current[s];
@@ -44,7 +44,7 @@ export function Conveyor() {
         if (c) {
           const tx = x0 + Math.min(c.d_m * (len / 59), len + 2);
           g.position.x = Math.abs(tx - g.position.x) > 4 ? tx : g.position.x + (tx - g.position.x) * 0.25;
-          prog[s].current = Math.min(1, Math.max(0, c.d_m / 59));
+          prog[s].current = c.build ?? Math.min(1, Math.max(0, c.d_m / 53));      // how far the body is built and painted; full at the inspection gate
         }
       }
       return;
