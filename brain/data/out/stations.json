@@ -1,0 +1,714 @@
+{
+ "stations": {
+  "S01": {
+   "id": "S01",
+   "name": "Coil yard",
+   "what_happens": "Steel/aluminium coils arrive, are decoiled and cut to blanks",
+   "priority": "P2",
+   "machines": [
+    {
+     "id": "M10",
+     "name": "Decoiler",
+     "type": "decoiler",
+     "failure_modes": [
+      {
+       "mode": "mandrel_bearing_wear",
+       "component": "mandrel_bearing",
+       "symptom": "vibration",
+       "cause": "fatigue",
+       "repair": "Replace mandrel bearing",
+       "spare_part": "bearing_22222",
+       "supplier": "Northwind Bearings",
+       "repair_min": 180.0,
+       "part_cost_usd": 2600.0
+      },
+      {
+       "mode": "brake_fault",
+       "component": "brake",
+       "symptom": "uncontrolled uncoiling",
+       "cause": "pad wear",
+       "repair": "Replace brake pads",
+       "spare_part": "brake_pad_set",
+       "supplier": "Harbor Industrial Supply",
+       "repair_min": 90.0,
+       "part_cost_usd": 1400.0
+      },
+      {
+       "mode": "motor_fault",
+       "component": "motor",
+       "symptom": "high current",
+       "cause": "winding fault",
+       "repair": "Replace motor",
+       "spare_part": "drive_motor_b",
+       "supplier": "Meridian Drives",
+       "repair_min": 150.0,
+       "part_cost_usd": 900.0
+      }
+     ]
+    }
+   ],
+   "upstream": [],
+   "downstream": [
+    "S02"
+   ],
+   "people": null,
+   "hero": false
+  },
+  "S02": {
+   "id": "S02",
+   "name": "Casting and press",
+   "what_happens": "Large casting press forms underbody parts; a transfer robot moves parts out",
+   "priority": "P0",
+   "machines": [
+    {
+     "id": "M01",
+     "name": "Casting press",
+     "type": "press",
+     "failure_modes": [
+      {
+       "mode": "hydraulic_leak",
+       "component": "hydraulic_unit",
+       "symptom": "pressure drop, oil on floor",
+       "cause": "worn seals",
+       "repair": "Replace seal kit and refill",
+       "spare_part": "seal_kit_h40",
+       "supplier": "Apex Hydraulics",
+       "repair_min": 180.0,
+       "part_cost_usd": 900.0
+      },
+      {
+       "mode": "die_wear",
+       "component": "die_insert",
+       "symptom": "part defects, burrs",
+       "cause": "abrasive wear",
+       "repair": "Replace die insert and re-shim",
+       "spare_part": "die_insert_a",
+       "supplier": "Harbor Industrial Supply",
+       "repair_min": 240.0,
+       "part_cost_usd": 5200.0
+      },
+      {
+       "mode": "clutch_brake_fault",
+       "component": "clutch_brake",
+       "symptom": "long stopping time",
+       "cause": "friction pad wear",
+       "repair": "Replace brake pads and recalibrate",
+       "spare_part": "brake_pad_set",
+       "supplier": "Harbor Industrial Supply",
+       "repair_min": 300.0,
+       "part_cost_usd": 1400.0
+      },
+      {
+       "mode": "lubrication_failure",
+       "component": "lube_pump",
+       "symptom": "high temperature, vibration",
+       "cause": "pump failure",
+       "repair": "Replace lube pump",
+       "spare_part": "lube_pump",
+       "supplier": "Apex Hydraulics",
+       "repair_min": 90.0,
+       "part_cost_usd": 700.0
+      },
+      {
+       "mode": "main_bearing_wear",
+       "component": "main_bearing",
+       "symptom": "vibration, noise",
+       "cause": "overload and fatigue",
+       "repair": "Replace main bearing",
+       "spare_part": "bearing_22222",
+       "supplier": "Northwind Bearings",
+       "repair_min": 360.0,
+       "part_cost_usd": 2600.0
+      }
+     ]
+    },
+    {
+     "id": "M02",
+     "name": "Press transfer robot",
+     "type": "robot",
+     "failure_modes": [
+      {
+       "mode": "gripper_fault",
+       "component": "gripper",
+       "symptom": "part drops",
+       "cause": "pad wear and air leak",
+       "repair": "Replace gripper pads and seals",
+       "spare_part": "gripper_pad_set",
+       "supplier": "Kestrel Robot Parts",
+       "repair_min": 30.0,
+       "part_cost_usd": 220.0
+      },
+      {
+       "mode": "bearing_wear",
+       "component": "joint1_bearing",
+       "symptom": "high vibration",
+       "cause": "fatigue",
+       "repair": "Replace joint bearing and regrease",
+       "spare_part": "bearing_6208",
+       "supplier": "Northwind Bearings",
+       "repair_min": 90.0,
+       "part_cost_usd": 180.0
+      },
+      {
+       "mode": "servo_motor_fault",
+       "component": "servo_motor",
+       "symptom": "high motor current",
+       "cause": "winding degradation",
+       "repair": "Replace servo motor",
+       "spare_part": "servo_motor_a",
+       "supplier": "Meridian Drives",
+       "repair_min": 150.0,
+       "part_cost_usd": 2400.0
+      },
+      {
+       "mode": "controller_fault",
+       "component": "controller_cabinet",
+       "symptom": "controller error codes",
+       "cause": "I/O card failure",
+       "repair": "Replace I/O card",
+       "spare_part": "io_card",
+       "supplier": "Orion Electrical",
+       "repair_min": 60.0,
+       "part_cost_usd": 520.0
+      }
+     ]
+    }
+   ],
+   "upstream": [
+    "S01"
+   ],
+   "downstream": [
+    "S03"
+   ],
+   "people": null,
+   "hero": false
+  },
+  "S03": {
+   "id": "S03",
+   "name": "Parts buffer",
+   "what_happens": "Racks of stamped parts wait for the line; forklift/AGV moves racks",
+   "priority": "P2",
+   "machines": [
+    {
+     "id": "M11",
+     "name": "Rack AGV",
+     "type": "agv",
+     "failure_modes": []
+    }
+   ],
+   "upstream": [
+    "S02"
+   ],
+   "downstream": [
+    "S04"
+   ],
+   "people": null,
+   "hero": false
+  },
+  "S04": {
+   "id": "S04",
+   "name": "Framing",
+   "what_happens": "Underbody parts are clamped into a fixture and tack-welded",
+   "priority": "P0",
+   "machines": [
+    {
+     "id": "M03",
+     "name": "Framing fixture",
+     "type": "fixture",
+     "failure_modes": [
+      {
+       "mode": "clamp_cylinder_leak",
+       "component": "clamp_cylinder",
+       "symptom": "slow clamping",
+       "cause": "worn seal",
+       "repair": "Replace cylinder seal",
+       "spare_part": "cyl_seal",
+       "supplier": "Apex Hydraulics",
+       "repair_min": 45.0,
+       "part_cost_usd": 80.0
+      },
+      {
+       "mode": "locating_pin_wear",
+       "component": "locating_pin",
+       "symptom": "gap and fit defects",
+       "cause": "wear",
+       "repair": "Replace locating pins",
+       "spare_part": "pin_set",
+       "supplier": "Harbor Industrial Supply",
+       "repair_min": 30.0,
+       "part_cost_usd": 150.0
+      },
+      {
+       "mode": "hydraulic_valve_fault",
+       "component": "valve",
+       "symptom": "unstable pressure",
+       "cause": "contamination",
+       "repair": "Replace valve",
+       "spare_part": "valve_4_3",
+       "supplier": "Apex Hydraulics",
+       "repair_min": 75.0,
+       "part_cost_usd": 600.0
+      }
+     ]
+    },
+    {
+     "id": "M06",
+     "name": "Main conveyor",
+     "type": "conveyor",
+     "failure_modes": [
+      {
+       "mode": "drive_chain_wear",
+       "component": "drive_chain",
+       "symptom": "jerky motion, noise",
+       "cause": "elongation",
+       "repair": "Replace drive chain",
+       "spare_part": "chain_set",
+       "supplier": "Harbor Industrial Supply",
+       "repair_min": 90.0,
+       "part_cost_usd": 450.0
+      },
+      {
+       "mode": "roller_seizure",
+       "component": "roller",
+       "symptom": "skid stalls",
+       "cause": "bearing seizure",
+       "repair": "Replace roller",
+       "spare_part": "roller_unit",
+       "supplier": "Harbor Industrial Supply",
+       "repair_min": 45.0,
+       "part_cost_usd": 120.0
+      },
+      {
+       "mode": "drive_motor_fault",
+       "component": "drive_motor",
+       "symptom": "high current, trips",
+       "cause": "winding fault",
+       "repair": "Replace drive motor",
+       "spare_part": "drive_motor_b",
+       "supplier": "Meridian Drives",
+       "repair_min": 120.0,
+       "part_cost_usd": 900.0
+      },
+      {
+       "mode": "sensor_misalignment",
+       "component": "position_sensor",
+       "symptom": "false stops",
+       "cause": "vibration loosened mount",
+       "repair": "Realign position sensor",
+       "spare_part": "photo_eye",
+       "supplier": "Orion Electrical",
+       "repair_min": 20.0,
+       "part_cost_usd": 90.0
+      }
+     ]
+    }
+   ],
+   "upstream": [
+    "S03"
+   ],
+   "downstream": [
+    "S05"
+   ],
+   "people": "line operator",
+   "hero": false
+  },
+  "S05": {
+   "id": "S05",
+   "name": "Weld cell A",
+   "what_happens": "Robot spot-welds the side panels",
+   "priority": "P0",
+   "machines": [
+    {
+     "id": "M04",
+     "name": "Weld robot 1",
+     "type": "weld_robot",
+     "failure_modes": [
+      {
+       "mode": "bearing_wear",
+       "component": "joint1_bearing",
+       "symptom": "high vibration, rising temperature",
+       "cause": "lubrication loss and fatigue",
+       "repair": "Replace joint bearing and regrease",
+       "spare_part": "bearing_6208",
+       "supplier": "Northwind Bearings",
+       "repair_min": 90.0,
+       "part_cost_usd": 180.0
+      },
+      {
+       "mode": "bearing_wear",
+       "component": "joint2_bearing",
+       "symptom": "high vibration, rising temperature",
+       "cause": "lubrication loss and fatigue",
+       "repair": "Replace joint bearing and regrease",
+       "spare_part": "bearing_6208",
+       "supplier": "Northwind Bearings",
+       "repair_min": 90.0,
+       "part_cost_usd": 180.0
+      },
+      {
+       "mode": "servo_motor_fault",
+       "component": "servo_motor",
+       "symptom": "high motor current, overheating",
+       "cause": "winding degradation",
+       "repair": "Replace servo motor and recalibrate",
+       "spare_part": "servo_motor_a",
+       "supplier": "Meridian Drives",
+       "repair_min": 150.0,
+       "part_cost_usd": 2400.0
+      },
+      {
+       "mode": "gearbox_wear",
+       "component": "gearbox",
+       "symptom": "noise, backlash",
+       "cause": "worn gear teeth",
+       "repair": "Replace gearbox and retune",
+       "spare_part": "gearbox_unit",
+       "supplier": "Meridian Drives",
+       "repair_min": 240.0,
+       "part_cost_usd": 3800.0
+      },
+      {
+       "mode": "weld_tip_wear",
+       "component": "weld_gun",
+       "symptom": "weak welds, quality alarms",
+       "cause": "electrode tip erosion",
+       "repair": "Dress or replace electrode tips",
+       "spare_part": "electrode_tips",
+       "supplier": "Harbor Industrial Supply",
+       "repair_min": 20.0,
+       "part_cost_usd": 40.0
+      },
+      {
+       "mode": "cable_harness_fatigue",
+       "component": "cable_harness",
+       "symptom": "intermittent faults",
+       "cause": "flex fatigue",
+       "repair": "Replace cable harness",
+       "spare_part": "cable_harness_kit",
+       "supplier": "Kestrel Robot Parts",
+       "repair_min": 75.0,
+       "part_cost_usd": 650.0
+      },
+      {
+       "mode": "controller_fault",
+       "component": "controller_cabinet",
+       "symptom": "controller error codes",
+       "cause": "I/O card failure",
+       "repair": "Replace I/O card and reload program",
+       "spare_part": "io_card",
+       "supplier": "Orion Electrical",
+       "repair_min": 60.0,
+       "part_cost_usd": 520.0
+      }
+     ]
+    }
+   ],
+   "upstream": [
+    "S04"
+   ],
+   "downstream": [
+    "S06"
+   ],
+   "people": "line operator",
+   "hero": false
+  },
+  "S06": {
+   "id": "S06",
+   "name": "Weld cell B",
+   "what_happens": "**Hero scenario:** robot with joint bearing wear",
+   "priority": "P0",
+   "machines": [
+    {
+     "id": "M05",
+     "name": "Weld robot 2",
+     "type": "weld_robot",
+     "failure_modes": [
+      {
+       "mode": "bearing_wear",
+       "component": "joint1_bearing",
+       "symptom": "high vibration, rising temperature",
+       "cause": "lubrication loss and fatigue",
+       "repair": "Replace joint bearing and regrease",
+       "spare_part": "bearing_6208",
+       "supplier": "Northwind Bearings",
+       "repair_min": 90.0,
+       "part_cost_usd": 180.0
+      },
+      {
+       "mode": "bearing_wear",
+       "component": "joint2_bearing",
+       "symptom": "high vibration, rising temperature",
+       "cause": "lubrication loss and fatigue",
+       "repair": "Replace joint bearing and regrease",
+       "spare_part": "bearing_6208",
+       "supplier": "Northwind Bearings",
+       "repair_min": 90.0,
+       "part_cost_usd": 180.0
+      },
+      {
+       "mode": "servo_motor_fault",
+       "component": "servo_motor",
+       "symptom": "high motor current, overheating",
+       "cause": "winding degradation",
+       "repair": "Replace servo motor and recalibrate",
+       "spare_part": "servo_motor_a",
+       "supplier": "Meridian Drives",
+       "repair_min": 150.0,
+       "part_cost_usd": 2400.0
+      },
+      {
+       "mode": "gearbox_wear",
+       "component": "gearbox",
+       "symptom": "noise, backlash",
+       "cause": "worn gear teeth",
+       "repair": "Replace gearbox and retune",
+       "spare_part": "gearbox_unit",
+       "supplier": "Meridian Drives",
+       "repair_min": 240.0,
+       "part_cost_usd": 3800.0
+      },
+      {
+       "mode": "weld_tip_wear",
+       "component": "weld_gun",
+       "symptom": "weak welds, quality alarms",
+       "cause": "electrode tip erosion",
+       "repair": "Dress or replace electrode tips",
+       "spare_part": "electrode_tips",
+       "supplier": "Harbor Industrial Supply",
+       "repair_min": 20.0,
+       "part_cost_usd": 40.0
+      },
+      {
+       "mode": "cable_harness_fatigue",
+       "component": "cable_harness",
+       "symptom": "intermittent faults",
+       "cause": "flex fatigue",
+       "repair": "Replace cable harness",
+       "spare_part": "cable_harness_kit",
+       "supplier": "Kestrel Robot Parts",
+       "repair_min": 75.0,
+       "part_cost_usd": 650.0
+      },
+      {
+       "mode": "controller_fault",
+       "component": "controller_cabinet",
+       "symptom": "controller error codes",
+       "cause": "I/O card failure",
+       "repair": "Replace I/O card and reload program",
+       "spare_part": "io_card",
+       "supplier": "Orion Electrical",
+       "repair_min": 60.0,
+       "part_cost_usd": 520.0
+      }
+     ]
+    }
+   ],
+   "upstream": [
+    "S05"
+   ],
+   "downstream": [
+    "S07"
+   ],
+   "people": "line operator",
+   "hero": true
+  },
+  "S07": {
+   "id": "S07",
+   "name": "Inspection gate",
+   "what_happens": "Camera arch checks weld quality and gaps",
+   "priority": "P1",
+   "machines": [
+    {
+     "id": "M07",
+     "name": "Vision inspection gate",
+     "type": "vision_gate",
+     "failure_modes": [
+      {
+       "mode": "camera_fault",
+       "component": "camera",
+       "symptom": "no image",
+       "cause": "sensor failure",
+       "repair": "Replace camera",
+       "spare_part": "camera_unit",
+       "supplier": "Lumen Vision Systems",
+       "repair_min": 60.0,
+       "part_cost_usd": 1800.0
+      },
+      {
+       "mode": "lens_contamination",
+       "component": "lens",
+       "symptom": "false rejects",
+       "cause": "dust and spatter",
+       "repair": "Clean lens",
+       "spare_part": "cleaning_kit",
+       "supplier": "Lumen Vision Systems",
+       "repair_min": 10.0,
+       "part_cost_usd": 5.0
+      },
+      {
+       "mode": "calibration_drift",
+       "component": "camera",
+       "symptom": "measurement drift",
+       "cause": "thermal drift",
+       "repair": "Recalibrate",
+       "spare_part": "none",
+       "supplier": "Lumen Vision Systems",
+       "repair_min": 30.0,
+       "part_cost_usd": 0.0
+      }
+     ]
+    }
+   ],
+   "upstream": [
+    "S06"
+   ],
+   "downstream": [
+    "S09"
+   ],
+   "people": "quality inspector",
+   "hero": false
+  },
+  "S08": {
+   "id": "S08",
+   "name": "Battery module line",
+   "what_happens": "Cells are stacked into modules",
+   "priority": "P2",
+   "machines": [
+    {
+     "id": "M08",
+     "name": "Battery module stacker",
+     "type": "gantry",
+     "failure_modes": [
+      {
+       "mode": "belt_wear",
+       "component": "drive_belt",
+       "symptom": "positioning error",
+       "cause": "wear",
+       "repair": "Replace belt",
+       "spare_part": "gantry_belt",
+       "supplier": "Harbor Industrial Supply",
+       "repair_min": 60.0,
+       "part_cost_usd": 140.0
+      },
+      {
+       "mode": "linear_guide_wear",
+       "component": "linear_guide",
+       "symptom": "vibration",
+       "cause": "wear",
+       "repair": "Replace guide block",
+       "spare_part": "guide_block",
+       "supplier": "Northwind Bearings",
+       "repair_min": 120.0,
+       "part_cost_usd": 700.0
+      },
+      {
+       "mode": "servo_motor_fault",
+       "component": "servo_motor",
+       "symptom": "high current",
+       "cause": "winding fault",
+       "repair": "Replace servo",
+       "spare_part": "servo_motor_a",
+       "supplier": "Meridian Drives",
+       "repair_min": 120.0,
+       "part_cost_usd": 1500.0
+      }
+     ]
+    }
+   ],
+   "upstream": [],
+   "downstream": [
+    "S09"
+   ],
+   "people": null,
+   "hero": false
+  },
+  "S09": {
+   "id": "S09",
+   "name": "Pack closing and EOL test",
+   "what_happens": "Pack is sealed, leak/electrical tested",
+   "priority": "P2",
+   "machines": [
+    {
+     "id": "M09",
+     "name": "Pack sealer",
+     "type": "sealer",
+     "failure_modes": [
+      {
+       "mode": "seal_head_wear",
+       "component": "seal_head",
+       "symptom": "poor seals, leaks",
+       "cause": "wear",
+       "repair": "Replace seal head",
+       "spare_part": "seal_head",
+       "supplier": "Harbor Industrial Supply",
+       "repair_min": 90.0,
+       "part_cost_usd": 520.0
+      },
+      {
+       "mode": "heater_fault",
+       "component": "heater",
+       "symptom": "low temperature",
+       "cause": "element burnout",
+       "repair": "Replace heater",
+       "spare_part": "heater_element",
+       "supplier": "Orion Electrical",
+       "repair_min": 60.0,
+       "part_cost_usd": 260.0
+      },
+      {
+       "mode": "leak_tester_fault",
+       "component": "leak_tester",
+       "symptom": "false failures",
+       "cause": "sensor drift",
+       "repair": "Recalibrate or replace sensor",
+       "spare_part": "pressure_sensor",
+       "supplier": "Orion Electrical",
+       "repair_min": 45.0,
+       "part_cost_usd": 300.0
+      }
+     ]
+    }
+   ],
+   "upstream": [
+    "S07",
+    "S08"
+   ],
+   "downstream": [],
+   "people": null,
+   "hero": false
+  },
+  "S10": {
+   "id": "S10",
+   "name": "Maintenance bay",
+   "what_happens": "Technician workbench, tool cart, tablet",
+   "priority": "P0",
+   "machines": [],
+   "upstream": [],
+   "downstream": [],
+   "people": "maintenance technician (on call)",
+   "hero": false
+  },
+  "S11": {
+   "id": "S11",
+   "name": "Control room and break room",
+   "what_happens": "Screens, andon light stack, supervisor desk",
+   "priority": "P1",
+   "machines": [],
+   "upstream": [],
+   "downstream": [],
+   "people": "line supervisor",
+   "hero": false
+  },
+  "S12": {
+   "id": "S12",
+   "name": "Spare parts cage",
+   "what_happens": "Shelving with bearings, gearboxes, motors (the \"spare part in stock?\" beat)",
+   "priority": "P1",
+   "machines": [],
+   "upstream": [],
+   "downstream": [],
+   "people": null,
+   "hero": false
+  }
+ }
+}

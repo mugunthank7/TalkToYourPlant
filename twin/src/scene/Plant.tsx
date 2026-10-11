@@ -33,14 +33,30 @@ export function Floor() {
 
 export function Stations() {
   const layout = useTwin((s) => s.data)!.layout;
+  const selected = useTwin((s) => s.selectedStation);
+  const select = useTwin((s) => s.setSelectedStation);
   return (
     <>
       {layout.stations.map((s) => {
         const [x, z] = toScene(s.x, s.z);
         const withBuilding = false;
         const detailed = DETAILED_IDS.has(s.id);
+        const on = selected === s.id;
+        const hw = s.w / 2, hd = s.d / 2;
         return (
-          <group key={s.id} position={[x, 0, z]}>
+          <group key={s.id} position={[x, 0, z]}
+            onClick={(e) => { e.stopPropagation(); select(on ? null : s.id); }}
+            onPointerOver={() => { document.body.style.cursor = "pointer"; }}
+            onPointerOut={() => { document.body.style.cursor = ""; }}>
+            {/* click target covering the whole station footprint */}
+            <mesh position={[0, 1.2, 0]}>
+              <boxGeometry args={[s.w, 2.4, s.d]} />
+              <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+            </mesh>
+            {on && (
+              <Line points={[[-hw, 0.14, -hd], [hw, 0.14, -hd], [hw, 0.14, hd], [-hw, 0.14, hd], [-hw, 0.14, -hd]]}
+                color="#22d3ee" lineWidth={4} />
+            )}
             {!detailed && (
               <mesh position={[0, 0.06, 0]} receiveShadow>
                 <boxGeometry args={[s.w, 0.12, s.d]} />

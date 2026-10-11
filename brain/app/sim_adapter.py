@@ -114,6 +114,16 @@ class MockSim:
             "caveat": "failure_probability is an estimate chosen per matched scenario, not a model output.",
         }
 
+    def get_station(self, station_id, machine_ids=(), graph=None):
+        ms = [self.get_sensor_state(m, graph) for m in machine_ids]
+        worst = next((m for m in ms if m.get("status") in ("critical", "warning")), None)
+        return {"station": station_id, "state": "risk" if worst else "run", "reason": (worst or {}).get("machine_id", ""),
+                "machines": ms, "source": "mock"}
+
+    def inject_fault(self, machine_id, repair_minutes=None):
+        self.fault_active.add(machine_id)
+        return {"injected": {"machine": machine_id, "repair_s": (repair_minutes or 30) * 60}, "source": "mock"}
+
     # ---- work orders ------------------------------------------------------
     def create_work_order(self, machine_id, component_id=None, spare_part=None, fault_code=None, priority="P2", note=None):
         wo = {"type": "work_order", "id": f"WO-{next(_wo_counter)}", "machine_id": machine_id,
@@ -159,39 +169,66 @@ class LiveSim:
                 out.append({"signal": c[0], "shap": c[1]})
         return out
 
+    def _snap(self, ttl=1.5):
+        """One cached /state snapshot shared by all lookups (the engine is single-threaded and busy)."""
+        import time as _t
+        now = _t.time()
+        if getattr(self, "_snap_at", 0) + ttl < now or not hasattr(self, "_snap_v"):
+            self._snap_v = self._req("GET", "/state", timeout=15)
+            self._snap_at = now
+        return self._snap_v
+
     def get_sensor_state(self, machine_id, graph=None):
         if machine_id not in self.SIMULATED:
             return self.fallback.get_sensor_state(machine_id, graph)
-        try:
-            dc = self._tool("get_diagnosis_context", {"machine_id": machine_id})
-            h = dc.get("machine") or {}
-        except Exception:  # noqa: BLE001
-            dc, h = {}, self._tool("get_machine_health", {"machine_id": machine_id})
-        if not h or h.get("error"):
-            return {"machine_id": machine_id, "status": "unknown", "source": "live", "error": (h or {}).get("error", "no data")}
-        try:
-            an = self._tool("get_anomaly_report", {"machine_id": machine_id})
-        except Exception:  # noqa: BLE001
-            an = {}
+        snap = self._snap()
+        h = (snap.get("machines") or {}).get(machine_id)
+        if not h:
+            return {"machine_id": machine_id, "status": "unknown", "source": "live", "error": "not in engine state"}
         level = h.get("alert")
-        status = {"critical": "critical", "watch": "warning"}.get(level, "ok" if h.get("state") in (None, "run", "idle") else h.get("state"))
+        mstate = h.get("state")
+        status = {"critical": "critical", "watch": "warning"}.get(level) or ("fault" if mstate in ("fault", "down") else
+                                                                            "repair" if mstate == "repair" else "ok")
         readings = {k: {"value": v} for k, v in (h.get("sensors") or {}).items()}
-        out = {"machine_id": machine_id, "status": status, "machine_state": h.get("state"),
-               "readings": readings, "source": "live:/tools/get_diagnosis_context",
-               "vib_multiple": h.get("vib_multiple"),
-               "evidence": dc.get("evidence"), "affected_stations": dc.get("affected_stations"),
-               "open_work_orders": [{"id": w.get("id"), "status": w.get("status")} for w in dc.get("open_work_orders", [])],
-               "candidate_failure_modes": [f.get("name") or f.get("code") or str(f)[:40] for f in dc.get("candidate_failure_modes", [])][:6],
-               "decision": dc.get("decision")}
+        st = (snap.get("stations") or {}).get(h.get("station"), {})
+        affected = [{"station": sid, "state": v.get("state"), "reason": v.get("reason")}
+                    for sid, v in (snap.get("stations") or {}).items() if v.get("state") not in ("run", None)]
+        evidence = []
+        if h.get("vib_multiple"):
+            evidence.append(f"Vibration is {h['vib_multiple']}x its healthy level.")
+        evidence.append(f"Machine state: {mstate}. Station {h.get('station')} is {st.get('state')}"
+                        + (f" ({st.get('reason')})." if st.get("reason") else "."))
+        out = {"machine_id": machine_id, "status": status, "machine_state": mstate, "station": h.get("station"),
+               "readings": readings, "source": "live:/state", "vib_multiple": h.get("vib_multiple"),
+               "evidence": evidence, "affected_stations": affected[:6],
+               "open_work_orders": [{"id": w.get("id"), "status": w.get("status")} for w in snap.get("work_orders", [])
+                                    if w.get("machine") == machine_id and w.get("status") != "closed"]}
         if h.get("rul_s") is not None:
             out["remaining_useful_life_min"] = round(h["rul_s"] / 60.0, 1)
         if level:
             out["alert"] = {"type": "alert", "machine_id": machine_id,
                             "severity": "critical" if level == "critical" else "warning",
-                            "score": (an.get("anomaly") or {}).get("score") if isinstance(an, dict) else None,
-                            "contributors": self._contrib(h.get("contributors") or an.get("contributors")),
+                            "score": (h.get("anomaly") or {}).get("score"),
+                            "contributors": self._contrib(h.get("contributors")),
                             "component_id": h.get("component_id")}
         return out
+
+    def get_station(self, station_id, machine_ids=(), graph=None):
+        try:
+            st = (self._snap().get("stations") or {}).get(station_id, {})
+        except Exception:  # noqa: BLE001
+            st = {}
+        ms = [self.get_sensor_state(m, graph) for m in machine_ids]
+        return {"station": station_id, "state": st.get("state"), "reason": st.get("reason"),
+                "utilization": st.get("utilization"), "machines": ms, "engine": st, "source": "live:/state"}
+
+    def inject_fault(self, machine_id, repair_minutes=None):
+        if machine_id not in self.SIMULATED:
+            return {"error": f"{machine_id} is not simulated by the engine"}
+        body = {"machine": machine_id}
+        if repair_minutes:
+            body["repair_minutes"] = repair_minutes
+        return {**self._req("POST", "/fault", body), "source": "live:/fault"}
 
     def run_scenario(self, machine_id, hours, op="keep_running", baseline="live"):
         changes = [{"op": op, "hours": hours}]

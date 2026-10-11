@@ -206,3 +206,16 @@ kbd { background: rgba(148, 163, 184, .25); border-radius: 4px; padding: 0 5px; 
 
 .simbtn.on { background: #15803d; border-color: #22c55e; color: #fff; } .simbtn.off { opacity: .75; } .simbtn.connecting { background: #854d0e; }
 .simtag { color: #86efac; margin-left: 4px; }
+
+/* click-a-station panel and chat (brain integration) */
+.stpanel { position: absolute; left: 16px; bottom: 170px; width: 400px; max-height: calc(100vh - 330px); overflow: auto; pointer-events: auto; font-size: 12px; }
+.stpanel h4 { margin: 10px 0 4px; font-size: 12px; opacity: .8; }
+.stpanel .stsub { margin: 0; padding-left: 18px; }
+.stmut { opacity: .7; font-size: 11px; margin-top: 2px; }
+.stpre { white-space: pre-wrap; margin: 4px 0; font: 11px/1.4 system-ui, sans-serif; background: rgba(0,0,0,.25); padding: 6px 8px; border-radius: 8px; max-height: 220px; overflow: auto; }
+.stpill { font-size: 11px; padding: 1px 8px; border-radius: 999px; border: 1px solid; margin-right: 6px; }
+.stpill.ok { color: #4ade80; } .stpill.bad { color: #f87171; }
+.stx { background: transparent; border: 0; color: inherit; font-size: 14px; cursor: pointer; }
+.chatbox { position: absolute; right: 430px; bottom: 162px; width: 340px; pointer-events: auto; font-size: 12px; }
+.chatlog { max-height: 300px; overflow: auto; margin-bottom: 6px; }
+.chatq { font-weight: 600; margin-top: 6px; }

@@ -83,6 +83,11 @@ brain/scripts/stop_all.sh
 ```
 Dependency notes: the engine's `anomaly.joblib` was pickled with numpy 2.x / scikit-learn 1.9.1; loading it with numpy 1.26 / sklearn 1.3 fails (BitGenerator, `numpy._core`, then `AbsoluteError`), so the engine runs from its own `sim/.venv`. A single bulk `pip install -r` failed with DNS errors on this network; installing package by package worked. The brain itself keeps the older numpy; the two never share an environment.
 
+### Click a station (3D twin, http://localhost:5180)
+Click any station in the 3D scene: it gets a cyan outline and a panel opens (`twin/src/ui/StationPanel.tsx`) driven by the brain:
+`GET /station/{id}` returns what the station does, live engine state and reason, each machine's sensors, alert, RUL and SHAP contributors, affected stations, open work orders, the recommended steps, who to page, the brain's diagnosis with citations, and the failure modes the simulator can inject there. `POST /station/{id}/plan` asks the local LLM for a short action plan from those facts (slow, on demand). `POST /station/{id}/simulate` injects a fault on that station's machine. The "Ask your plant" chat sends the selected station as context (`station_id`), so "what should I do?" refers to it, and answers select the station of the first highlighted machine.
+Station and failure knowledge (`brain/data/out/stations.json`, plus RAG chunks) is built by `brain/data/build_stations.py` from `docs/STATIONS.md`, `data/out/layout.json` and M's `data/out/history/failure_modes.csv`.
+
 ### Integration monitor (http://localhost:8300)
 Polls the engine every 2 s, draws OEE / throughput / M05 vibration + RUL / downtime cost with event markers, lists what changed (alerts, machine states, stopped stations, work orders), shows the brain's answer to each new alert or fault (auto-asked, with latency, tools, highlight, citations), has Inject fault / Clear faults / Ask buttons and a baseline-vs-now impact table.
 

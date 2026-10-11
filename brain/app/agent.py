@@ -487,11 +487,11 @@ class Brain:
             return hp["nodes"] if hp else []
         return []
 
-    def ask(self, question, session_id="default", shift=None, premium=False):
+    def ask(self, question, session_id="default", shift=None, premium=False, focus_hint=None):
         t0 = time.time()
         sess = self.sessions.setdefault(session_id, {"history": []})
-        focus = self.g.find_machines(question)
-        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v5", config.get("SIM_MODE", "mock"), config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
+        focus = self.g.find_machines(question) or list(focus_hint or [])
+        key = hashlib.sha1(json.dumps([PROMPT_VERSION, config.OLLAMA_MODEL, "render-v7", config.get("SIM_MODE", "mock"), config.get("LOCAL_NARRATE", "0"), question.strip().lower(), shift or current_shift(),
                                        sess["history"][-2:] if sess["history"] else []]).encode()).hexdigest()
         live = config.get("SIM_MODE", "mock").lower() == "live"     # live plant state changes: never serve cached answers
         hit = None if live else self.cache.get(key)

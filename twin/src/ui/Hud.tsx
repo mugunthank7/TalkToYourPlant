@@ -7,6 +7,8 @@ import { Help } from "./Help";
 import { heroTimes, liveAt, money, rateSeries, ratesFromCum, SHIFT_S } from "./live";
 import { simLink, simPost } from "../simlink";
 import { buildShots, goTo } from "./shots";
+import { brainPost } from "../brain";
+import { StationPanel } from "./StationPanel";
 
 const SPEEDS = [1, 10, 60, 300, 1200];
 const hhmm = (t: number, shift: string) => fmt(t, shift).slice(0, 5);
@@ -359,10 +361,41 @@ function WhatIf() {
 
 function ChatButton() {
   const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [log, setLog] = useState<{ q: string; a: string; hl: string[] }[]>([]);
+  const { data, selectedStation, setSelectedStation } = useTwin();
+  const [sid] = useState(() => Math.random().toString(36).slice(2));
+  const ask = async () => {
+    const text = q.trim();
+    if (!text || busy) return;
+    setBusy(true); setQ("");
+    try {
+      const r = await brainPost("/chat", { message: text, session_id: sid, station_id: selectedStation });
+      setLog((l) => [...l, { q: text, a: r.answer, hl: r.highlight?.machine_ids ?? [] }]);
+      const first = r.highlight?.machine_ids?.[0];
+      const st = data?.layout.machines.find((m) => m.id === first)?.station;
+      if (st) setSelectedStation(st);
+    } catch { setLog((l) => [...l, { q: text, a: "Brain not reachable on :8100.", hl: [] }]); }
+    setBusy(false);
+  };
   return (
     <>
-      {open && <div className="card chat">Chat and voice connect to the LLM side (teammate). Coming soon.</div>}
-      <button className="mic" onClick={() => setOpen(!open)}>🎤<small>Ask your plant…</small></button>
+      {open && (
+        <div className="card chatbox">
+          <div className="card-h"><span>Ask your plant{selectedStation ? ` (about ${selectedStation})` : ""}</span></div>
+          <div className="chatlog">
+            {log.length === 0 && <div className="stmut">Click a station, then ask: "what should I do?"</div>}
+            {log.map((m, i) => (<div key={i}><div className="chatq">{m.q}</div><pre className="stpre">{m.a}</pre></div>))}
+            {busy && <div className="stmut">thinking...</div>}
+          </div>
+          <div className="frow">
+            <input value={q} onChange={(e) => setQ(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void ask()} placeholder="why is M05 red?" />
+            <button onClick={() => void ask()} disabled={busy}>Ask</button>
+          </div>
+        </div>
+      )}
+      <button className="mic" onClick={() => setOpen(!open)}>💬<small>Ask your plant…</small></button>
     </>
   );
 }
@@ -382,6 +415,7 @@ export function Hud() {
         <TimelinePanel />
         <WhatIf />
       </div>
+      <StationPanel />
       <ChatButton />
     </div>
   );
