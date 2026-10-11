@@ -100,30 +100,30 @@ export function Props() {
   return (
     <>
       {/* S12 spare parts cage: two racks of boxes, a hand truck */}
-      <Rack position={at(72, 64.5)} len={5} seed={3} />
-      <Rack position={at(72, 67.8)} len={5} seed={7} />
-      <Model name="hand_truck" position={at(77.5, 62)} rotY={0.6} />
+      <Rack position={at(58, 57.4)} len={5} seed={3} />
+      <Rack position={at(58, 60.8)} len={5} seed={7} />
+      <Model name="hand_truck" position={at(63.8, 55)} rotY={0.6} />
       {/* S03 parts buffer: pallets of boxes, barrels */}
-      <Pallet position={at(63, 16)} stack={3} />
-      <Pallet position={at(66, 16)} stack={4} rotY={0.1} />
-      <Pallet position={at(69, 20)} stack={2} />
-      <Pallet position={at(72, 16)} stack={3} rotY={-0.1} />
-      <Model name="barrel_03" position={at(74, 22)} />
-      <Model name="barrel_03" position={at(75, 21)} />
+      <Pallet position={at(48, 11)} stack={3} />
+      <Pallet position={at(51, 11)} stack={4} rotY={0.1} />
+      <Pallet position={at(54, 11)} stack={2} />
+      <Pallet position={at(57, 11)} stack={3} rotY={-0.1} />
+      <Model name="barrel_03" position={at(58.5, 17)} />
+      <Model name="barrel_03" position={at(57.6, 18)} />
       {/* S10 maintenance bay */}
-      <Bench position={at(18, 70)} />
-      <Model name="industrial_storage_cart" position={at(25, 69)} rotY={-0.4} />
-      <Model name="barrel_03" position={at(14, 75)} />
-      {/* S02 / S01 */}
-      <Model name="barrel_03" position={at(30, 28)} />
-      <Model name="barrel_03" position={at(8, 27)} />
-      <Pallet position={at(24, 15)} stack={3} />
+      <Bench position={at(12, 57.5)} />
+      <Model name="industrial_storage_cart" position={at(19, 59)} rotY={-0.4} />
+      <Model name="barrel_03" position={at(8.5, 63)} />
+      {/* S01 / S02 */}
+      <Model name="barrel_03" position={at(23.5, 21.5)} />
+      <Model name="barrel_03" position={at(2.8, 21)} />
+      <Pallet position={at(16, 17)} stack={3} />
       {/* S08 / S09 */}
-      <Pallet position={at(108, 70)} stack={3} />
-      <Pallet position={at(110.5, 70)} stack={2} />
-      <Pallet position={at(138, 70)} stack={2} />
+      <Pallet position={at(82.5, 64)} stack={3} />
+      <Pallet position={at(85, 64)} stack={2} />
+      <Pallet position={at(118, 64)} stack={2} />
       {/* safety: extinguishers at the weld-cell fences and the control room */}
-      {[[102.5, 58], [123, 58], [141, 58], [58, 71]].map(([x, z], i) => (
+      {[[77, 44.5], [93, 44.5], [109, 44.5], [46.5, 56]].map(([x, z], i) => (
         <Model key={i} name="korean_fire_extinguisher_01" position={at(x, z)} rotY={i} />
       ))}
     </>

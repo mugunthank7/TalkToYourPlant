@@ -90,7 +90,7 @@ function Fence({ w, d, gapSouth = 3, gapSides = 4.2 }: { w: number; d: number; g
 export function Cells() {
   const data = useTwin((s) => s.data)!;
   const shift = useTwin((s) => s.shift);
-  const ctrl = toScene(60, 71);
+  const ctrl = toScene(47, 54);
   return (
     <>
       {data.layout.safety_zones.map((z) => {

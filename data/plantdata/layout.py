@@ -8,40 +8,40 @@ from __future__ import annotations
 import heapq
 import math
 
-PLANT = {"width_m": 160, "depth_m": 90}
+PLANT = {"width_m": 128, "depth_m": 72}
 
 # id, name, cx, cz, width, depth, access point (where people stand), lane node
 STATIONS = [
-    ("S01", "Coil yard", 14, 18, 22, 16, (14, 27), "N14"),
-    ("S02", "Casting and press", 42, 18, 26, 18, (42, 28), "N42"),
-    ("S03", "Parts buffer", 68, 18, 16, 14, (68, 26), "N68"),
-    ("S04", "Framing", 92, 44, 14, 12, (92, 52), "A92"),
-    ("S05", "Weld cell A", 112, 44, 14, 12, (112, 52), "A112"),
-    ("S06", "Weld cell B", 132, 44, 14, 12, (132, 52), "A132"),
-    ("S07", "Inspection gate", 150, 44, 10, 12, (150, 52), "A150"),
-    ("S08", "Battery module line", 118, 76, 18, 12, (118, 68), "A118"),
-    ("S09", "Pack closing and EOL test", 146, 76, 18, 12, (146, 68), "A146"),
-    ("S10", "Maintenance bay", 20, 72, 18, 12, (20, 64), "A20"),
-    ("S11", "Control room and break room", 50, 76, 16, 10, (50, 69), "A50"),
-    ("S12", "Spare parts cage", 72, 66, 12, 8, (72, 60), "A72"),
+    ("S01", "Coil yard", 11, 13, 18, 14, (11, 22), "N11"),
+    ("S02", "Casting and press", 33, 13, 22, 16, (33, 22), "N33"),
+    ("S03", "Parts buffer", 53, 13, 14, 12, (53, 21), "N53"),
+    ("S04", "Framing", 68, 34, 11, 11, (68, 42), "A68"),
+    ("S05", "Weld cell A", 84, 34, 12, 11, (84, 42), "A84"),
+    ("S06", "Weld cell B", 100, 34, 12, 11, (100, 42), "A100"),
+    ("S07", "Inspection gate", 116, 34, 10, 11, (116, 42), "A116"),
+    ("S08", "Battery module line", 88, 60, 16, 11, (88, 52), "A88"),
+    ("S09", "Pack closing and EOL test", 112, 60, 16, 11, (112, 52), "A112"),
+    ("S10", "Maintenance bay", 14, 60, 18, 11, (14, 52), "A14"),
+    ("S11", "Control room and break room", 38, 60, 16, 10, (38, 52), "A38"),
+    ("S12", "Spare parts cage", 58, 59, 12, 8, (58, 51), "A58"),
 ]
 
 # id, name, type, station, x, z, rotation in degrees
 MACHINES = [
-    ("M01", "Casting press", "press", "S02", 36, 18, 0),
-    ("M02", "Press transfer robot", "robot", "S02", 50, 18, 0),
-    ("M03", "Framing fixture", "fixture", "S04", 92, 44, 0),
-    ("M04", "Weld robot 1", "weld_robot", "S05", 112, 46, 0),
-    ("M05", "Weld robot 2", "weld_robot", "S06", 132, 46, 0),
-    ("M06", "Main conveyor", "conveyor", "S04", 119, 44, 0),
-    ("M07", "Vision inspection gate", "vision_gate", "S07", 150, 44, 0),
-    ("M08", "Battery module stacker", "gantry", "S08", 118, 76, 0),
-    ("M09", "Pack sealer", "sealer", "S09", 146, 76, 0),
-    ("M10", "Decoiler", "decoiler", "S01", 10, 18, 0),
-    ("M11", "Rack AGV", "agv", "S03", 68, 26, 0),
+    ("M01", "Casting press", "press", "S02", 29, 13, 0),
+    ("M02", "Press transfer robot", "robot", "S02", 40, 13, 0),
+    ("M03", "Framing fixture", "fixture", "S04", 68, 34, 0),
+    ("M04", "Weld robot 1", "weld_robot", "S05", 84, 35.8, 0),
+    ("M05", "Weld robot 2", "weld_robot", "S06", 100, 35.8, 0),
+    ("M06", "Main conveyor", "conveyor", "S04", 93.5, 34, 0),
+    ("M07", "Vision inspection gate", "vision_gate", "S07", 116, 34, 0),
+    ("M08", "Battery module stacker", "gantry", "S08", 88, 60, 0),
+    ("M09", "Pack sealer", "sealer", "S09", 112, 60, 0),
+    ("M10", "Decoiler", "decoiler", "S01", 8, 13, 0),
+    ("M11", "Rack AGV", "agv", "S03", 53, 21, 0),
 ]
 
-CONVEYOR_PATH = [(80, 44), (158, 44)]
+CONVEYOR_PATH = [(63, 34), (122, 34)]
 
 # Item (vehicle body, parts, packs) flow between stations and how it moves.
 ITEM_FLOW = [
@@ -55,12 +55,23 @@ ITEM_FLOW = [
     ("S08", "S09", "agv"),
 ]
 
+# Visible logistics for the 3D scene: (id, name, from node, to node, vehicle, load, period s, speed m/s, extra end point)
+LOGISTICS = [
+    ("L1", "Coil AGV", "S01.in", "S02.in", "agv", "coil", 300, 1.2, None),
+    ("L2", "Stamped-parts AGV", "S02.in", "S03.in", "agv", "rack", 180, 1.2, None),
+    ("L3", "Underbody AGV", "S03.in", "C61", "agv", "pan", 90, 1.2, (63, 34)),
+    ("L4", "Body AGV", "E124", "S09.in", "agv", "car", 90, 1.2, None),
+    ("L5", "Battery pack AGV", "S08.in", "S09.in", "agv", "pack", 90, 1.2, None),
+    ("L6", "Pallet forklift", "S03.in", "S12.in", "forklift", "pallet", 900, 1.6, None),
+    ("L7", "Spares cart", "S12.in", "S10.in", "cart", "boxes", 600, 1.0, None),
+]
+
 # People leave the robots alone: weld cells get a light-curtain zone (rect around station).
 SAFETY_ZONES = [("S05", 2.0), ("S06", 2.0)]
 
-GATE = (6, 56)
-AISLE_Z = 56
-ROW_Z = 30
+GATE = (3, 46)
+AISLE_Z = 46
+ROW_Z = 24
 
 
 class Graph:
@@ -87,7 +98,10 @@ class Graph:
 
     def route(self, a: str, b: str) -> list[str]:
         """Shortest node path between two places (station ids or 'GATE')."""
-        src, dst = self.node_for(a), self.node_for(b)
+        return self.route_nodes(self.node_for(a), self.node_for(b))
+
+    def route_nodes(self, src: str, dst: str) -> list[str]:
+        """Shortest node path between two graph node names."""
         dist = {src: 0.0}
         prev: dict[str, str] = {}
         pq = [(0.0, src)]
@@ -125,21 +139,25 @@ def build_graph() -> Graph:
     g = Graph()
     g.add_node("GATE", *GATE)
 
-    aisle_xs = sorted({10, 20, 50, 72, 76, 92, 112, 118, 132, 146, 150, 155})
+    aisle_xs = sorted({14, 38, 58, 61, 68, 84, 88, 100, 112, 116, 124})
     for x in aisle_xs:
         g.add_node(f"A{x}", x, AISLE_Z)
     g.add_edge("GATE", f"A{aisle_xs[0]}")
     for a, b in zip(aisle_xs, aisle_xs[1:]):
         g.add_edge(f"A{a}", f"A{b}")
 
-    row_xs = [14, 42, 68, 76]
+    row_xs = [11, 33, 53, 61]
     for x in row_xs:
         g.add_node(f"N{x}", x, ROW_Z)
     for a, b in zip(row_xs, row_xs[1:]):
         g.add_edge(f"N{a}", f"N{b}")
-    g.add_node("C76", 76, 43)
-    g.add_edge("N76", "C76")
-    g.add_edge("C76", "A76")
+    g.add_node("C61", 61, 35)
+    g.add_edge("N61", "C61")
+    g.add_edge("C61", "A61")
+
+    # East end of the conveyor: bodies leave here for the pack and EOL station.
+    g.add_node("E124", 124, 34)
+    g.add_edge("E124", "A124")
 
     for sid, _n, _cx, _cz, _w, _d, access, lane in STATIONS:
         g.add_node(f"{sid}.in", *access)
@@ -152,6 +170,17 @@ def station(sid: str) -> dict:
         if s[0] == sid:
             return {"id": s[0], "name": s[1], "x": s[2], "z": s[3], "w": s[4], "d": s[5], "access": list(s[6])}
     raise KeyError(sid)
+
+
+def _route_points(g: Graph, a: str, b: str, extra) -> list[tuple[float, float]]:
+    pts: list[tuple[float, float]] = []
+    for n in g.route_nodes(a, b):
+        p = g.xy(n)
+        if not pts or pts[-1] != p:
+            pts.append(p)
+    if extra:
+        pts.append(tuple(extra))
+    return pts
 
 
 def to_json(g: Graph) -> dict:
@@ -178,5 +207,10 @@ def to_json(g: Graph) -> dict:
             for sid, margin in SAFETY_ZONES
         ],
         "gate": list(GATE),
+        "logistics": [
+            {"id": i, "name": n, "from": f, "to": t, "vehicle": v, "load": ld, "period_s": p, "speed_mps": sp,
+             "route": [list(pt) for pt in _route_points(g, f, t, extra)]}
+            for i, n, f, t, v, ld, p, sp, extra in LOGISTICS
+        ],
         "walk_graph": {"nodes": nodes, "edges": [list(e) for e in edges]},
     }
