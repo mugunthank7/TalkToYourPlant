@@ -68,3 +68,13 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 ## D-014, Ownership of anomaly detection and synthetic data | 2026-10-10 | open
 **Context:** The whiteboard does not show anomaly detection; the brief has it (Isolation Forest + SHAP). Both sides need synthetic data.
 **Proposal:** M generates Data 1 (sensor streams with injected bearing-wear signatures, shifts, timings) and runs anomaly detection on the simulated stream; T generates Data 2 (manuals, logs, graph). Confirm with teammate.
+
+## D-015, Brain work lives in `brain/` on its own branch | 2026-10-11 | accepted
+**Context:** T side (knowledge base, RAG, LLM brain, chat) needs a place in the shared repo without touching twin/sim files owned by M.
+**Decision:** All T-side work goes in `brain/`, developed on branch `brain-kb`, merged via PR after review by M. Twin/sim files are not edited from this branch except additive docs (this log, CLAUDE.md pointers).
+**Consequences:** Few merge conflicts. Shared contract files (`docs/STATIONS.md`, interface contract in CLAUDE.md) still change only through new D-entries.
+
+## D-016, Brain data, RAG design and stack are open | 2026-10-11 | open
+**Context:** An early domain brief (`brain/docs/talk-to-your-plant-domain-brief.pdf`) proposed graph-anchored multimodal RAG, Neo4j, hybrid synthetic plus public data. It predates knowing the repo scope (fictional Voltline plant, `S01..S12`, `M01..M10`, hero `M05` bearing wear, graph path `symptom -> failure_mode -> component -> repair -> spare_part`).
+**Decision:** None yet. Owner of T side is working out data, RAG and stack and will bring a proposal. The brief is input only; its ontology must be realigned to the repo IDs before use.
+**Consequences:** No stack choice is implied. Unchecked items in the brief (Bosch line data, SECOM, NHTSA, CWRU/Paderborn official links, MVTec license) stay unverified.
