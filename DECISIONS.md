@@ -91,3 +91,10 @@ Format: **D-NNN, title** | date | status (`accepted`, `superseded by D-NNN`, `op
 ## D-019, M's scope is the blue boxes only | 2026-10-10 | accepted
 **Decision:** M owns Data 1 generation, simulation engine, live plant state, what-if scenarios, dashboard (KPIs, throughput forecast) and the live 3D window. Not M's: knowledge base, LLM, chat, voice/vision, anomaly detection (grey box, owner open; supersedes the anomaly-detection part of D-014). M only exposes the live plant state and what-if as an API so the LLM side can read them, and renders what it is sent (alerts, graph path).
 **Consequences:** Data 1 files include ground-truth fault labels so whoever builds anomaly detection can train on them.
+
+## D-020, Downtime cost $38,000 per minute (Siemens 2024) | 2026-10-10 | accepted
+**Decision:** Replace the brief's unsourced $20,000 per minute with $38,000 per minute, derived from Siemens' "True Cost of Downtime 2024": $2.3M per hour for a large automotive plant. The older $22,000 per minute figure is from a 2006 survey and is not used. See docs/SOURCES.md.
+**Consequences:** Pitch wording: "industry figure for a large automotive plant". Single-line numbers are likely conservative-to-high; the constant is configurable.
+
+## D-021, Estimated maintenance and downtime history | 2026-10-10 | accepted
+**Decision:** Generate a year of estimated work orders, downtime events and a failure-mode catalogue (data/plantdata/maintenance.py). Structured numbers for dashboards and forecasts are M's; free-text manuals and logs remain the teammate's Data 2. The failure-mode catalogue uses our component IDs so the teammate can reuse it for the graph.

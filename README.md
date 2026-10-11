@@ -2,7 +2,7 @@
 
 A live 3D digital twin of a fictional EV assembly plant, with animated machines and people. A simulation engine drives it, and an AI copilot (LLM + knowledge-graph RAG) lets you ask what is wrong, why, and what happens if something changes.
 
-Status: early scaffolding. See [docs/STATIONS.md](docs/STATIONS.md), [docs/ASSETS.md](docs/ASSETS.md), [DECISIONS.md](DECISIONS.md) and [CLAUDE.md](CLAUDE.md).
+Status: data layer done, 3D next. Teammate integration notes: [docs/FOR_TEAMMATE.md](docs/FOR_TEAMMATE.md). See [docs/STATIONS.md](docs/STATIONS.md), [docs/ASSETS.md](docs/ASSETS.md), [DECISIONS.md](DECISIONS.md) and [CLAUDE.md](CLAUDE.md).
 
 ## System flow
 
