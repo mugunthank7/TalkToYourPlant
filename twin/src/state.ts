@@ -4,6 +4,7 @@ export type BotState = "idle" | "listening" | "thinking" | "answering" | "happy"
 let botTimer: ReturnType<typeof setTimeout> | undefined;
 import type { TwinData } from "./data";
 import type { Injected } from "./plant";
+import { focusStation } from "./ui/shots";
 
 interface TwinState {
   data: TwinData | null;
@@ -45,7 +46,11 @@ export const useTwin = create<TwinState>((set) => ({
   setBot: (bot, holdMs) => { clearTimeout(botTimer); set({ bot }); if (holdMs) botTimer = setTimeout(() => set({ bot: "idle" }), holdMs); },
   askOpen: false,
   setAskOpen: (askOpen) => set({ askOpen }),
-  setSelectedStation: (selectedStation) => set((st) => ({ selectedStation, sideTab: selectedStation ? "station" : st.sideTab })),
+  setSelectedStation: (selectedStation) => {
+    set((st) => ({ selectedStation, sideTab: selectedStation ? "station" : st.sideTab }));
+    const d = useTwin.getState().data;
+    if (selectedStation && d) focusStation(d.layout, selectedStation);      // clicking a station also flies the camera to it
+  },
   selectQuiet: (selectedStation) => set({ selectedStation }),
   sideTab: "station",
   setSideTab: (sideTab) => set({ sideTab }),

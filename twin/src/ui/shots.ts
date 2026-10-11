@@ -37,3 +37,14 @@ export function goTo(shot: Shot) {
   cam.mode = "free";
   cam.goal = { pos: [...shot.pos], target: [...shot.target] };
 }
+
+/** Fly the camera to a station, a little off-centre so it stays clear of the right-hand panel that opens with it. */
+export function focusStation(layout: Layout, id: string) {
+  const s = layout.stations.find((x) => x.id === id);
+  if (!s) return;
+  const [x, z] = toScene(s.x, s.z);
+  const size = Math.max(s.w, s.d, 10);
+  const shot = stationShot(x + size * 0.22, z, size, 1.0);
+  cam.mode = "free";
+  cam.goal = { pos: [...shot.pos], target: [...shot.target] };
+}
