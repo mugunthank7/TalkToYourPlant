@@ -1,10 +1,16 @@
 # brain/
 
-Knowledge base, RAG and LLM side of Talk to Your Plant (the "T" side in `CLAUDE.md`).
-Mugu owns the twin, simulation and dashboard; this folder is kept separate to avoid merge conflicts.
+Knowledge base, answer engine, click-a-station briefing and run tooling for Talk to Your Plant (the "T" side).
 
-Status: **data ready, RAG/LLM stack not yet chosen.** See `../DECISIONS.md` D-020 to D-023.
+Start here: [`docs/HANDOFF.md`](docs/HANDOFF.md) (what changed, how to run, what is open).
+Then: [`docs/BRAIN.md`](docs/BRAIN.md) (architecture, API, answer format), [`docs/PAGES.md`](docs/PAGES.md) (what each page does), [`docs/DEMO_QUESTIONS.md`](docs/DEMO_QUESTIONS.md) (18 verified demo questions).
 
-- `docs/talk-to-your-plant-domain-brief.pdf`: early domain brief (RAG options, ontology, data sources, stories). Written before the repo scope was known; IDs and scope need aligning to `../docs/STATIONS.md`.
-- `data/`: keyed dataset builder, crosswalks, hero M05 content. Start at `data/README.md`.
-- `archive/`: first local notes, kept for history only.
+```
+app/       graph, hybrid retrieval, agent (intent router + cards), stations, sim adapter, chat API, dashboard, monitor
+data/      keyed dataset builder, crosswalks, station knowledge; out/ is the generated, committed dataset
+eval/      40 eval questions, demo questions, embedding experiment, RAGAS, run_eval, demo_check
+scripts/   start_all.sh, stop_all.sh
+ui/        brain chat page, run dashboard, integration monitor
+tests/     graph and index tests
+```
+Run: `brain/scripts/start_all.sh`, check: `python3 brain/eval/demo_check.py --reset`.
