@@ -1,20 +1,9 @@
-# Contract proposals (T to M)
+# Contract notes (T to M)
 
-The shared interface in `CLAUDE.md` is untouched. These are proposals; the brain works today against `SIM_MODE=mock`.
+Superseded: the earlier endpoint proposals are replaced by M's real engine API (`sim/README.md`). The brain now uses `/tools/get_machine_health`, `/tools/get_anomaly_report`, `/tools/run_what_if` and `/tools/create_work_order`.
 
-## 1. Engine HTTP endpoints the brain will call (D-016)
-| call | body | returns |
-|---|---|---|
-| `GET /state` | none | `{"machines": {"M05": {"status":"ok|warning|critical", "readings": {...}, "alert": <alert msg or null>}}, "ts": ...}` |
-| `POST /scenario` | `run_scenario` message from CLAUDE.md | `scenario_result` message (kpis: throughput_per_hr, downtime_min, oee, failure_probability, cost_usd) |
-| `POST /work_order` | `{machine_id, component_id, spare_part, fault_code, priority, note}` | `work_order` message with `id` |
-Questions for M: base URL and port; is `GET /state` per machine or full plant; does `scenario_result` include baseline vs scenario for each KPI (the mock does)?
-
-## 2. Highlight message for the 3D window
-The brain returns `highlight.machine_ids` (+ `graph_path` in the existing `graph_path` shape) with every chat answer. Proposal: the twin consumes this from `POST /chat` directly, or the brain relays a WebSocket message `{"type":"highlight","machine_ids":[...]}`. Pick one.
-
-## 3. Alert payload
-The mock `alert` uses the contract shape with illustrative SHAP values. When anomaly detection exists (owner open, D-019), please send real contributors; the brain only passes them through.
-
-## 4. Scope note
-Only M05 has a modelled fault in the engine outputs. The brain's knowledge base covers 119 machines and the live storylines (`CAS-GP-01`, `PNT-PR-04`, `BAT-BL-01`, `BIW-WK-03`, `UTL-CP-02`, `GA-TQ-07`); their sensor drift comes from the Voltara contract in mock mode.
+## Open items
+1. **Highlight to the 3D twin.** The brain returns `highlight.machine_ids` and a `graph_path` (same shape as the twin's `graph_path` message) in every `POST /chat` answer (port 8100). The twin needs to call `/chat` or receive these over the engine WebSocket. Pick one.
+2. **What-if scope.** The brain passes `keep_running {hours}` only. `failure_probability` is not in the engine's what-if output, so the brain shows it as not modelled.
+3. **Machine coverage.** The engine models `M01..M10`. The knowledge base covers 119 machines and six live storylines (`CAS-GP-01`, `PNT-PR-04`, `BAT-BL-01`, `BIW-WK-03`, `UTL-CP-02`, `GA-TQ-07`); those answer from the mock storyline data until the engine models them.
+4. **Real run.** Confirm one end-to-end `SIM_MODE=live` run against the real engine (shapes were read from source, not observed).

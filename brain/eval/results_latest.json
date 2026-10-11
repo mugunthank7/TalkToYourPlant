@@ -234,7 +234,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.1,
+   "latency_s": 0.06,
    "contexts": [
     "SOP-ROB-02",
     "MAN-WF"
@@ -265,7 +265,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.08,
+   "latency_s": 0.06,
    "contexts": [
     "MAN-WK",
     "WO-2026-007480"
@@ -327,7 +327,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.05,
+   "latency_s": 0.07,
    "contexts": [
     "SOP-BAT-01",
     "MAN-TQ"
@@ -358,7 +358,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.08,
+   "latency_s": 0.06,
    "contexts": [
     "MAN-BL",
     "SOP-BAT-02"
@@ -389,7 +389,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.08,
+   "latency_s": 0.05,
    "contexts": [
     "MAN-CP",
     "SOP-UTL-01"
@@ -417,7 +417,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.06,
+   "latency_s": 0.04,
    "contexts": [
     "SOP-SAF-01"
    ],
@@ -469,7 +469,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.07,
+   "latency_s": 0.05,
    "contexts": [
     "SOP-ROB-02"
    ],
@@ -497,7 +497,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.13,
+   "latency_s": 0.05,
    "contexts": [
     "SOP-QA-01",
     "SOP-BAT-01",
@@ -525,7 +525,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.07,
+   "latency_s": 0.04,
    "contexts": [
     "SOP-SAF-02"
    ],
@@ -554,7 +554,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.06,
+   "latency_s": 0.07,
    "contexts": [
     "WO-2026-007884",
     "WO-2026-004296",
@@ -586,7 +586,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.04,
+   "latency_s": 0.05,
    "contexts": [
     "WO-2026-001413",
     "WO-2025-002650",
@@ -618,7 +618,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.06,
+   "latency_s": 0.07,
    "contexts": [
     "WO-2026-001544",
     "WO-2025-006562",
@@ -650,7 +650,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.07,
+   "latency_s": 0.06,
    "contexts": [
     "WO-2025-002675",
     "WO-2026-007566",
@@ -710,7 +710,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.6,
+   "latency_s": 0.36,
    "contexts": [],
    "contexts_text": [
     "graph_lookup({\"entity\": \"CAS-GP-01\", \"what\": \"repeats\", \"fault_code\": \"GP-SHOT-SLOW\"}) -> {\"fault_code\": \"GP-SHOT-SLOW\", \"count_in_window\": 2, \"window_days\": 90, \"latest\": \"2026-10-02T15:14\", \"total\": 16}",
@@ -829,7 +829,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.13,
+   "latency_s": 0.05,
    "contexts": [
     "SOP-OPS-02"
    ],
@@ -861,7 +861,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.09,
+   "latency_s": 0.08,
    "contexts": [
     "SOP-OPS-02"
    ],
@@ -893,7 +893,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.14,
+   "latency_s": 0.07,
    "contexts": [
     "SOP-OPS-02"
    ],
@@ -928,7 +928,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.09,
+   "latency_s": 0.16,
    "contexts": [
     "WO-2025-005764",
     "WO-2025-005569",
@@ -967,7 +967,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.1,
+   "latency_s": 0.07,
    "contexts": [
     "WO-2025-002045",
     "WO-2025-000537",
@@ -1006,7 +1006,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.11,
+   "latency_s": 0.07,
    "contexts": [
     "INC-0060",
     "INC-0056",
@@ -1086,7 +1086,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.1,
+   "latency_s": 0.07,
    "contexts": [
     "SOP-UTL-02",
     "INC-0004",
@@ -1125,7 +1125,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.07,
+   "latency_s": 0.08,
    "contexts": [
     "WO-2025-006564",
     "WO-2025-004923",
@@ -1146,7 +1146,7 @@
    "pass": true,
    "fails": [],
    "gold_source_seen": true,
-   "answer": "M05 status: warning.\n- vibration_rms: 0.9 (nominal 0.42, 2.13x; alert at 2.0x)\n- temperature_c: 71.4  (nominal 61.5)\n- motor_current_a: 15.4  (nominal 14.2)\n- Alert score 0.93; top signals: vibration_rms 0.61, temperature_c 0.22, motor_current_a 0.1; component m05_joint1_bearing.\n- Fault mode bearing_wear: Joint bearing wear. Causes: Lubricant breakdown or missed regrease interval; Contamination at the axis 1 joint; Collision or overload event. Parts: bearing_6208 (2 on hand).\n- Latest work order [WO-2026-007948] 2026-10-10: PM.\n- Procedure: [SOP-MNT-M05-01].\n- Page L1 Paul Jimenez (x4530, radio PLT-E0) [M05-C]; then L2 after 8 min.",
+   "answer": "M05 status: warning.\n- vibration_rms: 0.9 (nominal 0.42, 2.13x; alert at 2.0x)\n- temperature_c: 71.4 (nominal 61.5)\n- motor_current_a: 15.4 (nominal 14.2)\n- Alert (warning), score 0.93; top signals: vibration_rms 0.61, temperature_c 0.22, motor_current_a 0.1; component m05_joint1_bearing.\n- Fault mode bearing_wear: Joint bearing wear. Causes: Lubricant breakdown or missed regrease interval; Contamination at the axis 1 joint; Collision or overload event. Parts: bearing_6208 (2 on hand).\n- Latest work order [WO-2026-007948] 2026-10-10: PM.\n- Procedure: [SOP-MNT-M05-01].\n- Page L1 Paul Jimenez (x4530, radio PLT-E0) [M05-C]; then L2 after 8 min.",
    "citations": [
     "WO-2026-007948",
     "SOP-MNT-M05-01",
@@ -1165,7 +1165,7 @@
    "llm_calls": 0,
    "model": "local-pipeline",
    "cached": false,
-   "latency_s": 0.08,
+   "latency_s": 0.05,
    "contexts": [
     "SOP-MNT-M05-01"
    ],
