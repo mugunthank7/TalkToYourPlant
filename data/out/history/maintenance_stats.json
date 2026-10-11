@@ -1,0 +1,79 @@
+{
+ "period": "2025-10-01 to 2026-09-30",
+ "operating_hours_per_machine": 4592,
+ "work_orders": 158,
+ "corrective_work_orders": 38,
+ "emergency_share_of_corrective": 0.37,
+ "unplanned_line_down_h": 113.2,
+ "planned_line_down_h": 39.8,
+ "line_down_h_by_category": {
+  "quality_hold": 42.0,
+  "material_shortage": 35.0,
+  "mechanical": 34.5,
+  "electrical": 1.8
+ },
+ "maintenance_cost_usd": 67026,
+ "line_downtime_cost_usd": 128858003,
+ "per_machine": {
+  "M01": {
+   "failures": 9,
+   "mtbf_h_observed": 510.0,
+   "mttr_min": 216.3,
+   "line_down_h": 30.2
+  },
+  "M02": {
+   "failures": 3,
+   "mtbf_h_observed": 1531.0,
+   "mttr_min": 31.7,
+   "line_down_h": 0.8
+  },
+  "M03": {
+   "failures": 3,
+   "mtbf_h_observed": 1531.0,
+   "mttr_min": 57.8,
+   "line_down_h": 2.9
+  },
+  "M04": {
+   "failures": 5,
+   "mtbf_h_observed": 918.0,
+   "mttr_min": 42.9,
+   "line_down_h": 3.6
+  },
+  "M05": {
+   "failures": 4,
+   "mtbf_h_observed": 1148.0,
+   "mttr_min": 55.3,
+   "line_down_h": 3.7
+  },
+  "M06": {
+   "failures": 6,
+   "mtbf_h_observed": 765.0,
+   "mttr_min": 61.6,
+   "line_down_h": 6.2
+  },
+  "M07": {
+   "failures": 2,
+   "mtbf_h_observed": 2296.0,
+   "mttr_min": 6.3,
+   "line_down_h": 0.2
+  },
+  "M08": {
+   "failures": 0,
+   "mtbf_h_observed": 4592.0,
+   "mttr_min": null,
+   "line_down_h": 0.0
+  },
+  "M09": {
+   "failures": 4,
+   "mtbf_h_observed": 1148.0,
+   "mttr_min": 71.9,
+   "line_down_h": 4.8
+  },
+  "M10": {
+   "failures": 2,
+   "mtbf_h_observed": 2296.0,
+   "mttr_min": 140.3,
+   "line_down_h": 4.2
+  }
+ }
+}

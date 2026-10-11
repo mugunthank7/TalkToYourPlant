@@ -94,3 +94,14 @@ def history(h: dict) -> None:
     assert sh.loc[sh["had_incident"], "oee"].mean() < sh.loc[~sh["had_incident"], "oee"].mean()
     assert not hr.isna().any().any()
     assert (h["history_sensors_1min"]["rul_s"].dropna() >= 0).all()
+
+
+def maintenance(m: dict) -> None:
+    wo, ev, st = m["maintenance_work_orders"], m["downtime_events"], m["stats"]
+    assert wo["wo_id"].is_unique and ev["event_id"].is_unique
+    assert (wo["downtime_min"] >= 0).all() and (wo["line_down_min"] <= wo["downtime_min"] + 1e-6).all()
+    assert 15 <= st["corrective_work_orders"] <= 120, st["corrective_work_orders"]
+    assert st["unplanned_line_down_h"] > 20
+    assert {"mechanical", "material_shortage", "quality_hold"} <= set(st["line_down_h_by_category"])
+    inc_wo = wo[wo["opened_ts"] >= "2026-09-01"]
+    assert len(inc_wo[inc_wo["type"].str.startswith("corrective")]) >= 1

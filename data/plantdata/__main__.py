@@ -9,7 +9,7 @@ import numpy as np
 
 from . import events as ev
 from . import layout as L
-from . import history, people, scenarios, schedule, transfers, validate
+from . import history, maintenance, outputs, people, scenarios, schedule, transfers, validate
 
 
 def main() -> None:
@@ -71,6 +71,12 @@ def main() -> None:
                 frame.to_parquet(hdir / f"{name}.parquet", compression="zstd", index=False)
             else:
                 frame.to_csv(hdir / f"{name}.csv", index=False)
+        mnt = maintenance.build(args.seed + 200, hist["history_incidents"], outputs.DOWNTIME_COST_PER_MIN_USD)
+        validate.maintenance(mnt)
+        for name in ("maintenance_work_orders", "downtime_events", "failure_modes"):
+            mnt[name].to_csv(hdir / f"{name}.csv", index=False)
+        (hdir / "maintenance_stats.json").write_text(json.dumps(mnt["stats"], indent=1))
+        print("maintenance:", {k: v for k, v in mnt["stats"].items() if k not in ("per_machine", "line_down_h_by_category")})
 
     if args.copy_to:
         dst = Path(args.copy_to)
