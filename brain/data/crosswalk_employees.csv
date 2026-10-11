@@ -1,0 +1,5 @@
+twin_id,twin_name,twin_role,shift,voltara_role_in_chain,chain_machine
+A-TECH01,Yuki Alvarez,technician,A,L1_primary_tech,BIW-WK-05
+B-TECH01,Fatima Singh,technician,B,L1_primary_tech,BIW-WK-05
+A-SUP01,Mei Garcia,supervisor,A,L0_production_supervisor,BIW-WK-05
+B-SUP01,Mateo Singh,supervisor,B,L0_production_supervisor,BIW-WK-05
