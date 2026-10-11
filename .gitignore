@@ -9,3 +9,4 @@ assets/source/raw/
 
 # regenerable sensor data (python -m plantdata)
 data/out/**/*.parquet
+.claude/

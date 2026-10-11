@@ -1,0 +1,26 @@
+html, body, #root { margin: 0; height: 100%; overflow: hidden; font-family: Inter, system-ui, sans-serif; background: #cfd8e3; }
+canvas { display: block; }
+.msg { display: grid; place-items: center; height: 100%; font-size: 18px; color: #334155; padding: 24px; text-align: center; }
+
+.hud { position: fixed; inset: 0; pointer-events: none; }
+.panel { position: absolute; top: 16px; left: 16px; width: 290px; padding: 14px; border-radius: 14px; pointer-events: auto;
+  background: rgba(15, 23, 42, 0.88); color: #e2e8f0; backdrop-filter: blur(8px); box-shadow: 0 8px 30px rgba(0,0,0,.25); }
+.title { font-weight: 700; font-size: 15px; }
+.title span { font-weight: 400; color: #94a3b8; }
+.time { font-size: 34px; font-weight: 700; letter-spacing: 1px; margin: 6px 0 10px; font-variant-numeric: tabular-nums; }
+.row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+button { background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 8px; padding: 5px 10px; font-size: 12px; cursor: pointer; }
+button:hover { background: #334155; }
+button.on { background: #2563eb; border-color: #3b82f6; }
+input[type=range] { width: 100%; margin: 2px 0 10px; }
+.status { padding: 8px 10px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+.status.ok { background: rgba(34, 197, 94, .2); color: #86efac; }
+.status.bad { background: rgba(239, 68, 68, .25); color: #fca5a5; animation: pulse 1s infinite; }
+.status.warn { background: rgba(245, 158, 11, .25); color: #fcd34d; }
+@keyframes pulse { 50% { opacity: .6; } }
+.legend { position: absolute; bottom: 14px; left: 16px; padding: 8px 12px; border-radius: 10px; background: rgba(15, 23, 42, 0.8);
+  color: #e2e8f0; font-size: 12px; display: flex; gap: 6px; align-items: center; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-left: 8px; }
+
+.tag { background: rgba(15, 23, 42, .75); color: #fff; padding: 2px 6px; border-radius: 6px; font-size: 11px; white-space: nowrap; }
+.station-label { background: rgba(255, 255, 255, .85); color: #0f172a; padding: 2px 8px; border-radius: 6px; font-size: 12px; white-space: nowrap; border: 1px solid #cbd5e1; }
