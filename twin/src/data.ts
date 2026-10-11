@@ -43,7 +43,16 @@ export interface Hero {
   t_repair_start_s: number;
   t_repair_end_s: number;
 }
-export interface TwinData { layout: Layout; schedule: Schedule; hero: Hero }
+export interface KpiSeries { cum_units: number[]; cum_down_s: number[]; cum_cost: number[]; oee: number[] }
+export interface ScenarioSummary {
+  units: number; units_lost_vs_ideal: number; downtime_min: number; downtime_cost_usd: number; oee: number;
+  t_fail_if_ignored_s?: number; remaining_useful_life_at_alert_min?: number; about: string;
+}
+export interface Kpi {
+  minutes: number; plan_units: number; cost_per_min: number;
+  series: Record<string, KpiSeries>; summary: Record<string, ScenarioSummary>;
+}
+export interface TwinData { layout: Layout; schedule: Schedule; hero: Hero; kpi: Kpi }
 
 export async function loadAll(): Promise<TwinData> {
   const get = async (f: string) => {
@@ -51,8 +60,8 @@ export async function loadAll(): Promise<TwinData> {
     if (!r.ok) throw new Error(`Could not load /data/${f}. Run the generator with --copy-to ../twin/public/data`);
     return r.json();
   };
-  const [layout, schedule, hero] = await Promise.all([get("layout.json"), get("schedule.json"), get("events.json")]);
-  return { layout, schedule, hero };
+  const [layout, schedule, hero, kpi] = await Promise.all([get("layout.json"), get("schedule.json"), get("events.json"), get("kpi.json")]);
+  return { layout, schedule, hero, kpi };
 }
 
 // The plant origin is its NW corner; scene is centred on the plant middle.
