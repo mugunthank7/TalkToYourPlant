@@ -102,7 +102,7 @@ Twin behaviour per message: `sensor` updates HUD and gauges; `alert` turns the m
 
 ## Simulation engine (sim/)
 
-SimPy model + FastAPI + WebSocket + LLM tool endpoints. See `sim/README.md`. The twin connects with `?sim=ws://localhost:8000/ws` or the top-bar button; when connected, station states, belt cars, KPIs, work orders, technician walks, fault injection, what-if and forecast all come from the engine, otherwise the client-side approximation in `twin/src/plant.ts` is used (D-029, D-030).
+SimPy model + FastAPI + WebSocket + LLM tool endpoints. See `sim/README.md`. The twin connects to the engine automatically on load (retrying every 3 s; `?sim=ws://...` overrides the URL); when connected, station states, belt cars, KPIs, work orders, technician walks, fault injection, what-if and forecast all come from the engine, otherwise the client-side approximation in `twin/src/plant.ts` is used (D-029, D-030).
 
 ## Commands (fill in as the app is scaffolded)
 
