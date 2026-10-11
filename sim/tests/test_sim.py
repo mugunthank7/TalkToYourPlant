@@ -99,11 +99,11 @@ def test_exported_dashboard_matches_live_engine():
 
 
 def test_cars_on_the_belt_never_overlap():
-    """Cars queued at a station used to share its position; bodies are 4.6 m long, so centres must be at least 5 m apart."""
+    """Cars queued at a station used to share its position; bodies are 4.6 m long, so centres must be well apart (6.5 m)."""
     from plantsim.snapshot import cars
     s = PlantSim(Params(detector=False))
     for t in range(1200, 28800, 1500):
         s.run_until(t)
         d = sorted(c["d_m"] for c in cars(s))
-        assert all(b - a >= 5.0 for a, b in zip(d, d[1:])), (t, d)
+        assert all(b - a >= 6.5 for a, b in zip(d, d[1:])), (t, d)
         assert len({c["k"] % 12 for c in cars(s)}) == len(cars(s))        # unique render slots in the twin

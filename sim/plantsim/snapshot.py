@@ -11,7 +11,7 @@ from .model import HERO, PlantSim, sensors_mod, ev
 
 D_BELT = {"S04": 5.0, "S05": 21.0, "S06": 37.0, "S07": 53.0}   # metres along the conveyor at each station
 BELT_LEN = 59.0
-CAR_GAP = 5.2          # metres between car centres: the body is 4.6 m long
+CAR_GAP = 6.6          # metres between car centres: the body is about 4.7 m long, leaving a visible 1.9 m gap
 
 
 def _noise(sim: PlantSim, mid: str, t: float, k: int) -> float:
