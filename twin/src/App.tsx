@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, PerformanceMonitor } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { camera as camGoal, clock } from "./clock";
@@ -178,7 +178,7 @@ function Scene({ low }: { low: boolean }) {
 
 export default function App() {
   const { data, error, setData, setError, view } = useTwin();
-  const [low, setLow] = useState(new URLSearchParams(location.search).get("q") === "low");
+  const low = new URLSearchParams(location.search).get("q") === "low";      // only when asked for in the URL; never switched on automatically
 
   useEffect(() => {
     loadAll().then(setData).catch((e) => setError(String(e.message ?? e)));
@@ -192,7 +192,6 @@ export default function App() {
       <TopBar />
       <div style={{ position: "fixed", inset: 0, display: view === "live" ? "block" : "none" }}>
       <Canvas frameloop={view === "live" ? "always" : "never"} shadows camera={{ position: [0, 92, 104], fov: 45, near: 0.5, far: 600 }} dpr={low ? 1 : [1, 1.75]}>
-        <PerformanceMonitor onDecline={() => setLow(true)} flipflops={0} />
         <Scene low={low} />
       </Canvas>
       <Hud />
