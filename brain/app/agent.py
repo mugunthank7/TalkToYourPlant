@@ -206,6 +206,10 @@ class Brain:
             self._run("get_kpis", {}, ctx)
             ctx["intent"] = "kpi"
             did = True
+        elif re.search(r"(explain|describe|walk me through|overview|summar\w+|how (does|do|is|are))\b.*\b(process|production|plant|factory|line|flow|car (is )?(built|made|assembled)|cars? (are )?(built|made|assembled)|works?)\b", ql) \
+                and not re.search(r"\b(m\d{2}|s\d{2})\b|oee|mtbf|mttr|\brul\b|shap|takt|loto|work order|fault|wrong|red\b", ql):
+            ctx["intent"] = "process"
+            did = True
         elif re.search(r"what (does|do|is)\b.*\b(do|for)\b|tell me about|describe|what happens (at|in)", ql) and \
                 not re.search(r"\bwrong|red|alarm|fault|fail", ql):
             self._run("search_docs", {"query": q, "doc_type": ["station", "station_failures"], "k": 3}, ctx)
@@ -295,6 +299,23 @@ class Brain:
             L += ["", "Sources: " + " ".join(f"[{x}]" for x in r["sources"])]
         return "\n".join(L)
 
+    @staticmethod
+    def _what(st):
+        w = re.sub(r"\*\*", "", st["what_happens"]).strip().rstrip(".")
+        if "Hero scenario" in w:
+            w = "Second weld robot (M05) welds the body; this is where the demo's bearing wear develops"
+        return w + "."
+
+    def _process_steps(self):
+        """Stations in material-flow order (from the station book's upstream/downstream links), then the support areas."""
+        import json as _json
+        book = _json.loads((config.BRAIN_DIR / "data" / "out" / "stations.json").read_text())["stations"]
+        # line order is the station numbering (S01 coil yard ... S09 pack and end-of-line test); S08 feeds S09 from the side
+        order = sorted(k for k, v in book.items() if v.get("upstream") or v.get("downstream"))
+        seen = set(order)
+        support = [k for k in book if k not in seen]
+        return book, order, support
+
     def _report(self, ctx):
         """Build the structured report for the matched intent from tool results. None if not covered."""
         raw = {}
@@ -343,6 +364,15 @@ class Brain:
                     "what_happened": [sc["about"]] if sc.get("about") else [], "impact": imp,
                     "do_now": ["Keep a technician and the likely spare part ready; the line starves downstream and blocks upstream while it is down."],
                     "sources": [], "intent": intent}
+
+        if intent == "process":
+            book, order, support = self._process_steps()
+            steps = [f"{k} {book[k]['name']}: {self._what(book[k])}" for k in order]
+            sup = [f"{k} {book[k]['name']}: {self._what(book[k])}" for k in support]
+            return {"title": "How the plant builds a car", "severity": "info", "intent": intent,
+                    "headline": f"Coils become cars through {len(order)} stations, then three support areas keep the line running.",
+                    "what_happened": steps, "impact": ["The belt is paced at one car every 90 seconds (takt); a stopped station starves or blocks its neighbours."],
+                    "procedure": sup, "sources": ["STATIONS"]}
 
         if intent == "kpi":
             k = first("get_kpis")
@@ -790,6 +820,11 @@ class Brain:
                     title = r["text"].split("\n", 1)[0].strip("[]")
                     L.append(f"- [{r['id']}] {title}")
             return "Relevant procedures:\n" + "\n".join(L) if L else None
+
+        if intent == "process":
+            book, order, support = self._process_steps()
+            return "\n".join(["How the plant builds a car:"] + [f"{i + 1}. {k} {book[k]['name']}: {self._what(book[k])}" for i, k in enumerate(order)]
+                              + ["Support areas:"] + [f"- {k} {book[k]['name']}: {self._what(book[k])}" for k in support])
 
         if intent == "status":
             st = first("get_sensor_state")

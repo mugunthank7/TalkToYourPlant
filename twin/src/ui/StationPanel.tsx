@@ -11,9 +11,11 @@ interface Machine {
 interface Report {
   title: string; severity: "critical" | "warning" | "ok" | "info"; headline: string;
   what_happened?: string[]; impact?: string[]; do_now?: string[]; contacts?: string[]; parts?: string[]; procedure?: string[]; sources?: string[];
+  intent?: string; suggestions?: string[];
 }
 
-function ReportView({ r }: { r: Report }) {
+function ReportView({ r, onAsk }: { r: Report; onAsk?: (q: string) => void }) {
+  const proc = r.intent === "process";
   const sec = (label: string, items: string[] | undefined, open = false, numbered = false) =>
     items && items.length > 0 ? (
       <details open={open}>
@@ -27,11 +29,14 @@ function ReportView({ r }: { r: Report }) {
         <span className="tag">{r.severity.toUpperCase()}</span><span className="hd">{r.headline}</span>
       </div>
       {sec("Do now", r.do_now, true, true)}
-      {sec("What happened", r.what_happened, true)}
-      {sec("Impact", r.impact, true)}
+      {sec(proc ? "The flow, station by station" : "What happened", r.what_happened, true, proc)}
+      {sec(proc ? "How it runs" : "Impact", r.impact, true)}
       {sec("Who to page", r.contacts)}
       {sec("Part", r.parts)}
-      {sec("Procedure", r.procedure)}
+      {sec(proc ? "Support areas" : "Procedure", r.procedure, proc)}
+      {onAsk && r.suggestions && r.suggestions.length > 0 && (
+        <div className="chips3">{r.suggestions.map((s) => <button key={s} onClick={() => onAsk(s)}>{s}</button>)}</div>
+      )}
       {r.sources && r.sources.length > 0 && <div className="note" style={{ marginTop: 10 }}>Sources: {r.sources.join(" · ")}</div>}
     </div>
   );
@@ -115,7 +120,7 @@ function StationView({ sid }: { sid: string }) {
   );
 }
 
-const SUGGEST = ["Why is M05 red?", "What should I do?", "Can we keep running M05 2 more hours?", "What happens if the conveyor stops?", "How many cars have we built so far?"];
+const SUGGEST = ["Explain the production process", "Why is M05 red?", "What should I do?", "Can we keep running M05 2 more hours?", "What happens if the conveyor stops?", "How many cars have we built so far?"];
 
 function AskView() {
   const { data, selectedStation, selectQuiet } = useTwin();
@@ -151,7 +156,7 @@ function AskView() {
         {log.map((m, i) => (
           <div key={i} style={{ display: "contents" }}>
             <div className="bub">{m.q}</div>
-            <div className="ans">{m.report ? <ReportView r={m.report} /> : m.a ? <pre className="txt" style={{ margin: 0 }}>{m.a}</pre> : <div className="note">Thinking…</div>}</div>
+            <div className="ans">{m.report ? <ReportView r={m.report} onAsk={(s) => void ask(s)} /> : m.a ? <pre className="txt" style={{ margin: 0 }}>{m.a}</pre> : <div className="note">Thinking…</div>}</div>
           </div>
         ))}
         <div ref={end} />

@@ -1,29 +1,160 @@
 {
   "setup": "Engine at t=12500 s (just after the M05 bearing alert), faults cleared, brain in live mode. Questions in a group share one chat session, in order.",
   "groups": [
-    {"name": "A. The hero moment (M05 bearing wear)", "session": "demo-a", "questions": [
-      {"q": "Why is M05 red?", "expect": ["CRITICAL", "bearing"], "why": "Status card: cause, evidence, impact, steps, who to page, part, SOP"},
-      {"q": "What should I do?", "expect": ["DO NOW"], "why": "Follow-up: remembers M05, gives the action list"},
-      {"q": "Who do I page for M05?", "expect": ["L1", "L2"], "why": "Escalation chain for the current shift with timers"},
-      {"q": "Which part do we need for M05 and is it in stock?", "expect": ["bearing_6208"], "why": "Part number and stock from the knowledge base"},
-      {"q": "Can we keep running M05 2 more hours?", "expect": ["SOP-OPS-02"], "why": "Live what-if from the engine plus the SOP-OPS-02 rule"},
-      {"q": "Create a work order for the M05 bearing replacement.", "expect": ["Work order"], "why": "Opens a real work order in the engine"}
-    ]},
-    {"name": "B. What if something breaks", "session": "demo-b", "questions": [
-      {"q": "What happens if the conveyor stops?", "expect": ["fewer cars"], "why": "Engine fault branch: cars lost and cost"},
-      {"q": "What happens if the decoiler fails?", "expect": ["fewer cars"], "why": "Same, upstream machine"},
-      {"q": "How many cars have we built so far?", "expect": ["cars so far"], "why": "Live KPIs: output, OEE, downtime cost"}
-    ]},
-    {"name": "C. Know the plant", "session": "demo-c", "questions": [
-      {"q": "What does the casting press do?", "expect": ["S02"], "why": "Station record with machines and flow"},
-      {"q": "What are the safety rules in the weld cell?", "expect": ["SOP-SAF-04"], "why": "Procedure lookup with source"},
-      {"q": "Which SOP covers lockout tagout?", "expect": ["SOP-SAF-01"], "why": "Procedure finder"},
-      {"q": "What does fault code SRVO-062 mean on M04?", "expect": ["pulsecoder"], "why": "Fault-code meaning from the manual catalogue"},
-      {"q": "What spare part is needed to fix KSS-GEAR-LEAK on BIW-WK-03?", "expect": ["KUKA-SEAL-A2"], "why": "Fault to part mapping"},
-      {"q": "How many times has CAS-GP-01 had GP-SHOT-SLOW in the last 90 days?", "expect": ["times"], "why": "Repeat-failure history from 20k work orders"},
-      {"q": "Who do I page for CAS-GP-01 on shift B?", "expect": ["L1"], "why": "Escalation for a specific machine and shift"},
-      {"q": "Explain OEE", "expect": ["availability"], "why": "Plain-language glossary"},
-      {"q": "What can you do?", "expect": ["Click a station"], "why": "Capability answer with example questions"}
-    ]}
+    {
+      "name": "A. The hero moment (M05 bearing wear)",
+      "session": "demo-a",
+      "questions": [
+        {
+          "q": "Why is M05 red?",
+          "expect": [
+            "CRITICAL",
+            "bearing"
+          ],
+          "why": "Status card: cause, evidence, impact, steps, who to page, part, SOP"
+        },
+        {
+          "q": "What should I do?",
+          "expect": [
+            "DO NOW"
+          ],
+          "why": "Follow-up: remembers M05, gives the action list"
+        },
+        {
+          "q": "Who do I page for M05?",
+          "expect": [
+            "L1",
+            "L2"
+          ],
+          "why": "Escalation chain for the current shift with timers"
+        },
+        {
+          "q": "Which part do we need for M05 and is it in stock?",
+          "expect": [
+            "bearing_6208"
+          ],
+          "why": "Part number and stock from the knowledge base"
+        },
+        {
+          "q": "Can we keep running M05 2 more hours?",
+          "expect": [
+            "SOP-OPS-02"
+          ],
+          "why": "Live what-if from the engine plus the SOP-OPS-02 rule"
+        },
+        {
+          "q": "Create a work order for the M05 bearing replacement.",
+          "expect": [
+            "Work order"
+          ],
+          "why": "Opens a real work order in the engine"
+        }
+      ]
+    },
+    {
+      "name": "B. What if something breaks",
+      "session": "demo-b",
+      "questions": [
+        {
+          "q": "What happens if the conveyor stops?",
+          "expect": [
+            "fewer cars"
+          ],
+          "why": "Engine fault branch: cars lost and cost"
+        },
+        {
+          "q": "What happens if the decoiler fails?",
+          "expect": [
+            "fewer cars"
+          ],
+          "why": "Same, upstream machine"
+        },
+        {
+          "q": "How many cars have we built so far?",
+          "expect": [
+            "cars so far"
+          ],
+          "why": "Live KPIs: output, OEE, downtime cost"
+        }
+      ]
+    },
+    {
+      "name": "C. Know the plant",
+      "session": "demo-c",
+      "questions": [
+        {
+          "q": "Explain the production process",
+          "expect": [
+            "Coil yard",
+            "Framing",
+            "Inspection gate"
+          ],
+          "why": "Walks the whole car-building flow, coil to finished pack, from the station records."
+        },
+        {
+          "q": "What does the casting press do?",
+          "expect": [
+            "S02"
+          ],
+          "why": "Station record with machines and flow"
+        },
+        {
+          "q": "What are the safety rules in the weld cell?",
+          "expect": [
+            "SOP-SAF-04"
+          ],
+          "why": "Procedure lookup with source"
+        },
+        {
+          "q": "Which SOP covers lockout tagout?",
+          "expect": [
+            "SOP-SAF-01"
+          ],
+          "why": "Procedure finder"
+        },
+        {
+          "q": "What does fault code SRVO-062 mean on M04?",
+          "expect": [
+            "pulsecoder"
+          ],
+          "why": "Fault-code meaning from the manual catalogue"
+        },
+        {
+          "q": "What spare part is needed to fix KSS-GEAR-LEAK on BIW-WK-03?",
+          "expect": [
+            "KUKA-SEAL-A2"
+          ],
+          "why": "Fault to part mapping"
+        },
+        {
+          "q": "How many times has CAS-GP-01 had GP-SHOT-SLOW in the last 90 days?",
+          "expect": [
+            "times"
+          ],
+          "why": "Repeat-failure history from 20k work orders"
+        },
+        {
+          "q": "Who do I page for CAS-GP-01 on shift B?",
+          "expect": [
+            "L1"
+          ],
+          "why": "Escalation for a specific machine and shift"
+        },
+        {
+          "q": "Explain OEE",
+          "expect": [
+            "availability"
+          ],
+          "why": "Plain-language glossary"
+        },
+        {
+          "q": "What can you do?",
+          "expect": [
+            "Click a station"
+          ],
+          "why": "Capability answer with example questions"
+        }
+      ]
+    }
   ]
 }
