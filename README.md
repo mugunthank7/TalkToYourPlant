@@ -6,7 +6,7 @@ Status: data layer done, 3D next. Teammate integration notes: [docs/FOR_TEAMMATE
 
 ## System flow
 
-![System flow](docs/img/system-flow.png)
+![System flow](docs/img/system-flow-v2.png)
 
 Blue is the twin and simulation side (this repo). Green is the knowledge and LLM side. Grey is shared. Editable source: [system-flow.svg](docs/img/system-flow.svg).
 
